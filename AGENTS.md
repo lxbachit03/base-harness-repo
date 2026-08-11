@@ -194,6 +194,44 @@ Never overwrite an existing resource. If an ID or filename collides, scan
 again, use the next unused global sequence where possible, and pause when the
 collision is ambiguous or a duplicate ID is found. Do not reuse an old ID.
 
+## Risk-to-Proposal Workflow
+
+When an authorized bounded code change detects a material security,
+performance, or memory-leak concern in first-party code, configuration, or
+infrastructure, apply this workflow:
+
+1. Promote it only when the finding has a repository-relative source path,
+   stable symbol or line locator, concrete execution/data flow, category,
+   plausible impact, and observable indicators. Strong static evidence may
+   create an `OPEN` risk; a weak observation remains response-level.
+2. Scan all existing Harness IDs and filenames, render the complete pair in
+   memory, and create or reuse a materially matching proposal without
+   overwriting existing resources.
+3. Create the risk as `STATUS: OPEN` and the proposal as `STATUS: PROPOSED`.
+   A risk proposal carries `TAG: [RISK]`; unknown mitigation is recorded as
+   `No safe mitigation identified`, with investigation, residual risk, and
+   rollback content rather than an invented solution.
+4. Put canonical relative ID links in `REFERENCES`, add `## Related Proposals`
+   to risks and `## Related Risks` to proposals, and keep those relationship
+   sets identical. Many-to-many links must be present on every affected side.
+5. Write the pair and update the risk-only `TAG: [RISK]` section of
+   `docs-harness/INDEX.md` in the same bounded change. Each risk is a top-level
+   INDEX item with nested proposal links sorted by immutable ID; proposals are
+   never independent INDEX items.
+6. Validate before claiming completion. The canonical local gate is
+   `bash .agents/validators/validate-risk-proposal-links.sh` from the repository
+   root: exit `0` means a stable complete snapshot, exit `1` means a contract
+   violation, and exit `2` means a tooling, parse, or snapshot failure.
+
+This artifact workflow is authorized only by the current prompt when it asks
+for an implementation/bounded change or explicitly asks to record the finding.
+Read-only answers, reviews, diagnoses, plans, and status reports must report or
+draft the pair without writing it. Explicit code-only or `do not edit
+docs-harness` instructions override this workflow. If validation fails, repair
+within the same bounded change when safe; otherwise roll back only newly
+created resources and INDEX changes, preserve unrelated changes, report the
+blocker, and do not claim completion.
+
 SQLite intake, story, trace, scoring, audit, and proposal commands are optional
 compatibility features. Use them only when explicitly requested or required by
 an external orchestrator.

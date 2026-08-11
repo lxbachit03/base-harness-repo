@@ -7,11 +7,16 @@ TITLE: <title>
 CREATED: <YYYY-MM-DD>
 STATUS: <status>
 REFERENCES:
-- <path-or-resource-id>
+- [#<proposal-resource-id> <proposal-title>](../proposals/<MMDD>-<proposal-slug>.md)
 
 ## Risk
 
 <Describe the security, performance, or memory-leak risk.>
+
+## Evidence
+
+<Record repository-relative source paths, stable symbols or lines, affected
+behavior/data flow, risk category, impact, indicators, and the code/ref state.>
 
 ## Impact
 
@@ -28,3 +33,8 @@ REFERENCES:
 ## Verification
 
 <Describe how mitigation and residual risk will be verified.>
+
+## Related Proposals
+
+<List the same canonical proposal links as REFERENCES. Every relationship must
+be reciprocal and every proposal must be listed on both sides.>
