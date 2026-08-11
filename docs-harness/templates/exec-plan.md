@@ -42,7 +42,7 @@ changes the approach.
 
 - YYYY-MM-DD: Task-local decision and reason.
 
-Promote lasting product or architecture decisions into `docs/decisions/`.
+Promote lasting product or architecture decisions into `docs-harness/decisions/`.
 
 ## Validation
 
@@ -53,4 +53,4 @@ Promote lasting product or architecture decisions into `docs/decisions/`.
 ## Result
 
 Complete after implementation. Record the verified outcome, limitations, and
-follow-up before moving the plan to `docs/plans/completed/`.
+follow-up before moving the plan to `docs-harness/plans/completed/`.

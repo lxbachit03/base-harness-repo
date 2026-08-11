@@ -9,11 +9,13 @@ Start here after `AGENTS.md` and before reading other repository documentation.
 ```text
 docs-harness/
 ├── constraints/
+├── decisions/
 ├── domain/
 ├── harness-improvements/
 ├── plans/
 │   ├── active/
 │   └── completed/
+├── product/
 ├── proposals/
 ├── risks/
 └── templates/
@@ -28,7 +30,7 @@ is created, moved, renamed, or deleted.
 
 Start from this tree, select a folder from the User intent, classification, and
 priority, read its routing metadata, and follow only the relevant `Resources`
-links. Read `docs/WORKFLOW.md`, product docs, code, or validation files only
+links. Read `docs-harness/WORKFLOW.md`, product docs, code, or validation files only
 after the relevant Harness context is selected.
 
 ### Bottom-Up (Explicit Deep Dive Only)
@@ -55,7 +57,9 @@ Skip when: never; this is the entry point.
 
 Resources:
 
+- [README.md](README.md)
 - [INDEX.md](INDEX.md)
+- [WORKFLOW.md](WORKFLOW.md)
 
 ## TAG: [IMPROVE_HARNESS]
 
@@ -124,6 +128,35 @@ Resources:
 No risk resources are indexed yet.
 
 ## Supporting Folders
+
+### decisions/
+
+Folder: [decisions/](decisions/)
+
+Purpose: lasting product, architecture, data, security, compatibility, and
+validation decisions that future work must inherit.
+
+Read when: a task makes or relies on a consequential decision.
+
+Skip when: the task has no lasting decision context.
+
+Resources:
+
+- [Decisions README](decisions/README.md)
+
+### product/
+
+Folder: [product/](product/)
+
+Purpose: consumer-product behavior derived from accepted intent.
+
+Read when: the task depends on current product behavior or product contracts.
+
+Skip when: the task is only Harness infrastructure or routing work.
+
+Resources:
+
+- [Product README](product/README.md)
 
 ### plans/
 
@@ -198,7 +231,9 @@ Resources:
 
 - [Harness improvement template](templates/harness-improvement.md)
 - [Constraint template](templates/constraint.md)
+- [Decision template](templates/decision.md)
 - [Domain template](templates/domain.md)
+- [Execution plan template](templates/exec-plan.md)
 - [Risk template](templates/risk.md)
 - [Proposal template](templates/proposal.md)
 - [Plan template](templates/plan.md)

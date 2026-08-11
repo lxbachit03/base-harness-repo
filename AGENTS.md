@@ -13,9 +13,9 @@ the relevant workflow, product, design, plan, code, and validation material.
   state.
 - For a bounded change, use an ephemeral plan: inspect the affected behavior and
   proof, implement, and validate. No control-plane operation is required.
-- Create or update one file under `docs/plans/active/` when work spans sessions,
+- Create or update one file under `docs-harness/plans/active/` when work spans sessions,
   needs coordination, has meaningful dependencies, or requires recovery steps.
-  Move it to `docs/plans/completed/` only after validation.
+  Move it to `docs-harness/plans/completed/` only after validation.
 - Before editing, identify repository authority for each new externally
   observable policy. If materially different choices remain open, stop before
   edits; configurable defaults are not authority.
@@ -45,6 +45,14 @@ implementation, or validation:
 - For read-only requests, do not create or modify resources; include the
   proposal/solution inline and report any missing cross-link as an unresolved
   gap.
+
+### Documentation Ownership
+
+- `docs-harness/` is the canonical context for AI agents and the Harness repo.
+  Read it through `docs-harness/INDEX.md` and its routed resources.
+- `docs/` is team-facing documentation, not a default Harness input. Do not
+  read, bootstrap, or recreate it unless the User explicitly requests team
+  documentation work.
 
 ## Harness Context
 
@@ -90,7 +98,7 @@ Use `INDEX.md` as a token-saving router rather than scanning all of
 4. Select candidate canonical resources from its `Resources` links.
 5. Read only the selected resources and any required `PRIORITY: [CRITIAL]`
    resources.
-6. Only then read `docs/WORKFLOW.md`, product docs, code, tests, or validation
+6. Only then read `docs-harness/WORKFLOW.md`, product docs, code, tests, or validation
    files relevant to the routed intent.
 
 Do not scan unrelated folders when `INDEX.md` provides a sufficient route. If

@@ -8,15 +8,15 @@ and process overhead.
 ## Repository Map
 
 - `AGENTS.md`: small entry map and authority boundary.
-- `README.md` and `docs/product/`: current product behavior.
-- `docs/ARCHITECTURE.md` and `docs/decisions/`: structural constraints and
+- `README.md` and `docs-harness/product/`: current product behavior.
+- Architecture documentation and `docs-harness/decisions/`: structural constraints and
   lasting decisions.
-- `docs/plans/active/`: complex work currently in progress.
-- `docs/plans/completed/`: completed execution history worth retaining.
+- `docs-harness/plans/active/`: complex work currently in progress.
+- `docs-harness/plans/completed/`: completed execution history worth retaining.
 - Project code, tests, CI, and runtime signals: executable and observable truth.
 - `scripts/README.md`: upstream Harness development and compatibility commands.
 
-Use `docs/README.md` for the map; prefer targeted search.
+Use `docs-harness/README.md` for the map; prefer targeted search.
 
 ## Select The Work Shape
 
@@ -26,7 +26,7 @@ Answer three questions independently; do not let one risk label decide them.
 
 Use an ephemeral plan for bounded, single-session work.
 
-Create or update one execution plan in `docs/plans/active/` when work:
+Create or update one execution plan in `docs-harness/plans/active/` when work:
 
 - is likely to span sessions;
 - coordinates multiple agents or contributors;
@@ -34,7 +34,7 @@ Create or update one execution plan in `docs/plans/active/` when work:
 - requires an explicit recovery procedure; or
 - would be unsafe or expensive to resume from the final diff alone.
 
-Use `docs/templates/exec-plan.md`. Keep progress and task-local decisions in the
+Use `docs-harness/templates/exec-plan.md`. Keep progress and task-local decisions in the
 same file. Do not create parallel story, design, validation, and trace documents
 for the same work unless one has independent long-term value.
 
@@ -96,14 +96,14 @@ is required.
 
 ### Durable Planned Change
 
-1. Create or resume one plan in `docs/plans/active/`.
+1. Create or resume one plan in `docs-harness/plans/active/`.
 2. Record outcome, context, approach, risks, recovery, progress, decisions, and
    validation in that file.
 3. Implement in coherent, independently verifiable groups.
 4. Update progress and decisions as reality changes.
 5. Run the plan's focused and repository-wide proof.
-6. Promote lasting product or architecture decisions into `docs/decisions/`.
-7. Record the final result and move the plan to `docs/plans/completed/`.
+6. Promote lasting product or architecture decisions into `docs-harness/decisions/`.
+7. Record the final result and move the plan to `docs-harness/plans/completed/`.
 
 The plan is working memory, not a prediction frozen at intake. Update it when
 evidence changes the approach.

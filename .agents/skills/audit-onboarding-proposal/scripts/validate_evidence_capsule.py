@@ -566,7 +566,7 @@ def self_test() -> None:
         ],
         "claims": [
             {"id": "C1", "hunk_id": "H1", "text": "New guidance.", "classification": "Authoritative", "sources": [
-                {"revision": revision, "path": "docs/WORKFLOW.md", "start_line": 1, "end_line": 1, "content_sha256": zeros, "role": "authority"}
+                {"revision": revision, "path": "docs-harness/WORKFLOW.md", "start_line": 1, "end_line": 1, "content_sha256": zeros, "role": "authority"}
             ]}
         ],
         "hunks": [
