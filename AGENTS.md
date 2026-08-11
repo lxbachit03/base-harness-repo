@@ -26,6 +26,26 @@ the relevant workflow, product, design, plan, code, and validation material.
 - Claim completion only with relevant executable or observable evidence. Report
   the outcome, important changes, validation, and unresolved risks.
 
+### Risk-to-Proposal Constraint
+
+When the AI agent identifies a risk in an answer, review, diagnosis, plan,
+implementation, or validation:
+
+- Include at least one explicit proposal/solution for that risk in the same
+  response.
+- Treat the proposal as a suggestion only; do not apply it or represent it as
+  accepted without User authority.
+- If an authorized task persists the risk as a resource under
+  `docs-harness/risks/`, persist a corresponding proposal resource under
+  `docs-harness/proposals/` and add reciprocal `REFERENCES:` entries using each
+  resource's canonical relative path or immutable resource ID.
+- Do not claim the persisted risk/proposal work is complete while either
+  resource is missing, either reference is one-sided, or either referenced path
+  cannot be resolved.
+- For read-only requests, do not create or modify resources; include the
+  proposal/solution inline and report any missing cross-link as an unresolved
+  gap.
+
 ## Harness Context
 
 `docs-harness/` is the Harness repo/workspace context for personalizing the

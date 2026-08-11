@@ -85,7 +85,7 @@ Skip when: no repository or task constraint is relevant.
 
 Resources:
 
-No canonical resources are indexed yet.
+- [Risk-to-proposal suggestion and cross-link constraint](constraints/0812-risk-proposal-suggestion-cross-link.md) — `#001_CONSTRAINTS_0812`, `PRIORITY: [MEDIUM]`
 
 ## TAG: [DOMAIN]
 
