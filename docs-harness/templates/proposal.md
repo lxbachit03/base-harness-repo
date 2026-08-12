@@ -1,13 +1,13 @@
 # Proposal Resource
 
-ID: #<next-sequence>_<PRIMARY_CLASSIFICATION>_<MMDD>
-TAG: [<classification>]
+ID: #<next-sequence>_RISK_<MMDD>
+TAG: [RISK]
 PRIORITY: [<CRITIAL|MEDIUM|NORMAL>]
 TITLE: <title>
 CREATED: <YYYY-MM-DD>
 STATUS: <status>
 REFERENCES:
-- <path-or-resource-id>
+- [#<risk-resource-id> <risk-title>](../risks/<MMDD>-<risk-slug>.md)
 
 ## Problem
 
@@ -16,6 +16,11 @@ REFERENCES:
 ## Context
 
 <Describe relevant repository and domain context.>
+
+## Related Risks
+
+<List the same canonical risk Markdown links as REFERENCES. Every relationship
+must be reciprocal and every risk must be listed on both sides.>
 
 ## Options
 
@@ -32,6 +37,12 @@ REFERENCES:
 ## Consequences
 
 <Describe expected consequences.>
+
+## Residual Risk
+
+<Record remaining exposure, uncertainty, conditions, and any evidence gap. If
+no safe mitigation is known, state that explicitly and record the investigation
+or escalation path instead of inventing a solution.>
 
 ## Rollback
 
