@@ -20,6 +20,43 @@ Do not produce a final `/goal` prompt until these six fields are clear enough:
 
 If any field is missing, ask the next highest-leverage question instead of drafting the final goal.
 
+## Routing And Triage
+
+`goal-griller` is the front door for goal shaping, not the default engine for
+every task. After the six fields are clear, classify the lightest useful route:
+
+- `direct`: answer, review, diagnosis, status, or a bounded task with a clear
+  local seam. Do not create or set autonomous goal state unless the User
+  explicitly requests it.
+- `$prompt-leverage`: the User needs a raw prompt upgraded, templated, or
+  prepared with an output and verification contract.
+- `$xia`: the implementation is unfamiliar, ambiguous, version-sensitive, or
+  risky and needs a research brief before coding.
+- `$sequence-execution-plan`: the work has multiple independently verifiable
+  items, dependencies, active impact, priority/order tension, or recovery needs.
+- `$improve-harness`: the User explicitly invokes it and an observed reusable
+  agent friction justifies one bounded Harness intervention and fresh rerun.
+
+Use the minimum route. Do not invoke every specialist by default. If research
+is needed before sequencing, run `$xia` first and then pass its evidence to
+`$sequence-execution-plan`. Preserve the repository entry order:
+`AGENTS.md` → `docs-harness/INDEX.md` → routed resources.
+
+Every route inherits the repository's authority and safety rules. If a risk is
+identified, include at least one proposal or solution inline. A read-only task
+must not create or modify a risk, proposal, or plan resource; persistence needs
+explicit User authority and reciprocal risk/proposal links.
+
+When a goal is drafted, include the route in the handoff:
+
+```text
+Route:
+- Mode: direct | prompt-leverage | xia | sequence-execution-plan | improve-harness
+- Specialist: <name or none>
+- Why: <evidence-based reason>
+- Handoff: <brief, plan, direct answer, or fresh-rerun record>
+```
+
 ## Interview Loop
 
 1. Restate the apparent intent in one sentence.
@@ -68,6 +105,12 @@ When the hard gate is satisfied, output:
 
 Context to read first:
 - [...]
+
+Route:
+- Mode: direct | prompt-leverage | xia | sequence-execution-plan | improve-harness
+- Specialist: <name or none>
+- Why: <evidence-based reason>
+- Handoff: <brief, plan, direct answer, or fresh-rerun record>
 
 Constraints:
 - [...]

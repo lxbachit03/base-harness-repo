@@ -74,7 +74,7 @@ Skip when: the intent concerns only product behavior or unrelated domain work.
 
 Resources:
 
-No canonical resources are indexed yet.
+- [Goal-griller specialist routing improvement](plans/completed/0812-harness-improvement-goal-routing.md) — `#002_IMPROVE_HARNESS_0812`, `PRIORITY: [MEDIUM]`
 
 ## TAG: [CONSTRAINTS]
 
@@ -186,7 +186,7 @@ Skip when: no active plan is related to the current intent.
 
 Resources:
 
-No active plan resources are indexed yet.
+No active plan resources are indexed.
 
 ### plans/completed/
 
@@ -200,7 +200,7 @@ Skip when: the task has no dependency on completed work.
 
 Resources:
 
-No completed plan resources are indexed yet.
+- [Goal-griller specialist routing improvement](plans/completed/0812-harness-improvement-goal-routing.md) — `#002_IMPROVE_HARNESS_0812`, `PRIORITY: [MEDIUM]`
 
 ### proposals/
 
