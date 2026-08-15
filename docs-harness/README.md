@@ -43,7 +43,7 @@ Use [`INDEX.md`](INDEX.md) as the routing authority. The folders below are
 separate context types; do not place a resource in a different folder merely
 because its subject overlaps:
 
-- `constraints/`: rules that constrain files, folders, or a specific task.
+- `harness-constraints/`: rules that constrain files, folders, or a specific task.
 - `decisions/`: lasting product, architecture, data, security, compatibility,
   or validation choices.
 - `domain/`: confirmed or uncertain project/domain knowledge.

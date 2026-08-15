@@ -8,7 +8,7 @@ Start here after `AGENTS.md` and before reading other repository documentation.
 
 ```text
 docs-harness/
-├── constraints/
+├── harness-constraints/
 ├── decisions/
 ├── domain/
 ├── harness-improvements/
@@ -78,7 +78,7 @@ Resources:
 
 ## TAG: [CONSTRAINTS]
 
-Folder: [constraints/](constraints/)
+Folder: [harness-constraints/](harness-constraints/)
 
 Purpose: rules that constrain files, folders, or a specific task.
 
@@ -89,7 +89,7 @@ Skip when: no repository or task constraint is relevant.
 
 Resources:
 
-- [Risk-to-proposal suggestion and cross-link constraint](constraints/0812-risk-proposal-suggestion-cross-link.md) — `#001_CONSTRAINTS_0812`, `PRIORITY: [MEDIUM]`
+- [Risk-to-proposal suggestion and cross-link constraint](harness-constraints/0812-risk-proposal-suggestion-cross-link.md) — `#001_CONSTRAINTS_0812`, `PRIORITY: [MEDIUM]`
 
 ## TAG: [DOMAIN]
 

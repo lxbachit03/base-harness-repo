@@ -1,4 +1,4 @@
-# Constraints
+# Harness Constraints
 
 This folder contains rules that constrain files, folders, or a specific task.
 Constraints describe boundaries that future work must preserve; they are not
