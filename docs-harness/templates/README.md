@@ -14,6 +14,8 @@ task instructions.
 - `plan.md`: plan resources requiring the common resource metadata.
 - `proposal.md`: options and recommendations awaiting authority.
 - `risk.md`: security, performance, and memory-leak risks.
+- `ticket.md`: ticket records managed under `docs-harness/tickets/active/` or
+  `docs-harness/tickets/completed/`.
 
 ## Usage Rules
 

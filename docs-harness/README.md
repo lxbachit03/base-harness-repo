@@ -51,6 +51,9 @@ because its subject overlaps:
   guidance, tools, runbooks, or validation.
 - `plans/`: durable execution working memory, with active and completed
   lifecycle folders.
+- `tickets/`: ticket intake, working records, attachments, and generated
+  resolution artifacts managed by `$ticket-solving`; `active/` is the default
+  route and `completed/` is historical context.
 - `product/`: consumer-product behavior derived from accepted intent.
 - `proposals/`: options and recommendations awaiting User authority.
 - `risks/`: security, performance, and memory-leak risk records.

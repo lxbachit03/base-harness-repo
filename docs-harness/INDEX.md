@@ -18,6 +18,9 @@ docs-harness/
 ├── product/
 ├── proposals/
 ├── risks/
+├── tickets/
+│   ├── active/
+│   └── completed/
 └── templates/
 ```
 
@@ -74,6 +77,7 @@ Skip when: the intent concerns only product behavior or unrelated domain work.
 
 Resources:
 
+- [Ticket lifecycle improvement](plans/active/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
 - [Writing-for-agents routing improvement](plans/active/0815-writing-for-agents-routing.md) — `#003_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
 - [Goal-griller specialist routing improvement](plans/completed/0812-harness-improvement-goal-routing.md) — `#002_IMPROVE_HARNESS_0812`, `PRIORITY: [MEDIUM]`
 
@@ -187,6 +191,7 @@ Skip when: no active plan is related to the current intent.
 
 Resources:
 
+- [Ticket lifecycle improvement](plans/active/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
 - [Writing-for-agents routing improvement](plans/active/0815-writing-for-agents-routing.md) — `#003_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
 
 ### plans/completed/
@@ -202,6 +207,57 @@ Skip when: the task has no dependency on completed work.
 Resources:
 
 - [Goal-griller specialist routing improvement](plans/completed/0812-harness-improvement-goal-routing.md) — `#002_IMPROVE_HARNESS_0812`, `PRIORITY: [MEDIUM]`
+
+### tickets/
+
+Folder: [tickets/](tickets/)
+
+Purpose: ticket intake, working records, attachments, and generated resolution
+artifacts managed by `$ticket-solving`, with active and completed lifecycle
+folders.
+
+Read when: the User invokes `$ticket-solving` or supplies a ticket source for
+intake, organization, or resolution. Read `active/` by default; read
+`completed/` only for explicit history or dependency context.
+
+Skip when: the intent does not concern ticket work.
+
+Resources:
+
+See the dedicated `tickets/active/` and `tickets/completed/` routing sections
+below. The template remains available at
+[templates/ticket.md](templates/ticket.md).
+
+### tickets/active/
+
+Folder: [tickets/active/](tickets/active/)
+
+Purpose: current ticket intake, investigation, implementation, validation, and
+User review.
+
+Read when: creating, resuming, or solving a ticket.
+
+Skip when: the current intent has no ticket work.
+
+Resources:
+
+- [Active ticket workspace guide](tickets/active/README.md)
+
+### tickets/completed/
+
+Folder: [tickets/completed/](tickets/completed/)
+
+Purpose: User-authorized completed ticket history.
+
+Read when: the User names completed history or the current ticket has an
+explicit dependency on it.
+
+Skip when: performing default ticket intake or solving current work without a
+history dependency.
+
+Resources:
+
+- [Completed ticket workspace guide](tickets/completed/README.md)
 
 ### proposals/
 
@@ -238,6 +294,7 @@ Resources:
 - [Risk template](templates/risk.md)
 - [Proposal template](templates/proposal.md)
 - [Plan template](templates/plan.md)
+- [Ticket template](templates/ticket.md)
 
 Templates do not receive resource IDs or date-prefixed filenames.
 

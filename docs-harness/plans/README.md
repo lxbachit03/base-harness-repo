@@ -44,7 +44,10 @@ approval.
 
 ## Active Plans
 
-No active execution plans are currently indexed.
+- [Ticket lifecycle routing](active/0815-ticket-lifecycle-routing.md) —
+  `#004_IMPROVE_HARNESS_0815`, pending fresh rerun.
+- [Writing-for-agents routing improvement](active/0815-writing-for-agents-routing.md) —
+  `#003_IMPROVE_HARNESS_0815`, pending fresh rerun.
 
 ## Active Directory Guidance
 

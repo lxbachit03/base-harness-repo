@@ -13,6 +13,9 @@ and process overhead.
   lasting decisions.
 - `docs-harness/plans/active/`: complex work currently in progress.
 - `docs-harness/plans/completed/`: completed execution history worth retaining.
+- `docs-harness/tickets/`: ticket intake, working records, and resolution
+  artifacts managed by `$ticket-solving`; read `active/` by default and use
+  `completed/` only for relevant history.
 - Project code, tests, CI, and runtime signals: executable and observable truth.
 - `scripts/README.md`: upstream Harness development and compatibility commands.
 
