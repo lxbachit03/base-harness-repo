@@ -12,6 +12,7 @@ docs-harness/
 ├── decisions/
 ├── domain/
 ├── harness-improvements/
+├── notes/
 ├── plans/
 │   ├── active/
 │   └── completed/
@@ -79,6 +80,7 @@ Resources:
 
 - [Ticket lifecycle improvement](plans/active/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
 - [Writing-for-agents routing improvement](plans/active/0815-writing-for-agents-routing.md) — `#003_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
+- [User-authorized notes workspace](plans/active/0815-user-authorized-notes.md) — `#005_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
 - [Goal-griller specialist routing improvement](plans/completed/0812-harness-improvement-goal-routing.md) — `#002_IMPROVE_HARNESS_0812`, `PRIORITY: [MEDIUM]`
 
 ## TAG: [CONSTRAINTS]
@@ -193,6 +195,7 @@ Resources:
 
 - [Ticket lifecycle improvement](plans/active/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
 - [Writing-for-agents routing improvement](plans/active/0815-writing-for-agents-routing.md) — `#003_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
+- [User-authorized notes workspace](plans/active/0815-user-authorized-notes.md) — `#005_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
 
 ### plans/completed/
 
@@ -258,6 +261,22 @@ history dependency.
 Resources:
 
 - [Completed ticket workspace guide](tickets/completed/README.md)
+
+### notes/
+
+Folder: [notes/](notes/)
+
+Purpose: concise context notes explicitly authorized by the User, including
+observed Harness gaps, follow-up boundaries, and links to canonical resources.
+
+Read when: the current task depends on prior User-authorized context, an
+accepted gap, a follow-up, or an authority boundary recorded in a note.
+
+Skip when: the task has no dependency on User-authorized notes.
+
+Resources:
+
+- [User-authorized notes guide](notes/README.md)
 
 ### proposals/
 

@@ -49,6 +49,8 @@ because its subject overlaps:
 - `domain/`: confirmed or uncertain project/domain knowledge.
 - `harness-improvements/`: the routing category for improvements to agent
   guidance, tools, runbooks, or validation.
+- `notes/`: concise context notes explicitly authorized by the User; notes do
+  not replace canonical risks, proposals, decisions, or plans.
 - `plans/`: durable execution working memory, with active and completed
   lifecycle folders.
 - `tickets/`: ticket intake, working records, attachments, and generated

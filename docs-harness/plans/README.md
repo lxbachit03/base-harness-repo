@@ -44,6 +44,8 @@ approval.
 
 ## Active Plans
 
+- [User-authorized notes workspace](active/0815-user-authorized-notes.md) —
+  `#005_IMPROVE_HARNESS_0815`, pending fresh rerun.
 - [Ticket lifecycle routing](active/0815-ticket-lifecycle-routing.md) —
   `#004_IMPROVE_HARNESS_0815`, pending fresh rerun.
 - [Writing-for-agents routing improvement](active/0815-writing-for-agents-routing.md) —
