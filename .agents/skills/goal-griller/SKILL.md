@@ -34,12 +34,19 @@ every task. After the six fields are clear, classify the lightest useful route:
   risky and needs a research brief before coding.
 - `$sequence-execution-plan`: the work has multiple independently verifiable
   items, dependencies, active impact, priority/order tension, or recovery needs.
+- `$writing-for-agents`: the task creates or edits an agent-facing skill,
+  `AGENTS.md`, `CLAUDE.md`, or a routed instruction document and needs review of
+  its pointers, disclosure, steps, or completion criteria.
 - `$improve-harness`: the User explicitly invokes it and an observed reusable
   agent friction justifies one bounded Harness intervention and fresh rerun.
 
-Use the minimum route. Do not invoke every specialist by default. If research
-is needed before sequencing, run `$xia` first and then pass its evidence to
-`$sequence-execution-plan`. Preserve the repository entry order:
+Use the minimum route. Do not invoke every specialist by default. Use
+`$writing-for-agents` for persistent agent-facing documents, not one-off User
+prompts. When a Harness guidance change is authorized, `$improve-harness` owns
+the intervention and fresh-rerun boundary while `$writing-for-agents` supplies
+the document-quality review. If research is needed before sequencing, run
+`$xia` first and then pass its evidence to `$sequence-execution-plan`. Preserve
+the repository entry order:
 `AGENTS.md` → `docs-harness/INDEX.md` → routed resources.
 
 Every route inherits the repository's authority and safety rules. If a risk is
@@ -51,7 +58,7 @@ When a goal is drafted, include the route in the handoff:
 
 ```text
 Route:
-- Mode: direct | prompt-leverage | xia | sequence-execution-plan | improve-harness
+- Mode: direct | prompt-leverage | xia | sequence-execution-plan | writing-for-agents | improve-harness
 - Specialist: <name or none>
 - Why: <evidence-based reason>
 - Handoff: <brief, plan, direct answer, or fresh-rerun record>
@@ -107,7 +114,7 @@ Context to read first:
 - [...]
 
 Route:
-- Mode: direct | prompt-leverage | xia | sequence-execution-plan | improve-harness
+- Mode: direct | prompt-leverage | xia | sequence-execution-plan | writing-for-agents | improve-harness
 - Specialist: <name or none>
 - Why: <evidence-based reason>
 - Handoff: <brief, plan, direct answer, or fresh-rerun record>
