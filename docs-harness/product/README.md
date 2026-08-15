@@ -3,6 +3,13 @@
 This directory contains current consumer-product behavior derived from real
 accepted intent. Harness deliberately ships no fake product domains.
 
+## Read When
+
+Read this directory when the task depends on current consumer behavior, product
+contracts, user-visible states, or domain-specific acceptance criteria. The
+consumer repository's README, architecture, code, tests, CI, and runtime signals
+remain authoritative.
+
 When a user provides a product specification, derive smaller living documents
 here instead of keeping one growing specification as the operating manual. Name
 files after actual product domains, such as `overview.md`, `billing.md`,
@@ -27,3 +34,9 @@ When behavior changes:
 
 Bounded changes do not require a story packet, proof-matrix row, or Harness CLI
 mutation.
+
+## Boundaries
+
+Do not place generic Harness workflow, speculative product behavior, or
+unaccepted policy here. Create a small living document named after an actual
+product domain only when accepted intent requires durable product context.

@@ -37,6 +37,28 @@ and working-memory structure around that truth; it does not install upstream
 - `docs/` is reserved for team-facing documentation and is not read by Harness
   by default. This repository may omit the directory entirely.
 
+## Local Folder Guide
+
+Use [`INDEX.md`](INDEX.md) as the routing authority. The folders below are
+separate context types; do not place a resource in a different folder merely
+because its subject overlaps:
+
+- `constraints/`: rules that constrain files, folders, or a specific task.
+- `decisions/`: lasting product, architecture, data, security, compatibility,
+  or validation choices.
+- `domain/`: confirmed or uncertain project/domain knowledge.
+- `harness-improvements/`: the routing category for improvements to agent
+  guidance, tools, runbooks, or validation.
+- `plans/`: durable execution working memory, with active and completed
+  lifecycle folders.
+- `product/`: consumer-product behavior derived from accepted intent.
+- `proposals/`: options and recommendations awaiting User authority.
+- `risks/`: security, performance, and memory-leak risk records.
+- `templates/`: stable placeholders used to create supported resources.
+
+Start with `AGENTS.md`, then `INDEX.md`, and read only the routed README or
+resource needed for the current intent.
+
 ## Source-Repository Indexes
 
 The following material is deliberately outside the default installation:

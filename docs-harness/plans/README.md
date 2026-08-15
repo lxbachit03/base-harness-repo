@@ -4,6 +4,15 @@ Execution plans are Git-native working memory for complex tasks. They preserve
 enough context for another agent or human to resume work without reconstructing
 intent from chat history or a partial diff.
 
+## Read When
+
+Read this folder when work spans sessions, contributors, dependencies,
+recovery, or an ordered sequence that would be unsafe or expensive to recover
+from the final diff alone.
+
+Use an ephemeral plan for bounded, single-session work. Do not create a durable
+plan merely to add ceremony to a small change.
+
 ## When To Create A Plan
 
 Use an ephemeral plan for bounded, single-session work.
@@ -25,6 +34,13 @@ docs-harness/plans/active/<slug>.md
 
 The plan is the primary task artifact. Promote a lasting product or architecture
 decision into `docs-harness/decisions/`; keep task-local choices in the plan.
+
+## Boundaries
+
+A plan records outcome, context, approach, risks, recovery, progress, decisions,
+and validation. It is working memory that must be updated when evidence changes
+the approach; it is not authority to invent product policy or bypass a required
+approval.
 
 ## Active Plans
 
