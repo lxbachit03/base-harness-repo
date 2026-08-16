@@ -186,6 +186,7 @@ the index.
 Use the matching template in `docs-harness/templates/` before creating a new
 resource:
 
+- `activity-diagram.md` for onboarding Mermaid flow and activity diagrams.
 - `harness-improvement.md` for Harness improvements.
 - `constraint.md` for constraints on files or folders.
 - `domain.md` for confirmed or uncertain project domain knowledge.

@@ -16,6 +16,7 @@
 
 - **Load theo nhu cầu qua Top-Down Routing (chỉ đọc khi intent yêu cầu):**
   - `docs-harness/WORKFLOW.md`
+  - `docs-harness/onboarding/README.md` (chỉ load `docs-harness/onboarding/<flow>/` khi làm việc với luồng đó)
   - `docs-harness/domain/**/*.md`
   - `docs-harness/plans/README.md`
   - `docs-harness/tickets/README.md`
@@ -71,3 +72,10 @@
 ## Đồng bộ filesystem trong `docs-harness` và `INDEX.md`
 
 - Kiểm tra và đồng bộ tính toàn vẹn giữa cấu trúc Filesystem thực tế và INDEX.md vào đầu mỗi phiên (Session Start) để tránh đứt gãy routing.
+
+## Onboarding Dự Án Brownfield (`docs-harness/onboarding/`)
+
+- Skill `.agents/skills/onboarding`: Chuyên dùng để phân tích và mapping các dự án brownfield phức tạp thành từng luồng dữ liệu/nghiệp vụ độc lập (`docs-harness/onboarding/<flow-name>/`).
+- **Quy tắc Top-Down**: Chỉ nạp thư mục con của luồng dữ liệu đang làm việc (`docs-harness/onboarding/<target-flow>/`), tuyệt đối không nạp toàn bộ thư mục cha ở Session Start.
+- **Quy tắc User Authority**: AI Agent **tuyệt đối không tự ý** chuyển đổi hoặc tạo file trong `docs-harness/domain/` từ `onboarding/` nếu không có User Authority. Việc chuyển đổi chỉ diễn ra khi người dùng tự kéo/chuyển file hoặc ra lệnh trực tiếp cho AI Agent thực hiện.
+- **Xây dựng Domain Knowledge**: Khi có sự đồng ý của User, các kết quả khảo sát từ `onboarding/` được dùng làm nguồn tư liệu để tổng hợp kiến thức nghiệp vụ chuẩn hóa vào `docs-harness/domain/`.

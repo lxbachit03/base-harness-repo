@@ -12,6 +12,7 @@ docs-harness/
 ├── decisions/
 ├── domain/
 ├── harness-improvements/
+├── onboarding/
 ├── plans/
 │   ├── active/
 │   └── completed/
@@ -80,6 +81,7 @@ Skip when: the intent concerns only product behavior or unrelated domain work.
 
 Resources:
 
+- [Onboarding skill and flow-based workspace routing](plans/active/0816-onboarding-skill-folder-routing.md) — `#007_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
 - [Persona response style configuration and session start routing](plans/active/0816-persona-response-style-routing.md) — `#006_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
 - [Filesystem and INDEX synchronization check at session start](plans/active/0816-filesystem-index-sync-rule.md) — `#005_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
 - [Ticket lifecycle improvement](plans/active/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
@@ -279,6 +281,23 @@ Resources:
 
 No proposal resources are indexed yet.
 
+### onboarding/
+
+Folder: [onboarding/](onboarding/)
+
+Purpose: brownfield data and business flow investigation workspaces managed by
+`$onboarding`, used to discover, map, and synthesize persistent domain knowledge.
+
+Read when: the User invokes `$onboarding` or a task targets a specific isolated
+flow workspace (e.g. `docs-harness/onboarding/<target-flow>/`).
+
+Skip when: the intent does not require onboarding context or concerns unrelated
+bounded work. Do not scan or load the entire parent directory at once.
+
+Resources:
+
+- [Onboarding workspace guide](onboarding/README.md)
+
 ### templates/
 
 Folder: [templates/](templates/)
@@ -291,6 +310,7 @@ Skip when: no new resource is being created.
 
 Resources:
 
+- [Activity diagram template](templates/activity-diagram.md)
 - [Harness improvement template](templates/harness-improvement.md)
 - [Constraint template](templates/constraint.md)
 - [Decision template](templates/decision.md)
@@ -312,3 +332,4 @@ file. Each real resource entry must include one `PRIORITY: [CRITIAL]`,
 
 Update this file in the same task when filesystem structure or routing metadata
 changes. Do not invent routes, resources, domain knowledge, or priorities.
+

@@ -6,6 +6,7 @@ task instructions.
 
 ## Available Templates
 
+- `activity-diagram.md`: Mermaid flow/activity diagrams with file and line range citations for onboarding flows.
 - `constraint.md`: file, folder, or task constraints.
 - `decision.md`: lasting product or architecture decisions.
 - `domain.md`: confirmed or uncertain domain knowledge.
