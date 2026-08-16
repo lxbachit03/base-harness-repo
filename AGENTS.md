@@ -77,7 +77,12 @@ For the first prompt of a session:
 1. Inspect the `docs-harness/` folder tree.
 2. Read `docs-harness/INDEX.md` before any other repository documentation.
 3. Combine the instructions and context from `AGENTS.md` and `INDEX.md`.
-4. Follow the Top-Down routing steps below and read additional resources marked
+4. Automatically load active resources to establish current situational awareness:
+   - `docs-harness/tickets/active/*.md`
+   - `docs-harness/plans/active/*.md`
+   - `docs-harness/risks/**/*.md`
+   Do not automatically load `tickets/completed/`, `plans/completed/`, or `proposals/`.
+5. Follow the Top-Down routing steps below and read additional resources marked
    `PRIORITY: [CRITIAL]`.
 
 For every later prompt in the same session:

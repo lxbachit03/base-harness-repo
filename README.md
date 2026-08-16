@@ -6,17 +6,20 @@
 
 ## Những resources AI cần phải load từ harness repo
 
-- `AGENT.md`
-- `docs-harness/INDEX.md`
-- `docs-harness/WORKFLOW.md`
-- `docs-harness/domain/**/*.md`
-- `docs-harness/plans/README.md`
-- `docs-harness/plans/active/*.md`
-- `docs-harness/tickets/README.md`
-- `docs-harness/tickets/active/*.md`
-- `docs-harness/risks/**/*.md`
-- `docs-harness/harness-constraints/**/*.md`
-- `docs-harness/harness-improvements/**/*.md`
+- **Tự động load vào đầu mỗi phiên (Session Start) để nắm bắt bối cảnh hiện tại:**
+  - `AGENTS.md`
+  - `docs-harness/INDEX.md`
+  - `docs-harness/tickets/active/*.md`
+  - `docs-harness/plans/active/*.md`
+  - `docs-harness/risks/**/*.md`
+
+- **Load theo nhu cầu qua Top-Down Routing (chỉ đọc khi intent yêu cầu):**
+  - `docs-harness/WORKFLOW.md`
+  - `docs-harness/domain/**/*.md`
+  - `docs-harness/plans/README.md`
+  - `docs-harness/tickets/README.md`
+  - `docs-harness/harness-constraints/**/*.md`
+  - `docs-harness/harness-improvements/**/*.md`
 
 ## Tiết kiệm Tokens
 
@@ -38,19 +41,19 @@
 
 ## Hardening
 
-- Skill `.agents/improve-harness`: Tăng tính cá nhân hoá của AI và harness repo từ intent của user
+- Skill `.agents/skills/improve-harness`: Tăng tính cá nhân hoá của AI và harness repo từ intent của user
 
 ## Quản lý tickets
 
 - AI agent không được tự load `docs-harness/tickets/completed/*.md` => tránh làm loãng context
-- AI agent tự động load `docs-harness/tickets/active/*.md` => để aware các tickets hiện tại (dể load vào context để AI agent có nhiều info hơn)
+- AI agent tự động load `docs-harness/tickets/active/*.md` => để aware các tickets hiện tại (dễ load vào context để AI agent có nhiều info hơn)
 
 ## Quản lý plans
 
 - AI agent không được tự load `docs-harness/plans/completed/*.md` => tránh làm loãng context
-- AI agent tự động load `docs-harness/plans/active/*.md` => để aware các plans hiện tại (dể load vào context để AI agent có nhiều info hơn)
+- AI agent tự động load `docs-harness/plans/active/*.md` => để aware các plans hiện tại (dễ load vào context để AI agent có nhiều info hơn)
 
 ## Quản lý Risks/Proposals
 
 - AI agent không được tự load `docs-harness/proposals/*.md` => tránh làm loãng context
-- AI agent tự động load `docs-harness/risks/*.md` => để aware các risk hiện tại (dể load vào context để AI agent có nhiều info hơn)
+- AI agent tự động load `docs-harness/risks/*.md` => để aware các risk hiện tại (dễ load vào context để AI agent có nhiều info hơn)

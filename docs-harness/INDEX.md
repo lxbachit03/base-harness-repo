@@ -33,7 +33,9 @@ is created, moved, renamed, or deleted.
 
 Start from this tree, select a folder from the User intent, classification, and
 priority, read its routing metadata, and follow only the relevant `Resources`
-links. Read `docs-harness/WORKFLOW.md`, product docs, code, or validation files only
+links. Active tickets, active plans, and risk records are loaded at session start
+for situational awareness; do not automatically load completed history or proposals.
+Read `docs-harness/WORKFLOW.md`, product docs, code, or validation files only
 after the relevant Harness context is selected.
 
 ### Bottom-Up (Explicit Deep Dive Only)
