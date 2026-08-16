@@ -312,5 +312,3 @@ file. Each real resource entry must include one `PRIORITY: [CRITIAL]`,
 
 Update this file in the same task when filesystem structure or routing metadata
 changes. Do not invent routes, resources, domain knowledge, or priorities.
-
-
