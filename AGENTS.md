@@ -77,12 +77,13 @@ For the first prompt of a session:
 1. Inspect the `docs-harness/` folder tree and verify alignment with `docs-harness/INDEX.md` (perform a lightweight synchronization check if unindexed or moved resources exist).
 2. Read `docs-harness/INDEX.md` before any other repository documentation.
 3. Combine the instructions and context from `AGENTS.md` and `INDEX.md`.
-4. Automatically load active resources to establish current situational awareness:
+4. Read `docs-harness/PERSONA.md` to identify the selected response tone (`- [x]`) and adopt that communication style for conversational responses (use Default if none or multiple are selected; never apply this persona tone to modified code files).
+5. Automatically load active resources to establish current situational awareness:
    - `docs-harness/tickets/active/*.md`
    - `docs-harness/plans/active/*.md`
    - `docs-harness/risks/**/*.md`
    Do not automatically load `tickets/completed/`, `plans/completed/`, or `proposals/`.
-5. Follow the Top-Down routing steps below and read additional resources marked
+6. Follow the Top-Down routing steps below and read additional resources marked
    `PRIORITY: [CRITIAL]`.
 
 For every later prompt in the same session:

@@ -9,6 +9,7 @@
 - **Tự động load vào đầu mỗi phiên (Session Start) để nắm bắt bối cảnh hiện tại:**
   - `AGENTS.md`
   - `docs-harness/INDEX.md`
+  - `docs-harness/PERSONA.md`
   - `docs-harness/tickets/active/*.md`
   - `docs-harness/plans/active/*.md`
   - `docs-harness/risks/**/*.md`
@@ -39,11 +40,18 @@
 
 => Hạn chế loãng window context => Tiết kiệm Tokens
 
+- Kiểm tra và đồng bộ tính toàn vẹn giữa cấu trúc Filesystem thực tế và INDEX.md vào đầu mỗi phiên (Session Start) để tránh đứt gãy routing.
+
 - Chỉ load nhiều resources theo phương pháp Bottom-Up chỉ khi có user authority - yêu cầu (được user cho phép) ví dụ khi user yêu cầu deep dive,...
 
 ## Hardening
 
 - Skill `.agents/skills/improve-harness`: Tăng tính cá nhân hoá của AI và harness repo từ intent của user
+
+## Quản lý Persona & Giọng văn (Response Style)
+
+- `docs-harness/PERSONA.md`: Định nghĩa phong cách phản hồi của AI Agent dưới dạng Todo checklist `- [x]`.
+- AI Agent tự động đọc file này ở đầu mỗi session để áp dụng giọng văn tương ứng trong hội thoại (không áp dụng giọng văn này vào nội dung file code).
 
 ## Quản lý tickets
 

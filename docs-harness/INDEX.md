@@ -65,6 +65,7 @@ Resources:
 - [README.md](README.md)
 - [INDEX.md](INDEX.md)
 - [WORKFLOW.md](WORKFLOW.md)
+- [PERSONA.md](PERSONA.md)
 
 ## TAG: [IMPROVE_HARNESS]
 
@@ -79,6 +80,7 @@ Skip when: the intent concerns only product behavior or unrelated domain work.
 
 Resources:
 
+- [Persona response style configuration and session start routing](plans/active/0816-persona-response-style-routing.md) — `#006_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
 - [Filesystem and INDEX synchronization check at session start](plans/active/0816-filesystem-index-sync-rule.md) — `#005_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
 - [Ticket lifecycle improvement](plans/active/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
 - [Writing-for-agents routing improvement](plans/active/0815-writing-for-agents-routing.md) — `#003_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
@@ -310,4 +312,5 @@ file. Each real resource entry must include one `PRIORITY: [CRITIAL]`,
 
 Update this file in the same task when filesystem structure or routing metadata
 changes. Do not invent routes, resources, domain knowledge, or priorities.
+
 
