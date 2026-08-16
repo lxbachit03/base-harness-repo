@@ -39,6 +39,8 @@
 
 => Hạn chế loãng window context => Tiết kiệm Tokens
 
+- Chỉ load nhiều resources theo phương pháp Bottom-Up chỉ khi có user authority - yêu cầu (được user cho phép) ví dụ khi user yêu cầu deep dive,...
+
 ## Hardening
 
 - Skill `.agents/skills/improve-harness`: Tăng tính cá nhân hoá của AI và harness repo từ intent của user
@@ -57,3 +59,7 @@
 
 - AI agent không được tự load `docs-harness/proposals/*.md` => tránh làm loãng context
 - AI agent tự động load `docs-harness/risks/*.md` => để aware các risk hiện tại (dễ load vào context để AI agent có nhiều info hơn)
+
+## Đồng bộ filesystem trong `docs-harness` và `INDEX.md`
+
+- Kiểm tra và đồng bộ tính toàn vẹn giữa cấu trúc Filesystem thực tế và INDEX.md vào đầu mỗi phiên (Session Start) để tránh đứt gãy routing.

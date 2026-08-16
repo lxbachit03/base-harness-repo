@@ -74,7 +74,7 @@ User message in that conversation.
 
 For the first prompt of a session:
 
-1. Inspect the `docs-harness/` folder tree.
+1. Inspect the `docs-harness/` folder tree and verify alignment with `docs-harness/INDEX.md` (perform a lightweight synchronization check if unindexed or moved resources exist).
 2. Read `docs-harness/INDEX.md` before any other repository documentation.
 3. Combine the instructions and context from `AGENTS.md` and `INDEX.md`.
 4. Automatically load active resources to establish current situational awareness:
@@ -138,6 +138,7 @@ scanning unrelated folders.
 The filesystem is the authority for the actual folder tree. `INDEX.md` is the
 routing mirror and must remain aligned with that tree.
 
+- Verify alignment at session start during Session Context Loading to catch any out-of-band additions or removals.
 - Update `INDEX.md` in the same task after creating, moving, renaming, or
   deleting a file or folder.
 - Update it when a resource's `TAG`, `PRIORITY`, `Purpose`, routing criteria, or
