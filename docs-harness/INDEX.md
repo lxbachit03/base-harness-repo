@@ -23,6 +23,8 @@ docs-harness/
 │   ├── active/
 │   └── completed/
 └── templates/
+    ├── <sample-big-ticket>/
+    └── <ticket-number>-<single-ticket>/
 ```
 
 The filesystem is authoritative for this tree. Update this block when a folder
@@ -312,6 +314,9 @@ Resources:
 Folder: [templates/](templates/)
 
 Purpose: stable system templates for creating canonical resources.
+
+The folder-layout examples under `templates/` are scaffolding only and are not
+active ticket records.
 
 Read when: creating a new resource in a supported resource folder.
 

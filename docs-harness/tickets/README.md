@@ -78,6 +78,11 @@ summary; an empty inventory must state what was checked and `None found`.
 with evidence. Unknown facts remain explicitly marked; they are not inferred
 into the record.
 
+The placeholder folder examples are stored under
+`docs-harness/templates/<ticket-number>-<single-ticket>/` and
+`docs-harness/templates/<sample-big-ticket>/`; they are layout templates, not
+active tickets.
+
 ## Lifecycle
 
 `active/` is the default intake and execution route. Keep tickets there while

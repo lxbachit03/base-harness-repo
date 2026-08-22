@@ -20,7 +20,7 @@ owner, link, purpose, and source or generator for each artifact. Do not delete
 or move those artifacts merely because the ticket lifecycle changed.
 
 For a multi-ticket batch, preserve the batch container and its
-`<ticket-number>-<ticket-slug>/` child folders when moving history here. The
+`<ticket-number>-<child-ticket>/` child folders when moving history here. The
 folder naming convention is part of the ticket identity and is not normalized to
 a generic slug.
 

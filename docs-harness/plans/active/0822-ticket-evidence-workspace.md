@@ -44,10 +44,9 @@ The existing ticket contract required one `ticket.md` but placed source files,
 supporting resources, and generated documents beside the record. It did not
 provide standard API or database-schema inventories for User review, nor did it
 require an artifact manifest, explicit owner/link, or review evidence. No real
-ticket records require migration in the current workspace. The User has created
-empty sample layout folders for one direct ticket and one multi-ticket batch:
-`active/<ticket-number>-<single-ticket>/` and
-`active/<sample-big-ticket>/<ticket-number>-<ticket-1|2>/`.
+ticket records require migration in the current workspace. The User-created
+direct and batch folder examples now live under `docs-harness/templates/`, not
+the active ticket route, and are persisted with README placeholders.
 
 ## Proposed Improvement
 
@@ -86,6 +85,8 @@ In scope:
 
 - `docs-harness/templates/ticket.md`, `APIs.md`, `SCHEMAs.md`, and
   `ticket-docs-README.md`.
+- `docs-harness/templates/<ticket-number>-<single-ticket>/` and
+  `docs-harness/templates/<sample-big-ticket>/` layout examples.
 - `docs-harness/tickets/README.md`, `tickets/active/README.md`, and
   `tickets/completed/README.md`.
 - `.agents/skills/ticket-solving/SKILL.md` and relevant template/routing docs.
@@ -111,6 +112,8 @@ During work:
 - Verify the ticket workspace and skill diagrams agree on the folder shape.
 - Verify direct and batch examples use the User-provided folder names and
   preserve the source ticket number prefix.
+- Verify the placeholder layout folders are under `templates/` and absent from
+  the active ticket route.
 - Verify `APIs.md` and `SCHEMAs.md` require a non-placeholder review date and
   evidence record, including the `None found` empty-inventory path.
 - Verify template links, INDEX routing, unique resource IDs, whitespace, and
@@ -140,6 +143,9 @@ Final proof:
   and evidence fields.
 - User-provided direct/batch naming contract is represented in the ticket
   template, workspace guides, and `$ticket-solving` layout rules.
+- Folder move: the single-ticket and batch layout examples are under
+  `docs-harness/templates/` with README placeholders; the active route contains
+  only its lifecycle guide.
 - Targeted static contract check: pass for required paths, headings, owner/link
   markers, review fields, and changed-file whitespace.
 - Build, test, lint, format, generation, installation, migration, and seed

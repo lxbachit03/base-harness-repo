@@ -25,6 +25,19 @@ task instructions.
 - `ticket-docs-README.md`: the required owner/link/provenance manifest for a
   ticket's `docs/` folder.
 
+## Ticket Folder Layout Templates
+
+The placeholder folders below are layout examples, not active ticket records:
+
+- `<ticket-number>-<single-ticket>/`: one ticket directly under the active or
+  completed lifecycle folder.
+- `<sample-big-ticket>/`: a batch container whose child folders are named
+  `<ticket-number>-<ticket-name>/`, one child per ticket.
+
+Use the file templates above inside each ticket folder. Do not route or solve
+these placeholder folders as tickets merely because they exist under
+`templates/`.
+
 ## Usage Rules
 
 - Read the matching template before creating a new supported resource.

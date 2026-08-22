@@ -48,6 +48,9 @@ Use the source-provided number in `<ticket-number>`. Use a stable
 lowercase-kebab-case slug for the ticket or batch name; use `TBD` when the
 source does not provide a number instead of inventing one.
 
+Placeholder layout folders live under `docs-harness/templates/`; this
+`active/` folder contains only real in-progress ticket workspaces.
+
 Move a ticket to `../completed/` only after the User authorizes completion or
 explicitly moves the ticket. Preserve the ticket history and update its
 metadata to `status: completed` during that move.

@@ -59,7 +59,7 @@ reported.
    identity cannot be established from the source.
 6. For one ticket, choose the direct `<ticket-number>-<single-ticket>/` layout.
    For multiple tickets from one source, choose a `<sample-big-ticket>/`
-   container and create one `<ticket-number>-<ticket-slug>/` child per ticket.
+   container and create one `<ticket-number>-<ticket-name>/` child per ticket.
    Do not put a ticket record directly at the batch-container root.
 
 For an inline source, record `User prompt` as the source and preserve the exact
@@ -238,7 +238,7 @@ During the work:
 - compare the parsed ticket count with the created active ticket folders;
 - confirm one ticket uses the direct `<ticket-number>-<single-ticket>/` layout;
 - confirm multiple tickets use one `<sample-big-ticket>/` container with one
-  `<ticket-number>-<ticket-slug>/` child per ticket and no root ticket record;
+  `<ticket-number>-<ticket-name>/` child per ticket and no root ticket record;
 - confirm each active ticket folder contains exactly one `ticket.md`, one
   `APIs.md`, one `SCHEMAs.md`, and one `docs/` folder with `README.md`;
 - confirm every ticket-specific source and AI-created artifact is under `docs/`
