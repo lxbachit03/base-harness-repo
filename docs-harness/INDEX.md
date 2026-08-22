@@ -24,6 +24,7 @@ docs-harness/
 │   └── completed/
 └── templates/
     ├── <sample-big-ticket>/
+    ├── <service-name>/
     └── <ticket-number>-<single-ticket>/
 ```
 
@@ -83,6 +84,7 @@ Skip when: the intent concerns only product behavior or unrelated domain work.
 
 Resources:
 
+- [Service E2E domain-flow template improvement](plans/active/0822-domain-e2e-flow-template.md) — `#011_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [Ticket evidence workspace templates](plans/active/0822-ticket-evidence-workspace.md) — `#010_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [User authority operation gate](plans/active/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [Onboarding skill and flow-based workspace routing](plans/active/0816-onboarding-skill-folder-routing.md) — `#007_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
@@ -203,6 +205,7 @@ Skip when: no active plan is related to the current intent.
 
 Resources:
 
+- [Service E2E domain-flow template improvement](plans/active/0822-domain-e2e-flow-template.md) — `#011_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [Ticket evidence workspace templates](plans/active/0822-ticket-evidence-workspace.md) — `#010_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [User authority operation gate](plans/active/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [Onboarding skill and flow-based workspace routing](plans/active/0816-onboarding-skill-folder-routing.md) — `#007_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
@@ -324,11 +327,13 @@ Skip when: no new resource is being created.
 
 Resources:
 
+- [Service E2E domain-flow template catalog](templates/README.md)
 - [Activity diagram template](templates/activity-diagram.md)
 - [Harness improvement template](templates/harness-improvement.md)
 - [Constraint template](templates/constraint.md)
 - [Decision template](templates/decision.md)
 - [Domain template](templates/domain.md)
+- [Domain entity/schema template](templates/domain-entity.md)
 - [Execution plan template](templates/exec-plan.md)
 - [Risk template](templates/risk.md)
 - [Proposal template](templates/proposal.md)

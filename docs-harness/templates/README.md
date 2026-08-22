@@ -10,6 +10,8 @@ task instructions.
 - `constraint.md`: file, folder, or task constraints.
 - `decision.md`: lasting product or architecture decisions.
 - `domain.md`: confirmed or uncertain domain knowledge.
+- `domain-entity.md`: detailed service schema/entity documentation, including
+  field code-usage and query tracing gated by explicit User authority.
 - `exec-plan.md`: durable execution plans.
 - `harness-improvement.md`: bounded Harness improvement experiments.
 - `plan.md`: plan resources requiring the common resource metadata.
@@ -38,6 +40,44 @@ Use the file templates above inside each ticket folder. Do not route or solve
 these placeholder folders as tickets merely because they exist under
 `templates/`.
 
+## Domain E2E Flow Template
+
+`<service-name>/` is the folder template for service-level domain knowledge
+organized as multiple isolated E2E data flows:
+
+```text
+<service-name>/
+├── README.md
+├── data-flows/
+│   └── <data-flow-name>/
+│       ├── apis.md
+│       ├── entities.md
+│       ├── prerequisite.md
+│       └── data-flow.md
+└── schemas/
+    └── <schema-name>.md
+```
+
+The first Mermaid diagram in each `data-flow.md` is the complete E2E flow. Every
+following diagram covers one API from `apis.md`. Each real schema file under a
+promoted service workspace uses `domain-entity.md`; the placeholder
+`schemas/<schema-name>.md` remains empty until a concrete User-authorized schema
+is documented.
+
+## Domain Schema/Entity Template
+
+Use `domain-entity.md` for one schema/entity file under
+`docs-harness/domain/<service-name>/schemas/`. It covers schema meaning, fields,
+enums, relationships, constraints, indexes, lifecycle, and source-backed code
+usage. Code usage means tracing where a field is assigned, transformed, read,
+serialized, and used in `WHERE`, `JOIN`, filter, sort, or index conditions.
+
+The schema documentation authority and the detailed field-analysis authority
+are separate. A current User request must name the schema before a real file is
+created. Detailed field/code tracing is prohibited unless that authority also
+explicitly covers the analysis scope. Otherwise retain `Pending User authority`
+or `Unverified` placeholders.
+
 ## Usage Rules
 
 - Read the matching template before creating a new supported resource.
@@ -47,6 +87,18 @@ these placeholder folders as tickets merely because they exist under
   priority, authority, or validation.
 - Templates do not receive real resource IDs or date-prefixed filenames and
   should not be indexed as real resources.
+- Domain templates are not domain truth. Creating or populating a real service
+  workspace under `docs-harness/domain/` requires an explicit current User
+  request naming the service and authorizing its documentation scope; agent
+  inference, discovery, or a plan alone is insufficient.
+- A domain schema file must use `domain-entity.md`. Its detailed field and code
+  usage sections require explicit User authority for the named schema/fields;
+  the template may define the sections but must not be populated from agent
+  inference without that authority.
+- After promotion, replace placeholders with source-backed or explicitly
+  User-confirmed facts, apply `templates/domain.md`, and update `INDEX.md` only
+  for the real canonical resources. If authority or evidence is unresolved,
+  keep the scaffold under `templates/`.
 - Update `docs-harness/INDEX.md` in the same task when a real resource or
   routing metadata changes.
 
