@@ -2,6 +2,23 @@
 
 This folder stores ticket history after User-authorized completion.
 
+Each completed ticket preserves the same self-contained workspace it had while
+active:
+
+```text
+docs-harness/tickets/completed/<ticket-slug>/
+├── docs/
+│   └── README.md
+├── ticket.md
+├── APIs.md
+└── SCHEMAs.md
+```
+
+The `docs/` folder retains ticket-specific source files, supporting resources,
+and artifacts created during resolution. Its `README.md` manifest preserves the
+owner, link, purpose, and source or generator for each artifact. Do not delete
+or move those artifacts merely because the ticket lifecycle changed.
+
 Completed tickets are not part of the default `$ticket-solving` context. Read a
 completed ticket only when the User names it, asks for historical context, or
 the current ticket has an explicit dependency on it.

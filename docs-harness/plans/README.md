@@ -44,6 +44,8 @@ approval.
 
 ## Active Plans
 
+- [Ticket evidence workspace](active/0822-ticket-evidence-workspace.md) —
+  `#010_IMPROVE_HARNESS_0822`, pending fresh rerun.
 - [User authority operation gate](active/0822-user-authority-operation-gate.md) —
   `#008_IMPROVE_HARNESS_0822`, pending fresh rerun.
 - [Onboarding skill and flow-based workspace routing](active/0816-onboarding-skill-folder-routing.md) —

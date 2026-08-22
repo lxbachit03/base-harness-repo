@@ -17,8 +17,9 @@ Load repository context before ticket intake:
 1. Read `AGENTS.md`.
 2. Read `docs-harness/INDEX.md`.
 3. Follow only the routed resources relevant to the ticket's intent.
-4. Read `docs-harness/tickets/README.md` and
-   `docs-harness/templates/ticket.md` before creating ticket records.
+4. Read `docs-harness/tickets/README.md` and the ticket templates
+   `docs-harness/templates/ticket.md`, `APIs.md`, `SCHEMAs.md`, and
+   `ticket-docs-README.md` before creating ticket records.
 5. Read `docs-harness/tickets/active/README.md` for the default intake and
    execution lifecycle. Read `docs-harness/tickets/completed/README.md` only
    when the User names completed history or the ticket has an explicit
@@ -39,7 +40,8 @@ If `docs-harness/tickets/README.md` or
 workspace contract. Bootstrap it only with explicit User authority.
 
 Done when the repository instructions, routed context, ticket workspace guide,
-and record template have been read, or a missing required input is reported.
+and all four ticket templates have been read, or a missing required input is
+reported.
 
 ## Intake
 
@@ -72,23 +74,45 @@ For one ticket:
 
 ```text
 docs-harness/tickets/active/<ticket-slug>/
-├── <source-file>          # only when the source is a file
-└── ticket.md
+├── docs/                  # manifest, source, support files, and AI artifacts
+│   ├── README.md          # owner/link/provenance manifest
+│   └── <ticket-artifacts>
+├── ticket.md              # canonical ticket record
+├── APIs.md                # relevant API inventory
+└── SCHEMAs.md             # relevant schema and enum inventory
 ```
 
 For multiple tickets from one source:
 
 ```text
 docs-harness/tickets/active/<batch-slug>/
-├── <source-file>          # shared source, when the source is a file
-├── <ticket-a-slug>/ticket.md
-└── <ticket-b-slug>/ticket.md
+├── docs/                  # shared source and resources, when applicable
+│   └── README.md          # shared-artifact ownership manifest, when applicable
+├── <ticket-a-slug>/
+│   ├── docs/
+│   │   ├── README.md
+│   │   └── <ticket-artifacts>
+│   ├── ticket.md
+│   ├── APIs.md
+│   └── SCHEMAs.md
+└── <ticket-b-slug>/
+    ├── docs/
+    │   ├── README.md
+    │   └── <ticket-artifacts>
+    ├── ticket.md
+    ├── APIs.md
+    └── SCHEMAs.md
 ```
 
-Place a ticket-specific PDF or other artifact beside that ticket's
-`ticket.md`. Place an artifact shared by several tickets at the batch root.
-Keep generated documents beside the record and avoid `input/` or `output/`
-subfolders unless the User requests them.
+Place a ticket-specific source file, PDF, JavaScript, HTML, log, screenshot, or
+other resource under that ticket's `docs/`. Place a shared source or artifact
+under the batch-level `docs/`. Put every artifact created by the AI agent while
+working the ticket under the owning `docs/` folder. Start each `docs/` folder
+from `docs-harness/templates/ticket-docs-README.md` as `README.md`; list every
+other file or folder there exactly once with its ticket owner, resolvable link,
+purpose, source or generator, and status. Keep the three Markdown records at
+the ticket-folder root and do not create `input/` or `output/` subfolders unless
+the User requests them.
 
 Start records from `docs-harness/templates/ticket.md`. Reuse an existing active
 ticket folder only when its identity matches the intake result. Preserve
@@ -96,8 +120,9 @@ existing files and pause on an ambiguous collision; never overwrite a user's
 source or artifact.
 
 Done when the folder shape matches the parsed ticket count, every active ticket
-folder has one canonical `ticket.md`, and each source or artifact has one clear
-owner.
+folder has exactly one `ticket.md`, one `APIs.md`, one `SCHEMAs.md`, and one
+`docs/README.md` manifest, and every source or artifact has one clear owner and
+a resolvable link.
 
 ## Lifecycle
 
@@ -127,21 +152,35 @@ Start each record from `docs-harness/templates/ticket.md`. Keep source text
 separate from the agent's interpretation. A record contains, as applicable:
 
 - ticket ID and title from the source;
+- ticket owner and canonical ticket link;
 - source location and original ticket text;
 - summary, context, evidence, and expected outcome;
+- the ticket-local `APIs.md` inventory and data-preparation decision;
+- the ticket-local `SCHEMAs.md` entity, field, relationship, and enum inventory;
+- the ticket-local `docs/README.md` artifact manifest;
 - explicit acceptance criteria;
 - in-scope and out-of-scope boundaries;
 - plan, implementation or resolution notes, and decisions;
 - validation commands and results;
 - risks, proposals or mitigations, open questions, and artifact links.
 
+Keep API and schema facts source-backed. `APIs.md` must identify relevant
+endpoints and whether seed data is a better preparation path. `SCHEMAs.md` must
+explain relevant entity fields, relationships, and every relevant enum value.
+Both files must contain a real `Last reviewed` date, `Evidence sources`, and an
+evidence summary. If no relevant API or schema is found, record the checked
+scope and `None found`; never omit the review record. Use `TBD`, `Not found`, or
+`Unverified` instead of guessing.
+
 Use the source's ticket ID when one exists. A slug is a filesystem key, not a
 replacement business ID. Use `TBD` for an absent field rather than guessing.
 Keep `status: resolved` distinct from lifecycle completion: a resolved record
 stays under `active/` until the User authorizes or performs the move.
-Add a separate Markdown document beside `ticket.md` only when the analysis,
-plan, resolution, or validation is large enough to review independently, and
-link it from the record.
+Keep ticket-specific source and AI-created documents under `docs/`. Add each
+file or folder to `docs/README.md` with its owner, resolvable link, purpose,
+source or generator, and status. Keep the three ticket records at the folder
+root; use the manifest to link larger analysis, plan, resolution, or validation
+artifacts.
 
 When a risk appears in the response or ticket record, include at least one
 explicit proposal or mitigation for it. Treat that proposal as a suggestion
@@ -154,17 +193,19 @@ acceptance criterion, evidence, or an explicitly marked open question.
 
 ## Solve
 
-1. Read the active ticket's `ticket.md` and all files in its folder before
-   proposing or implementing a solution. Read a completed ticket only through
-   the explicit history/dependency branch described above.
+1. Read the active ticket's `ticket.md`, `APIs.md`, `SCHEMAs.md`, its
+   `docs/README.md`, and the relevant readable resources in its `docs/` folder
+   before proposing or implementing a solution. Read a completed ticket only
+   through the explicit history/dependency branch described above.
 2. Work on one ticket at a time and keep its status current. Use
    `intake`, `ready`, `in-progress`, `blocked`, or `resolved`, unless the User
    supplies another vocabulary.
 3. Implement only work authorized by the User and repository instructions.
    Record changed paths, decisions, validation results, and remaining risks in
    the ticket record or a linked document after each meaningful action.
-4. Keep AI-created documents in the owning ticket folder so the folder remains
-   the ticket's complete working set.
+4. Keep AI-created documents in the owning ticket's `docs/` folder and update
+   its manifest immediately so the owner, link, purpose, generator, and status
+   remain visible.
 5. For a batch, mark a blocked ticket with the missing authority or evidence;
    continue another ticket only when its scope is independent and the User
    requested multi-ticket solving.
@@ -184,7 +225,12 @@ explicit active-to-completed move.
 During the work:
 
 - compare the parsed ticket count with the created active ticket folders;
-- confirm each active ticket folder contains exactly one canonical `ticket.md`;
+- confirm each active ticket folder contains exactly one `ticket.md`, one
+  `APIs.md`, one `SCHEMAs.md`, and one `docs/` folder with `README.md`;
+- confirm every ticket-specific source and AI-created artifact is under `docs/`
+  and appears exactly once in the manifest with one owner and a resolvable link;
+- confirm `APIs.md` and `SCHEMAs.md` contain a real review date, evidence
+  sources, and an evidence summary, plus explicit unknown markers where needed;
 - confirm completed folders are excluded from default intake and read only
   through the explicit history/dependency branch;
 - normalize any `status: active` record found under `completed/` to
@@ -197,15 +243,19 @@ During the work:
 Before claiming completion:
 
 1. Inspect the final tree under `docs-harness/tickets/active/` and
-   `docs-harness/tickets/completed/`; confirm the single-ticket or batch layout.
+   `docs-harness/tickets/completed/`; confirm every ticket folder has the
+   required three Markdown records and a `docs/README.md` manifest.
 2. Check every acceptance criterion as satisfied, unsatisfied, or explicitly
    blocked, and separate that proof from User authority to complete.
 3. Confirm every ticket in `completed/` has `status: completed`.
-4. Run relevant focused repository checks and record their exact results. If a
+4. Confirm every artifact has one ticket owner, a resolvable link, source or
+   generator evidence, and a current status in the manifest; confirm both
+   inventories carry their review date and evidence.
+5. Run relevant focused repository checks and record their exact results. If a
    requested tool is unavailable, report it separately from a test failure.
-5. Run `git diff --check` and verify that changes stay within the authorized
+6. Run `git diff --check` and verify that changes stay within the authorized
    scope.
-6. Report the outcome, changed files, validation evidence, and unresolved
+7. Report the outcome, changed files, validation evidence, and unresolved
    questions separately.
 
 Update `docs-harness/INDEX.md` when the ticket workspace, lifecycle folders,

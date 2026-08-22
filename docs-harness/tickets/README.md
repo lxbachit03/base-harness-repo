@@ -11,11 +11,19 @@ One ticket is placed under `active/` while it is being worked:
 docs-harness/tickets/
 ├── active/
 │   └── <ticket-slug>/
-│       ├── <source-file>
+│       ├── docs/
+│       │   ├── README.md
+│       │   └── <source-files-supporting-resources-and-AI-artifacts>
 │       ├── ticket.md
-│       └── <supporting-or-generated-documents>
+│       ├── APIs.md
+│       └── SCHEMAs.md
 └── completed/
-    └── <ticket-slug>/ticket.md
+    └── <ticket-slug>/
+        ├── docs/
+        │   └── README.md
+        ├── ticket.md
+        ├── APIs.md
+        └── SCHEMAs.md
 ```
 
 When one source file contains multiple tickets, the source stays once in an
@@ -23,15 +31,43 @@ active batch folder and each ticket gets its own child folder:
 
 ```text
 docs-harness/tickets/active/<batch-slug>/
-├── <source-file>
-├── <ticket-a-slug>/ticket.md
-└── <ticket-b-slug>/ticket.md
+├── docs/
+│   ├── README.md
+│   └── <shared-source-and-resources>
+├── <ticket-a-slug>/
+│   ├── docs/
+│   │   └── README.md
+│   ├── ticket.md
+│   ├── APIs.md
+│   └── SCHEMAs.md
+└── <ticket-b-slug>/
+    ├── docs/
+    │   └── README.md
+    ├── ticket.md
+    ├── APIs.md
+    └── SCHEMAs.md
 ```
 
-Files that apply to one ticket and documents generated for that ticket belong
-beside its `ticket.md`. Files shared by several tickets belong in the batch
-folder. Use the canonical record template at
-`docs-harness/templates/ticket.md` when creating a ticket.
+Files that apply to one ticket belong in its `docs/` folder. This includes
+source files, PDFs, JavaScript, HTML, logs, screenshots, and artifacts created
+by the AI agent while working the ticket. Files shared by several tickets
+belong in the batch `docs/` folder, whose manifest records the shared artifact
+owner and links. Each ticket `docs/` folder must contain a `README.md` manifest;
+every other artifact must have one ticket owner, a resolvable link, a purpose,
+and source or generator evidence. Keep exactly three ticket records at the
+ticket-folder root: `ticket.md`, `APIs.md`, and `SCHEMAs.md`. Use the canonical
+templates at
+`docs-harness/templates/ticket.md`, `docs-harness/templates/APIs.md`,
+`docs-harness/templates/SCHEMAs.md`, and
+`docs-harness/templates/ticket-docs-README.md` for the manifest.
+
+`APIs.md` lists only verified APIs relevant to the ticket and records whether
+API calls or seed data are the appropriate preparation path. Both inventory
+files must record a real last-reviewed date, evidence sources, and an evidence
+summary; an empty inventory must state what was checked and `None found`.
+`SCHEMAs.md` lists relevant entities, fields, relationships, and enum meanings
+with evidence. Unknown facts remain explicitly marked; they are not inferred
+into the record.
 
 ## Lifecycle
 

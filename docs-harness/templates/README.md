@@ -17,6 +17,11 @@ task instructions.
 - `risk.md`: security, performance, and memory-leak risks.
 - `ticket.md`: ticket records managed under `docs-harness/tickets/active/` or
   `docs-harness/tickets/completed/`.
+- `APIs.md`: ticket-local API inventories and data-preparation alternatives.
+- `SCHEMAs.md`: ticket-local database schema, field, relationship, and enum
+  inventories.
+- `ticket-docs-README.md`: the required owner/link/provenance manifest for a
+  ticket's `docs/` folder.
 
 ## Usage Rules
 

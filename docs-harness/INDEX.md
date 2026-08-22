@@ -81,6 +81,7 @@ Skip when: the intent concerns only product behavior or unrelated domain work.
 
 Resources:
 
+- [Ticket evidence workspace templates](plans/active/0822-ticket-evidence-workspace.md) — `#010_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [User authority operation gate](plans/active/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [Onboarding skill and flow-based workspace routing](plans/active/0816-onboarding-skill-folder-routing.md) — `#007_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
 - [Persona response style configuration and session start routing](plans/active/0816-persona-response-style-routing.md) — `#006_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
@@ -200,6 +201,7 @@ Skip when: no active plan is related to the current intent.
 
 Resources:
 
+- [Ticket evidence workspace templates](plans/active/0822-ticket-evidence-workspace.md) — `#010_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [User authority operation gate](plans/active/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [Onboarding skill and flow-based workspace routing](plans/active/0816-onboarding-skill-folder-routing.md) — `#007_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
 - [Persona response style configuration and session start routing](plans/active/0816-persona-response-style-routing.md) — `#006_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
@@ -239,7 +241,8 @@ Resources:
 
 See the dedicated `tickets/active/` and `tickets/completed/` routing sections
 below. The template remains available at
-[templates/ticket.md](templates/ticket.md).
+[templates/ticket.md](templates/ticket.md), with the ticket `docs/` manifest at
+[templates/ticket-docs-README.md](templates/ticket-docs-README.md).
 
 ### tickets/active/
 
@@ -326,6 +329,9 @@ Resources:
 - [Proposal template](templates/proposal.md)
 - [Plan template](templates/plan.md)
 - [Ticket template](templates/ticket.md)
+- [API inventory template](templates/APIs.md)
+- [Schema inventory template](templates/SCHEMAs.md)
+- [Ticket docs manifest template](templates/ticket-docs-README.md)
 
 Templates do not receive resource IDs or date-prefixed filenames.
 
