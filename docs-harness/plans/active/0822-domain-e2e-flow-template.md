@@ -51,6 +51,15 @@ placeholder is empty and has no contract for schema meaning, field lifecycle,
 enum semantics, or codebase usage. The authority boundary for detailed field
 tracing is also not represented in the template surface.
 
+API-detail extension baseline:
+
+- Repository revision: `5ad6dc70f7de8f6881f923513445052c99793d76`
+- Branch: `main`
+- Worktree before this extension: clean.
+- Observed friction: the per-API template had request/response and side-effect
+  fields but no explicit sections for input provenance, execution context,
+  output semantics, domain logic, or database entity/component impact.
+
 ## Proposed Improvement
 
 If the scaffold is owned by `templates/<service-name>/`, explicitly labels
@@ -58,7 +67,11 @@ itself as template-only, requires current User authority before promotion, and
 uses `domain-entity.md` for schema resources with a separate field-analysis
 gate, a fresh agent will discover the template without loading it as domain
 truth and will produce consistent E2E flow evidence and schema traces because
-the filesystem owner, authority gates, and artifact contracts are explicit.
+the filesystem owner, authority gates, and artifact contracts are explicit. If
+each API section also requires input, context, output, domain logic, entity
+impact, query impact, and downstream-component evidence, a fresh agent will
+produce API explanations that are useful for tracing behavior into persistence
+and adjacent components instead of stopping at endpoint metadata.
 
 ## Scope
 
@@ -70,6 +83,10 @@ In scope:
   `entities.md`, `prerequisite.md`, and `data-flow.md`.
 - Add `docs-harness/templates/domain-entity.md` for detailed schema/entity
   documentation, including authority-gated field code-usage and query traces.
+- Expand the per-API contract in
+  `docs-harness/templates/<service-name>/data-flows/<data-flow-name>/apis.md`
+  with input, context, output, domain logic, entity/database impact, query
+  impact, downstream components, and evidence placeholders.
 - Update `docs-harness/domain/README.md`, `docs-harness/templates/README.md`,
   `docs-harness/INDEX.md`, and this active improvement record.
 - Preserve the existing `schemas/` folder and empty placeholder unchanged; the
@@ -101,6 +118,10 @@ During work:
   constraint, index, lifecycle, assignment, read, and query-trace sections.
 - Verify detailed field/code usage is explicitly gated by User authority and
   that no real schema resource is created.
+- Verify each per-API section in `apis.md` has Input, Context, Output, Domain
+  Logic and Entity Impact, Downstream Components, and evidence fields.
+- Verify the entity-impact table captures read/create/update/delete actions,
+  affected fields, query/filter/join behavior, persistence impact, and evidence.
 - Verify `data-flow.md` puts the overall E2E Mermaid diagram first and one API
   diagram in each subsequent API section.
 - Verify `schemas/` content is byte-for-byte preserved across the move.
@@ -137,6 +158,8 @@ Final proof:
 - `git diff --check`: pass.
 - Required section, authority-language, template-link, schema-boundary, and
   scoped whitespace assertions: pass.
+- Per-API input/context/output, domain-logic, entity-impact, query-impact, and
+  downstream-component contract: added; structural assertions pass.
 - No onboarding paths appear in the changed-file set; no real domain schema was
   created.
 - Onboarding files, product code, build, test, seed, and Mermaid renderer:
@@ -160,6 +183,11 @@ Detailed field tracing could expose unsupported domain meaning or sensitive
 usage if performed without the named authority. Proposal: keep the separate
 field-analysis gate and leave each unauthorized section as `Pending User
 authority` or `Unverified`.
+
+The expanded API contract may become too heavy for a simple endpoint. Proposal:
+keep the sections mandatory but allow `None verified` or `Unverified` with
+evidence instead of forcing speculative detail; revisit the weight after the
+fresh equivalent authoring rerun.
 
 ## Current Decision
 
