@@ -18,7 +18,8 @@ rerun before claiming improvement.
   changes. Preserve all existing work.
 - Treat invocation as authority for this bounded experiment, not for changing
   product policy, weakening proof, adding credentials, or mutating external
-  systems.
+  systems. It is not blanket authority to change unrelated files or run
+  build/test commands.
 
 ## 1. Preserve The Baseline
 
@@ -70,7 +71,10 @@ Maintenance owner and removal condition:
 Make only the authorized intervention. Prefer an existing owner, a clearer
 route, an actionable diagnostic, a runbook fact, a type or API, or
 claim-matched proof over a parallel framework. Keep unknown policy unknown.
-Run repository-native checks that protect the changed boundary.
+Run read-only repository-native checks that protect the changed boundary by
+default. Build, test, lint, format, generation, installation, migration, and
+package commands require explicit User authority for the command or command
+class. If the required proof is not authorized, report it as unattempted.
 
 ## 4. Require A Fresh Rerun
 

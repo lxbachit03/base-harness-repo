@@ -54,6 +54,12 @@ identified, include at least one proposal or solution inline. A read-only task
 must not create or modify a risk, proposal, or plan resource; persistence needs
 explicit User authority and reciprocal risk/proposal links.
 
+Route selection and a drafted goal do not grant operation authority. The goal
+must name the User-authorized mutation scope before the agent creates, edits,
+deletes, moves, or renames files or folders. Build, test, and other
+side-effecting commands require explicit User authority; if that authority is
+missing, the goal must leave those checks unattempted and report the gap.
+
 When a goal is drafted, include the route in the handoff:
 
 ```text
@@ -121,6 +127,8 @@ Route:
 
 Constraints:
 - [...]
+- File/folder mutations: only the explicitly User-authorized paths and actions.
+- Build/test or other side-effecting commands: only when explicitly authorized.
 
 Operating rules:
 - Keep a concise progress log in [file] when the task is long-running.

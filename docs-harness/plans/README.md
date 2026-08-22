@@ -44,6 +44,14 @@ approval.
 
 ## Active Plans
 
+- [User authority operation gate](active/0822-user-authority-operation-gate.md) —
+  `#008_IMPROVE_HARNESS_0822`, pending fresh rerun.
+- [Onboarding skill and flow-based workspace routing](active/0816-onboarding-skill-folder-routing.md) —
+  `#007_IMPROVE_HARNESS_0816`, pending fresh rerun.
+- [Persona response style configuration and session start routing](active/0816-persona-response-style-routing.md) —
+  `#006_IMPROVE_HARNESS_0816`, pending fresh rerun.
+- [Filesystem and INDEX synchronization check at session start](active/0816-filesystem-index-sync-rule.md) —
+  `#005_IMPROVE_HARNESS_0816`, pending fresh rerun.
 - [Ticket lifecycle routing](active/0815-ticket-lifecycle-routing.md) —
   `#004_IMPROVE_HARNESS_0815`, pending fresh rerun.
 - [Writing-for-agents routing improvement](active/0815-writing-for-agents-routing.md) —

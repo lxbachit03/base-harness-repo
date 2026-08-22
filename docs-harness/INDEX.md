@@ -81,6 +81,7 @@ Skip when: the intent concerns only product behavior or unrelated domain work.
 
 Resources:
 
+- [User authority operation gate](plans/active/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [Onboarding skill and flow-based workspace routing](plans/active/0816-onboarding-skill-folder-routing.md) — `#007_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
 - [Persona response style configuration and session start routing](plans/active/0816-persona-response-style-routing.md) — `#006_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
 - [Filesystem and INDEX synchronization check at session start](plans/active/0816-filesystem-index-sync-rule.md) — `#005_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
@@ -102,6 +103,7 @@ Skip when: no repository or task constraint is relevant.
 Resources:
 
 - [Risk-to-proposal suggestion and cross-link constraint](harness-constraints/0812-risk-proposal-suggestion-cross-link.md) — `#001_CONSTRAINTS_0812`, `PRIORITY: [MEDIUM]`
+- [User authority operation gate](harness-constraints/0822-user-authority-operation-gate.md) — `#009_CONSTRAINTS_0822`, `PRIORITY: [CRITIAL]`
 
 ## TAG: [DOMAIN]
 
@@ -198,6 +200,10 @@ Skip when: no active plan is related to the current intent.
 
 Resources:
 
+- [User authority operation gate](plans/active/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
+- [Onboarding skill and flow-based workspace routing](plans/active/0816-onboarding-skill-folder-routing.md) — `#007_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
+- [Persona response style configuration and session start routing](plans/active/0816-persona-response-style-routing.md) — `#006_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
+- [Filesystem and INDEX synchronization check at session start](plans/active/0816-filesystem-index-sync-rule.md) — `#005_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
 - [Ticket lifecycle improvement](plans/active/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
 - [Writing-for-agents routing improvement](plans/active/0815-writing-for-agents-routing.md) — `#003_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
 
@@ -332,4 +338,3 @@ file. Each real resource entry must include one `PRIORITY: [CRITIAL]`,
 
 Update this file in the same task when filesystem structure or routing metadata
 changes. Do not invent routes, resources, domain knowledge, or priorities.
-

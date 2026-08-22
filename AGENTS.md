@@ -26,6 +26,29 @@ the relevant workflow, product, design, plan, code, and validation material.
 - Claim completion only with relevant executable or observable evidence. Report
   the outcome, important changes, validation, and unresolved risks.
 
+### User Authority Gate
+
+Read-only inspection is the default operating mode.
+
+- Create, edit, delete, move, rename, copy, or generate files and folders only
+  when the current User request explicitly authorizes that operation and its
+  scope. This includes generated documentation, build artifacts, and
+  formatter or fixer output.
+- Build, test, lint, format, generate, install, migrate, and package commands
+  that can change repository or environment state require explicit User
+  authority for the command or command class. A request to implement,
+  validate, use a skill, create a plan, or satisfy acceptance criteria does not
+  by itself authorize such commands.
+- A `$goal-griller` route, drafted goal, or `$improve-harness` invocation does
+  not grant blanket operation authority. `$improve-harness` authorizes only the
+  bounded Harness intervention named by the current User request.
+- Before an authorized mutation or side-effecting command, state the target
+  paths or command and the intended scope. If authority or scope is absent or
+  ambiguous, pause and request it.
+- Read-only inspection and proof may run without additional authority when the
+  command does not create artifacts, caches, or other state. If the required
+  proof needs an unauthorized build or test, report it as unattempted.
+
 ### Risk-to-Proposal Constraint
 
 When the AI agent identifies a risk in an answer, review, diagnosis, plan,

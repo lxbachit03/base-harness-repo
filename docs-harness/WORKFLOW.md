@@ -88,14 +88,32 @@ Discovery never grants authority to fix what it finds.
 ### Bounded Change
 
 1. Restate the observable outcome.
-2. Read the relevant product or design material, affected code, adjacent
+2. Identify the User-authorized paths and commands; pause if the mutation or
+   proof scope is not explicit.
+3. Read the relevant product or design material, affected code, adjacent
    patterns, and existing tests.
-3. Make the smallest coherent change that satisfies the outcome.
-4. Run focused proof plus repository-required checks.
-5. Report the outcome, important changed surfaces, proof, and known limitations.
+4. Make the smallest coherent change that satisfies the authorized outcome.
+5. Run read-only focused proof by default. Run build, test, lint, format,
+   generation, installation, migration, or package commands only when the User
+   explicitly authorizes them.
+6. Report the outcome, important changed surfaces, proof, unattempted checks,
+   and known limitations.
 
 No bootstrap, intake, story, matrix, trace, scoring, audit, or proposal command
 is required.
+
+### Authority-Gated Operations
+
+`AGENTS.md` owns the authority gate. Apply it at every workflow entry point:
+
+- Reading, searching, listing, and other genuinely read-only inspection are
+  the default.
+- Filesystem and version-control mutations require explicit User authority for
+  the named scope.
+- Build/test and other commands that may write artifacts or external state
+  require explicit User authority for the command or command class.
+- A validation step never silently upgrades into permission to run a build or
+  test. Pause and report the exact missing command authority instead.
 
 ### Durable Planned Change
 
