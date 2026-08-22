@@ -57,6 +57,10 @@ reported.
    ticket-specific attachments before layout work begins.
 5. Use `TBD` for absent information and pause when the ticket boundary or
    identity cannot be established from the source.
+6. For one ticket, choose the direct `<ticket-number>-<single-ticket>/` layout.
+   For multiple tickets from one source, choose a `<sample-big-ticket>/`
+   container and create one `<ticket-number>-<ticket-slug>/` child per ticket.
+   Do not put a ticket record directly at the batch-container root.
 
 For an inline source, record `User prompt` as the source and preserve the exact
 ticket text in `ticket.md`; do not manufacture a source file.
@@ -67,13 +71,15 @@ attachment ownership, with missing authority or information marked explicitly.
 ## Workspace layout
 
 Create or reuse the `docs-harness/tickets/active/` workspace described by its
-README. Use a stable lowercase-kebab-case slug, preferring a source-provided
-ticket ID as a slug prefix when it can be represented safely.
+README. Use the source-provided ticket number as the folder prefix and a stable
+lowercase-kebab-case slug for the title. If the source has no ticket number, use
+`TBD` explicitly and record the missing identity; never invent or reuse a
+business number.
 
-For one ticket:
+For one ticket, use a direct ticket folder:
 
 ```text
-docs-harness/tickets/active/<ticket-slug>/
+docs-harness/tickets/active/<ticket-number>-<single-ticket>/
 ├── docs/                  # manifest, source, support files, and AI artifacts
 │   ├── README.md          # owner/link/provenance manifest
 │   └── <ticket-artifacts>
@@ -82,20 +88,19 @@ docs-harness/tickets/active/<ticket-slug>/
 └── SCHEMAs.md             # relevant schema and enum inventory
 ```
 
-For multiple tickets from one source:
+For multiple tickets from one source, use a batch container with one child
+folder per ticket:
 
 ```text
-docs-harness/tickets/active/<batch-slug>/
-├── docs/                  # shared source and resources, when applicable
-│   └── README.md          # shared-artifact ownership manifest, when applicable
-├── <ticket-a-slug>/
+docs-harness/tickets/active/<sample-big-ticket>/
+├── <ticket-number>-<ticket-1>/
 │   ├── docs/
 │   │   ├── README.md
 │   │   └── <ticket-artifacts>
 │   ├── ticket.md
 │   ├── APIs.md
 │   └── SCHEMAs.md
-└── <ticket-b-slug>/
+└── <ticket-number>-<ticket-2>/
     ├── docs/
     │   ├── README.md
     │   └── <ticket-artifacts>
@@ -104,25 +109,31 @@ docs-harness/tickets/active/<batch-slug>/
     └── SCHEMAs.md
 ```
 
+The batch folder is a container, not a ticket record. Create an optional
+`<sample-big-ticket>/docs/README.md` only when the source or an artifact is
+shared by multiple child tickets; do not create a batch `docs/` folder for
+ticket-specific resources.
+
 Place a ticket-specific source file, PDF, JavaScript, HTML, log, screenshot, or
-other resource under that ticket's `docs/`. Place a shared source or artifact
-under the batch-level `docs/`. Put every artifact created by the AI agent while
-working the ticket under the owning `docs/` folder. Start each `docs/` folder
-from `docs-harness/templates/ticket-docs-README.md` as `README.md`; list every
-other file or folder there exactly once with its ticket owner, resolvable link,
-purpose, source or generator, and status. Keep the three Markdown records at
-the ticket-folder root and do not create `input/` or `output/` subfolders unless
-the User requests them.
+other resource under that ticket's `docs/`. Put a shared source or artifact in
+the optional batch-level `docs/`. Put every artifact created by the AI agent
+while working the ticket under the owning `docs/` folder. Start each `docs/`
+folder from `docs-harness/templates/ticket-docs-README.md` as `README.md`; list
+every other file or folder there exactly once with its ticket owner, resolvable
+link, purpose, source or generator, and status. Keep the three Markdown records
+at each ticket-folder root and do not create `input/` or `output/` subfolders
+unless the User requests them.
 
 Start records from `docs-harness/templates/ticket.md`. Reuse an existing active
 ticket folder only when its identity matches the intake result. Preserve
 existing files and pause on an ambiguous collision; never overwrite a user's
 source or artifact.
 
-Done when the folder shape matches the parsed ticket count, every active ticket
-folder has exactly one `ticket.md`, one `APIs.md`, one `SCHEMAs.md`, and one
-`docs/README.md` manifest, and every source or artifact has one clear owner and
-a resolvable link.
+Done when one parsed ticket is a direct `<ticket-number>-<single-ticket>/`
+folder, or multiple parsed tickets are child folders under one batch container;
+every active ticket folder has exactly one `ticket.md`, one `APIs.md`, one
+`SCHEMAs.md`, and one `docs/README.md` manifest, and every source or artifact
+has one clear owner and a resolvable link.
 
 ## Lifecycle
 
@@ -225,6 +236,9 @@ explicit active-to-completed move.
 During the work:
 
 - compare the parsed ticket count with the created active ticket folders;
+- confirm one ticket uses the direct `<ticket-number>-<single-ticket>/` layout;
+- confirm multiple tickets use one `<sample-big-ticket>/` container with one
+  `<ticket-number>-<ticket-slug>/` child per ticket and no root ticket record;
 - confirm each active ticket folder contains exactly one `ticket.md`, one
   `APIs.md`, one `SCHEMAs.md`, and one `docs/` folder with `README.md`;
 - confirm every ticket-specific source and AI-created artifact is under `docs/`
@@ -243,7 +257,9 @@ During the work:
 Before claiming completion:
 
 1. Inspect the final tree under `docs-harness/tickets/active/` and
-   `docs-harness/tickets/completed/`; confirm every ticket folder has the
+   `docs-harness/tickets/completed/`; confirm single tickets are direct
+   `<ticket-number>-<single-ticket>/` folders and batch tickets are children of
+   one `<sample-big-ticket>/` container, with every ticket folder carrying the
    required three Markdown records and a `docs/README.md` manifest.
 2. Check every acceptance criterion as satisfied, unsatisfied, or explicitly
    blocked, and separate that proof from User authority to complete.

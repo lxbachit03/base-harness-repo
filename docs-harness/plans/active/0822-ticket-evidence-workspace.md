@@ -27,7 +27,9 @@ Give every ticket a stable, self-contained workspace with `ticket.md`,
 `APIs.md`, `SCHEMAs.md`, and a `docs/` folder for ticket resources and
 AI-created artifacts. Give every artifact a ticket owner, resolvable link, and
 source or generator evidence, and require review date/evidence in both
-inventory files.
+inventory files. Use a direct `<ticket-number>-<single-ticket>/` folder for one
+ticket and a `<sample-big-ticket>/` container with numbered child folders for a
+multi-ticket source.
 
 ## Current State
 
@@ -42,7 +44,10 @@ The existing ticket contract required one `ticket.md` but placed source files,
 supporting resources, and generated documents beside the record. It did not
 provide standard API or database-schema inventories for User review, nor did it
 require an artifact manifest, explicit owner/link, or review evidence. No real
-ticket folders require migration in the current workspace.
+ticket records require migration in the current workspace. The User has created
+empty sample layout folders for one direct ticket and one multi-ticket batch:
+`active/<ticket-number>-<single-ticket>/` and
+`active/<sample-big-ticket>/<ticket-number>-<ticket-1|2>/`.
 
 ## Proposed Improvement
 
@@ -51,11 +56,14 @@ If the ticket template, ticket-solving skill, and workspace README require one
 will keep ticket evidence and generated artifacts co-located, expose verified
 API/seed-data options, and document schema/field/enum meaning consistently,
 because the folder contract, owner/link manifest, review record, and templates
-are explicit.
+are explicit and the direct-versus-batch naming rule is unambiguous.
 
 Evidence that would weaken this:
 
 - A fresh ticket intake omits one of the required files or the `docs/` folder.
+- A single ticket is nested under a batch container, or a multi-ticket source
+  creates ticket records at the batch root instead of numbered child folders.
+- A ticket folder does not use `<ticket-number>-<lowercase-kebab-case-slug>`.
 - Source or AI-created artifacts are placed outside the owning `docs/` folder.
 - An artifact has no single ticket owner, resolvable link, purpose, source, or
   generator in the `docs/README.md` manifest.
@@ -101,6 +109,8 @@ During work:
 - Verify the ticket docs manifest requires owner, link, purpose, provenance, and
   status for every artifact.
 - Verify the ticket workspace and skill diagrams agree on the folder shape.
+- Verify direct and batch examples use the User-provided folder names and
+  preserve the source ticket number prefix.
 - Verify `APIs.md` and `SCHEMAs.md` require a non-placeholder review date and
   evidence record, including the `None found` empty-inventory path.
 - Verify template links, INDEX routing, unique resource IDs, whitespace, and
@@ -108,9 +118,9 @@ During work:
 
 Final proof:
 
-- Run a fresh equivalent ticket-intake prompt and confirm the agent creates one
-  ticket folder with `docs/README.md`, `docs/`, `ticket.md`, `APIs.md`, and
-  `SCHEMAs.md`.
+- Run fresh equivalent single-ticket and multi-ticket intake prompts and
+  confirm the agent creates the direct and batch-child layouts with
+  `docs/README.md`, `docs/`, `ticket.md`, `APIs.md`, and `SCHEMAs.md`.
 - Confirm a supplied source file and an AI-created artifact are placed under
   the ticket's `docs/` folder and both appear in the manifest with owner/link
   and source or generator evidence.
@@ -128,6 +138,8 @@ Final proof:
 - Proposal implementation: `docs/README.md` is the required artifact
   owner/link/provenance manifest, and `APIs.md`/`SCHEMAs.md` require review date
   and evidence fields.
+- User-provided direct/batch naming contract is represented in the ticket
+  template, workspace guides, and `$ticket-solving` layout rules.
 - Targeted static contract check: pass for required paths, headings, owner/link
   markers, review fields, and changed-file whitespace.
 - Build, test, lint, format, generation, installation, migration, and seed

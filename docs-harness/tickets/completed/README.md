@@ -6,7 +6,7 @@ Each completed ticket preserves the same self-contained workspace it had while
 active:
 
 ```text
-docs-harness/tickets/completed/<ticket-slug>/
+docs-harness/tickets/completed/<ticket-number>-<single-ticket>/
 ├── docs/
 │   └── README.md
 ├── ticket.md
@@ -18,6 +18,11 @@ The `docs/` folder retains ticket-specific source files, supporting resources,
 and artifacts created during resolution. Its `README.md` manifest preserves the
 owner, link, purpose, and source or generator for each artifact. Do not delete
 or move those artifacts merely because the ticket lifecycle changed.
+
+For a multi-ticket batch, preserve the batch container and its
+`<ticket-number>-<ticket-slug>/` child folders when moving history here. The
+folder naming convention is part of the ticket identity and is not normalized to
+a generic slug.
 
 Completed tickets are not part of the default `$ticket-solving` context. Read a
 completed ticket only when the User names it, asks for historical context, or

@@ -9,12 +9,36 @@ source: <docs/source-file-name-or-location-or-User-prompt>
 
 # Ticket: <ticket-title>
 
+## Folder naming
+
+Use one of these two layouts:
+
+### One ticket
+
+```text
+docs-harness/tickets/active/<ticket-number>-<single-ticket>/
+```
+
+### Multiple tickets in one source/batch
+
+```text
+docs-harness/tickets/active/<sample-big-ticket>/
+├── <ticket-number>-<ticket-1>/
+├── <ticket-number>-<ticket-2>/
+└── <ticket-number>-<ticket-n>/
+```
+
+`<ticket-number>` is the source-provided ticket number; never invent a business
+number. `<single-ticket>`, `<ticket-1>`, and `<sample-big-ticket>` are stable
+lowercase-kebab-case slugs. Use `TBD` only when the source has no ticket number
+and record that gap in the ticket; do not reuse another ticket's number.
+
 ## Workspace
 
 Every ticket folder contains this fixed working set:
 
 ```text
-<ticket-slug>/
+<ticket-number>-<single-ticket>/
 ├── docs/
 │   ├── README.md
 │   └── <source-files-supporting-resources-and-AI-artifacts>
@@ -32,6 +56,12 @@ Every ticket folder contains this fixed working set:
   whether an API or seed-data path is the better way to prepare data.
 - `SCHEMAs.md`: verified database entities/schemas, field meanings,
   relationships, and enum meanings relevant to this ticket.
+
+For a batch, keep each child ticket's fixed working set inside the batch folder.
+Create `<sample-big-ticket>/docs/` only when the source or an artifact is shared
+by multiple child tickets; initialize its manifest from
+`ticket-docs-README.md`. It is not required for a batch with only
+ticket-specific resources.
 
 Keep unknown facts as `TBD`, `Not found`, or `Unverified`; do not invent API,
 schema, field, or enum details.

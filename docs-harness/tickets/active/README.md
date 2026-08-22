@@ -2,16 +2,33 @@
 
 This folder is the default working area for `$ticket-solving`.
 
-Create each in-progress ticket under its own stable slug:
+Create a single in-progress ticket directly under `active/`:
 
 ```text
-docs-harness/tickets/active/<ticket-slug>/
+docs-harness/tickets/active/<ticket-number>-<single-ticket>/
 ├── docs/
 │   ├── README.md
 │   └── <source-files-supporting-resources-and-AI-artifacts>
 ├── ticket.md
 ├── APIs.md
 └── SCHEMAs.md
+```
+
+For a source containing multiple tickets, use a batch container and one
+workspace per child ticket:
+
+```text
+docs-harness/tickets/active/<sample-big-ticket>/
+├── <ticket-number>-<ticket-1>/
+│   ├── docs/README.md
+│   ├── ticket.md
+│   ├── APIs.md
+│   └── SCHEMAs.md
+└── <ticket-number>-<ticket-2>/
+    ├── docs/README.md
+    ├── ticket.md
+    ├── APIs.md
+    └── SCHEMAs.md
 ```
 
 Keep a ticket here while intake, investigation, implementation, validation, or
@@ -26,6 +43,10 @@ artifact one ticket owner, a resolvable link, and source or generator evidence.
 Shared batch resources belong under the batch-level `docs/` folder.
 When that folder exists, initialize its `README.md` from the ticket docs
 manifest template and record ownership and links for every shared artifact.
+
+Use the source-provided number in `<ticket-number>`. Use a stable
+lowercase-kebab-case slug for the ticket or batch name; use `TBD` when the
+source does not provide a number instead of inventing one.
 
 Move a ticket to `../completed/` only after the User authorizes completion or
 explicitly moves the ticket. Preserve the ticket history and update its
