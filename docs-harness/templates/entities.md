@@ -1,4 +1,4 @@
-# SCHEMAs: <ticket-title>
+# Entities: <ticket-title>
 
 This file inventories database entities and schemas relevant to this ticket.
 Record verified field and enum meanings from repository evidence; mark unknown

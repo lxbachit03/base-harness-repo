@@ -43,8 +43,8 @@ Every ticket folder contains this fixed working set:
 │   ├── README.md
 │   └── <source-files-supporting-resources-and-AI-artifacts>
 ├── ticket.md
-├── APIs.md
-└── SCHEMAs.md
+├── apis.md
+└── entities.md
 ```
 
 - `docs/`: ticket-specific PDFs, JavaScript, HTML, logs, screenshots, source
@@ -52,9 +52,9 @@ Every ticket folder contains this fixed working set:
   manifest: every other item must have one ticket owner, a purpose, a source or
   generator, and a link from the manifest or an applicable ticket record. Do
   not place unrelated files here.
-- `APIs.md`: verified repository APIs relevant to this ticket, including
+- `apis.md`: verified repository APIs relevant to this ticket, including
   whether an API or seed-data path is the better way to prepare data.
-- `SCHEMAs.md`: verified database entities/schemas, field meanings,
+- `entities.md`: verified database entities/schemas, field meanings,
   relationships, and enum meanings relevant to this ticket.
 
 For a batch, keep each child ticket's fixed working set inside the batch folder.
@@ -91,8 +91,8 @@ unknown.
 - Source:
 - Relevant files, links, logs, or screenshots:
 - Known constraints:
-- API inventory: `APIs.md`
-- Schema inventory: `SCHEMAs.md`
+- API inventory: `apis.md`
+- Schema inventory: `entities.md`
 
 ## Expected outcome
 

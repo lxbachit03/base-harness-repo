@@ -10,8 +10,8 @@ Expected ticket workspace:
 ├── docs/
 │   └── README.md
 ├── ticket.md
-├── APIs.md
-└── SCHEMAs.md
+├── apis.md
+└── entities.md
 ```
 
 Copy the file templates from `docs-harness/templates/` into a real ticket

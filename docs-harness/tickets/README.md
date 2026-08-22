@@ -14,8 +14,8 @@ docs-harness/tickets/active/
     │   ├── README.md
     │   └── <source-files-supporting-resources-and-AI-artifacts>
     ├── ticket.md
-    ├── APIs.md
-    └── SCHEMAs.md
+    ├── apis.md
+    └── entities.md
 ```
 
 When one source contains multiple tickets, create one batch container and put
@@ -29,22 +29,22 @@ docs-harness/tickets/active/
     │   │   ├── README.md
     │   │   └── <ticket-1-specific-resources-and-artifacts>
     │   ├── ticket.md
-    │   ├── APIs.md
-    │   └── SCHEMAs.md
+    │   ├── apis.md
+    │   └── entities.md
     ├── <ticket-number>-<ticket-2>/
     │   ├── docs/
     │   │   ├── README.md
     │   │   └── <ticket-2-specific-resources-and-artifacts>
     │   ├── ticket.md
-    │   ├── APIs.md
-    │   └── SCHEMAs.md
+    │   ├── apis.md
+    │   └── entities.md
     └── <ticket-number>-<ticket-n>/
         ├── docs/
         │   ├── README.md
         │   └── <ticket-n-specific-resources-and-artifacts>
         ├── ticket.md
-        ├── APIs.md
-        └── SCHEMAs.md
+        ├── apis.md
+        └── entities.md
 ```
 
 The batch folder is only a container, not a ticket record. If the source or an
@@ -64,17 +64,17 @@ belong in the batch `docs/` folder, whose manifest records the shared artifact
 owner and links. Each ticket `docs/` folder must contain a `README.md` manifest;
 every other artifact must have one ticket owner, a resolvable link, a purpose,
 and source or generator evidence. Keep exactly three ticket records at the
-ticket-folder root: `ticket.md`, `APIs.md`, and `SCHEMAs.md`. Use the canonical
+ticket-folder root: `ticket.md`, `apis.md`, and `entities.md`. Use the canonical
 templates at
-`docs-harness/templates/ticket.md`, `docs-harness/templates/APIs.md`,
-`docs-harness/templates/SCHEMAs.md`, and
+`docs-harness/templates/ticket.md`, `docs-harness/templates/apis.md`,
+`docs-harness/templates/entities.md`, and
 `docs-harness/templates/ticket-docs-README.md` for the manifest.
 
-`APIs.md` lists only verified APIs relevant to the ticket and records whether
+`apis.md` lists only verified APIs relevant to the ticket and records whether
 API calls or seed data are the appropriate preparation path. Both inventory
 files must record a real last-reviewed date, evidence sources, and an evidence
 summary; an empty inventory must state what was checked and `None found`.
-`SCHEMAs.md` lists relevant entities, fields, relationships, and enum meanings
+`entities.md` lists relevant entities, fields, relationships, and enum meanings
 with evidence. Unknown facts remain explicitly marked; they are not inferred
 into the record.
 

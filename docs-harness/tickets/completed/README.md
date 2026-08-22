@@ -10,8 +10,8 @@ docs-harness/tickets/completed/<ticket-number>-<single-ticket>/
 ├── docs/
 │   └── README.md
 ├── ticket.md
-├── APIs.md
-└── SCHEMAs.md
+├── apis.md
+└── entities.md
 ```
 
 The `docs/` folder retains ticket-specific source files, supporting resources,

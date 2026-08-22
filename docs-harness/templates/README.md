@@ -21,8 +21,8 @@ task instructions.
   `docs-harness/tickets/completed/`; use the direct
   `<ticket-number>-<single-ticket>/` layout for one ticket and a
   `<sample-big-ticket>/` container with numbered child folders for a batch.
-- `APIs.md`: ticket-local API inventories and data-preparation alternatives.
-- `SCHEMAs.md`: ticket-local database schema, field, relationship, and enum
+- `apis.md`: ticket-local API inventories and data-preparation alternatives.
+- `entities.md`: ticket-local database schema, field, relationship, and enum
   inventories.
 - `ticket-docs-README.md`: the required owner/link/provenance manifest for a
   ticket's `docs/` folder.

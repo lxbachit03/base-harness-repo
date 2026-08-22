@@ -30,7 +30,7 @@ leaving the inventory ambiguous.
 - Keep ticket-specific source, supporting files, and AI-created artifacts in
   this `docs/` folder; shared batch resources belong in the batch-level `docs/`.
 - Give every entry one clear ticket owner and link it from this manifest or the
-  applicable `ticket.md`, `APIs.md`, or `SCHEMAs.md` record.
+  applicable `ticket.md`, `apis.md`, or `entities.md` record.
 - Identify whether the file is source material, supporting evidence, or
   AI-generated output. Record the source path or generator and mark stale or
   superseded files explicitly.

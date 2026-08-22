@@ -9,6 +9,6 @@ Add the standard child workspace here when creating a real ticket:
 <ticket-number>-<ticket-1>/
 ├── docs/README.md
 ├── ticket.md
-├── APIs.md
-└── SCHEMAs.md
+├── apis.md
+└── entities.md
 ```

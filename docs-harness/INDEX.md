@@ -339,8 +339,8 @@ Resources:
 - [Proposal template](templates/proposal.md)
 - [Plan template](templates/plan.md)
 - [Ticket template](templates/ticket.md)
-- [API inventory template](templates/APIs.md)
-- [Schema inventory template](templates/SCHEMAs.md)
+- [API inventory template](templates/apis.md)
+- [Schema inventory template](templates/entities.md)
 - [Ticket docs manifest template](templates/ticket-docs-README.md)
 
 Templates do not receive resource IDs or date-prefixed filenames.

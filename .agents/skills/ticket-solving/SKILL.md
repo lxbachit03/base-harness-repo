@@ -18,7 +18,7 @@ Load repository context before ticket intake:
 2. Read `docs-harness/INDEX.md`.
 3. Follow only the routed resources relevant to the ticket's intent.
 4. Read `docs-harness/tickets/README.md` and the ticket templates
-   `docs-harness/templates/ticket.md`, `APIs.md`, `SCHEMAs.md`, and
+   `docs-harness/templates/ticket.md`, `apis.md`, `entities.md`, and
    `ticket-docs-README.md` before creating ticket records.
 5. Read `docs-harness/tickets/active/README.md` for the default intake and
    execution lifecycle. Read `docs-harness/tickets/completed/README.md` only
@@ -84,8 +84,8 @@ docs-harness/tickets/active/<ticket-number>-<single-ticket>/
 │   ├── README.md          # owner/link/provenance manifest
 │   └── <ticket-artifacts>
 ├── ticket.md              # canonical ticket record
-├── APIs.md                # relevant API inventory
-└── SCHEMAs.md             # relevant schema and enum inventory
+├── apis.md                # relevant API inventory
+└── entities.md             # relevant schema and enum inventory
 ```
 
 For multiple tickets from one source, use a batch container with one child
@@ -98,15 +98,15 @@ docs-harness/tickets/active/<sample-big-ticket>/
 │   │   ├── README.md
 │   │   └── <ticket-artifacts>
 │   ├── ticket.md
-│   ├── APIs.md
-│   └── SCHEMAs.md
+│   ├── apis.md
+│   └── entities.md
 └── <ticket-number>-<ticket-2>/
     ├── docs/
     │   ├── README.md
     │   └── <ticket-artifacts>
     ├── ticket.md
-    ├── APIs.md
-    └── SCHEMAs.md
+    ├── apis.md
+    └── entities.md
 ```
 
 The batch folder is a container, not a ticket record. Create an optional
@@ -131,8 +131,8 @@ source or artifact.
 
 Done when one parsed ticket is a direct `<ticket-number>-<single-ticket>/`
 folder, or multiple parsed tickets are child folders under one batch container;
-every active ticket folder has exactly one `ticket.md`, one `APIs.md`, one
-`SCHEMAs.md`, and one `docs/README.md` manifest, and every source or artifact
+every active ticket folder has exactly one `ticket.md`, one `apis.md`, one
+`entities.md`, and one `docs/README.md` manifest, and every source or artifact
 has one clear owner and a resolvable link.
 
 ## Lifecycle
@@ -166,8 +166,8 @@ separate from the agent's interpretation. A record contains, as applicable:
 - ticket owner and canonical ticket link;
 - source location and original ticket text;
 - summary, context, evidence, and expected outcome;
-- the ticket-local `APIs.md` inventory and data-preparation decision;
-- the ticket-local `SCHEMAs.md` entity, field, relationship, and enum inventory;
+- the ticket-local `apis.md` inventory and data-preparation decision;
+- the ticket-local `entities.md` entity, field, relationship, and enum inventory;
 - the ticket-local `docs/README.md` artifact manifest;
 - explicit acceptance criteria;
 - in-scope and out-of-scope boundaries;
@@ -175,8 +175,8 @@ separate from the agent's interpretation. A record contains, as applicable:
 - validation commands and results;
 - risks, proposals or mitigations, open questions, and artifact links.
 
-Keep API and schema facts source-backed. `APIs.md` must identify relevant
-endpoints and whether seed data is a better preparation path. `SCHEMAs.md` must
+Keep API and schema facts source-backed. `apis.md` must identify relevant
+endpoints and whether seed data is a better preparation path. `entities.md` must
 explain relevant entity fields, relationships, and every relevant enum value.
 Both files must contain a real `Last reviewed` date, `Evidence sources`, and an
 evidence summary. If no relevant API or schema is found, record the checked
@@ -204,7 +204,7 @@ acceptance criterion, evidence, or an explicitly marked open question.
 
 ## Solve
 
-1. Read the active ticket's `ticket.md`, `APIs.md`, `SCHEMAs.md`, its
+1. Read the active ticket's `ticket.md`, `apis.md`, `entities.md`, its
    `docs/README.md`, and the relevant readable resources in its `docs/` folder
    before proposing or implementing a solution. Read a completed ticket only
    through the explicit history/dependency branch described above.
@@ -240,10 +240,10 @@ During the work:
 - confirm multiple tickets use one `<sample-big-ticket>/` container with one
   `<ticket-number>-<ticket-name>/` child per ticket and no root ticket record;
 - confirm each active ticket folder contains exactly one `ticket.md`, one
-  `APIs.md`, one `SCHEMAs.md`, and one `docs/` folder with `README.md`;
+  `apis.md`, one `entities.md`, and one `docs/` folder with `README.md`;
 - confirm every ticket-specific source and AI-created artifact is under `docs/`
   and appears exactly once in the manifest with one owner and a resolvable link;
-- confirm `APIs.md` and `SCHEMAs.md` contain a real review date, evidence
+- confirm `apis.md` and `entities.md` contain a real review date, evidence
   sources, and an evidence summary, plus explicit unknown markers where needed;
 - confirm completed folders are excluded from default intake and read only
   through the explicit history/dependency branch;

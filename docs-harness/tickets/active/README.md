@@ -10,8 +10,8 @@ docs-harness/tickets/active/<ticket-number>-<single-ticket>/
 │   ├── README.md
 │   └── <source-files-supporting-resources-and-AI-artifacts>
 ├── ticket.md
-├── APIs.md
-└── SCHEMAs.md
+├── apis.md
+└── entities.md
 ```
 
 For a source containing multiple tickets, use a batch container and one
@@ -22,20 +22,20 @@ docs-harness/tickets/active/<sample-big-ticket>/
 ├── <ticket-number>-<ticket-1>/
 │   ├── docs/README.md
 │   ├── ticket.md
-│   ├── APIs.md
-│   └── SCHEMAs.md
+│   ├── apis.md
+│   └── entities.md
 └── <ticket-number>-<ticket-2>/
     ├── docs/README.md
     ├── ticket.md
-    ├── APIs.md
-    └── SCHEMAs.md
+    ├── apis.md
+    └── entities.md
 ```
 
 Keep a ticket here while intake, investigation, implementation, validation, or
 User review remains in progress. Passing acceptance criteria is evidence for
 completion; it does not by itself authorize the lifecycle move.
 
-Every active ticket folder must keep `ticket.md`, `APIs.md`, `SCHEMAs.md`, and a
+Every active ticket folder must keep `ticket.md`, `apis.md`, `entities.md`, and a
 `docs/` folder containing `README.md`. Put ticket-specific source files,
 supporting resources, and AI-created artifacts under `docs/`; keep the three
 Markdown records at the ticket-folder root. The manifest must give every
