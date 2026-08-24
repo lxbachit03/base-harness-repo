@@ -1,7 +1,7 @@
-# APIs: <data-flow-name>
+# APIs: {data-flow-name}
 
 > Template-only: this file is not domain truth. Populate it only inside a
-> User-authorized service workspace under `docs-harness/domain/<service-name>/`.
+> User-authorized service workspace under `docs-harness/domain/{service-name}/`.
 > Until then, keep its placeholders and do not index it as a domain resource.
 
 Record only APIs verified as relevant to this E2E flow. Keep the order aligned
@@ -32,8 +32,8 @@ scope.
 
 ## Scope
 
-- Service: `<service-name>`
-- Data flow: `<data-flow-name>`
+- Service: `{service-name}`
+- Data flow: `{data-flow-name}`
 - Entry API or trigger: `<method> <path>`
 - Terminal outcome: `<response, event, or state>`
 - Last reviewed: `<YYYY-MM-DD>`

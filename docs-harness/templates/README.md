@@ -19,8 +19,8 @@ task instructions.
 - `risk.md`: security, performance, and memory-leak risks.
 - `ticket.md`: ticket records managed under `docs-harness/tickets/active/` or
   `docs-harness/tickets/completed/`; use the direct
-  `<ticket-number>-<single-ticket>/` layout for one ticket and a
-  `<sample-big-ticket>/` container with numbered child folders for a batch.
+  `{ticket-number}-{single-ticket}/` layout for one ticket and a
+  `{sample-big-ticket}/` container with numbered child folders for a batch.
 - `apis.md`: ticket-local API inventories and data-preparation alternatives.
 - `entities.md`: ticket-local database schema, field, relationship, and enum
   inventories.
@@ -31,10 +31,10 @@ task instructions.
 
 The placeholder folders below are layout examples, not active ticket records:
 
-- `<ticket-number>-<single-ticket>/`: one ticket directly under the active or
+- `{ticket-number}-{single-ticket}/`: one ticket directly under the active or
   completed lifecycle folder.
-- `<sample-big-ticket>/`: a batch container whose child folders are named
-  `<ticket-number>-<ticket-name>/`, one child per ticket.
+- `{sample-big-ticket}/`: a batch container whose child folders are named
+  `{ticket-number}-{ticket-name}/`, one child per ticket.
 
 Use the file templates above inside each ticket folder. Do not route or solve
 these placeholder folders as tickets merely because they exist under
@@ -42,32 +42,32 @@ these placeholder folders as tickets merely because they exist under
 
 ## Domain E2E Flow Template
 
-`<service-name>/` is the folder template for service-level domain knowledge
+`{service-name}/` is the folder template for service-level domain knowledge
 organized as multiple isolated E2E data flows:
 
 ```text
-<service-name>/
+{service-name}/
 ├── README.md
 ├── data-flows/
-│   └── <data-flow-name>/
+│   └── {data-flow-name}/
 │       ├── apis.md
 │       ├── entities.md
 │       ├── prerequisite.md
 │       └── data-flow.md
 └── schemas/
-    └── <schema-name>.md
+    └── {schema-name}.md
 ```
 
 The first Mermaid diagram in each `data-flow.md` is the complete E2E flow. Every
 following diagram covers one API from `apis.md`. Each real schema file under a
 promoted service workspace uses `domain-entity.md`; the placeholder
-`schemas/<schema-name>.md` remains empty until a concrete User-authorized schema
+`schemas/{schema-name}.md` remains empty until a concrete User-authorized schema
 is documented.
 
 ## Domain Schema/Entity Template
 
 Use `domain-entity.md` for one schema/entity file under
-`docs-harness/domain/<service-name>/schemas/`. It covers schema meaning, fields,
+`docs-harness/domain/{service-name}/schemas/`. It covers schema meaning, fields,
 enums, relationships, constraints, indexes, lifecycle, and source-backed code
 usage. Code usage means tracing where a field is assigned, transformed, read,
 serialized, and used in `WHERE`, `JOIN`, filter, sort, or index conditions.

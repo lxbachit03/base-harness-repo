@@ -15,11 +15,11 @@ REFERENCES:
 - docs-harness/templates/domain.md
 - docs-harness/templates/domain-entity.md
 - docs-harness/templates/activity-diagram.md
-- docs-harness/templates/<service-name>/README.md
-- docs-harness/templates/<service-name>/data-flows/<data-flow-name>/apis.md
-- docs-harness/templates/<service-name>/data-flows/<data-flow-name>/entities.md
-- docs-harness/templates/<service-name>/data-flows/<data-flow-name>/prerequisite.md
-- docs-harness/templates/<service-name>/data-flows/<data-flow-name>/data-flow.md
+- docs-harness/templates/{service-name}/README.md
+- docs-harness/templates/{service-name}/data-flows/{data-flow-name}/apis.md
+- docs-harness/templates/{service-name}/data-flows/{data-flow-name}/entities.md
+- docs-harness/templates/{service-name}/data-flows/{data-flow-name}/prerequisite.md
+- docs-harness/templates/{service-name}/data-flows/{data-flow-name}/data-flow.md
 - .agents/skills/goal-griller/SKILL.md
 - .agents/skills/improve-harness/SKILL.md
 
@@ -77,14 +77,14 @@ and adjacent components instead of stopping at endpoint metadata.
 
 In scope:
 
-- Move `docs-harness/domain/<service-name>/` to
-  `docs-harness/templates/<service-name>/`.
+- Move `docs-harness/domain/{service-name}/` to
+  `docs-harness/templates/{service-name}/`.
 - Add the service and data-flow template README/content for `apis.md`,
   `entities.md`, `prerequisite.md`, and `data-flow.md`.
 - Add `docs-harness/templates/domain-entity.md` for detailed schema/entity
   documentation, including authority-gated field code-usage and query traces.
 - Expand the per-API contract in
-  `docs-harness/templates/<service-name>/data-flows/<data-flow-name>/apis.md`
+  `docs-harness/templates/{service-name}/data-flows/{data-flow-name}/apis.md`
   with input, context, output, domain logic, entity/database impact, query
   impact, downstream components, and evidence placeholders.
 - Update `docs-harness/domain/README.md`, `docs-harness/templates/README.md`,

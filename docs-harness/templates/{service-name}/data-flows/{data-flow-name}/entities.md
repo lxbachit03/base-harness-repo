@@ -1,7 +1,7 @@
-# Entities: <data-flow-name>
+# Entities: {data-flow-name}
 
 > Template-only: this file is not domain truth. Populate it only inside a
-> User-authorized service workspace under `docs-harness/domain/<service-name>/`.
+> User-authorized service workspace under `docs-harness/domain/{service-name}/`.
 > Until then, keep its placeholders and do not index it as a domain resource.
 
 Record entities and persistence schemas that are actually involved in this E2E
@@ -10,8 +10,8 @@ from User-confirmed domain meaning.
 
 ## Scope
 
-- Service: `<service-name>`
-- Data flow: `<data-flow-name>`
+- Service: `{service-name}`
+- Data flow: `{data-flow-name}`
 - Last reviewed: `<YYYY-MM-DD>`
 - Evidence sources: `<model, migration, schema, query, or documentation paths>`
 

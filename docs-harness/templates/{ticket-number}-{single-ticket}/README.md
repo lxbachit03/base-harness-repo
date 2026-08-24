@@ -6,7 +6,7 @@ must not be solved as work.
 Expected ticket workspace:
 
 ```text
-<ticket-number>-<single-ticket>/
+{ticket-number}-{single-ticket}/
 ├── docs/
 │   └── README.md
 ├── ticket.md

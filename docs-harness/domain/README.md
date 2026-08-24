@@ -27,7 +27,7 @@ scope, and references. Promote a resource to confirmed only when its authority
 is explicit, and index each real resource without copying its contents.
 
 For service-level E2E flow documentation, use the template at
-`docs-harness/templates/<service-name>/`. The template is template-only, not domain truth.
+`docs-harness/templates/{service-name}/`. The template is template-only, not domain truth.
 A real service workspace belongs here only after explicit User authority and
 must retain source-backed evidence and its applicable routing metadata.
 
@@ -47,7 +47,7 @@ leave the template under `docs-harness/templates/` and pause.
 ### Schema and field-analysis gate
 
 Create each real schema file under
-`docs-harness/domain/<service-name>/schemas/` from
+`docs-harness/domain/{service-name}/schemas/` from
 `docs-harness/templates/domain-entity.md`. The current User request must name
 the service, schema, and documentation scope before the file is created or
 populated.

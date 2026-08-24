@@ -79,8 +79,8 @@ with evidence. Unknown facts remain explicitly marked; they are not inferred
 into the record.
 
 The placeholder folder examples are stored under
-`docs-harness/templates/<ticket-number>-<single-ticket>/` and
-`docs-harness/templates/<sample-big-ticket>/`; they are layout templates, not
+`docs-harness/templates/{ticket-number}-{single-ticket}/` and
+`docs-harness/templates/{sample-big-ticket}/`; they are layout templates, not
 active tickets.
 
 ## Lifecycle

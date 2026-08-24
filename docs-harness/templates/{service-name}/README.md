@@ -11,7 +11,7 @@ of business truth, or evidence that the placeholder service exists. Do not
 populate, copy, move, or index it as a real domain workspace based on agent
 inference, discovery, or a plan alone.
 
-Creating or populating `docs-harness/domain/<service-name>/` requires an
+Creating or populating `docs-harness/domain/{service-name}/` requires an
 explicit current User request that names the service and authorizes the domain
 documentation scope. Before promotion, confirm the service name, data-flow
 scope, authoritative evidence sources, and whether each statement is
@@ -34,16 +34,16 @@ domain documentation.
 ## Folder contract
 
 ```text
-<service-name>/
+{service-name}/
 ├── README.md
 ├── data-flows/
-│   └── <data-flow-name>/
+│   └── {data-flow-name}/
 │       ├── apis.md
 │       ├── entities.md
 │       ├── prerequisite.md
 │       └── data-flow.md
 └── schemas/
-    └── <schema-name>.md  # create from templates/domain-entity.md
+    └── {schema-name}.md  # create from templates/domain-entity.md
 ```
 
 Create one child folder under `data-flows/` for each concrete E2E flow. Keep
@@ -64,7 +64,7 @@ one folder.
 
 The `schemas/` folder is carried as a placeholder. Its contract is defined by
 `docs-harness/templates/domain-entity.md`. Each concrete schema file under
-`docs-harness/domain/<service-name>/schemas/` must be created from that template
+`docs-harness/domain/{service-name}/schemas/` must be created from that template
 and must retain source evidence.
 
 Creating or populating a schema file requires explicit current User authority

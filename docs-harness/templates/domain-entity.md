@@ -7,7 +7,7 @@
 ## Authority Gate
 
 Creating a real schema file under
-`docs-harness/domain/<service-name>/schemas/<schema-name>.md` requires an
+`docs-harness/domain/{service-name}/schemas/{schema-name}.md` requires an
 explicit current User request that names the service, schema, and documentation
 scope.
 
@@ -227,4 +227,4 @@ detailed sections above.
 - [ ] Relationships, constraints, and indexes are recorded or marked unknown.
 - [ ] No placeholder remains in a claimed verified section.
 - [ ] The real resource is indexed only after the file exists under
-      `docs-harness/domain/<service-name>/schemas/`.
+      `docs-harness/domain/{service-name}/schemas/`.

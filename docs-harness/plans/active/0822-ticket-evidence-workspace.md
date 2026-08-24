@@ -101,8 +101,8 @@ In scope:
   `ticket-docs-README.md`.
 - The case-only rename of the canonical inventory templates from `APIs.md` to
   `apis.md` and from `SCHEMAs.md` to `entities.md`, plus all current references.
-- `docs-harness/templates/<ticket-number>-<single-ticket>/` and
-  `docs-harness/templates/<sample-big-ticket>/` layout examples.
+- `docs-harness/templates/{ticket-number}-{single-ticket}/` and
+  `docs-harness/templates/{sample-big-ticket}/` layout examples.
 - `docs-harness/tickets/README.md`, `tickets/active/README.md`, and
   `tickets/completed/README.md`.
 - `.agents/skills/ticket-solving/SKILL.md` and relevant template/routing docs.

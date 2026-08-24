@@ -23,9 +23,9 @@ docs-harness/
 │   ├── active/
 │   └── completed/
 └── templates/
-    ├── <sample-big-ticket>/
-    ├── <service-name>/
-    └── <ticket-number>-<single-ticket>/
+    ├── {sample-big-ticket}/
+    ├── {service-name}/
+    └── {ticket-number}-{single-ticket}/
 ```
 
 The filesystem is authoritative for this tree. Update this block when a folder

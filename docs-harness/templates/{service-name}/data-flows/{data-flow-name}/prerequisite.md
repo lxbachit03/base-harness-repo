@@ -1,7 +1,7 @@
-# Prerequisites: <data-flow-name>
+# Prerequisites: {data-flow-name}
 
 > Template-only: this file is not domain truth. Populate it only inside a
-> User-authorized service workspace under `docs-harness/domain/<service-name>/`.
+> User-authorized service workspace under `docs-harness/domain/{service-name}/`.
 > Until then, keep its placeholders and do not index it as a domain resource.
 
 Record everything that must exist or run before the E2E flow can start. Prefer
@@ -10,7 +10,7 @@ instructions until the User explicitly authorizes execution.
 
 ## E2E Gate
 
-- Flow: `<data-flow-name>`
+- Flow: `{data-flow-name}`
 - Required starting state: `<state that must be true>`
 - Reset/cleanup boundary: `<how state is isolated or removed>`
 - Last reviewed: `<YYYY-MM-DD>`
