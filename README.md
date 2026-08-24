@@ -86,9 +86,16 @@
 - **Ràng buộc bảng công cụ (Response Contract)**: Bắt buộc khai báo bảng `Selected Tools & MCPs` ngay đầu phản hồi trước khi thực thi liền mạch.
 - **Cẩm nang tra cứu Antigravity Tools**: Xem chi tiết tại [`docs/tools/antigravity/README.md`](docs/tools/antigravity/README.md).
 
+## Tối Ưu Khai Thác Tools, MCPs & Skills (`utilizing-tools-codex`)
+
+- Skill `.agents/skills/utilizing-tools-codex`: Phân tích task và lựa chọn tổ hợp Codex built-in tools, MCP servers, plugins và skills phù hợp.
+- **Ràng buộc bảng công cụ (Response Contract)**: Bắt buộc khai báo bảng `Selected Codex Tools & MCPs` ngay đầu phản hồi trước khi thực thi.
+- **Cẩm nang tra cứu Codex Tools**: Xem chi tiết tại [`docs/tools/codex/README.md`](docs/tools/codex/README.md).
+
 ## Tài Liệu Đúc Kết Kinh Nghiệm & Quy Trình (`docs/`)
 
 - Thư mục `docs/` là tài liệu tham khảo cho team (Team-Facing Documentation, không tự động load vào AI Agent context):
   - [`docs/AI_PROBLEMS.md`](docs/AI_PROBLEMS.md): Phân tích 9 vấn đề phổ biến của AI Agents và giải pháp kiến trúc khắc phục.
   - [`docs/WORKFLOWS.md`](docs/WORKFLOWS.md): So sánh 5 trường phái Agentic Workflows (Prompt, Loop, Graph, RAG, Harness Engineering).
   - [`docs/tools/antigravity/README.md`](docs/tools/antigravity/README.md): Cẩm nang toàn diện về Tools, MCPs, Plugins và Skills của Google Antigravity.
+  - [`docs/tools/codex/README.md`](docs/tools/codex/README.md): Cẩm nang toàn diện về Tools, MCPs, Plugins và Skills của Codex.
