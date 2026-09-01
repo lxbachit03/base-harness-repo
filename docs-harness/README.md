@@ -37,6 +37,14 @@ and working-memory structure around that truth; it does not install upstream
 - `docs/` is reserved for team-facing documentation and is not read by Harness
   by default. This repository may omit the directory entirely.
 
+## Global Git Ignore Convention
+
+The Harness setup expects `docs-harness/` to be present in the developer's
+global Git excludes configuration. This keeps untracked local Harness context
+ignored in consumer repositories. A global ignore rule affects untracked paths
+only; it does not untrack the `docs-harness/` directory that this base Harness
+repository intentionally keeps under version control.
+
 ## Local Folder Guide
 
 Use [`INDEX.md`](INDEX.md) as the routing authority. The folders below are
