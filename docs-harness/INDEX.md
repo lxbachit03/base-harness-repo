@@ -84,6 +84,7 @@ Skip when: the intent concerns only product behavior or unrelated domain work.
 
 Resources:
 
+- [Evidence-backed domain capture and freshness validation](plans/completed/0902-evidence-backed-domain-freshness.md) - `#012_IMPROVE_HARNESS_0902`, `PRIORITY: [MEDIUM]`
 - [Service E2E domain-flow template improvement](plans/active/0822-domain-e2e-flow-template.md) — `#011_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [Ticket evidence workspace templates](plans/active/0822-ticket-evidence-workspace.md) — `#010_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [User authority operation gate](plans/active/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
@@ -114,22 +115,26 @@ Resources:
 
 Folder: [domain/](domain/)
 
-Purpose: project/domain knowledge marked as confirmed or uncertain.
+Purpose: project/domain knowledge marked as confirmed or uncertain. Canonical
+resources live in date-prefixed folders as
+`domain/<MMDD>-<lowercase-kebab-case-name>/README.md`; the domain README owns
+the capture and freshness contract.
 
 Read when: the intent depends on project vocabulary, domain behavior, or
 User-confirmed context.
 
 Skip when: the task is independent of project/domain knowledge.
 
-Resources:
-
 ### [CONFIRMED]
+
+Resources:
 
 No confirmed domain resources are indexed yet.
 
 ### [UNCERTAIN]
 
-No uncertain domain resources are indexed yet.
+Resources:
+
 
 ## TAG: [RISK]
 
@@ -217,6 +222,10 @@ Resources:
 ### plans/completed/
 
 Folder: [plans/completed/](plans/completed/)
+
+Resources:
+
+- [Evidence-backed domain capture and freshness validation](plans/completed/0902-evidence-backed-domain-freshness.md) - `#012_IMPROVE_HARNESS_0902`, `PRIORITY: [MEDIUM]`
 
 Purpose: completed execution history that remains useful context.
 

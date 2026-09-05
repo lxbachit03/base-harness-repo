@@ -27,6 +27,30 @@ task instructions.
 - `ticket-docs-README.md`: the required owner/link/provenance manifest for a
   ticket's `docs/` folder.
 
+## Domain Resource Capture Contract
+
+The service-flow files below are reusable supporting templates, not canonical
+domain truth. A qualifying `$onboarding` run, ticket-solving workspace, or Q&A
+explicitly marked as domain discovery may create a source-backed domain
+resource at:
+
+```text
+docs-harness/domain/<MMDD>-<lowercase-kebab-case-name>/README.md
+```
+
+Use `templates/domain.md` for the canonical README and keep new resources
+`[UNCERTAIN]` until explicit User confirmation makes them `[CONFIRMED]`.
+Record concrete repository path/line, ticket/section, or Q&A references, plus
+contradictions and open questions. Ordinary Q&A and agent inference do not
+create domain resources.
+
+After runtime-logic, persistence, contract, or data-flow code changes, compare
+changed paths with domain references, evidence citations, and linked
+dependencies. Re-validate every possible affected domain; record
+`Freshness: CURRENT`, or mark `STATUS: needs-review` and `Freshness: STALE`,
+record the changed source, and pause. Preserve confirmed content during
+automatic maintenance.
+
 ## Ticket Folder Layout Templates
 
 The placeholder folders below are layout examples, not active ticket records:
@@ -42,8 +66,10 @@ these placeholder folders as tickets merely because they exist under
 
 ## Domain E2E Flow Template
 
-`{service-name}/` is the folder template for service-level domain knowledge
-organized as multiple isolated E2E data flows:
+`{service-name}/` is the supporting template for service-level content inside
+the date-prefixed canonical domain folder. The canonical domain resource is
+`docs-harness/domain/<MMDD>-<name>/README.md`; this scaffold is not domain
+truth.
 
 ```text
 {service-name}/
@@ -60,23 +86,22 @@ organized as multiple isolated E2E data flows:
 
 The first Mermaid diagram in each `data-flow.md` is the complete E2E flow. Every
 following diagram covers one API from `apis.md`. Each real schema file under a
-promoted service workspace uses `domain-entity.md`; the placeholder
-`schemas/{schema-name}.md` remains empty until a concrete User-authorized schema
-is documented.
+date-prefixed domain workspace uses `domain-entity.md`; the placeholder
+`schemas/{schema-name}.md` remains empty until the schema gate is satisfied.
 
 ## Domain Schema/Entity Template
 
 Use `domain-entity.md` for one schema/entity file under
-`docs-harness/domain/{service-name}/schemas/`. It covers schema meaning, fields,
+`docs-harness/domain/<MMDD>-<name>/schemas/`. It covers schema meaning, fields,
 enums, relationships, constraints, indexes, lifecycle, and source-backed code
 usage. Code usage means tracing where a field is assigned, transformed, read,
 serialized, and used in `WHERE`, `JOIN`, filter, sort, or index conditions.
 
 The schema documentation authority and the detailed field-analysis authority
-are separate. A current User request must name the schema before a real file is
-created. Detailed field/code tracing is prohibited unless that authority also
-explicitly covers the analysis scope. Otherwise retain `Pending User authority`
-or `Unverified` placeholders.
+are separate. A source-backed `[UNCERTAIN]` domain may record a schema summary
+when the workflow evidence supports it, but detailed field/code tracing is
+prohibited unless the User explicitly authorizes that analysis scope. Otherwise
+retain `Pending User authority` or `Unverified` placeholders.
 
 ## Usage Rules
 
@@ -87,20 +112,24 @@ or `Unverified` placeholders.
   priority, authority, or validation.
 - Templates do not receive real resource IDs or date-prefixed filenames and
   should not be indexed as real resources.
-- Domain templates are not domain truth. Creating or populating a real service
-  workspace under `docs-harness/domain/` requires an explicit current User
-  request naming the service and authorizing its documentation scope; agent
-  inference, discovery, or a plan alone is insufficient.
+- Domain templates are not domain truth. A real domain workspace may be created
+  only by an explicitly scoped `$onboarding` run, ticket-solving workspace, or
+  Q&A marked as domain discovery, and only when its claims have concrete
+  evidence. Ordinary Q&A, agent inference, and plans alone do not create one.
+- Every new domain resource starts as `[UNCERTAIN]`. Only explicit User
+  confirmation makes it `[CONFIRMED]`.
+- After runtime-logic, persistence, contract, or data-flow code changes,
+  compare changed paths with domain references and dependencies and re-validate
+  every possible affected resource. Record `Freshness: CURRENT`, or mark
+  `STATUS: needs-review` and `Freshness: STALE`, record changed sources, and
+  pause when a claim is stale or contradictory.
 - A domain schema file must use `domain-entity.md`. Its detailed field and code
   usage sections require explicit User authority for the named schema/fields;
   the template may define the sections but must not be populated from agent
   inference without that authority.
-- After promotion, replace placeholders with source-backed or explicitly
-  User-confirmed facts, apply `templates/domain.md`, and update `INDEX.md` only
-  for the real canonical resources. If authority or evidence is unresolved,
-  keep the scaffold under `templates/`.
-- Update `docs-harness/INDEX.md` in the same task when a real resource or
-  routing metadata changes.
+- Keep ticket/onboarding artifacts in their owning workspace and link them from
+  the canonical domain README. Update `docs-harness/INDEX.md` after the README
+  exists and its routing metadata is known.
 
 ## Skip When
 

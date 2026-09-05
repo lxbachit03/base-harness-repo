@@ -49,6 +49,23 @@ Read-only inspection is the default operating mode.
   command does not create artifacts, caches, or other state. If the required
   proof needs an unauthorized build or test, report it as unattempted.
 
+### Evidence-backed domain maintenance
+
+For an explicitly requested `$onboarding` run, a ticket-solving run with an
+active workspace, or a Q&A explicitly marked as domain discovery, follow the
+capture and freshness contract in `docs-harness/domain/README.md`. A qualifying
+workflow may create a source-backed `[UNCERTAIN]` domain resource at
+`docs-harness/domain/<MMDD>-<name>/README.md`; this bounded authority does not
+promote knowledge to `[CONFIRMED]` or authorize unrelated changes.
+
+After a runtime-logic, persistence, contract, or data-flow code change, compare
+the changed paths with domain `REFERENCES`, evidence citations, and linked
+dependencies. Re-validate every domain that may be affected; when impact is
+uncertain, include the domain. Record a current result, or mark the resource
+`STATUS: needs-review` and `Freshness: STALE` with the changed source and a
+pause. Preserve `[CONFIRMED]` content unless the User provides new authority;
+directly evidenced `[UNCERTAIN]` updates remain uncertain.
+
 ### Risk-to-Proposal Constraint
 
 When the AI agent identifies a risk in an answer, review, diagnosis, plan,

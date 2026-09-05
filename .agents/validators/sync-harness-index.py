@@ -27,6 +27,8 @@ CANONICAL_FOLDERS = (
     "proposals",
     "risks",
 )
+DOMAIN_FOLDER = "domain"
+DOMAIN_FOLDER_RE = re.compile(r"^(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])-[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
 @dataclass
@@ -36,11 +38,16 @@ class ResourceItem:
     resource_id: Optional[str] = None
     title: Optional[str] = None
     priority: Optional[str] = None
+    created: Optional[str] = None
+    status: Optional[str] = None
+    references: List[str] = field(default_factory=list)
     tags: List[str] = field(default_factory=list)
 
 
-def parse_resource_metadata(file_path: Path, docs_harness_root: Path) -> Optional[ResourceItem]:
-    if file_path.name == "README.md" or file_path.suffix != ".md":
+def parse_resource_metadata(
+    file_path: Path, docs_harness_root: Path, allow_readme: bool = False
+) -> Optional[ResourceItem]:
+    if (file_path.name == "README.md" and not allow_readme) or file_path.suffix != ".md":
         return None
 
     try:
@@ -51,6 +58,7 @@ def parse_resource_metadata(file_path: Path, docs_harness_root: Path) -> Optiona
     rel_path = file_path.relative_to(docs_harness_root).as_posix()
     item = ResourceItem(path=file_path, rel_path=rel_path)
 
+    in_references = False
     for line in content.splitlines():
         if line.startswith("## "):
             break
@@ -63,8 +71,21 @@ def parse_resource_metadata(file_path: Path, docs_harness_root: Path) -> Optiona
                 item.title = val
             elif key == "PRIORITY" and not item.priority:
                 item.priority = val
+            elif key == "CREATED" and not item.created:
+                item.created = val
+            elif key == "STATUS" and not item.status:
+                item.status = val
+            elif key == "REFERENCES":
+                in_references = True
+                if val:
+                    item.references.append(val)
             elif key == "TAG":
                 item.tags.append(val)
+            if key != "REFERENCES":
+                in_references = False
+            continue
+        if in_references and line.strip().startswith("- "):
+            item.references.append(line.strip()[2:].strip())
 
     if not item.title:
         # Fallback to first heading if TITLE meta not explicitly found
@@ -81,15 +102,121 @@ def parse_resource_metadata(file_path: Path, docs_harness_root: Path) -> Optiona
     return item
 
 
+def tag_tokens(tags: List[str]) -> List[str]:
+    tokens: List[str] = []
+    for tag in tags:
+        matches = re.findall(r"\[([^\]]+)\]", tag)
+        tokens.extend(matches or ([tag] if tag else []))
+    return list(dict.fromkeys(tokens))
+
+
+def target_sections(item: ResourceItem) -> List[str]:
+    tokens = tag_tokens(item.tags)
+    sections: List[str] = []
+    domain_state = next(
+        (token for token in tokens if token in {"CONFIRMED", "UNCERTAIN"}),
+        None,
+    )
+
+    if "DOMAIN" in tokens and domain_state:
+        sections.append(f"### [{domain_state}]")
+
+    for token in tokens:
+        if token in {"CONFIRMED", "UNCERTAIN"}:
+            continue
+        sections.append(f"## TAG: [{token}]")
+
+    parts = item.rel_path.split("/")
+    if len(parts) > 1 and parts[0] != DOMAIN_FOLDER:
+        sections.append(f"### {'/'.join(parts[:2])}/")
+    sections.append(f"### {parts[0]}/")
+    return list(dict.fromkeys(sections))
+
+
+def validate_domain_resource(
+    file_path: Path, item: ResourceItem, docs_harness_root: Path
+) -> List[str]:
+    try:
+        content = file_path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return [
+            f"{file_path.relative_to(docs_harness_root).as_posix()}: "
+            "cannot read README.md"
+        ]
+
+    rel_path = file_path.relative_to(docs_harness_root).as_posix()
+    errors: List[str] = []
+    required_metadata = (
+        "ID",
+        "TAG",
+        "PRIORITY",
+        "TITLE",
+        "CREATED",
+        "STATUS",
+        "REFERENCES",
+    )
+    for key in required_metadata:
+        if not re.search(rf"^{key}:", content, re.MULTILINE):
+            errors.append(f"{rel_path}: missing {key} metadata")
+
+    tokens = tag_tokens(item.tags)
+    if "DOMAIN" not in tokens:
+        errors.append(f"{rel_path}: TAG [DOMAIN] is required")
+    if "CONFIRMED" not in tokens and "UNCERTAIN" not in tokens:
+        errors.append(
+            f"{rel_path}: TAG [CONFIRMED] or TAG [UNCERTAIN] is required"
+        )
+    if not item.resource_id or "<" in item.resource_id:
+        errors.append(f"{rel_path}: concrete ID is required")
+    if not item.priority or "<" in item.priority:
+        errors.append(f"{rel_path}: concrete PRIORITY is required")
+    if not item.title or "<" in item.title:
+        errors.append(f"{rel_path}: concrete TITLE is required")
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", item.created or ""):
+        errors.append(f"{rel_path}: CREATED must be YYYY-MM-DD")
+    if not item.status or "<" in item.status:
+        errors.append(f"{rel_path}: concrete STATUS is required")
+    if not item.references or any("<" in reference for reference in item.references):
+        errors.append(
+            f"{rel_path}: at least one concrete REFERENCES entry is required"
+        )
+
+    for heading in (
+        "Domain Statement",
+        "Evidence/Authority",
+        "Freshness",
+        "Confidence",
+        "Open Questions",
+    ):
+        if not re.search(rf"^## {re.escape(heading)}$", content, re.MULTILINE):
+            errors.append(f"{rel_path}: missing ## {heading} section")
+
+    freshness_match = re.search(r"^Freshness:\s*(CURRENT|STALE)\s*$", content, re.MULTILINE)
+    if not freshness_match:
+        errors.append(f"{rel_path}: Freshness must be CURRENT or STALE")
+    elif freshness_match.group(1) == "STALE" and item.status != "needs-review":
+        errors.append(f"{rel_path}: STALE freshness requires STATUS: needs-review")
+    elif item.status == "needs-review" and freshness_match.group(1) != "STALE":
+        errors.append(
+            f"{rel_path}: STATUS: needs-review requires Freshness: STALE"
+        )
+
+    return errors
+
+
 class IndexSync:
     def __init__(self, root: Path) -> None:
         self.root = root.resolve()
         self.docs_harness = self.root / "docs-harness"
         self.index_path = self.docs_harness / "INDEX.md"
         self.resources: Dict[str, ResourceItem] = {}
+        self.layout_errors: List[str] = []
+        self.duplicate_ids: List[str] = []
 
     def discover_resources(self) -> None:
         self.resources.clear()
+        self.layout_errors.clear()
+        self.duplicate_ids.clear()
         if not self.docs_harness.exists():
             return
 
@@ -97,12 +224,62 @@ class IndexSync:
             folder = self.docs_harness / folder_rel
             if not folder.exists():
                 continue
+            if folder_rel == DOMAIN_FOLDER:
+                for entry in sorted(folder.iterdir()):
+                    if entry.is_dir():
+                        if not DOMAIN_FOLDER_RE.fullmatch(entry.name):
+                            self.layout_errors.append(
+                                f"domain/{entry.name}: folder name must match "
+                                "<MMDD>-<lowercase-kebab-case-name>"
+                            )
+                        readme = entry / "README.md"
+                        if not readme.is_file():
+                            self.layout_errors.append(
+                                f"{entry.relative_to(self.docs_harness).as_posix()}: "
+                                "README.md is required"
+                            )
+                            continue
+                        item = parse_resource_metadata(
+                            readme, self.docs_harness, allow_readme=True
+                        )
+                        if item:
+                            self.resources[item.rel_path] = item
+                            self.layout_errors.extend(
+                                validate_domain_resource(
+                                    readme, item, self.docs_harness
+                                )
+                            )
+                    elif entry.is_file() and entry.suffix == ".md" and entry.name != "README.md":
+                        self.layout_errors.append(
+                            f"{entry.relative_to(self.docs_harness).as_posix()}: "
+                            "domain resources must use a date-prefixed folder with README.md"
+                        )
+                        item = parse_resource_metadata(entry, self.docs_harness)
+                        if item:
+                            self.resources[item.rel_path] = item
+                            self.layout_errors.extend(
+                                validate_domain_resource(
+                                    entry, item, self.docs_harness
+                                )
+                            )
+                continue
             for entry in sorted(folder.glob("*.md")):
                 if entry.name == "README.md":
                     continue
                 item = parse_resource_metadata(entry, self.docs_harness)
                 if item:
                     self.resources[item.rel_path] = item
+
+        seen_ids: Dict[str, str] = {}
+        for item in self.resources.values():
+            if not item.resource_id:
+                continue
+            if item.resource_id in seen_ids:
+                self.duplicate_ids.append(
+                    f"{item.resource_id}: {seen_ids[item.resource_id]}, {item.rel_path}"
+                )
+            else:
+                seen_ids[item.resource_id] = item.rel_path
 
     def check(self) -> Tuple[List[str], List[str]]:
         """Returns (missing_in_index, stale_in_index)."""
@@ -128,7 +305,10 @@ class IndexSync:
         for target in indexed_links:
             # Check if target is inside docs-harness canonical paths
             target_path = self.docs_harness / target
-            is_canonical = any(target.startswith(cf) for cf in CANONICAL_FOLDERS)
+            is_canonical = any(
+                target == cf or target.startswith(f"{cf}/")
+                for cf in CANONICAL_FOLDERS
+            )
             if is_canonical and not target_path.exists():
                 stale_in_index.append(target)
 
@@ -137,6 +317,8 @@ class IndexSync:
     def fix(self) -> bool:
         """Fixes missing and stale links in INDEX.md."""
         missing, stale = self.check()
+        if self.layout_errors or self.duplicate_ids:
+            return False
         if not missing and not stale:
             return False
 
@@ -171,19 +353,10 @@ class IndexSync:
             entry_line = f"- [{item.title}]({item.rel_path}) — {id_str}`PRIORITY: {item.priority}`"
 
             # Determine target section headers
-            target_sections: List[str] = []
-            for tag in item.tags:
-                tag_clean = tag.strip("[]")
-                target_sections.append(f"## TAG: [{tag_clean}]")
-
-            folder_prefix = rel_path.split("/")[0]
-            if "/" in rel_path:
-                subfolder_prefix = "/".join(rel_path.split("/")[:2])
-                target_sections.append(f"### {subfolder_prefix}/")
-            target_sections.append(f"### {folder_prefix}/")
+            section_headers = target_sections(item)
 
             inserted = False
-            for sec_header in target_sections:
+            for sec_header in section_headers:
                 for idx, line in enumerate(lines):
                     if line.strip() == sec_header:
                         # Find "Resources:" under this section
@@ -228,6 +401,18 @@ def main() -> int:
     syncer = IndexSync(root_path)
 
     if args.fix:
+        syncer.check()
+        if syncer.layout_errors or syncer.duplicate_ids:
+            print("Synchronization check: FAILED")
+            if syncer.layout_errors:
+                print(f"Invalid domain layout ({len(syncer.layout_errors)}):")
+                for error in syncer.layout_errors:
+                    print(f"  - {error}")
+            if syncer.duplicate_ids:
+                print(f"Duplicate resource IDs ({len(syncer.duplicate_ids)}):")
+                for duplicate in syncer.duplicate_ids:
+                    print(f"  - {duplicate}")
+            return 1
         modified = syncer.fix()
         if modified:
             print("Successfully synchronized and updated docs-harness/INDEX.md.")
@@ -236,7 +421,7 @@ def main() -> int:
         return 0
     else:
         missing, stale = syncer.check()
-        if missing or stale:
+        if missing or stale or syncer.layout_errors or syncer.duplicate_ids:
             print("Synchronization check: FAILED")
             if missing:
                 print(f"Missing from INDEX.md ({len(missing)}):")
@@ -246,6 +431,14 @@ def main() -> int:
                 print(f"Stale links in INDEX.md ({len(stale)}):")
                 for item in stale:
                     print(f"  - {item}")
+            if syncer.layout_errors:
+                print(f"Invalid domain layout ({len(syncer.layout_errors)}):")
+                for error in syncer.layout_errors:
+                    print(f"  - {error}")
+            if syncer.duplicate_ids:
+                print(f"Duplicate resource IDs ({len(syncer.duplicate_ids)}):")
+                for duplicate in syncer.duplicate_ids:
+                    print(f"  - {duplicate}")
             print("\nRun with --fix to automatically synchronize docs-harness/INDEX.md.")
             return 1
         else:

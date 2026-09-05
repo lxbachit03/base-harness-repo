@@ -29,7 +29,7 @@ Instead, isolate each flow into its own dedicated workspace:
    ↓
 3. Deep Flow Tracing & Evidence Artifacts
    ↓
-4. Domain Knowledge Synthesis (Gated by User Authority)
+4. Domain Knowledge Synthesis (Evidence and Authority Gated)
 ```
 
 ### Stage 1: Flow Discovery & Boundary Selection
@@ -73,32 +73,59 @@ Within `docs-harness/onboarding/<flow-name>/`, create dedicated artifact files b
 
 ---
 
-### Stage 4: Domain Knowledge Synthesis (Requires User Authority)
+### Stage 4: Evidence-backed Domain Capture and Freshness
 
-> [!CAUTION]
-> **Strict User Authority Gate**:
-> The AI Agent must **NEVER** automatically promote or move an onboarding flow to `docs-harness/domain/` on its own.
-> Promotion occurs **ONLY** when explicitly authorized by the User through:
-> 1. The User directly commanding the AI agent / Harness repo to promote the flow.
-> 2. The User manually moving/approving the artifacts into `docs-harness/domain/`.
+Run this stage after Stage 3 has complete, source-cited evidence. The explicit
+`$onboarding` request is the workflow scope for creating a bounded domain
+resource; it does not grant confirmation of business policy.
 
-When authorized by User:
 1. Check existing domain IDs in `docs-harness/` and determine `max(ID) + 1`.
-2. Create a new domain resource using `docs-harness/templates/domain.md`:
-   - Path: `docs-harness/domain/<MMDD>-<flow-name>-domain.md`
-   - Classification:
-     - `TAG: [DOMAIN] [CONFIRMED]` if verified by authoritative documentation or User confirmation.
-     - `TAG: [DOMAIN] [UNCERTAIN]` if derived only from observed code facts pending human confirmation.
-3. Update `docs-harness/INDEX.md` to link the new domain resource under `## TAG: [DOMAIN]`.
+2. Confirm the flow name is a non-colliding lowercase-kebab-case slug and use
+   the date-prefixed path:
+   `docs-harness/domain/<MMDD>-<flow-name>/README.md`.
+3. Create the README from `docs-harness/templates/domain.md`. Record every
+   claim with a repository path and line range, ticket/section reference, or
+   Q&A decision. Keep contradictions and open questions visible, and use two
+   independent sources when practical.
+4. Use separate `TAG: [DOMAIN]` and `TAG: [UNCERTAIN]` lines by default. Change
+   the state to `[CONFIRMED]` only when the User explicitly confirms the
+   knowledge. Keep the onboarding artifacts in their flow workspace and link
+   them from `REFERENCES` instead of copying the full transcript.
+5. Record the capture scope and `Freshness: CURRENT`, then update
+   `docs-harness/INDEX.md` under the `[UNCERTAIN]` or `[CONFIRMED]` route after
+   the README exists.
 
-**Completion Criterion**: Domain knowledge resource persisted and indexed with verified User authority.
+**Completion Criterion**: An evidence-backed date-prefixed domain README
+exists, carries complete metadata/references/freshness/open questions, remains
+`[UNCERTAIN]` without explicit confirmation, and is indexed in the correct
+classification route.
+
+### Domain freshness after logic changes
+
+When a runtime-logic, persistence, contract, or data-flow code change occurs,
+compare changed paths with each domain resource's `REFERENCES`, evidence
+citations, and linked service/data-flow dependencies. Include a domain when
+impact is uncertain. Re-check every claim and line-range citation:
+
+- record `Freshness: CURRENT`, validation date, scope, and result when claims
+  still hold;
+- record `STATUS: needs-review`, `Freshness: STALE`, the changed source, and the
+  unresolved question, then pause when a citation or claim no longer holds;
+- preserve `[CONFIRMED]` content during automatic maintenance; directly
+  evidenced `[UNCERTAIN]` updates remain `[UNCERTAIN]`.
 
 ---
 
 ## Anti-Patterns & Guardrails
 
 - **Never omit line-range citations in Mermaid diagrams in `activity-diagrams.md`.**
-- **Never promote onboarding artifacts to `domain/` without explicit User authority.**
+- Keep onboarding artifacts in their flow workspace and create only the
+  source-backed domain README required by the capture gate.
+- Keep `[UNCERTAIN]` and `[CONFIRMED]` states separate; explicit User
+  confirmation is the promotion authority.
+- Treat an affected domain as current only after its freshness result is
+  recorded; stale or contradictory claims require `Needs review`/`STALE` and a
+  pause.
 - **Do not mix multiple flows in one folder**: Keep each flow cleanly isolated.
 - **Do not invent product policy**: Mark unconfirmed business rules as `[UNCERTAIN]` in domain notes.
 - **Do not scan all onboarding folders at once**: Always route directly to the active `<flow-name>/`.

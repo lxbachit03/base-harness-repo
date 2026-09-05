@@ -202,6 +202,36 @@ authorized, and then follow `AGENTS.md` for reciprocal `REFERENCES:` links.
 Done when a reviewer can trace every proposed action to the source, an
 acceptance criterion, evidence, or an explicitly marked open question.
 
+## Domain capture and freshness
+
+When the ticket investigates project/domain behavior, ownership, or a data
+flow, use the domain contract in `docs-harness/domain/README.md` after the
+ticket workspace has complete evidence. A normal ticket with no domain
+discovery scope does not create a domain resource.
+
+1. Check that each domain claim has a repository path and line range,
+   ticket/section reference, or recorded Q&A decision. Preserve contradictions
+   and open questions, and corroborate with two independent sources when
+   practical.
+2. Create the canonical summary at
+   `docs-harness/domain/<MMDD>-<lowercase-kebab-case-name>/README.md` from
+   `docs-harness/templates/domain.md`, after checking the folder and global ID
+   sequence for collisions.
+3. Record the ticket link and evidence in `REFERENCES`, include concise Q&A
+   date/scope/answer/state when relevant, and keep the new resource
+   `[UNCERTAIN]` unless the User explicitly confirms `[CONFIRMED]`.
+4. Record `Freshness: CURRENT`, update `docs-harness/INDEX.md`, and keep the
+   ticket artifacts in their ticket workspace rather than copying the full
+   transcript.
+
+After a runtime-logic, persistence, contract, or data-flow code change,
+compare changed paths with every domain resource's references, evidence
+citations, and linked dependencies. Include uncertain overlaps and re-check
+all affected claims. Record the current result, or mark the resource
+`STATUS: needs-review` and `Freshness: STALE`, record the changed source, and
+pause. Preserve `[CONFIRMED]` content during automatic maintenance; directly
+evidenced `[UNCERTAIN]` updates remain `[UNCERTAIN]`.
+
 ## Solve
 
 1. Read the active ticket's `ticket.md`, `apis.md`, `entities.md`, its
@@ -277,9 +307,10 @@ Before claiming completion:
 Update `docs-harness/INDEX.md` when the ticket workspace, lifecycle folders,
 template, or a canonical ticket route changes. Keep the stable active and
 completed folder routes there without duplicating ordinary ticket records in a
-classification section. If the User asks to promote a ticket record into
-canonical Harness context, pause and apply the resource ID, template, priority,
-and reciprocal-link rules before making that change.
+classification section. Evidence-backed domain capture follows the domain
+contract above; if the User explicitly confirms a domain resource or promotes a
+non-domain ticket artifact into canonical Harness context, apply the resource
+ID, template, priority, and reciprocal-link rules before making that change.
 
 Do not claim resolution from folder creation alone. A prepared workspace is
 the completion state for intake-only work; evidence-backed acceptance is the
