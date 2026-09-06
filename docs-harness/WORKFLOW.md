@@ -1,157 +1,68 @@
 # Repository Workflow
 
-Canonical default workflow. Repository product behavior,
-architecture, plans, decisions, code, tests, and runtime signals are the system
-of record. Optimize for reliable agent execution with minimal human attention
-and process overhead.
+AGENTS.md owns task authority. docs-harness/INDEX.md owns retrieval. This file owns work
+shape and proof; consult the specific domain, ticket, or plan guide only when
+that workflow is involved.
 
-## Repository Map
+## Choose the work shape
 
-- `AGENTS.md`: small entry map and authority boundary.
-- `README.md` and `docs-harness/product/`: current product behavior.
-- Architecture documentation and `docs-harness/decisions/`: structural constraints and
-  lasting decisions.
-- `docs-harness/plans/active/`: complex work currently in progress.
-- `docs-harness/plans/completed/`: completed execution history worth retaining.
-- `docs-harness/tickets/`: ticket intake, working records, and resolution
-  artifacts managed by `$ticket-solving`; read `active/` by default and use
-  `completed/` only for relevant history.
-- Project code, tests, CI, and runtime signals: executable and observable truth.
-- `scripts/README.md`: upstream Harness development and compatibility commands.
+- **Read-only:** answer, review, diagnosis, status, or an unsaved plan. Inspect
+  the necessary evidence and report findings and proposals in the response.
+- **Bounded change:** implement the requested local result, using an ephemeral
+  plan and focused proof. Routine local verification is part of task authority.
+- **Durable change:** use one evolving plan when work spans sessions, coordinates
+  contributors, has meaningful dependencies, or needs recovery steps. Follow
+  docs-harness/plans/README.md and docs-harness/templates/plan.md.
+- **Strict audit:** use the selected audit skill's evidence protocol only when
+  that audit is requested. Cryptographic evidence bundles and a fresh reviewer
+  are not prerequisites for ordinary inspection or implementation.
 
-Use `docs-harness/README.md` for the map; prefer targeted search.
+Keep task-local progress and decisions together. Add a separate accepted
+decision only when future work must inherit a consequential product,
+architecture, ownership, security, compatibility, or validation choice.
 
-## Select The Work Shape
+## Execute a change
 
-Answer three questions independently; do not let one risk label decide them.
+1. Establish the observable outcome, inherited task authority, changed-path
+   scope, relevant product policy, and existing worktree changes.
+2. Read the affected implementation, contracts, neighboring patterns, and proof.
+3. Make the smallest coherent change. Do not expand product policy by choosing
+   an undocumented default.
+4. Run focused local verification under AGENTS.md. Inspect effects before
+   unfamiliar commands and honor narrower User restrictions.
+5. Update affected product docs and, for runtime/contract changes, apply the
+   domain freshness contract. A stale claim blocks only actions relying on it;
+   continue independent work and report the unresolved dependency.
+6. Inspect the final diff and relevant INDEX consistency. Record final results
+   in the durable plan when one was needed.
 
-### Does The Work Need Durable Memory?
+If a new decision or external action is needed, finish independent preparation
+and present the concrete boundary for approval. An unavailable tool is an
+unattempted check, not a failing product test.
 
-Use an ephemeral plan for bounded, single-session work.
+## Choose proof
 
-Create or update one execution plan in `docs-harness/plans/active/` when work:
+Use checks matched to the changed behavior: focused tests for local rules,
+integration tests for persistence/boundaries, E2E interaction for user-visible
+flows, recovery rehearsal for migrations, or measurements for performance.
+For a reversible documentation edit, check its links, consistency, and relevant
+instruction scenarios; avoid tests that merely repeat the wording.
 
-- is likely to span sessions;
-- coordinates multiple agents or contributors;
-- has meaningful dependencies or an important sequence;
-- requires an explicit recovery procedure; or
-- would be unsafe or expensive to resume from the final diff alone.
+Run repository-required checks that are within task authority. Broaden checks
+when failures, new changes, or unresolved concerns justify it. Never substitute
+a score, folder, proof flag, or successful tool invocation for the requested
+observable result.
 
-Use `docs-harness/templates/exec-plan.md`. Keep progress and task-local decisions in the
-same file. Do not create parallel story, design, validation, and trace documents
-for the same work unless one has independent long-term value.
+## Completion
 
-### Does The Work Need Human Judgment?
+The outcome exists and appropriate proof has passed. Report any missing proof
+without implying it passed. Current product/domain context and durable working
+memory must reflect relevant changes within authorized scope. A discovered
+blocker is a reported limitation, not an achieved outcome.
 
-Before editing, identify repository authority for each new externally
-observable policy. If materially different choices remain open, stop before
-edits and request the smallest necessary decision. Configurable defaults are
-not authority.
+A verified ordinary plan may move to completed/ as part of finishing its task.
+Ticket lifecycle and Harness improvement experiments have their own closure
+criteria in docs-harness/tickets/README.md and docs-harness/harness-improvements/README.md.
 
-For example, `Add rate limiting` without a quota, trusted key, enforcement
-topology, or response contract must stop. `Enforce the documented 20 requests
-per minute per authenticated tenant` may proceed.
-
-Also pause when:
-
-- product intent remains ambiguous;
-- the action is irreversible or difficult to recover;
-- validation, security, or compatibility requirements would be weakened; or
-- the requested work does not authorize the necessary action.
-
-### What Proves The Behavior?
-
-Choose proof from the affected behavior:
-
-- focused tests for local rules;
-- integration tests for persistence and service boundaries;
-- end-to-end interaction for user-visible behavior;
-- recovery rehearsal for migrations and destructive operations; and
-- runtime measurements for reliability or performance claims.
-
-Harness rows, proof flags, trace tiers, context scores, and entropy scores do not
-prove product behavior by themselves.
-
-## Task Flows
-
-### Read-Only Request
-
-For an answer, explanation, review, diagnosis, plan, or status report:
-
-1. Read `AGENTS.md` and only the material needed for the response.
-2. Use read-only inspection commands when useful.
-3. Do not edit files or mutate Harness state.
-4. Stop when concrete repository evidence supports the answer.
-
-Discovery never grants authority to fix what it finds.
-
-### Bounded Change
-
-1. Restate the observable outcome.
-2. Identify the User-authorized paths and commands; pause if the mutation or
-   proof scope is not explicit.
-3. Read the relevant product or design material, affected code, adjacent
-   patterns, and existing tests.
-4. Make the smallest coherent change that satisfies the authorized outcome.
-5. Run read-only focused proof by default. Run build, test, lint, format,
-   generation, installation, migration, or package commands only when the User
-   explicitly authorizes them.
-6. Report the outcome, important changed surfaces, proof, unattempted checks,
-   and known limitations.
-
-No bootstrap, intake, story, matrix, trace, scoring, audit, or proposal command
-is required.
-
-### Authority-Gated Operations
-
-`AGENTS.md` owns the authority gate. Apply it at every workflow entry point:
-
-- Reading, searching, listing, and other genuinely read-only inspection are
-  the default.
-- Filesystem and version-control mutations require explicit User authority for
-  the named scope.
-- Build/test and other commands that may write artifacts or external state
-  require explicit User authority for the command or command class.
-- A validation step never silently upgrades into permission to run a build or
-  test. Pause and report the exact missing command authority instead.
-
-### Durable Planned Change
-
-1. Create or resume one plan in `docs-harness/plans/active/`.
-2. Record outcome, context, approach, risks, recovery, progress, decisions, and
-   validation in that file.
-3. Implement in coherent, independently verifiable groups.
-4. Update progress and decisions as reality changes.
-5. Run the plan's focused and repository-wide proof.
-6. Promote lasting product or architecture decisions into `docs-harness/decisions/`.
-7. Record the final result and move the plan to `docs-harness/plans/completed/`.
-
-The plan is working memory, not a prediction frozen at intake. Update it when
-evidence changes the approach.
-
-## Completion Standard
-
-A change is complete only when:
-
-- the requested outcome exists or the blocker is explicit;
-- relevant product and design truth remains current;
-- behavior-appropriate proof has passed, or missing proof is disclosed without
-  overstating completion;
-- durable plan progress and result are current when a plan was required; and
-- the final report separates verified facts, limitations, and unattempted work.
-
-Git history, pull-request discussion, test artifacts, screenshots, videos,
-logs, metrics, and plan progress are preferred evidence because they arise from
-the work. Manual descriptions may add context but do not replace observed proof.
-
-## Compatibility Control Plane
-
-The Rust CLI and SQLite durable layer remain supported for historical state and
-optional external orchestration. Their intake, story, matrix, trace, scoring,
-audit, intervention, proposal, snapshot, and changeset commands are not part of
-the default repository workflow.
-
-Use those commands only when a user explicitly requests them, a maintenance task
-targets that compatibility surface, or an external orchestrator's documented
-contract requires them. Compatibility documents are references, not authority
-to reintroduce mandatory control-plane writes.
+SQLite intake, story, trace, scoring, audit, and proposal commands are optional
+compatibility operations, not a default lifecycle.

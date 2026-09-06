@@ -1,53 +1,28 @@
-# Onboarding Workspace (`docs-harness/onboarding/`)
+# Onboarding Workspace
 
-This directory is the dedicated working space for onboarding and mapping brownfield projects, managed primarily by the `$onboarding` skill.
+This folder owns exploratory evidence for named business/data flows.
+docs-harness/domain/README.md owns subsequent domain capture and confirmation.
 
-> [!IMPORTANT]
-> **Top-Down Routing & Token Saving Rule**:
-> - This directory is **NEVER** loaded entirely at Session Start.
-> - When working with a specific data/business flow, load **ONLY** the relevant subfolder (e.g. `docs-harness/onboarding/<target-flow>/`).
+Read only the target flow and its relevant dependencies. Discover flow names
+without loading every flow body at session start. Keep different flows in
+separate lowercase-kebab-case folders with a README that names entry, exit,
+purpose, contracts, and evidence.
 
-> [!CAUTION]
-> **User Authority Gate for Domain Knowledge**:
-> - Artifacts in `onboarding/` are exploratory working materials.
-> - The AI Agent **NEVER** automatically promotes or moves an onboarding flow to `docs-harness/domain/` without explicit **User Authority**.
-> - Promotion occurs only when the User explicitly requests the AI Agent to synthesize the domain knowledge or manually moves/approves the flow.
+For a small flow, the README may contain the trace and explicit coverage of
+models, integrations, and edge cases. For a multi-step E2E investigation, use
+the standard supporting artifacts:
 
----
+- activity-diagrams.md: Mermaid with source evidence for each implementation step;
+- data-flow-map.md: input-to-output transformations;
+- entity-schemas.md: relevant models and contracts;
+- integration-points.md: external dependencies and configuration names, never secrets;
+- quirks-and-gotchas.md: observed exceptions and failure paths.
 
-## Directory Structure Pattern
+Use docs-harness/templates/activity-diagram.md when a diagram clarifies the flow. An external
+actor without local implementation should be marked external, not assigned an
+invented source range.
 
-Each data or business flow is isolated into its own subfolder:
-
-```text
-docs-harness/onboarding/
-├── README.md                              <- This guide
-├── <flow-name-1>/                         <- Example: user-authentication/
-│   ├── README.md                          <- Flow overview & entry points
-│   ├── activity-diagrams.md               <- Mermaid diagrams with file:line ranges
-│   ├── data-flow-map.md                   <- Step-by-step transformation path
-│   ├── entity-schemas.md                  <- Schemas & database models
-│   ├── integration-points.md              <- External services & dependencies
-│   └── quirks-and-gotchas.md              <- Undocumented legacy edge cases
-└── <flow-name-2>/                         <- Example: payment-processing/
-    └── ...
-```
-
----
-
-## Required Artifacts per Flow
-
-1. **`activity-diagrams.md`**: Visual Mermaid activity/sequence diagram mapping the data flow. Every node must cite the related file path and code line ranges (e.g., `Node["Handler<br/>src/api/auth.ts:L20-L45"]`).
-2. **`data-flow-map.md`**: Detailed prose trace of the end-to-end data transformation.
-3. **`entity-schemas.md`**: Data models, schemas, and interface definitions.
-4. **`integration-points.md`**: External services, queues, environment configs, and secrets.
-5. **`quirks-and-gotchas.md`**: Edge cases, legacy workarounds, and implicit logic.
-
----
-
-## Lifecycle: From Onboarding to Domain Knowledge
-
-1. **Investigate**: Trace the codebase and populate all 5 artifacts within `onboarding/<flow-name>/`.
-2. **User Authority Check**: Await explicit user command or manual user promotion.
-3. **Synthesize**: Extract core concepts, business invariants, and terminology into `docs-harness/domain/`.
-4. **Index**: Register the synthesized domain knowledge in `docs-harness/INDEX.md` under `## TAG: [DOMAIN]` (`[CONFIRMED]` or `[UNCERTAIN]`).
+The authorized onboarding flow may capture a source-backed UNCERTAIN domain
+once the relevant evidence is complete, following docs-harness/domain/README.md. Preserve
+exploration artifacts here; confirmation of domain policy is a separate User
+decision. A directory or an artifact count does not prove the flow is understood.

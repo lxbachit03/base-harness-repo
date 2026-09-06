@@ -1,103 +1,73 @@
-# Tickets
+# Ticket Workspace
 
-This folder is the Harness working area for `$ticket-solving`. Its lifecycle is
-split between current work and historical work.
+This file owns ticket layout and lifecycle. AGENTS.md owns operation authority.
+Use the source's ticket ID and wording; do not invent requirements or business
+numbers. Missing IDs use TBD and a stable lowercase-kebab-case slug.
 
-## Layout
+## Intake and scope
 
-One ticket is placed directly under `active/` while it is being worked:
+Read the complete named source before creating records. A request to organize
+tickets authorizes intake; a request to solve them includes implementation and
+routine local proof under AGENTS.md. Review/status requests remain read-only.
+Preserve existing files and clarify ambiguous identity or folder collisions.
 
-```text
-docs-harness/tickets/active/
-└── <ticket-number>-<single-ticket>/
-    ├── docs/
-    │   ├── README.md
-    │   └── <source-files-supporting-resources-and-AI-artifacts>
-    ├── ticket.md
-    ├── apis.md
-    └── entities.md
-```
+For one ticket use active/<ticket-number>-<slug>/ticket.md. For multiple tickets
+from one source, use active/<batch-slug>/<ticket-number>-<slug>/ticket.md.
+The batch is a container, not a ticket. Source text and agent interpretation
+remain separate in ticket.md.
 
-When one source contains multiple tickets, create one batch container and put
-each ticket in its own child folder:
+## Proportional artifacts
 
-```text
-docs-harness/tickets/active/
-└── <sample-big-ticket>/
-    ├── <ticket-number>-<ticket-1>/
-    │   ├── docs/
-    │   │   ├── README.md
-    │   │   └── <ticket-1-specific-resources-and-artifacts>
-    │   ├── ticket.md
-    │   ├── apis.md
-    │   └── entities.md
-    ├── <ticket-number>-<ticket-2>/
-    │   ├── docs/
-    │   │   ├── README.md
-    │   │   └── <ticket-2-specific-resources-and-artifacts>
-    │   ├── ticket.md
-    │   ├── apis.md
-    │   └── entities.md
-    └── <ticket-number>-<ticket-n>/
-        ├── docs/
-        │   ├── README.md
-        │   └── <ticket-n-specific-resources-and-artifacts>
-        ├── ticket.md
-        ├── apis.md
-        └── entities.md
-```
+Every ticket needs ticket.md, initialized from templates/ticket.md. Record its
+source, owner when known, outcome, acceptance criteria, scope, decisions,
+validation, risks/proposals, and status there.
 
-The batch folder is only a container, not a ticket record. If the source or an
-artifact is shared by several child tickets, add an optional
-`<sample-big-ticket>/docs/README.md` manifest and place the shared resources
-there. The default batch shape does not require that folder.
+Add only artifacts the task needs:
 
-`<ticket-number>` comes from the source. `<single-ticket>`, `<ticket-1>`, and
-`<sample-big-ticket>` are stable lowercase-kebab-case slugs. Use `TBD` when a
-source has no ticket number and record the missing identity; never invent or
-reuse a business number.
+- apis.md when API behavior or data preparation is relevant;
+- entities.md when persistence, schemas, or enum behavior is relevant;
+- docs/README.md and docs/ when attachments or additional generated artifacts
+  need a manifest. Inline-only intake does not need an empty docs/ folder.
 
-Files that apply to one ticket belong in its `docs/` folder. This includes
-source files, PDFs, JavaScript, HTML, logs, screenshots, and artifacts created
-by the AI agent while working the ticket. Files shared by several tickets
-belong in the batch `docs/` folder, whose manifest records the shared artifact
-owner and links. Each ticket `docs/` folder must contain a `README.md` manifest;
-every other artifact must have one ticket owner, a resolvable link, a purpose,
-and source or generator evidence. Keep exactly three ticket records at the
-ticket-folder root: `ticket.md`, `apis.md`, and `entities.md`. Use the canonical
-templates at
-`docs-harness/templates/ticket.md`, `docs-harness/templates/apis.md`,
-`docs-harness/templates/entities.md`, and
-`docs-harness/templates/ticket-docs-README.md` for the manifest.
+Use the corresponding templates. If an inventory is applicable, record a real
+review date, evidence sources, and verified facts or an explicit unknown.
+Record non-applicability briefly in ticket.md; do not create empty inventories
+merely to satisfy a layout. Preserve existing inventories and manifests.
 
-`apis.md` lists only verified APIs relevant to the ticket and records whether
-API calls or seed data are the appropriate preparation path. Both inventory
-files must record a real last-reviewed date, evidence sources, and an evidence
-summary; an empty inventory must state what was checked and `None found`.
-`entities.md` lists relevant entities, fields, relationships, and enum meanings
-with evidence. Unknown facts remain explicitly marked; they are not inferred
-into the record.
+Every artifact under docs/ has one owner, resolvable link, purpose, source or
+generator, and status in its manifest. Shared batch artifacts live in the
+batch docs/ with their own manifest. Implementation source stays in its normal
+repository location; link it rather than copying it into the ticket.
 
-The placeholder folder examples are stored under
-`docs-harness/templates/{ticket-number}-{single-ticket}/` and
-`docs-harness/templates/{sample-big-ticket}/`; they are layout templates, not
-active tickets.
+## Work and lifecycle
 
-## Lifecycle
+Default to active/; discover nested ticket.md records and read only relevant
+tickets. Read completed history for a named ticket or a real dependency.
 
-`active/` is the default intake and execution route. Keep tickets there while
-work, validation, or User review remains in progress.
+Use intake, ready, in-progress, blocked, or resolved as appropriate. Work one
+ticket at a time unless independent parallel work has been requested. When a
+batch ticket is blocked, continue another independent requested ticket.
 
-`completed/` contains User-authorized history. The agent skips it by default and
-reads it only when the User names a ticket, requests history, or declares a
-dependency.
+Acceptance proof marks a ticket resolved. Keep it in active/ for review unless
+the User requested closure or approved the active-to-completed move; that
+authority may already exist earlier in the task. Preserve artifacts and history
+when moving, update status to completed, and maintain current links.
 
-Acceptance criteria prove the outcome but do not authorize completion on their
-own. A User-authorized move from `active/` to `completed/` is the lifecycle
-transition. A record found in `completed/` with `status: active` is normalized
-to `status: completed` while preserving its history.
+If a completed folder still declares active metadata, report the mismatch in a
+read-only task. Normalize it only during authorized ticket maintenance; preserve
+the history and report the correction. Location does not itself grant a write.
 
-Ticket folder names use `<ticket-number>-<lowercase-kebab-case-slug>`. A
-multi-ticket source uses a lowercase-kebab-case batch container and one such
-child folder per ticket. Existing user files are preserved; ambiguous folder
-collisions require clarification before work continues.
+## Evidence and handoff
+
+Read the ticket and applicable inventories/manifest before solving. Record
+evidence after meaningful progress; do not report resolution from folder
+creation. Missing tool access is distinct from failing acceptance criteria.
+
+Domain discovery and freshness follow domain/README.md. Risks and proposals may
+remain inline in the ticket. Create canonical paired resources only when
+durable risk tracking is requested or part of the accepted scope.
+
+Before handoff verify requested ticket count/identity, applicable artifacts and
+links, acceptance evidence, lifecycle, and the final diff. Report outcomes,
+checks, unresolved decisions, and any unattempted proof. INDEX routes to stable
+ticket lifecycle folders; ordinary ticket records do not receive Harness IDs.

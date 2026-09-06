@@ -1,101 +1,44 @@
-# Purposes
+# Base Harness Repository
 
-## Definition
+`docs-harness/` là context của repo dành cho AI agent: nguồn bằng chứng, quy tắc
+làm việc, kế hoạch, ticket và kiến thức domain. Bắt đầu từ
+[AGENTS.md](AGENTS.md), rồi [INDEX.md](docs-harness/INDEX.md).
 
-- `docs-harness` folder: tôi hay gọi là "harness repo" => Nơi định nghĩa/cung cấp context/cách làm việc giữa user và AI agent xoay quanh repo hiện tại
+## Nguồn quy tắc
 
-## Những resources AI cần phải load từ harness repo
+| Nội dung | Nguồn chính |
+| --- | --- |
+| Quyền theo task; phạm vi local/external | [AGENTS.md](AGENTS.md) |
+| Nạp context liên quan và routing | [INDEX.md](docs-harness/INDEX.md) |
+| Thực thi và bằng chứng hoàn tất | [WORKFLOW.md](docs-harness/WORKFLOW.md) |
+| Kế hoạch qua nhiều phiên | [plans/README.md](docs-harness/plans/README.md) |
+| Domain capture, confirmation, freshness | [domain/README.md](docs-harness/domain/README.md) |
+| Ticket và artifact theo nhu cầu | [tickets/README.md](docs-harness/tickets/README.md) |
+| Template, ID và metadata | [templates/README.md](docs-harness/templates/README.md) |
+| Kiểm tra cấu trúc | [validator guide](.agents/validators/README.md) |
 
-- **Tự động load vào đầu mỗi phiên (Session Start) để nắm bắt bối cảnh hiện tại:**
-  - `AGENTS.md`
-  - `docs-harness/INDEX.md`
-  - `docs-harness/PERSONA.md`
-  - `docs-harness/tickets/active/*.md`
-  - `docs-harness/plans/active/*.md`
-  - `docs-harness/risks/**/*.md`
+Ở đầu phiên, agent đọc persona và thông tin định danh/trạng thái của công việc
+đang mở, sau đó chỉ nạp nội dung liên quan. Quyền đã cấp được giữ trong task;
+yêu cầu triển khai bao gồm sửa cục bộ và kiểm tra phù hợp. Review vẫn chỉ đọc.
+Deploy, thao tác dữ liệu thật, external writes và commit/push có ranh giới riêng
+theo AGENTS.md.
 
-- **Load theo nhu cầu qua Top-Down Routing (chỉ đọc khi intent yêu cầu):**
-  - `docs-harness/WORKFLOW.md`
-  - `docs-harness/onboarding/README.md` (chỉ load `docs-harness/onboarding/<flow>/` khi làm việc với luồng đó)
-  - `docs-harness/domain/**/*.md`
-  - `docs-harness/plans/README.md`
-  - `docs-harness/tickets/README.md`
-  - `docs-harness/harness-constraints/**/*.md`
-  - `docs-harness/harness-improvements/**/*.md`
+Một ticket nhỏ chỉ cần ticket.md; inventory và manifest có khi cần. Onboarding
+tạo bằng chứng theo từng flow và có thể tổng hợp domain UNCERTAIN. Việc xác nhận
+thành CONFIRMED vẫn thuộc User.
 
-## Tiết kiệm Tokens
+`docs/` chứa tài liệu team. Agent có thể đọc nguồn liên quan đến task qua
+routing hoặc dependency; không tự bootstrap tài liệu team.
 
-- Phương pháp Top-Down Approach => KHÔNG tự động load toàn bộ
+## Skills và kiểm tra
 
-- INDEX.md => routing đúng folders/files cần đọc
+Các skill nằm trong `.agents/skills/`. Chỉ dùng workflow phù hợp; goal shaping,
+ticket intake, strict onboarding audit và tool selection không phải bước bắt
+buộc của mọi task. Cải tiến Harness cần một yêu cầu có phạm vi và bằng chứng.
 
-- Dùng đúng tool (.agents/validators/*.py,...)
--> Ưu điểm: STRICT => đúng format khi validate bằng tool
--> Nhược điểm: không validate về ngữ nghĩa => việc này AI agent sẽ validate
+Chạy `node .agents/validators/sync-harness-index.js --check` để kiểm tra cấu trúc.
+Kết quả pass không thay thế đánh giá ý nghĩa quy tắc hoặc replay hành vi agent.
 
-- AI agent không được tự load `docs-harness/tickets/completed/*.md` => tránh làm loãng context
-
-- AI agent không được tự load `docs-harness/plans/completed/*.md` => tránh làm loãng context
-
-- AI agent không được tự load `docs-harness/proposals/*.md` => tránh làm loãng context
-
-=> Hạn chế loãng window context => Tiết kiệm Tokens
-
-- Kiểm tra và đồng bộ tính toàn vẹn giữa cấu trúc Filesystem thực tế và INDEX.md vào đầu mỗi phiên (Session Start) để tránh đứt gãy routing.
-
-- Chỉ load nhiều resources theo phương pháp Bottom-Up chỉ khi có user authority - yêu cầu (được user cho phép) ví dụ khi user yêu cầu deep dive,...
-
-## Hardening
-
-- Skill `.agents/skills/improve-harness`: Tăng tính cá nhân hoá của AI và harness repo từ intent của user
-
-## Quản lý Persona & Giọng văn (Response Style)
-
-- `docs-harness/PERSONA.md`: Định nghĩa phong cách phản hồi của AI Agent dưới dạng Todo checklist `- [x]`.
-- AI Agent tự động đọc file này ở đầu mỗi session để áp dụng giọng văn tương ứng trong hội thoại (không áp dụng giọng văn này vào nội dung file code).
-
-## Quản lý tickets
-
-- AI agent không được tự load `docs-harness/tickets/completed/*.md` => tránh làm loãng context
-- AI agent tự động load `docs-harness/tickets/active/*.md` => để aware các tickets hiện tại (dễ load vào context để AI agent có nhiều info hơn)
-
-## Quản lý plans
-
-- AI agent không được tự load `docs-harness/plans/completed/*.md` => tránh làm loãng context
-- AI agent tự động load `docs-harness/plans/active/*.md` => để aware các plans hiện tại (dễ load vào context để AI agent có nhiều info hơn)
-
-## Quản lý Risks/Proposals
-
-- AI agent không được tự load `docs-harness/proposals/*.md` => tránh làm loãng context
-- AI agent tự động load `docs-harness/risks/*.md` => để aware các risk hiện tại (dễ load vào context để AI agent có nhiều info hơn)
-
-## Đồng bộ filesystem trong `docs-harness` và `INDEX.md`
-
-- Kiểm tra và đồng bộ tính toàn vẹn giữa cấu trúc Filesystem thực tế và INDEX.md vào đầu mỗi phiên (Session Start) để tránh đứt gãy routing.
-
-## Onboarding Dự Án Brownfield (`docs-harness/onboarding/`)
-
-- Skill `.agents/skills/onboarding`: Chuyên dùng để phân tích và mapping các dự án brownfield phức tạp thành từng luồng dữ liệu/nghiệp vụ độc lập (`docs-harness/onboarding/<flow-name>/`).
-- **Quy tắc Top-Down**: Chỉ nạp thư mục con của luồng dữ liệu đang làm việc (`docs-harness/onboarding/<target-flow>/`), tuyệt đối không nạp toàn bộ thư mục cha ở Session Start.
-- **Quy tắc User Authority**: AI Agent **tuyệt đối không tự ý** chuyển đổi hoặc tạo file trong `docs-harness/domain/` từ `onboarding/` nếu không có User Authority. Việc chuyển đổi chỉ diễn ra khi người dùng tự kéo/chuyển file hoặc ra lệnh trực tiếp cho AI Agent thực hiện.
-- **Xây dựng Domain Knowledge**: Khi có sự đồng ý của User, các kết quả khảo sát từ `onboarding/` được dùng làm nguồn tư liệu để tổng hợp kiến thức nghiệp vụ chuẩn hóa vào `docs-harness/domain/`.
-
-## Tối Ưu Khai Thác Tools, MCPs & Skills (`utilizing-tools-agy`)
-
-- Skill `.agents/skills/utilizing-tools-agy`: Thay thế câu prompt dài dòng, tự động phân tích bài toán và lựa chọn bộ công cụ tối ưu nhất (Core Tools, MCP Plugins, Subagents, Skills).
-- **Ràng buộc bảng công cụ (Response Contract)**: Bắt buộc khai báo bảng `Selected Tools & MCPs` ngay đầu phản hồi trước khi thực thi liền mạch.
-- **Cẩm nang tra cứu Antigravity Tools**: Xem chi tiết tại [`docs/tools/antigravity/README.md`](docs/tools/antigravity/README.md).
-
-## Tối Ưu Khai Thác Tools, MCPs & Skills (`utilizing-tools-codex`)
-
-- Skill `.agents/skills/utilizing-tools-codex`: Phân tích task và lựa chọn tổ hợp Codex built-in tools, MCP servers, plugins và skills phù hợp.
-- **Ràng buộc bảng công cụ (Response Contract)**: Bắt buộc khai báo bảng `Selected Codex Tools & MCPs` ngay đầu phản hồi trước khi thực thi.
-- **Cẩm nang tra cứu Codex Tools**: Xem chi tiết tại [`docs/tools/codex/README.md`](docs/tools/codex/README.md).
-
-## Tài Liệu Đúc Kết Kinh Nghiệm & Quy Trình (`docs/`)
-
-- Thư mục `docs/` là tài liệu tham khảo cho team (Team-Facing Documentation, không tự động load vào AI Agent context):
-  - [`docs/AI_PROBLEMS.md`](docs/AI_PROBLEMS.md): Phân tích 9 vấn đề phổ biến của AI Agents và giải pháp kiến trúc khắc phục.
-  - [`docs/WORKFLOWS.md`](docs/WORKFLOWS.md): So sánh 5 trường phái Agentic Workflows (Prompt, Loop, Graph, RAG, Harness Engineering).
-  - [`docs/tools/antigravity/README.md`](docs/tools/antigravity/README.md): Cẩm nang toàn diện về Tools, MCPs, Plugins và Skills của Google Antigravity.
-  - [`docs/tools/codex/README.md`](docs/tools/codex/README.md): Cẩm nang toàn diện về Tools, MCPs, Plugins và Skills của Codex.
+Global Git excludes có thể chứa `docs-harness/` để giữ context cá nhân khỏi
+consumer repo. Quy tắc ignore không untrack các file đã được quản lý trong base
+repo này. Kiểm tra Git khi cần lưu resource mới; không tự force-add hoặc commit.

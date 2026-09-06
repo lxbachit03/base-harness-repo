@@ -4,6 +4,26 @@
 hub: it routes the agent to canonical resources without copying their contents.
 Start here after `AGENTS.md` and before reading other repository documentation.
 
+## Session retrieval
+
+At session start, inspect the folder names and INDEX alignment without changing
+files. Read PERSONA.md and use the single selected style, or Default when the
+selection is empty or ambiguous. Apply persona to conversation only.
+
+Discover current work by metadata, not by loading every body:
+
+- plans/active/: ID, title, status, priority, references;
+- tickets/active/: discover nested ticket.md files and read identity/status;
+- risks/: ID, title, status, priority, references.
+
+Read only records relevant to the task and applicable critical constraints.
+Completed history and proposals are retrieved for a named request or dependency.
+Historical and pending experiment text does not override the current policy
+owner. Read the recorded scope and decision before resuming an experiment.
+
+For later prompts, use the already loaded INDEX while unchanged; reread it
+after changes, a workspace switch, or a compaction that loses routing context.
+
 ## Folder Tree
 
 ```text
@@ -24,35 +44,35 @@ docs-harness/
 │   └── completed/
 └── templates/
     ├── {sample-big-ticket}/
+    │   ├── {ticket-number}-{ticket-1}/
+    │   └── {ticket-number}-{ticket-2}/
     ├── {service-name}/
+    │   ├── data-flows/
+    │   │   └── {data-flow-name}/
+    │   └── schemas/
     └── {ticket-number}-{single-ticket}/
 ```
 
-The filesystem is authoritative for this tree. Update this block when a folder
-is created, moved, renamed, or deleted.
+Filesystem folder paths are authoritative; order in this display is immaterial.
+Keep every descendant folder represented, including template scaffolds.
 
-## Routing Modes
+## Routing and maintenance
 
-### Top-Down (Default)
+Start from the folder and its Purpose, Read when, Skip when, and Resources.
+Follow relevant references and code dependencies until evidence answers the
+task. A missing route may be reported while following an explicitly named path
+or the nearest relevant owner; it does not block safe read-only discovery.
+A broad unrelated survey needs a separate scope. For a requested deep dive,
+state the scope and report why each dependency expansion was necessary.
 
-Start from this tree, select a folder from the User intent, classification, and
-priority, read its routing metadata, and follow only the relevant `Resources`
-links. Active tickets, active plans, and risk records are loaded at session start
-for situational awareness; do not automatically load completed history or proposals.
-Read `docs-harness/WORKFLOW.md`, product docs, code, or validation files only
-after the relevant Harness context is selected.
+INDEX links to policy owners instead of repeating their contracts. Update the
+tree and canonical routes in the same task when their structure, classification,
+priority, or links change. Content-only edits need no routing rewrite.
+In read-only work report drift without repairing it.
 
-### Bottom-Up (Explicit Deep Dive Only)
-
-Use Bottom-Up only when the User explicitly requests `deep dive`, `tìm hiểu
-sâu`, `phân tích chuyên sâu`, `đọc sâu`, `investigate thoroughly`, or `audit
-comprehensively`. Begin from the Top-Down-routed folder/resource, then expand
-only through canonical links, `REFERENCES`, relevant dependencies, and related
-child resources. Do not scan unrelated folders.
-
-Before expanding, state the deep-dive scope. Stop when the User intent has
-enough evidence or no related dependency remains, then report the paths read
-and why each expansion was needed.
+Run the structural check documented in .agents/validators/README.md before
+claiming routing consistency. Its tree, sections, links, IDs, metadata, and
+domain-state checks do not prove claim truth or agent effectiveness.
 
 ## Root Routing
 
@@ -70,6 +90,7 @@ Resources:
 - [INDEX.md](INDEX.md)
 - [WORKFLOW.md](WORKFLOW.md)
 - [PERSONA.md](PERSONA.md)
+- [Local validator guide](../.agents/validators/README.md)
 
 ## TAG: [IMPROVE_HARNESS]
 
@@ -84,6 +105,8 @@ Skip when: the intent concerns only product behavior or unrelated domain work.
 
 Resources:
 
+- [Harness improvement guide](harness-improvements/README.md)
+- [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Evidence-backed domain capture and freshness validation](plans/completed/0902-evidence-backed-domain-freshness.md) - `#012_IMPROVE_HARNESS_0902`, `PRIORITY: [MEDIUM]`
 - [Service E2E domain-flow template improvement](plans/active/0822-domain-e2e-flow-template.md) — `#011_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [Ticket evidence workspace templates](plans/active/0822-ticket-evidence-workspace.md) — `#010_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
@@ -108,8 +131,9 @@ Skip when: no repository or task constraint is relevant.
 
 Resources:
 
+- [Constraint guide](harness-constraints/README.md)
 - [Risk-to-proposal suggestion and cross-link constraint](harness-constraints/0812-risk-proposal-suggestion-cross-link.md) — `#001_CONSTRAINTS_0812`, `PRIORITY: [MEDIUM]`
-- [User authority operation gate](harness-constraints/0822-user-authority-operation-gate.md) — `#009_CONSTRAINTS_0822`, `PRIORITY: [CRITIAL]`
+- [Task authority for local work and explicit external boundaries](harness-constraints/0822-user-authority-operation-gate.md) — `#009_CONSTRAINTS_0822`, `PRIORITY: [CRITIAL]`
 
 ## TAG: [DOMAIN]
 
@@ -125,6 +149,10 @@ User-confirmed context.
 
 Skip when: the task is independent of project/domain knowledge.
 
+Resources:
+
+- [Domain capture and freshness contract](domain/README.md)
+
 ### [CONFIRMED]
 
 Resources:
@@ -135,6 +163,7 @@ No confirmed domain resources are indexed yet.
 
 Resources:
 
+No uncertain domain resources are indexed yet.
 
 ## TAG: [RISK]
 
@@ -148,6 +177,8 @@ those risks.
 Skip when: no security, performance, or memory-leak concern is in scope.
 
 Resources:
+
+- [Risk guide](risks/README.md)
 
 No risk resources are indexed yet.
 
@@ -195,6 +226,8 @@ Skip when: the task is bounded and needs no durable recovery context.
 
 Resources:
 
+- [Durable plan lifecycle](plans/README.md)
+
 See the dedicated `plans/active/` and `plans/completed/` routing sections
 below; do not duplicate their resource links here.
 
@@ -223,10 +256,6 @@ Resources:
 
 Folder: [plans/completed/](plans/completed/)
 
-Resources:
-
-- [Evidence-backed domain capture and freshness validation](plans/completed/0902-evidence-backed-domain-freshness.md) - `#012_IMPROVE_HARNESS_0902`, `PRIORITY: [MEDIUM]`
-
 Purpose: completed execution history that remains useful context.
 
 Read when: prior execution history is directly relevant to the current intent.
@@ -235,6 +264,9 @@ Skip when: the task has no dependency on completed work.
 
 Resources:
 
+- [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
+
+- [Evidence-backed domain capture and freshness validation](plans/completed/0902-evidence-backed-domain-freshness.md) — `#012_IMPROVE_HARNESS_0902`, `PRIORITY: [MEDIUM]`
 - [Goal-griller specialist routing improvement](plans/completed/0812-harness-improvement-goal-routing.md) — `#002_IMPROVE_HARNESS_0812`, `PRIORITY: [MEDIUM]`
 
 ### tickets/
@@ -252,6 +284,8 @@ intake, organization, or resolution. Read `active/` by default; read
 Skip when: the intent does not concern ticket work.
 
 Resources:
+
+- [Ticket layout and lifecycle contract](tickets/README.md)
 
 See the dedicated `tickets/active/` and `tickets/completed/` routing sections
 below. The template remains available at
@@ -302,6 +336,8 @@ Skip when: no proposal or decision context is relevant.
 
 Resources:
 
+- [Proposal guide](proposals/README.md)
+
 No proposal resources are indexed yet.
 
 ### onboarding/
@@ -343,10 +379,10 @@ Resources:
 - [Decision template](templates/decision.md)
 - [Domain template](templates/domain.md)
 - [Domain entity/schema template](templates/domain-entity.md)
-- [Execution plan template](templates/exec-plan.md)
+- [Legacy execution-plan pointer](templates/exec-plan.md)
 - [Risk template](templates/risk.md)
 - [Proposal template](templates/proposal.md)
-- [Plan template](templates/plan.md)
+- [Canonical plan template](templates/plan.md)
 - [Ticket template](templates/ticket.md)
 - [API inventory template](templates/apis.md)
 - [Schema inventory template](templates/entities.md)
@@ -356,10 +392,8 @@ Templates do not receive resource IDs or date-prefixed filenames.
 
 ## Resource Routing Rules
 
-When canonical resources are added, list each resource under every applicable
-classification section using a relative link. Do not duplicate the resource
-file. Each real resource entry must include one `PRIORITY: [CRITIAL]`,
-`PRIORITY: [MEDIUM]`, or `PRIORITY: [NORMAL]` line.
-
-Update this file in the same task when filesystem structure or routing metadata
-changes. Do not invent routes, resources, domain knowledge, or priorities.
+Resource metadata and IDs are owned by [the template catalog](templates/README.md).
+List each canonical resource once per applicable classification and lifecycle
+section. A link in two different routes is intentional; duplicate entries in the
+same route are not. Every resource entry carries its ID and current priority.
+Ordinary tickets and supporting artifacts are reached through their owner.

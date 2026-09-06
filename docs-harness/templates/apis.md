@@ -9,7 +9,7 @@ contracts.
 - Ticket: <ticket-id-or-title>
 - Ticket owner: <person-team-or-role>
 - Canonical ticket record: [`ticket.md`](ticket.md)
-- Artifact manifest: [`docs/README.md`](docs/README.md)
+- Artifact manifest: <link to docs/README.md when artifacts exist; otherwise Not applicable>
 - Service or repository area: <service-or-area>
 
 ## Review Record
@@ -54,8 +54,9 @@ Only APIs relevant to this ticket belong here. Use `TBD`, `Not found`, or
 - Existing seed or fixture sources: <paths>
 - Required User authority or command to run: <authority or `Not requested`>
 
-Do not run an API call, seed command, build, or test from this template. Record
-the command or request for a separately authorized execution.
+The template documents preparation; execution follows AGENTS.md task authority.
+Routine isolated local checks are included in implementation. Inspect API/seed
+side effects and require specific authority for shared services or real data.
 
 ## Missing or Unverified APIs
 

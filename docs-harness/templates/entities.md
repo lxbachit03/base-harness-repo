@@ -9,7 +9,7 @@ details instead of guessing.
 - Ticket: <ticket-id-or-title>
 - Ticket owner: <person-team-or-role>
 - Canonical ticket record: [`ticket.md`](ticket.md)
-- Artifact manifest: [`docs/README.md`](docs/README.md)
+- Artifact manifest: <link to docs/README.md when artifacts exist; otherwise Not applicable>
 - Database or persistence area: <database, service, or area>
 
 ## Review Record

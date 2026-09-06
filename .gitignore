@@ -1,0 +1,13 @@
+# Keep global Harness ignores for unrelated local context, but expose these
+# source artifacts added by the approved policy/validator update.
+!.agents/validators/
+.agents/validators/*
+!.agents/validators/sync-harness-index.test.js
+
+!docs-harness/
+docs-harness/*
+!docs-harness/plans/
+docs-harness/plans/*
+!docs-harness/plans/completed/
+docs-harness/plans/completed/*
+!docs-harness/plans/completed/0906-task-authority-and-policy-consistency.md

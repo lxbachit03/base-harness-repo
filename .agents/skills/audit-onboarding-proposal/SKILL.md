@@ -5,6 +5,9 @@ description: Independently audit a brownfield onboarding transcript, operational
 
 # Audit Onboarding Proposal
 
+This strict transcript/patch protocol applies only to the requested onboarding
+audit. Ordinary code review and local validation do not require this bundle.
+
 Audit the producer, not the producer's story about itself. Reconstruct the run
 from raw evidence, verify every proposed clause against repository authority,
 and return hunk-level apply or no-apply decisions.

@@ -1,7 +1,8 @@
 # Data Flow: {data-flow-name}
 
 > Template-only: this file is not domain truth. Populate it only inside a
-> User-authorized service workspace under `docs-harness/domain/{service-name}/`.
+> authorized domain workspace under `docs-harness/domain/<MMDD>-<name>/`;
+> use `docs-harness/domain/README.md` for capture and evidence rules.
 > Until then, keep its placeholders and do not index it as a domain resource.
 
 This file is the visual E2E contract for one concrete service flow. Use Mermaid

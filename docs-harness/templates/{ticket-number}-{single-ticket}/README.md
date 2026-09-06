@@ -1,19 +1,8 @@
-# Single Ticket Folder Template
+# Single Ticket Layout Example
 
-This folder is a layout example for one ticket. It is not an active ticket and
-must not be solved as work.
+This is scaffolding, not an active ticket. Follow docs-harness/tickets/README.md.
 
-Expected ticket workspace:
-
-```text
-{ticket-number}-{single-ticket}/
-├── docs/
-│   └── README.md
-├── ticket.md
-├── apis.md
-└── entities.md
-```
-
-Copy the file templates from `docs-harness/templates/` into a real ticket
-folder under `docs-harness/tickets/active/` and replace all placeholders with
-source-backed values.
+A real active/<ticket-number>-<slug>/ needs ticket.md. Add apis.md, entities.md,
+and docs/README.md only when applicable to its evidence and artifacts. Preserve
+the source ID or use TBD for a missing ID. Templates live in this parent
+catalog; replace placeholders with evidence in the real workspace.

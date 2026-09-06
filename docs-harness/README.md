@@ -11,7 +11,7 @@ upstream-maintenance material only when the task explicitly needs it.
 - `plans/`: one evolving Git-native plan for work that needs durable memory.
 - `decisions/`: lasting product and architecture choices.
 - `templates/decision.md`: lasting-decision template.
-- `templates/exec-plan.md`: durable execution-plan template.
+- `templates/plan.md`: canonical durable execution-plan template.
 - `.agents/skills/onboard-repository/`: explicit, read-only-first brownfield
   repository mapping and improvement proposals.
 - `.agents/skills/audit-onboarding-proposal/`: explicit independent proposal
@@ -21,8 +21,8 @@ These files are generic Harness structure. They do not select an application
 stack, replace a consumer README or architecture, fabricate validation
 commands, or require the optional SQLite control-plane lifecycle. The installed
 `harness` binary only maintains this core structure. The skills do not run
-automatically; invoke `$onboard-repository` only when repository onboarding is
-the requested outcome.
+automatically; invoke `$onboard-repository` only for the explicitly requested strict
+onboarding/evidence-bundle protocol; use `$onboarding` for a named flow.
 
 ## Consumer-Owned Truth
 
@@ -34,8 +34,9 @@ and working-memory structure around that truth; it does not install upstream
 ## Documentation Ownership
 
 - `docs-harness/` is the canonical context for AI agents and the Harness repo.
-- `docs/` is reserved for team-facing documentation and is not read by Harness
-  by default. This repository may omit the directory entirely.
+- `docs/` is team-facing documentation. Read task-relevant linked documents or
+  dependencies under AGENTS.md; the directory may be absent and is not bootstrapped
+  merely because a workflow mentions it.
 
 ## Global Git Ignore Convention
 

@@ -1,38 +1,43 @@
 # Execution Plan Resource
 
-ID: #<next-sequence>_<PRIMARY_CLASSIFICATION>_<MMDD>
-TAG: [<classification>]
+ID: #<next-sequence>_<creation-kind>_<MMDD>
+TAG: [<applicable-classification; omit this line for an unclassified plan>]
 PRIORITY: [<CRITIAL|MEDIUM|NORMAL>]
 TITLE: <title>
 CREATED: <YYYY-MM-DD>
-STATUS: <status>
+STATUS: active
 REFERENCES:
 - <path-or-resource-id>
 
 ## Outcome
 
-<State the observable outcome.>
+<Observable result and acceptance evidence.>
 
-## Context
+## Context and Authority
 
-<List the files, decisions, evidence, and constraints to read first.>
+<Relevant sources, baseline, existing changes, User request and inherited scope.>
 
-## Approach
+## Scope and Approach
 
-<Describe the implementation sequence.>
+<In scope, exclusions, dependencies, and smallest coherent sequence.>
 
-## Risks/Recovery
+## Risks and Recovery
 
-<Describe risks, recovery steps, and stop conditions.>
+<Each material risk with proposal/mitigation; recovery and stop conditions.>
 
 ## Progress
 
-<Record verified progress and remaining work.>
+- [ ] <Verifiable step.>
 
 ## Decisions
 
-<Record task-local decisions and their authority.>
+<Task-local decisions and their authority. Promote accepted lasting choices only
+when future work must inherit them.>
 
 ## Validation
 
-<Record during-work checks and final proof.>
+<Focused checks, required checks, observed results, and unattempted proof.>
+
+## Result
+
+<Verified outcome, limitations, and follow-up. Update before moving to completed/.>

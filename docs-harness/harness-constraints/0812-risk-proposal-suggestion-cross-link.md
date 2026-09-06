@@ -54,9 +54,10 @@ orphaned.
 3. When persistence is authorized, create the risk and proposal resources from
    their templates, then add reciprocal `REFERENCES:` entries using canonical
    relative paths or immutable resource IDs before claiming completion.
-4. Pause when either resource is missing, a reference is one-sided or
-   unresolved, an ID or path collides, or the proposal requires authority that
-   has not been granted.
+4. Pause persistence or closure of the affected pair when a resource is missing,
+   a reference is one-sided or unresolved, an ID/path collides, or required
+   authority is absent. Report drift without edits in read-only tasks; continue
+   independent authorized work under AGENTS.md.
 
 ## Validation
 

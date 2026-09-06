@@ -1,116 +1,65 @@
 ---
 name: improve-harness
-description: Run one explicitly authorized, evidence-backed improvement to a repository's agent guidance, tools, runbooks, or validation. Use only when the user invokes `$improve-harness` or explicitly asks to improve the Harness after observed reusable agent friction. Do not use for ordinary product changes, speculative cleanup, one unexplained agent mistake, or automatic post-task reflection.
+description: Apply a scoped Harness improvement after an explicit request or acceptance of an evidence-backed rules review, then verify the changed behavior.
 ---
 
 # Improve Harness
 
-Improve one bounded future-agent behavior without turning every difficult task
-into permanent process. Keep consumer truth with its owner and require a fresh
-rerun before claiming improvement.
+Use for an explicitly requested change to guidance, skills, tools, or validation
+after observed reusable friction. A request to report friction remains read-only.
+Read AGENTS.md, docs-harness/INDEX.md, docs-harness/WORKFLOW.md, and the routed policy owners first.
+Use writing-for-agents for instruction edits. AGENTS.md owns task authority,
+including routine local proof; the workflow name is not an external-write grant.
 
-## Establish Authority
+## 1. Preserve the baseline
 
-- Read `AGENTS.md`, `docs-harness/WORKFLOW.md`, and applicable local instructions.
-- Confirm the request authorizes changing Harness behavior. Inspection or a
-  request to report friction does not authorize edits.
-- Record the initial repository root, revision, branch, status, and unrelated
-  changes. Preserve all existing work.
-- Treat invocation as authority for this bounded experiment, not for changing
-  product policy, weakening proof, adding credentials, or mutating external
-  systems. It is not blanket authority to change unrelated files or run
-  build/test commands.
+Record repository root, revision, branch, status, representative request,
+observed gap, relevant tool/authority conditions, and existing proof. A concrete
+rules review accepted by the User supplies a baseline and change authority.
+Do not invent runtime measurements or diagnose model limitations from one run.
 
-## 1. Preserve The Baseline
+Use one active experiment from docs-harness/templates/harness-improvement.md when durable
+memory is needed. Follow docs-harness/templates/README.md for its date-prefixed name and ID.
+Reuse an existing record for the same intervention.
 
-Use an observed task trajectory when available. Record:
+Done when the accepted outcome and evidenced gap are concrete. If no gap is
+established, return an experiment proposal before editing.
 
-- the representative job and accepted outcome;
-- the concrete failure and evidence;
-- human steering, relay, or recovery required;
-- the worker, repository revision, relevant external state, tools, and
-  authority; and
-- existing proof and known limitations.
+## 2. Change the owning contract
 
-Do not diagnose a worker limitation from one run. If no observed baseline
-exists, stop with an experiment proposal; do not manufacture one.
+Locate the earliest preventable gap: context, capability, domain ownership,
+authority, proof, or environment. State the smallest hypothesis, contrary
+evidence, maintenance owner, and removal condition.
 
-Copy `docs-harness/templates/harness-improvement.md` to
-`docs-harness/plans/active/harness-improvement-<slug>.md`. Reuse an existing active
-record for the same experiment.
+Apply the accepted scope at its existing owner and update direct consumers.
+A User-approved consistency review may span several files; it remains one
+coherent intervention. Preserve consumer policy and unrelated work.
 
-## 2. Locate The Earliest Gap
+Done when contradictory current guidance is reconciled and local checks pass.
 
-Trace the failure upstream to the first owner that could have prevented or
-exposed it:
+## 3. Exercise the changed behavior
 
-- **Context:** knowledge was absent, stale, overloaded, or not retrieved.
-- **Capability:** discovery, invocation, interpretation, repair, or real-system
-  verification failed.
-- **Domain ownership:** no canonical type, API, state machine, or source owned
-  the invariant.
-- **Authority:** permission, approval, audit, or recovery was unclear.
-- **Proof:** checks established a proxy rather than the accepted outcome.
-- **Environment:** an external prerequisite was unavailable.
+Use a fresh agent session with equivalent task, tools, authority, and relevant
+conditions. Match the replay to the change: instruction routing/permission
+changes can use bounded scenarios, including a real isolated local edit/check
+where execution authority is being tested. Keep external actions simulated.
 
-Assign the correction to `repository-harness`, the consumer repository, the
-external environment, or a human decision. Do not copy consumer commands or
-policy into a generic upstream template.
+Record whether the intervention was available, retrieved, and exercised; report
+observed outcome, repeated questions, mistakes, and remaining limits. Review
+returned work. Do not infer production effectiveness or speed from scenario
+results. A separate reviewer may independently check consistency while the
+main agent finishes native validation.
 
-## 3. State And Apply One Intervention
+If a relevant fresh replay cannot run, keep the experiment active with
+Decision: pending fresh rerun, a concrete replay task and owner. Implementation
+may be reported finished; effectiveness remains unverified.
 
-Before editing, write:
+## 4. Decide and report
 
-```text
-If <smallest change> is added at <owner>, then a fresh agent will
-<observable change> on <representative job>, because <mechanism>.
-Evidence that would weaken this:
-Maintenance owner and removal condition:
-```
+Choose keep, revise, or remove from the evidence. Move the experiment to
+completed/ only after native checks and the relevant replay decision. Existing
+older experiments retain their history; new policy may supersede their scope
+without pretending they passed old reruns.
 
-Make only the authorized intervention. Prefer an existing owner, a clearer
-route, an actionable diagnostic, a runbook fact, a type or API, or
-claim-matched proof over a parallel framework. Keep unknown policy unknown.
-Run read-only repository-native checks that protect the changed boundary by
-default. Build, test, lint, format, generation, installation, migration, and
-package commands require explicit User authority for the command or command
-class. If the required proof is not authorized, report it as unattempted.
-
-## 4. Require A Fresh Rerun
-
-Use a fresh agent session and an equivalent starting state. Hold the worker,
-task class, authority, tools, and relevant external conditions materially
-steady. Record separately whether the intervention was available, retrieved or
-invoked, and relevant.
-
-If a fresh rerun is not authorized or available, leave the record active with
-`Decision: pending fresh rerun`. Report the exact next task; do not claim the
-Harness improved.
-
-## 5. Keep, Revise, Or Remove
-
-Compare accepted outcome, claim-matched proof, human intervention, retries,
-authority behavior, and maintenance cost.
-
-- **Keep** when the rerun exercised the intervention and improved the bounded
-  job enough to justify its cost.
-- **Revise** when the owner is correct but the route or interface remains hard
-  to use.
-- **Remove** when it adds noise, duplicates a better owner, or does not improve
-  the job.
-
-Record the decision, evidence, owner, and removal condition. Move the record to
-`docs-harness/plans/completed/` only after native validation and the fresh-rerun
-decision. Preserve a removed intervention's result in the completed record.
-
-## Report
-
-Return:
-
-- representative job and baseline;
-- earliest gap and owner;
-- intervention and changed files;
-- native validation;
-- fresh-rerun status and comparison;
-- `keep`, `revise`, `remove`, or `pending fresh rerun`; and
-- remaining authority, risk, or follow-up.
+Report baseline, changed owners, checks, fresh scenario results, decision, and
+limitations. If a replay exposes a defect, revise and rerun the affected case.

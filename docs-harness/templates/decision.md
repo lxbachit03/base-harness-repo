@@ -1,10 +1,19 @@
-# NNNN Decision Title
+# Decision Resource
 
-Date: YYYY-MM-DD
+ID: #<next-sequence>_DECISION_<MMDD>
+PRIORITY: [<CRITIAL|MEDIUM|NORMAL>]
+TITLE: <title>
+CREATED: <YYYY-MM-DD>
+STATUS: accepted
+REFERENCES:
+- <authority-or-source>
+
+Use docs-harness/templates/README.md for applicable TAG lines and immutable identity.
+Create only after the relevant choice is accepted.
 
 ## Status
 
-Proposed | Accepted | Superseded | Rejected
+<Current accepted or superseded state, decision date, and authority.>
 
 ## Context
 

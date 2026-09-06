@@ -1,75 +1,33 @@
 # Execution Plans
 
-Execution plans are Git-native working memory for complex tasks. They preserve
-enough context for another agent or human to resume work without reconstructing
-intent from chat history or a partial diff.
+Use an ephemeral plan for a bounded, single-session task. A request to discuss
+a plan does not create a file; a request to save one does.
 
-## Read When
+## Durable plan contract
 
-Read this folder when work spans sessions, contributors, dependencies,
-recovery, or an ordered sequence that would be unsafe or expensive to recover
-from the final diff alone.
+When authorized work spans sessions, coordinates contributors, has meaningful
+dependencies, or needs recovery, maintain one plan under active/. Start from
+docs-harness/templates/plan.md and use the metadata/ID rules in
+docs-harness/templates/README.md. The former exec-plan.md path is a compatibility
+pointer to that template.
 
-Use an ephemeral plan for bounded, single-session work. Do not create a durable
-plan merely to add ceremony to a small change.
+Record outcome, context, scope, task authority, approach, progress, decisions,
+risks/recovery, validation, and result. Keep task-local choices in this record.
+Promote an accepted lasting decision into decisions/ only when future work
+must inherit it.
 
-## When To Create A Plan
-
-Use an ephemeral plan for bounded, single-session work.
-
-Create one durable plan when work spans sessions, coordinates contributors, has
-meaningful dependencies or ordering, requires recovery steps, or would be unsafe
-to resume from the diff alone.
-
-Use `docs-harness/templates/exec-plan.md` and place the file under `active/`.
+Read current plans through docs-harness/INDEX.md; avoid maintaining a second active-plan list
+here. Completed plans are historical evidence, not active policy. An older
+active plan may describe a superseded policy; its baseline is not authority to
+restore that policy.
 
 ## Lifecycle
 
-```text
-docs-harness/plans/active/<slug>.md
-  -> update progress and decisions during implementation
-  -> record final validation and result
-  -> move to docs-harness/plans/completed/<slug>.md
-```
+Update progress as evidence changes. After the outcome and relevant proof are
+recorded, move the plan from active/ to completed/ within the authorized task,
+and update INDEX and current links. Preserve ID, creation date, and evidence.
 
-The plan is the primary task artifact. Promote a lasting product or architecture
-decision into `docs-harness/decisions/`; keep task-local choices in the plan.
-
-## Boundaries
-
-A plan records outcome, context, approach, risks, recovery, progress, decisions,
-and validation. It is working memory that must be updated when evidence changes
-the approach; it is not authority to invent product policy or bypass a required
-approval.
-
-## Active Plans
-
-- [Ticket evidence workspace](active/0822-ticket-evidence-workspace.md) —
-  `#010_IMPROVE_HARNESS_0822`, pending fresh rerun.
-- [User authority operation gate](active/0822-user-authority-operation-gate.md) —
-  `#008_IMPROVE_HARNESS_0822`, pending fresh rerun.
-- [Onboarding skill and flow-based workspace routing](active/0816-onboarding-skill-folder-routing.md) —
-  `#007_IMPROVE_HARNESS_0816`, pending fresh rerun.
-- [Persona response style configuration and session start routing](active/0816-persona-response-style-routing.md) —
-  `#006_IMPROVE_HARNESS_0816`, pending fresh rerun.
-- [Filesystem and INDEX synchronization check at session start](active/0816-filesystem-index-sync-rule.md) —
-  `#005_IMPROVE_HARNESS_0816`, pending fresh rerun.
-- [Ticket lifecycle routing](active/0815-ticket-lifecycle-routing.md) —
-  `#004_IMPROVE_HARNESS_0815`, pending fresh rerun.
-- [Writing-for-agents routing improvement](active/0815-writing-for-agents-routing.md) —
-  `#003_IMPROVE_HARNESS_0815`, pending fresh rerun.
-
-## Active Directory Guidance
-
-Place one evolving plan here when work needs durable memory. Use
-`docs-harness/templates/exec-plan.md`, keep progress and validation current, and
-move the plan to `../completed/` only after the result is verified.
-
-## Completed Directory Guidance
-
-Move a plan here only after its requested outcome and validation are recorded.
-Completed plans are historical evidence, not default task instructions.
-
-Keep a completed plan when it explains a consequential migration, recovery
-procedure, architectural transition, or decision history that future work may
-need. Ordinary bounded changes should rely on Git and pull-request history.
+Harness improvement experiments also follow docs-harness/harness-improvements/README.md:
+implementation can be finished while an explicitly recorded behavioral rerun
+remains pending. Preserve a useful historical result rather than fabricating
+proof to close a plan.

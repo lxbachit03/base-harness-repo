@@ -12,6 +12,14 @@ REFERENCES:
 - docs-harness/PERSONA.md
 - README.md
 
+## Current policy notice (2026-09-06)
+
+The accepted [task authority and policy consistency intervention](../completed/0906-task-authority-and-policy-consistency.md)
+updates current guidance at AGENTS.md and its routed owners. This record retains
+its original scope, evidence, and pending rerun; earlier proposed instructions
+are historical context and must not override current policy. Its previous
+fresh-rerun result is not retroactively claimed by the new intervention.
+
 ## Objective
 
 Introduce a dedicated persona configuration file (`docs-harness/PERSONA.md`) that allows the user to select an AI communication tone via a Markdown checklist (`- [x]`), and update `AGENTS.md` so the AI agent loads and adopts the selected tone at session start without altering code file editing standards.

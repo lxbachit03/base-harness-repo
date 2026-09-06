@@ -10,12 +10,14 @@
 
 > [!IMPORTANT]
 > **Line Range Annotation Rule**:
-> Every step, node, state transition, and conditional branch in the Mermaid diagram **MUST explicitly include the relative file path and code line ranges** in the node label.
+> Every implementation step and branch must cite a relative source path and
+> line range or stable symbol/revision. Mark external actors without local
+> implementation as external; never invent a code location.
 
 ```mermaid
 flowchart TD
     %% Entry Point
-    Start(["Client / Ingestion Trigger"]) --> Step1["Parse & Validate Request<br/>(src/api/auth.ts:L15-L35)"]
+    Start(["Client / Ingestion Trigger<br/>(external actor)"]) --> Step1["Parse & Validate Request<br/>(src/api/auth.ts:L15-L35)"]
     
     %% Processing & Validation
     Step1 --> Decision1{"Valid Payload?<br/>(src/api/auth.ts:L36-L45)"}
@@ -39,9 +41,9 @@ flowchart TD
 
 | Step | Component / Action | Exact Source File & Line Range | Observed Behavior |
 | :--- | :--- | :--- | :--- |
-| **1** | `<Action 1>` | `[path/to/file.ts:L10-L30](file:///path/to/file.ts#L10-L30)` | `<Description of behavior>` |
-| **2** | `<Action 2>` | `[path/to/file.ts:L31-L55](file:///path/to/file.ts#L31-L55)` | `<Description of behavior>` |
-| **3** | `<Action 3>` | `[path/to/file.ts:L56-L90](file:///path/to/file.ts#L56-L90)` | `<Description of behavior>` |
+| **1** | `<Action 1>` | `[path/to/file.ts:L10-L30](path/to/file.ts#L10-L30)` | `<Description of behavior>` |
+| **2** | `<Action 2>` | `[path/to/file.ts:L31-L55](path/to/file.ts#L31-L55)` | `<Description of behavior>` |
+| **3** | `<Action 3>` | `[path/to/file.ts:L56-L90](path/to/file.ts#L56-L90)` | `<Description of behavior>` |
 
 ---
 
@@ -49,10 +51,10 @@ flowchart TD
 
 - **Condition 1 (`<Branch Name>`)**:
   - *Trigger Condition*: `<When condition occurs>`
-  - *Code Reference*: `[path/to/file.ts:L40-L50](file:///path/to/file.ts#L40-L50)`
+  - *Code Reference*: `[path/to/file.ts:L40-L50](path/to/file.ts#L40-L50)`
   - *Fallback / Error Mitigation*: `<How error is handled>`
 
 - **Condition 2 (`<Branch Name>`)**:
   - *Trigger Condition*: `<When condition occurs>`
-  - *Code Reference*: `[path/to/file.ts:L60-L75](file:///path/to/file.ts#L60-L75)`
+  - *Code Reference*: `[path/to/file.ts:L60-L75](path/to/file.ts#L60-L75)`
   - *Fallback / Error Mitigation*: `<How error is handled>`

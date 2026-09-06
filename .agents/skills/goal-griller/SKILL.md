@@ -18,7 +18,7 @@ Do not produce a final `/goal` prompt until these six fields are clear enough:
 5. Validation loop: cheap checks during work and final checks before claiming done.
 6. Stop and pause rules: when to stop as done, and when to pause for human input.
 
-If any field is missing, ask the next highest-leverage question instead of drafting the final goal.
+Fill discoverable fields from evidence and inherited task authority. Ask only when a missing answer materially changes the goal; mark a non-blocking assumption explicitly.
 
 ## Routing And Triage
 
@@ -37,7 +37,7 @@ every task. After the six fields are clear, classify the lightest useful route:
 - `$writing-for-agents`: the task creates or edits an agent-facing skill,
   `AGENTS.md`, `CLAUDE.md`, or a routed instruction document and needs review of
   its pointers, disclosure, steps, or completion criteria.
-- `$improve-harness`: the User explicitly invokes it and an observed reusable
+- `$improve-harness`: the User requests a scoped improvement or accepts a review, and observed reusable
   agent friction justifies one bounded Harness intervention and fresh rerun.
 
 Use the minimum route. Do not invoke every specialist by default. Use
@@ -54,11 +54,7 @@ identified, include at least one proposal or solution inline. A read-only task
 must not create or modify a risk, proposal, or plan resource; persistence needs
 explicit User authority and reciprocal risk/proposal links.
 
-Route selection and a drafted goal do not grant operation authority. The goal
-must name the User-authorized mutation scope before the agent creates, edits,
-deletes, moves, or renames files or folders. Build, test, and other
-side-effecting commands require explicit User authority; if that authority is
-missing, the goal must leave those checks unattempted and report the gap.
+Route selection does not grant new authority. Carry the User's existing task scope into the goal and follow AGENTS.md for local verification and external boundaries.
 
 When a goal is drafted, include the route in the handoff:
 
@@ -127,8 +123,7 @@ Route:
 
 Constraints:
 - [...]
-- File/folder mutations: only the explicitly User-authorized paths and actions.
-- Build/test or other side-effecting commands: only when explicitly authorized.
+- Follow AGENTS.md task authority, including routine local proof and explicit external boundaries.
 
 Operating rules:
 - Keep a concise progress log in [file] when the task is long-running.

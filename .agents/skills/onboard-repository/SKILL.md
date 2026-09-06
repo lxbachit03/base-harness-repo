@@ -1,9 +1,14 @@
 ---
 name: onboard-repository
-description: Inspect an unfamiliar or brownfield repository, trace one real operational path, and propose evidence-backed improvements that help future agents work independently. Use when explicitly asked to onboard, map, assess, or backfill agent-facing repository guidance; use again after the user approves exact proposal items. The first pass is read-only and must not edit files, install tools, start services, create state, or infer missing product policy.
+description: Run the strict repository-onboarding evidence protocol when explicitly requested, with a read-only operational map, authenticated patch bundle, and separately approved application.
 ---
 
 # Onboard Repository
+
+This is the strict evidence-bundle workflow. Use it only when the User requests
+this skill or an authenticated onboarding/patch audit. Ordinary repository
+questions follow docs-harness/WORKFLOW.md; named flow mapping uses onboarding. Explicit User
+scope and AGENTS.md remain authoritative across follow-up turns.
 
 Turn an unfamiliar repository into a verified map for future work. Treat the
 repository as the system of record. Separate facts from gaps and suggestions.

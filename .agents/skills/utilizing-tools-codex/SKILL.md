@@ -138,13 +138,10 @@ report ties that result to the declared tools and proof.
 
 ## Tool-Specific Guardrails
 
-- **Authority**: reading is the default. File mutations, deployment, permission
-  changes, uninstall, build, test, lint, format, generation, installation,
-  migration, and package commands require explicit User authority for the
-  named scope. A goal, plan, skill invocation, or acceptance criterion does
-  not grant that authority.
+- **Authority**: follow AGENTS.md task authority. Carry existing permissions across turns; inspect command effects and use the specific boundary for external or destructive actions.
 - **Freshness**: use `web__run` for facts that may have changed. For OpenAI
-  product or Codex questions, use `openai-docs` and official OpenAI sources.
+  product or Codex questions, use an available official-documentation skill or
+  local product evidence, then official OpenAI sources as needed.
 - **Connected apps**: a tool being exposed does not prove that an account,
   document session, site, or permission is connected. Discover and report the
   connection state before relying on it.
@@ -168,8 +165,8 @@ report ties that result to the declared tools and proof.
 - Listing every available tool when only one or two are relevant.
 - Guessing a tool name, plugin status, app connection, or external identifier.
 - Using web search for a task that local files or a native tool can answer.
-- Running a build/test/lint/format/generation command without command-level
-  authority.
+- Asking again for routine local verification already included in task authority,
+  or treating a command name as permission for external effects.
 - Treating a successful tool call as proof without inspecting its result.
 - Claiming completion while a required connection, validation check, or User
   decision remains unresolved.

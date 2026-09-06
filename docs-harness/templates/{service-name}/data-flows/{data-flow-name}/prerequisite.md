@@ -1,12 +1,14 @@
 # Prerequisites: {data-flow-name}
 
 > Template-only: this file is not domain truth. Populate it only inside a
-> User-authorized service workspace under `docs-harness/domain/{service-name}/`.
+> authorized domain workspace under `docs-harness/domain/<MMDD>-<name>/`;
+> use `docs-harness/domain/README.md` for capture and evidence rules.
 > Until then, keep its placeholders and do not index it as a domain resource.
 
 Record everything that must exist or run before the E2E flow can start. Prefer
 the least stateful preparation path and keep commands or API calls as proposed
-instructions until the User explicitly authorizes execution.
+instructions whose execution follows the inherited task authority in AGENTS.md.
+Inspect setup effects; shared services or real data need specific authority.
 
 ## E2E Gate
 

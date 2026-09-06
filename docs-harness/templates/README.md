@@ -1,137 +1,79 @@
-# Resource Templates
+# Resource Templates and Identity
 
-This folder contains stable system templates for creating supported Harness
-resources. Templates are scaffolding, not canonical resources and not default
-task instructions.
+This file owns template selection and resource identity. AGENTS.md owns task
+authority; workflow guides own behavior. Read the matching template before
+creating a resource. Templates contain placeholders and are not domain truth.
 
-## Available Templates
+## Catalog
 
-- `activity-diagram.md`: Mermaid flow/activity diagrams with file and line range citations for onboarding flows.
-- `constraint.md`: file, folder, or task constraints.
-- `decision.md`: lasting product or architecture decisions.
-- `domain.md`: confirmed or uncertain domain knowledge.
-- `domain-entity.md`: detailed service schema/entity documentation, including
-  field code-usage and query tracing gated by explicit User authority.
-- `exec-plan.md`: durable execution plans.
-- `harness-improvement.md`: bounded Harness improvement experiments.
-- `plan.md`: plan resources requiring the common resource metadata.
-- `proposal.md`: options and recommendations awaiting authority.
-- `risk.md`: security, performance, and memory-leak risks.
-- `ticket.md`: ticket records managed under `docs-harness/tickets/active/` or
-  `docs-harness/tickets/completed/`; use the direct
-  `{ticket-number}-{single-ticket}/` layout for one ticket and a
-  `{sample-big-ticket}/` container with numbered child folders for a batch.
-- `apis.md`: ticket-local API inventories and data-preparation alternatives.
-- `entities.md`: ticket-local database schema, field, relationship, and enum
-  inventories.
-- `ticket-docs-README.md`: the required owner/link/provenance manifest for a
-  ticket's `docs/` folder.
+- [plan.md](plan.md): canonical durable plan with metadata and result.
+- [exec-plan.md](exec-plan.md): compatibility pointer; no separate plan contract.
+- [harness-improvement.md](harness-improvement.md): experiment-specific sections
+  used with the plan lifecycle.
+- [constraint.md](constraint.md): file/folder/task boundaries.
+- [decision.md](decision.md): accepted lasting choices.
+- [domain.md](domain.md): canonical date-prefixed domain README.
+- [domain-entity.md](domain-entity.md): relevant schema/field evidence.
+- [activity-diagram.md](activity-diagram.md): cited flow diagrams.
+- [risk.md](risk.md) and [proposal.md](proposal.md): durable paired risk tracking.
+- [ticket.md](ticket.md): every ticket's source, result, and evidence.
+- [apis.md](apis.md), [entities.md](entities.md): applicable ticket inventories.
+- [ticket-docs-README.md](ticket-docs-README.md): manifest when artifacts exist.
+- [{service-name}/README.md]({service-name}/README.md): E2E service-flow scaffold.
+- [{ticket-number}-{single-ticket}/README.md]({ticket-number}-{single-ticket}/README.md)
+  and [{sample-big-ticket}/README.md]({sample-big-ticket}/README.md): layout examples.
 
-## Domain Resource Capture Contract
+Follow ../domain/README.md for capture, confirmation, tracing, and freshness;
+follow ../tickets/README.md for optional ticket artifacts. Existing evidence
+files are preserved when adopting the smaller layout.
 
-The service-flow files below are reusable supporting templates, not canonical
-domain truth. A qualifying `$onboarding` run, ticket-solving workspace, or Q&A
-explicitly marked as domain discovery may create a source-backed domain
-resource at:
+## Common metadata
 
-```text
-docs-harness/domain/<MMDD>-<lowercase-kebab-case-name>/README.md
-```
+Canonical classified resources use ID, TAG, PRIORITY, TITLE, CREATED, STATUS,
+and REFERENCES before their first level-two heading. Use exactly one priority:
+[CRITIAL], [MEDIUM], or [NORMAL]. The existing CRITIAL spelling is retained for
+compatibility. Choose it from evidenced impact; do not fill an empty index.
 
-Use `templates/domain.md` for the canonical README and keep new resources
-`[UNCERTAIN]` until explicit User confirmation makes them `[CONFIRMED]`.
-Record concrete repository path/line, ticket/section, or Q&A references, plus
-contradictions and open questions. Ordinary Q&A and agent inference do not
-create domain resources.
+Use one TAG line per classification: [IMPROVE_HARNESS], [CONSTRAINTS], [RISK],
+or [DOMAIN] plus exactly one [CONFIRMED]/[UNCERTAIN] line. Combined legacy domain
+tags remain readable. A supporting plan or decision with no applicable
+classification may omit TAG; its folder supplies its route. Do not invent a
+product domain or a new TAG solely to file a plan.
 
-After runtime-logic, persistence, contract, or data-flow code changes, compare
-changed paths with domain references, evidence citations, and linked
-dependencies. Re-validate every possible affected domain; record
-`Freshness: CURRENT`, or mark `STATUS: needs-review` and `Freshness: STALE`,
-record the changed source, and pause. Preserve confirmed content during
-automatic maintenance.
+A canonical file is stored once and linked from every applicable classification
+and lifecycle route. Templates, ordinary tickets, and child evidence artifacts
+do not receive independent resource IDs. A schema may remain supporting evidence
+linked from its canonical domain; give it an ID only when separately promoted.
 
-## Ticket Folder Layout Templates
+## Immutable identity
 
-The placeholder folders below are layout examples, not active ticket records:
+Before creating a resource, discover real ID metadata across docs-harness/,
+excluding templates. Select the next global sequence, max + 1, padded to at
+least three digits. Use #<sequence>_<creation-kind>_<MMDD>.
+Creation kind is the applicable classification (DOMAIN_UNCERTAIN or
+DOMAIN_CONFIRMED for a domain); an unclassified supporting plan/decision may
+use PLAN/DECISION. Creation kind records origin, not current classification.
+A confirmation changes TAG and routing without changing the ID.
 
-- `{ticket-number}-{single-ticket}/`: one ticket directly under the active or
-  completed lifecycle folder.
-- `{sample-big-ticket}/`: a batch container whose child folders are named
-  `{ticket-number}-{ticket-name}/`, one child per ticket.
+CREATED uses YYYY-MM-DD and MMDD uses the creation date in Asia/Bangkok.
+Preserve creation date and ID after moves, promotion, and content updates.
+Name ordinary resources <MMDD>-<lowercase-kebab-case-meaning>.md, without ID.
+A domain uses <MMDD>-<name>/README.md instead.
 
-Use the file templates above inside each ticket folder. Do not route or solve
-these placeholder folders as tickets merely because they exist under
-`templates/`.
+Recheck IDs and target existence immediately before creation. Allocate IDs in
+one sequence when coordinating writers, then check the merged result for
+duplicate full IDs and reused numeric sequences. If another writer took an ID,
+choose the next unused ID for the not-yet-created resource. Never reassign an
+existing ID or overwrite a colliding file; resolve ambiguous collisions with
+the User. This is collision detection, not a concurrent allocation lock.
 
-## Domain E2E Flow Template
+## Routing and proof
 
-`{service-name}/` is the supporting template for service-level content inside
-the date-prefixed canonical domain folder. The canonical domain resource is
-`docs-harness/domain/<MMDD>-<name>/README.md`; this scaffold is not domain
-truth.
+After creating a resource, update INDEX tree, classification, and lifecycle
+links in the same task. Content-only changes need no INDEX rewrite unless
+routing metadata changed. Resolve relative links and duplicate IDs before
+completion. Static checks do not confirm business facts.
 
-```text
-{service-name}/
-├── README.md
-├── data-flows/
-│   └── {data-flow-name}/
-│       ├── apis.md
-│       ├── entities.md
-│       ├── prerequisite.md
-│       └── data-flow.md
-└── schemas/
-    └── {schema-name}.md
-```
-
-The first Mermaid diagram in each `data-flow.md` is the complete E2E flow. Every
-following diagram covers one API from `apis.md`. Each real schema file under a
-date-prefixed domain workspace uses `domain-entity.md`; the placeholder
-`schemas/{schema-name}.md` remains empty until the schema gate is satisfied.
-
-## Domain Schema/Entity Template
-
-Use `domain-entity.md` for one schema/entity file under
-`docs-harness/domain/<MMDD>-<name>/schemas/`. It covers schema meaning, fields,
-enums, relationships, constraints, indexes, lifecycle, and source-backed code
-usage. Code usage means tracing where a field is assigned, transformed, read,
-serialized, and used in `WHERE`, `JOIN`, filter, sort, or index conditions.
-
-The schema documentation authority and the detailed field-analysis authority
-are separate. A source-backed `[UNCERTAIN]` domain may record a schema summary
-when the workflow evidence supports it, but detailed field/code tracing is
-prohibited unless the User explicitly authorizes that analysis scope. Otherwise
-retain `Pending User authority` or `Unverified` placeholders.
-
-## Usage Rules
-
-- Read the matching template before creating a new supported resource.
-- Preserve the required metadata, immutable IDs, dates, tags, priorities, and
-  references defined by `AGENTS.md`.
-- Replace placeholders with evidence; do not fabricate domain knowledge,
-  priority, authority, or validation.
-- Templates do not receive real resource IDs or date-prefixed filenames and
-  should not be indexed as real resources.
-- Domain templates are not domain truth. A real domain workspace may be created
-  only by an explicitly scoped `$onboarding` run, ticket-solving workspace, or
-  Q&A marked as domain discovery, and only when its claims have concrete
-  evidence. Ordinary Q&A, agent inference, and plans alone do not create one.
-- Every new domain resource starts as `[UNCERTAIN]`. Only explicit User
-  confirmation makes it `[CONFIRMED]`.
-- After runtime-logic, persistence, contract, or data-flow code changes,
-  compare changed paths with domain references and dependencies and re-validate
-  every possible affected resource. Record `Freshness: CURRENT`, or mark
-  `STATUS: needs-review` and `Freshness: STALE`, record changed sources, and
-  pause when a claim is stale or contradictory.
-- A domain schema file must use `domain-entity.md`. Its detailed field and code
-  usage sections require explicit User authority for the named schema/fields;
-  the template may define the sections but must not be populated from agent
-  inference without that authority.
-- Keep ticket/onboarding artifacts in their owning workspace and link them from
-  the canonical domain README. Update `docs-harness/INDEX.md` after the README
-  exists and its routing metadata is known.
-
-## Skip When
-
-Skip this folder when the task edits existing content only or does not create a
-supported resource.
+Persisted risk/proposal pairs follow the canonical constraint; inline risks in
+a task can stay inline with a proposal. Keep accepted decisions separate from
+unaccepted recommendations. Templates keep stable names and no real IDs.

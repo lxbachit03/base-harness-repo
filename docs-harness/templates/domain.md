@@ -1,72 +1,44 @@
 # Domain Knowledge Resource
 
-> Template-only: this file is not a domain resource or domain truth. A
-> qualifying evidence-backed workflow may instantiate it as
-> `docs-harness/domain/<MMDD>-<name>/README.md` with `[UNCERTAIN]` state; an
-> explicit User confirmation is still required for `[CONFIRMED]`.
+Use the capture, confirmation, tracing, and freshness contract in
+docs-harness/domain/README.md. This is a template, not a domain fact.
 
-ID: #<next-sequence>_<PRIMARY_CLASSIFICATION>_<MMDD>
+ID: #<next-sequence>_<creation-kind>_<MMDD>
 TAG: [DOMAIN]
-TAG: [<CONFIRMED|UNCERTAIN>]
+TAG: [UNCERTAIN]
 PRIORITY: [<CRITIAL|MEDIUM|NORMAL>]
 TITLE: <title>
 CREATED: <YYYY-MM-DD>
-STATUS: <status>
+STATUS: active
 REFERENCES:
-- <path-or-resource-id>
+- <source-path-or-resource-id>
 
 ## Domain Statement
 
-<State the project/domain knowledge.>
+<Source-backed claims; distinguish observed behavior from accepted policy.>
 
 ## Evidence/Authority
 
-<Record repository paths and line ranges, ticket/section references, or the
-recorded Q&A decision. Separate observed facts from User-confirmed authority.>
-
-## Capture and Confirmation Gate
-
-Before creating a real domain resource from this template:
-
-1. Confirm that the current workflow is an active `$onboarding` flow, a ticket
-   workspace, or Q&A explicitly marked as domain discovery.
-2. Confirm a non-colliding `<MMDD>-<lowercase-kebab-case-name>` folder and a
-   complete evidence set for every claim.
-3. Record contradictions and open questions; use `[UNCERTAIN]` unless the User
-   explicitly confirms the knowledge.
-4. Add the canonical `README.md` to `docs-harness/INDEX.md` only after it
-   exists under `docs-harness/domain/<MMDD>-<name>/`.
-
-If evidence, scope, or the collision check is unresolved, stop at the template
-and report the missing input. Do not turn a plan or inference into domain truth.
+<For each claim: path and line range or symbol/revision, ticket section, or
+recorded User decision. Include dependency links used for impact selection.>
 
 ## Freshness
 
 Last validated: <YYYY-MM-DD>
-Validation scope: <changed paths or initial capture scope>
-Freshness: <CURRENT|STALE>
-Validation result: <summary and source references>
-Changed sources: <None or paths that triggered review>
-
-After a runtime-logic, persistence, contract, or data-flow code change, compare
-changed paths with this resource's references, citations, and linked
-dependencies. Re-validate uncertain overlaps. If claims no longer hold, set
-`STATUS: needs-review` and `Freshness: STALE`, record the changed source and
-pause. Do not rewrite `[CONFIRMED]` knowledge automatically. Directly
-evidenced `[UNCERTAIN]` updates remain `[UNCERTAIN]`.
+Validation scope: <initial capture or affected claims and changed paths>
+Freshness: CURRENT
+Validation result: <what was checked and observed>
+Changed sources: <None or paths/symbols that triggered review>
 
 ## Confidence
 
-<Explain why this is CONFIRMED or UNCERTAIN.>
+<Why this remains uncertain, or the explicit User confirmation and date.
+Confirmation preserves the ID, including its creation-kind component.>
 
 ## Q&A Evidence
 
-Date: <YYYY-MM-DD or None>
-Scope: <question scope or None>
-User answer/decision: <answer or None>
-State: <CONFIRMED|UNCERTAIN|None>
-Source: <ticket, onboarding flow, or Q&A reference>
+<Date, scope, answer/decision, state, and source; None when inapplicable.>
 
 ## Open Questions
 
-<List unresolved questions requiring confirmation, or state none.>
+<Contradictions, unknowns, and the next verification/decision; or None.>

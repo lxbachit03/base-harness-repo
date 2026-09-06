@@ -7,6 +7,10 @@ description: Select and execute optimal combinations of Antigravity (AGY) built-
 
 Select, declare, and execute the most effective combination of Google Antigravity (AGY) built-in core tools, MCP plugins, and specialized skills for any given task.
 
+AGENTS.md owns task authority and persistent permissions. The actual runtime
+capabilities override the example tool catalog below. Use only exposed tools
+and inspect effects before external or destructive actions.
+
 ## Mandatory Response Contract
 
 Whenever this skill is triggered, you **MUST** begin the response by declaring your selected tools/MCPs/skills in a concise Markdown table, followed immediately by seamless execution:

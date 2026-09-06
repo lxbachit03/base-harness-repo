@@ -13,6 +13,14 @@ REFERENCES:
 - docs-harness/WORKFLOW.md
 - docs-harness/INDEX.md
 
+## Current policy notice (2026-09-06)
+
+The accepted [task authority and policy consistency intervention](../completed/0906-task-authority-and-policy-consistency.md)
+updates current guidance at AGENTS.md and its routed owners. This record retains
+its original scope, evidence, and pending rerun; earlier proposed instructions
+are historical context and must not override current policy. Its previous
+fresh-rerun result is not retroactively claimed by the new intervention.
+
 ## Objective
 
 When a User asks to create or edit a persistent agent-facing document, the

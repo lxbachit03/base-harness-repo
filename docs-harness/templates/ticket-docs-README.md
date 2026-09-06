@@ -1,7 +1,8 @@
 # Ticket Docs Manifest
 
-Use this template as `docs/README.md` inside every ticket folder, and for a
-batch-level `docs/` folder when shared resources exist. It is the index for
+Use this template as `docs/README.md` when a ticket has source attachments or
+additional artifacts, and for a batch-level `docs/` folder with shared resources.
+Follow `docs-harness/tickets/README.md`; inline-only intake needs no empty manifest. It is the index for
 ticket-specific or shared source files, supporting resources, and AI-created
 artifacts; it is not itself an artifact entry.
 

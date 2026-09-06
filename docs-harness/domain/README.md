@@ -1,109 +1,70 @@
 # Domain Knowledge
 
-This folder contains source-backed project or domain knowledge that the agent
-may need to understand vocabulary, behavior, ownership, or accepted context. It
-is not a place to invent business rules or replace product-owned source of
-truth.
+This file owns domain capture, confirmation, layout, tracing, and freshness.
+AGENTS.md owns task authority; templates and skills apply this contract.
 
-## Knowledge states and layout
+## Capture and layout
 
-- `TAG: [DOMAIN]` plus `TAG: [CONFIRMED]`: supported by an authoritative source
-  or explicit User confirmation.
-- `TAG: [DOMAIN]` plus `TAG: [UNCERTAIN]`: useful evidence-backed context that
-  still requires confirmation before it becomes policy.
+Capture a domain when the User requests onboarding of a named flow, domain
+addition (including domain-audit), ticket work that discovers domain behavior,
+or Q&A explicitly marked as domain discovery. Ordinary Q&A stays in the answer.
+A capture request includes the bounded domain and INDEX edits; it does not
+confirm business policy.
 
-Keep the state visible. New knowledge from a qualifying workflow starts as
-`[UNCERTAIN]`; only explicit User confirmation can make it `[CONFIRMED]`.
+Use docs-harness/templates/domain.md for the canonical
+docs-harness/domain/<MMDD>-<lowercase-kebab-case-name>/README.md.
+Optional data-flows/ and schemas/ support that README. Use the identity rules
+in docs-harness/templates/README.md. Keep source artifacts in their ticket/onboarding
+workspace and link them instead of copying transcripts.
 
-Every canonical domain resource uses a date-prefixed folder:
+Before creating the resource, establish one non-colliding scope and a concrete
+source for every claim: repository path and line range, stable symbol with
+revision, ticket/section, or recorded Q&A decision. Record contradictions and
+questions; corroborate independent sources when practical.
 
-```text
-docs-harness/domain/
-└── <MMDD>-<lowercase-kebab-case-name>/
-    ├── README.md
-    ├── data-flows/       # optional, when the evidence covers an E2E flow
-    └── schemas/          # optional, subject to the schema gate below
-```
+New observed knowledge starts with separate TAG: [DOMAIN] and TAG: [UNCERTAIN]
+lines. Only explicit User confirmation makes it [CONFIRMED]. Keep observed
+implementation facts separate from accepted policy. Confirmation changes the
+current tags, not the immutable ID or creation date.
 
-`<MMDD>` is the zero-padded month and day in `Asia/Bangkok`. The folder's
-`README.md` is the canonical summary, metadata, evidence, authority,
-confidence, freshness, references, and open questions. Keep ticket or
-onboarding artifacts in their owning workspace and link them from the domain
-README rather than copying the entire transcript.
+## Schema and flow detail
 
-## Read When
+Relevant read-only schema/field tracing is part of an authorized investigation;
+it does not need a second permission solely because it follows assignments,
+transformations, serialization, WHERE/JOIN/filter conditions, or consumers.
+Follow only the named flow/schema and its necessary dependencies. Reading is
+not authority to query live data, expose secrets, or mutate an external system.
 
-Read this folder when the task depends on project vocabulary, domain behavior,
-User-confirmed context, or the freshness of an existing domain resource.
-Follow only the classification route selected in `docs-harness/INDEX.md`.
+Persist a schema summary only within authorized documentation/domain capture.
+Use docs-harness/templates/domain-entity.md, populating applicable sections with evidence;
+omit unrelated detailed sections or mark unverified claims explicitly. A
+separate exhaustive schema audit needs an explicitly requested broader scope.
+Use the service-flow template when E2E artifacts help explain the domain.
 
-## Capture gate
+## Freshness after changes
 
-Capture a domain resource only in one of these explicitly scoped workflows:
+Runtime logic, persistence, contract, or data-flow changes trigger an impact
+check. First compare changed paths and symbols with domain REFERENCES and
+evidence/dependency links. Read metadata/references before full domain bodies.
+Include uncertain overlaps; clearly unrelated domains need no revalidation.
 
-1. an active `$onboarding` flow after its evidence artifacts are complete;
-2. a ticket-solving run with an active ticket workspace; or
-3. a Q&A explicitly marked as domain discovery.
+For each affected domain, recheck the affected claims and their dependent
+claims. Check the whole resource only when the dependency boundary is unclear.
+Record the changed sources, inspected scope, date, and result:
 
-Ordinary Q&A and unsupported inference do not create domain resources. Before
-creating a resource, confirm all of the following:
+- Claims still hold: update citations as needed and record Freshness: CURRENT.
+- A claim is contradicted or cannot be checked: record STATUS: needs-review and
+  Freshness: STALE with the exact unresolved claim.
+- Directly evidenced UNCERTAIN content may be updated within task authority.
+  Preserve CONFIRMED statements until the User authorizes a changed policy;
+  freshness metadata may flag them for review.
 
-1. The domain scope and lowercase-kebab-case name are clear and the
-   `<MMDD>-<name>` folder does not collide with an existing resource.
-2. Every claim has a concrete source: repository path and line range,
-   ticket/section, or recorded Q&A decision.
-3. Contradictions and open questions are recorded instead of resolved by
-   guesswork; corroborate with two independent sources when practical.
-4. `docs-harness/templates/domain.md` supplies the metadata and README
-   structure.
-5. The new resource is indexed under the correct `[UNCERTAIN]` or `[CONFIRMED]`
-   route after the file exists.
+A source edit or line-number shift alone does not prove a domain claim false.
+Resolve the current symbol/range and check meaning. Documentation-only edits
+with no domain-contract effect do not trigger revalidation.
 
-For Q&A evidence, record the date, scope, User answer or decision, state, and a
-link to the ticket or exploration workspace when one exists. Keep a new
-resource `[UNCERTAIN]` unless the User explicitly confirms the knowledge.
-
-## Freshness contract
-
-Treat a runtime-logic, persistence, contract, or data-flow code change as a
-freshness trigger. Compare changed paths with every domain resource's
-`REFERENCES`, evidence citations, and linked service/data-flow dependencies.
-An uncertain overlap is enough to include a domain in the re-validation set;
-only clear non-overlap can exclude it.
-
-For each affected resource, inspect the current source and re-check every
-claim and line-range citation:
-
-- If the claims still hold, record `Freshness: CURRENT`, the validation date,
-  scope, and result in the domain README.
-- If a source changed, a citation no longer resolves, or claims conflict,
-  record `STATUS: needs-review`, `Freshness: STALE`, the changed source, and
-  the unresolved question, then pause.
-- Preserve `[CONFIRMED]` knowledge during automatic maintenance. A directly
-  evidenced `[UNCERTAIN]` resource may be updated with the new evidence, but it
-  remains `[UNCERTAIN]` until User confirmation.
-
-Documentation-only changes with no runtime or domain-contract effect do not
-by themselves trigger a domain re-validation, but any uncertain impact is
-handled conservatively as affected.
-
-## Service flows and schema gate
-
-Use `docs-harness/templates/{service-name}/` for the optional service-level E2E
-flow structure. A qualifying evidence-backed workflow may instantiate its
-README and flow artifacts inside the date-prefixed domain folder; the template
-itself is never domain truth.
-
-Create a concrete schema file from
-`docs-harness/templates/domain-entity.md` only when the named schema and scope
-are authorized or directly supported by the workflow's evidence. Detailed
-field explanation is a separate authority boundary: the User must explicitly
-authorize codebase tracing before explaining assignment, transformation,
-reads, serialization, or `WHERE`/`JOIN`/filter/query usage. Without that
-authority, keep those sections as `Pending User authority` or `Unverified` and
-do not infer field behavior.
-
-## Skip When
-
-Skip this folder when the task is independent of product/domain knowledge or
-can be answered from repository structure and executable proof alone.
+Pause only an action whose correctness depends on an unresolved claim.
+Continue independent authorized work and propose the next verification or
+User decision. A read-only request reports stale state inline and leaves files
+unchanged. For an authorized code change, related freshness metadata and
+routing maintenance are included in the task.
