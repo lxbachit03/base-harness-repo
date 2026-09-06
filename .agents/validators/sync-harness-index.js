@@ -3,6 +3,8 @@
 // Canonical structural validator. Pure analysis/fix planning is exported for tests.
 const fs = require('node:fs');
 const path = require('node:path');
+const { createHash } = require('node:crypto');
+const { TextDecoder } = require('node:util');
 
 const RESOURCE_ROOTS = ['harness-constraints', 'decisions', 'domain',
   'harness-improvements', 'plans', 'proposals', 'risks'];
@@ -101,28 +103,45 @@ function parseTree(index) {
 }
 
 function sectionBody(text, heading) {
-  const section = sections(text).find(s => s.heading === heading);
-  return section ? section.body : '';
+  // Relationship blocks are literal lists: fences/subheadings cannot hide entries.
+  const lines = text.replace(/\r\n/g, '\n').split('\n');
+  const start = lines.findIndex(line => line === heading);
+  if (start < 0) return '';
+  let end = start + 1;
+  while (end < lines.length && !lines[end].startsWith('## ')) end++;
+  return lines.slice(start + 1, end).join('\n');
 }
 
-function referenceTargets(text, rel, resources) {
+function referenceBody(text, literal = false) {
+  const head = (literal ? text.replace(/\r\n/g, '\n') : prose(text)).split(/^## /m)[0];
+  const match = head.match(/^REFERENCES:[ \t]*(.*)\n?([\s\S]*)$/m);
+  return match ? (match[1].trim() ? '- ' + match[1].trim() + '\n' : '') + match[2] : '';
+}
+
+function referenceTargets(text, rel, resources, report = () => {}) {
   const targets = new Set();
-  const add = raw => {
-    const token = raw.trim().replace(/^`|`$/g, '');
+  for (const line of text.split('\n').filter(l => l.trim())) {
+    const bullet = line.match(/^- (.+)$/);
+    if (!bullet) { report('malformed counterpart entry: ' + line); continue; }
+    const entry = bullet[1].trim(), markdown = entry.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    const token = (markdown ? markdown[2].trim() : entry.replace(/^`([^`]+)`$/, '$1'));
+    let target;
     if (ID_RE.test(token)) {
       const found = [...resources].find(([, r]) => r.id === token);
-      targets.add(found ? found[0] : token);
+      target = found ? found[0] : token;
     } else {
-      const target = token.split(/[?#]/)[0];
-      if (/^[a-z][a-z0-9+.-]*:/i.test(target)) return;
-      targets.add(target.startsWith('docs-harness/') ? target.slice(13) :
-        clean(path.posix.join(path.posix.dirname(rel), target)));
+      if (/[?#\\\s<>\[\]()`]/.test(token) || /^(?:\/|~|[a-z][a-z0-9+.-]*:)/i.test(token)) {
+        report('counterpart must use a canonical relative path or immutable ID: ' + entry);
+        continue;
+      }
+      target = token.startsWith('docs-harness/') ? token.slice(13) :
+        clean(path.posix.join(path.posix.dirname(rel), token));
     }
-  };
-  for (const line of text.split('\n').filter(l => /^- /.test(l))) {
-    const found = links(line);
-    if (found.length) found.forEach(l => add(l.raw));
-    else add(line.slice(2));
+    const peer = resources.get(target);
+    if (markdown && peer && markdown[1] !== peer.id + ' ' + peer.title)
+      report('counterpart label ID/title mismatch');
+    if (targets.has(target)) report('duplicate counterpart: ' + target);
+    targets.add(target);
   }
   return targets;
 }
@@ -132,6 +151,15 @@ function analyze(snapshot, { riskOnly = false } = {}) {
   const fail = (group, message) => errors.push({ group, message });
   for (const problem of snapshot.errors || []) fail('scope', problem);
   if (typeof index !== 'string') return { errors: [...errors, { group: 'scope', message: 'INDEX.md is missing' }], resources };
+  for (const kind of ['risks', 'proposals']) {
+    if (!snapshot.directories.includes(kind)) fail('scope', kind + ': required directory missing');
+    for (const dir of snapshot.directories.filter(d => d.startsWith(kind + '/')))
+      fail('scope', dir + ': nested risk/proposal directory is not allowed');
+    for (const rel of Object.keys(snapshot.files).filter(p => p.startsWith(kind + '/'))) {
+      if (!rel.endsWith('.md')) fail('scope', rel + ': non-Markdown risk/proposal file is not allowed');
+      if (rel.split('/').length !== 2) fail('scope', rel + ': nested risk/proposal file is not allowed');
+    }
+  }
   const indexProse = prose(index), routeSections = sections(index);
   for (const [rel, text] of Object.entries(snapshot.files)) {
     if (rel.startsWith('templates/') || !rel.endsWith('.md')) continue;
@@ -183,8 +211,8 @@ function analyze(snapshot, { riskOnly = false } = {}) {
       const freshness = [...prose(text).matchAll(/^Freshness:[ \t]*(CURRENT|STALE)[ \t]*$/gm)];
       if (freshness.length !== 1 || (freshness[0][1] === 'STALE') !== (item.status === 'needs-review'))
         fail('domain', rel + ': invalid freshness/status pair');
-      const refs = prose(text).split(/^REFERENCES:.*$/m)[1]?.split(/^## /m)[0] || '';
-      if (!/^- \S/m.test(refs) || /^- .*<.*>/m.test(refs))
+      const refs = referenceBody(text);
+      if (!/^\s*- \S/m.test(refs) || /^\s*- .*</m.test(refs))
         fail('domain', rel + ': concrete evidence reference required');
     }
   }
@@ -217,21 +245,10 @@ function analyze(snapshot, { riskOnly = false } = {}) {
     for (const heading of required)
       if (!sections(snapshot.files[rel]).some(section => section.heading === '## ' + heading))
         fail('risk-links', rel + ': missing section ' + heading);
-    const head = prose(snapshot.files[rel]).split(/^## /m)[0];
-    const refs = referenceTargets(head.split(/^REFERENCES:.*$/m)[1] || '', rel, resources);
+    const report = message => fail('risk-links', rel + ': ' + message);
+    const refs = referenceTargets(referenceBody(snapshot.files[rel], true), rel, resources, report);
     const related = referenceTargets(sectionBody(snapshot.files[rel],
-      kind === 'risks' ? '## Related Proposals' : '## Related Risks'), rel, resources);
-    const relationText = (head.split(/^REFERENCES:.*$/m)[1] || '') + '\n' +
-      sectionBody(snapshot.files[rel], kind === 'risks' ? '## Related Proposals' : '## Related Risks');
-    for (const link of links(relationText)) {
-      if (/[?#\\]/.test(link.raw) || /^(?:\/|~|[a-z][a-z0-9+.-]*:)/i.test(link.raw))
-        fail('risk-links', rel + ': counterpart must use a canonical relative path');
-      const target = link.raw.startsWith('docs-harness/') ? link.raw.slice(13) :
-        clean(path.posix.join(path.posix.dirname(rel), link.raw));
-      const peer = resources.get(target);
-      if (peer && link.label.startsWith('#') && link.label !== peer.id + ' ' + peer.title)
-        fail('risk-links', rel + ': counterpart label ID/title mismatch');
-    }
+      kind === 'risks' ? '## Related Proposals' : '## Related Risks'), rel, resources, report);
     for (const target of [...refs, ...related])
       if (!target.startsWith(other + '/') || !resources.has(target))
         fail('risk-links', rel + ': invalid counterpart path/ID ' + target);
@@ -242,8 +259,7 @@ function analyze(snapshot, { riskOnly = false } = {}) {
       fail('risk-links', rel + ': REFERENCES and related counterparts differ');
     for (const peer of peers) {
       if (!resources.has(peer)) { fail('risk-links', rel + ': missing counterpart ' + peer); continue; }
-      const peerHead = prose(snapshot.files[peer]).split(/^## /m)[0];
-      const back = referenceTargets(peerHead.split(/^REFERENCES:.*$/m)[1] || '', peer, resources);
+      const back = referenceTargets(referenceBody(snapshot.files[peer], true), peer, resources);
       if (!back.has(rel)) fail('risk-links', rel + ': one-sided counterpart ' + peer);
     }
   }
@@ -332,21 +348,28 @@ function planFix(snapshot) {
 }
 
 function readSnapshot(root) {
-  const base = path.join(root, 'docs-harness'), files = {}, directories = [], errors = [];
-  if (!fs.existsSync(base) || fs.lstatSync(base).isSymbolicLink())
+  const base = path.join(root, 'docs-harness'), files = {}, directories = [], errors = [], hashes = {};
+  if (!fs.existsSync(base) || fs.lstatSync(base).isSymbolicLink() || !fs.lstatSync(base).isDirectory())
     return { files, directories, errors: ['docs-harness must be an existing real directory'] };
   const walk = (folder, rel) => {
     for (const entry of fs.readdirSync(folder, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
       const name = rel ? rel + '/' + entry.name : entry.name, absolute = path.join(folder, entry.name);
       if (entry.isSymbolicLink()) { errors.push('symlink is outside validator scope: ' + name); continue; }
       if (entry.isDirectory()) { directories.push(name); walk(absolute, name); }
-      else if (entry.isFile()) files[name] = entry.name.endsWith('.md') ? fs.readFileSync(absolute, 'utf8').replace(/\r\n/g, '\n') : '';
+      else if (entry.isFile()) {
+        const bytes = fs.readFileSync(absolute);
+        hashes[name] = createHash('sha256').update(bytes).digest('hex');
+        if (entry.name.endsWith('.md')) {
+          try { files[name] = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes).replace(/\r\n/g, '\n'); }
+          catch { throw new Error(name + ': invalid UTF-8'); }
+        } else files[name] = '';
+      } else errors.push('non-regular entry is outside validator scope: ' + name);
     }
   };
   walk(base, '');
   const externalPaths = links(prose(files['INDEX.md'] || '')).filter(local)
     .map(l => clean(l.target)).filter(t => t.startsWith('../') && fs.existsSync(path.resolve(base, t)));
-  return { files, directories, externalPaths, errors };
+  return { files, directories, externalPaths, errors, hashes };
 }
 
 function main(args = process.argv.slice(2)) {
@@ -361,14 +384,14 @@ function main(args = process.argv.slice(2)) {
   if (fix && (check || riskOnly)) { console.error('--fix cannot be combined with --check or --risk-links'); return 2; }
   try {
     const snapshot = readSnapshot(root), result = fix ? planFix(snapshot) : analyze(snapshot, { riskOnly });
+    if (JSON.stringify(readSnapshot(root)) !== JSON.stringify(snapshot)) {
+      console.error('Scope changed during validation; no files written.');
+      return 2;
+    }
     if (result.errors.length) {
       for (const error of result.errors) console.error('FAIL|' + error.group + '|' + error.message);
       console.error('Structural check: FAILED; no files written.');
       return 1;
-    }
-    if (JSON.stringify(readSnapshot(root)) !== JSON.stringify(snapshot)) {
-      console.error('Scope changed during validation; no files written.');
-      return 2;
     }
     if (fix && result.index !== snapshot.files['INDEX.md']) {
       if (JSON.stringify(readSnapshot(root)) !== JSON.stringify(snapshot)) {

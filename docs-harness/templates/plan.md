@@ -23,7 +23,7 @@ REFERENCES:
 
 ## Risks and Recovery
 
-<Each material risk with proposal/mitigation; recovery and stop conditions.>
+<Each reported risk with proposal/mitigation; recovery and stop conditions.>
 
 ## Progress
 

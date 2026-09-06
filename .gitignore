@@ -6,8 +6,15 @@
 
 !docs-harness/
 docs-harness/*
+!docs-harness/harness-improvements/
+docs-harness/harness-improvements/*
+!docs-harness/harness-improvements/0906-per-improvement-records.md
 !docs-harness/plans/
 docs-harness/plans/*
+!docs-harness/plans/active/
+docs-harness/plans/active/*
+!docs-harness/plans/active/0906-behavior-parity-audit.md
 !docs-harness/plans/completed/
 docs-harness/plans/completed/*
 !docs-harness/plans/completed/0906-task-authority-and-policy-consistency.md
+!docs-harness/plans/completed/0906-behavior-parity-audit.md

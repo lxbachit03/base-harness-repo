@@ -52,7 +52,7 @@ authority or obtain the missing decision. Pause the dependent action when
 intent, authority, recovery, or proof is insufficient; continue independent
 authorized work.
 
-For every material risk reported, include a concrete mitigation or investigation
+For every risk reported, include a concrete mitigation or investigation
 proposal. It remains a suggestion until authorized. The persisted risk/proposal
 contract lives in docs-harness/harness-constraints/0812-risk-proposal-suggestion-cross-link.md.
 

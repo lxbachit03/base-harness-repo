@@ -26,9 +26,12 @@ recorded User decision. Include dependency links used for impact selection.>
 
 Last validated: <YYYY-MM-DD>
 Validation scope: <initial capture or affected claims and changed paths>
-Freshness: CURRENT
+Freshness: <CURRENT|STALE>
 Validation result: <what was checked and observed>
 Changed sources: <None or paths/symbols that triggered review>
+
+<Set CURRENT only after recording the validation scope and observed result.
+Use STALE with STATUS: needs-review when affected claims cannot be revalidated.>
 
 ## Confidence
 

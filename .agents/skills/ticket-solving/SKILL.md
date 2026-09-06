@@ -32,8 +32,8 @@ Stop here for intake-only work.
 3. Implement the scoped solution and run routine local verification under
    AGENTS.md. Keep implementation code in its normal repository paths.
 4. Record meaningful progress, decisions, evidence, and applicable artifacts.
-5. For domain discovery or runtime changes apply docs-harness/domain/README.md; keep material
-   risks paired with an inline mitigation or investigation proposal.
+5. For domain discovery or runtime changes apply docs-harness/domain/README.md;
+   pair every reported risk with an inline mitigation or investigation proposal.
 6. Mark resolved only with acceptance evidence. Apply completed moves and
    metadata correction only under the guide's authorized maintenance boundary.
 

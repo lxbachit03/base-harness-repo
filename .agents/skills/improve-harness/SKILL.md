@@ -18,12 +18,31 @@ observed gap, relevant tool/authority conditions, and existing proof. A concrete
 rules review accepted by the User supplies a baseline and change authority.
 Do not invent runtime measurements or diagnose model limitations from one run.
 
-Use one active experiment from docs-harness/templates/harness-improvement.md when durable
-memory is needed. Follow docs-harness/templates/README.md for its date-prefixed name and ID.
-Reuse an existing record for the same intervention.
+Every new authorized improvement, including a small single-session change,
+gets one Markdown record directly under docs-harness/harness-improvements/.
+Create it before intervention edits from docs-harness/templates/harness-improvement.md.
+Name it MMDD-lowercase-kebab-case-description.md, using the creation date in
+Asia/Bangkok with zero-padded month/day, for example 0906-update-index-routing.md.
+Follow docs-harness/templates/README.md for the global ID, metadata and collision
+checks; use TAG: [IMPROVE_HARNESS] and index the record in that classification.
 
-Done when the accepted outcome and evidenced gap are concrete. If no gap is
-established, return an experiment proposal before editing.
+On continuation, identify the same intervention by its objective, scope and
+existing record; update that record and preserve its ID, creation date and path.
+A different improvement gets a new record even on the same day. If its intended
+filename is occupied by another improvement, use a distinct meaningful slug or
+a numeric suffix such as -2; never overwrite it. Pause if identity is ambiguous.
+An existing legacy record under plans/ is continued in place; migration requires
+User authority. This record holds baseline, progress, decisions, proof and result;
+do not create a duplicate plan merely to record the same improvement.
+
+An explicit request to perform an improvement includes its bounded record.
+A question about the skill or an explicitly read-only review does not start a
+new improvement and creates no record. If the requested change lacks evidence,
+record the gap and proposed investigation before pausing the intervention.
+
+Done when the record exists, is indexed, and the accepted outcome and evidenced
+gap are concrete. If no gap is established, propose an investigation before
+intervention edits; keep the record's status and missing evidence explicit.
 
 ## 2. Change the owning contract
 
@@ -56,10 +75,12 @@ may be reported finished; effectiveness remains unverified.
 
 ## 4. Decide and report
 
-Choose keep, revise, or remove from the evidence. Move the experiment to
-completed/ only after native checks and the relevant replay decision. Existing
-older experiments retain their history; new policy may supersede their scope
-without pretending they passed old reruns.
+Choose keep, revise, or remove from the evidence. After native checks and the
+relevant replay decision, record the result and set STATUS: completed in the
+same file under harness-improvements/; retain its path, ID and creation date.
+Pending replay keeps STATUS: active with the missing proof and next case.
+Legacy experiments already under plans/ retain that plan lifecycle. Preserve
+their history without retroactively claiming they passed earlier reruns.
 
-Report baseline, changed owners, checks, fresh scenario results, decision, and
+Report the record path, baseline, changed owners, checks, fresh scenario results, decision, and
 limitations. If a replay exposes a defect, revise and rerun the affected case.

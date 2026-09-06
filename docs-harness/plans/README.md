@@ -27,7 +27,10 @@ Update progress as evidence changes. After the outcome and relevant proof are
 recorded, move the plan from active/ to completed/ within the authorized task,
 and update INDEX and current links. Preserve ID, creation date, and evidence.
 
-Harness improvement experiments also follow docs-harness/harness-improvements/README.md:
+New Harness improvement records live in docs-harness/harness-improvements/ and serve as their
+working memory under docs-harness/harness-improvements/README.md, rather than
+duplicating the same experiment as a plan. Legacy experiments already in plans/
+retain the lifecycle above. For either location,
 implementation can be finished while an explicitly recorded behavioral rerun
 remains pending. Preserve a useful historical result rather than fabricating
 proof to close a plan.

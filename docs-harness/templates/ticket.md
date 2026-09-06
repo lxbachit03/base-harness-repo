@@ -44,7 +44,7 @@ links when applicable; otherwise note why they are unnecessary.>
 
 ## Risks and Open Questions
 
-<Each material risk with mitigation/investigation proposal; unknowns and next action.>
+<Each reported risk with mitigation/investigation proposal; unknowns and next action.>
 
 ## Artifacts
 

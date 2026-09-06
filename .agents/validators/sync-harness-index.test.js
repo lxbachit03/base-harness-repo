@@ -216,6 +216,108 @@ test('risk labels and canonical counterpart paths remain verifiable', () => {
   p.files[risk] = p.files[risk].replaceAll('../proposals/0906-example.md', '../proposals/0906-example.md#fragment');
   fails(p, 'risk-links', 'canonical relative path');
 });
+
+for (const rel of [risk, proposal]) {
+  for (const location of ['REFERENCES', 'related']) {
+    test('duplicate counterpart is rejected in ' + rel + ' ' + location, () => {
+      const s = pairFixture(), text = s.files[rel];
+      const line = text.match(/^- \[.*$/m)[0];
+      const offset = location === 'REFERENCES' ? text.indexOf(line) : text.lastIndexOf(line);
+      s.files[rel] = text.slice(0, offset) + line + '\n' + text.slice(offset);
+      fails(s, 'risk-links', 'duplicate counterpart');
+    });
+  }
+}
+
+for (const extra of ['unparsed relationship', '- https://example.test/peer',
+  '```text\nignored relationship\n```',
+  '- [#002_RISK_0906 Proposal](../proposals/0906-example.md) trailing text',
+  '- ../proposals/0906-example.md#fragment', '- ../proposals/0906-example.md?query']) {
+  test('malformed extra counterpart is rejected: ' + extra, () => {
+    const s = pairFixture();
+    s.files[risk] = s.files[risk].replace('REFERENCES:\n', 'REFERENCES:\n' + extra + '\n');
+    fails(s, 'risk-links');
+  });
+}
+
+test('counterpart Markdown labels without an ID cannot bypass title validation', () => {
+  const s = pairFixture();
+  s.files[risk] = s.files[risk].replaceAll('#002_RISK_0906 Proposal', 'Arbitrary label');
+  fails(s, 'risk-links', 'label ID/title mismatch');
+});
+
+test('a subheading cannot hide malformed related entries', () => {
+  const s = pairFixture();
+  s.files[risk] += '\n### Hidden\n\nnot a counterpart\n';
+  fails(s, 'risk-links', 'malformed');
+});
+
+test('raw canonical paths and immutable IDs remain supported', () => {
+  for (const token of ['docs-harness/proposals/0906-example.md', '../proposals/0906-example.md', '#002_RISK_0906']) {
+    const s = pairFixture();
+    s.files[risk] = s.files[risk].replaceAll('[#002_RISK_0906 Proposal](../proposals/0906-example.md)', token);
+    passes(s);
+  }
+});
+
+test('different reference spellings cannot hide a duplicate counterpart', () => {
+  const s = pairFixture();
+  s.files[risk] = s.files[risk].replace('REFERENCES:\n', 'REFERENCES:\n- #002_RISK_0906\n');
+  fails(s, 'risk-links', 'duplicate counterpart');
+});
+
+for (const kind of ['risks', 'proposals']) {
+  test('risk scope requires the ' + kind + ' directory even when empty', () => {
+    const s = fixture(); s.directories = s.directories.filter(d => d !== kind);
+    assert.ok(analyze(s, { riskOnly: true }).errors.some(e => e.group === 'scope'));
+  });
+  test('risk scope rejects nested folders and non-Markdown files in ' + kind, () => {
+    const s = fixture(); s.directories.push(kind + '/nested');
+    fails(s, 'scope', 'nested');
+    const p = fixture(); p.files[kind + '/payload.bin'] = '';
+    fails(p, 'scope', 'non-Markdown');
+  });
+}
+
+test('domain evidence rejects incomplete placeholders as well as complete placeholders', () => {
+  for (const ref of ['<missing>', '<missing', 'real-source <missing']) {
+    const s = domainFixture();
+    s.files['domain/0906-example/README.md'] = s.files['domain/0906-example/README.md'].replace('- AGENTS.md', '- ' + ref);
+    fails(s, 'domain', 'concrete evidence');
+  }
+});
+
+test('concrete inline domain REFERENCES remain accepted', () => {
+  const s = domainFixture();
+  s.files['domain/0906-example/README.md'] = s.files['domain/0906-example/README.md'].replace('REFERENCES:\n- AGENTS.md', 'REFERENCES: AGENTS.md');
+  passes(s);
+});
+
+test('indented domain evidence placeholders cannot be ignored', () => {
+  const s = domainFixture();
+  s.files['domain/0906-example/README.md'] = s.files['domain/0906-example/README.md'].replace('- AGENTS.md', '- AGENTS.md\n  - <missing');
+  fails(s, 'domain', 'concrete evidence');
+});
+
+for (const mode of ['UTF-8', 'line endings', 'invalid content drift']) {
+  test('read-only mocked snapshot catches ' + mode, t => {
+    const target = path.join(repo, 'docs-harness/INDEX.md');
+    const originalRead = fs.readFileSync, before = originalRead(target), messages = [];
+    let reads = 0;
+    t.mock.method(console, 'error', message => messages.push(message));
+    t.mock.method(console, 'log', () => {});
+    t.mock.method(fs, 'readFileSync', function (file, ...args) {
+      if (path.resolve(String(file)) !== target) return originalRead.call(fs, file, ...args);
+      reads++;
+      if (mode === 'UTF-8') return Buffer.from([0xff]);
+      if (mode === 'invalid content drift') return Buffer.from('# Invalid INDEX ' + reads + '\n');
+      return Buffer.from(before.toString('utf8').replace(/\r?\n/g, reads === 1 ? '\n' : '\r\n'));
+    });
+    assert.equal(main(['--root', repo, '--check']), 2);
+    assert.ok(messages.some(m => m.includes(mode === 'UTF-8' ? 'UTF-8' : 'Scope changed')));
+    assert.deepEqual(originalRead(target), before);
+  });
+}
 test('fix plans tree and all missing routes without mutating snapshot', () => {
   const s = fixture();
   s.files['plans/active/0906-example.md'] = resource('#001_IMPROVE_HARNESS_0906', ['IMPROVE_HARNESS']);
@@ -298,3 +400,35 @@ test('concurrent content drift returns tooling failure and preserves the changed
   assert.ok(messages.some(message => message.includes('Scope changed')));
   assert.match(originalRead(index, 'utf8'), /Concurrent owner note/);
 });
+
+test('CLI rejects invalid UTF-8 as a tooling failure without rewriting bytes', t => {
+  const s = fixture(); s.files['templates/invalid.md'] = Buffer.from([0xff, 0xfe, 0x61]);
+  const root = materialize(t, s), target = path.join(root, 'docs-harness/templates/invalid.md');
+  const result = spawnSync(process.execPath, [engine, '--root', root, '--check'], { encoding: 'utf8' });
+  assert.equal(result.status, 2);
+  assert.match(result.stderr, /UTF-8/);
+  assert.deepEqual(fs.readFileSync(target), s.files['templates/invalid.md']);
+});
+
+for (const mode of ['line endings', 'binary content']) {
+  test('concurrent raw ' + mode + ' drift is detected', t => {
+    const s = fixture(); s.files['templates/asset.bin'] = Buffer.from([1, 2, 3]);
+    const root = materialize(t, s);
+    const target = path.join(root, 'docs-harness', mode === 'line endings' ? 'INDEX.md' : 'templates/asset.bin');
+    const originalRead = fs.readFileSync, messages = [];
+    let changed = false;
+    t.mock.method(console, 'error', message => messages.push(message));
+    t.mock.method(console, 'log', () => {});
+    t.mock.method(fs, 'readFileSync', function (file, ...args) {
+      const bytes = originalRead.call(fs, file, ...args);
+      if (!changed && path.resolve(String(file)) === target) {
+        changed = true;
+        fs.writeFileSync(target, mode === 'line endings'
+          ? Buffer.from(String(bytes).replace(/\n/g, '\r\n')) : Buffer.from([3, 2, 1]));
+      }
+      return bytes;
+    });
+    assert.equal(main(['--root', root, '--check']), 2);
+    assert.ok(messages.some(message => message.includes('Scope changed')));
+  });
+}

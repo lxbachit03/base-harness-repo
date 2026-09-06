@@ -9,7 +9,7 @@ creating a resource. Templates contain placeholders and are not domain truth.
 - [plan.md](plan.md): canonical durable plan with metadata and result.
 - [exec-plan.md](exec-plan.md): compatibility pointer; no separate plan contract.
 - [harness-improvement.md](harness-improvement.md): experiment-specific sections
-  used with the plan lifecycle.
+  for each improvement record; follow ../harness-improvements/README.md for its lifecycle.
 - [constraint.md](constraint.md): file/folder/task boundaries.
 - [decision.md](decision.md): accepted lasting choices.
 - [domain.md](domain.md): canonical date-prefixed domain README.
@@ -35,8 +35,9 @@ and REFERENCES before their first level-two heading. Use exactly one priority:
 compatibility. Choose it from evidenced impact; do not fill an empty index.
 
 Use one TAG line per classification: [IMPROVE_HARNESS], [CONSTRAINTS], [RISK],
-or [DOMAIN] plus exactly one [CONFIRMED]/[UNCERTAIN] line. Combined legacy domain
-tags remain readable. A supporting plan or decision with no applicable
+or [DOMAIN]. A domain resource also needs exactly one [CONFIRMED]/[UNCERTAIN]
+line; an improvement record needs no domain confirmation state. Combined legacy
+domain tags remain readable. A supporting plan or decision with no applicable
 classification may omit TAG; its folder supplies its route. Do not invent a
 product domain or a new TAG solely to file a plan.
 
