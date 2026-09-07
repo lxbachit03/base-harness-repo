@@ -32,6 +32,12 @@ routing hoặc dependency; không tự bootstrap tài liệu team.
 
 ## Skills và kiểm tra
 
+Phiên chính mặc định là Bale, giữ model hiện tại và tự làm việc nhỏ. Khi chia
+việc có lợi, [skill điều phối Herdr](.agents/skills/herdr-coordinate-agents/SKILL.md)
+giao task cho các phiên Codex Luna/Max/Fast độc lập, rồi kiểm chứng kết quả.
+Worker có vai trò riêng từ lúc khởi chạy và không điều phối tiếp. Ngoài Herdr,
+Bale vẫn làm trực tiếp; việc cần Herdr được báo rõ khi thiếu runtime.
+
 Các skill nằm trong `.agents/skills/`. Chỉ dùng workflow phù hợp; goal shaping,
 ticket intake, strict onboarding audit và tool selection không phải bước bắt
 buộc của mọi task. Cải tiến Harness cần một yêu cầu có phạm vi và bằng chứng.

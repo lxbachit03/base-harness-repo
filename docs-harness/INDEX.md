@@ -91,6 +91,7 @@ Resources:
 - [WORKFLOW.md](WORKFLOW.md)
 - [PERSONA.md](PERSONA.md)
 - [Local validator guide](../.agents/validators/README.md)
+- [Bale and Herdr coordination](../.agents/skills/herdr-coordinate-agents/SKILL.md): read for primary-session alias binding, delegation, or resumption; workers retain their assigned role.
 
 ## TAG: [IMPROVE_HARNESS]
 
@@ -106,6 +107,7 @@ Skip when: the intent concerns only product behavior or unrelated domain work.
 Resources:
 
 - [Harness improvement guide](harness-improvements/README.md)
+- [Bale orchestration through independent Herdr agents](harness-improvements/0907-bale-herdr-orchestration.md) — `#016_IMPROVE_HARNESS_0907`, `PRIORITY: [MEDIUM]`
 - [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
