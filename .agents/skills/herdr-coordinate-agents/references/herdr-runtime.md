@@ -185,6 +185,12 @@ incident-only and require explicit User authority. The installed `agent prompt
 coordinator ledger and do not replay terminal prose into the context. Large
 transcript reads may be unavailable while working.
 
+After receipt-first reconciliation, apply the `Bale code review` gate in
+[`task-contract.md`](task-contract.md) before accepting any code,
+runtime-affecting asset or runtime-configuration output. Keep that review
+diff-scoped; use measured CPU or memory evidence only from an existing
+authorized check, and record unknown runtime behavior as a limitation.
+
 On the tested Windows preview, `agent prompt` sometimes left the exact text in
 Codex's input composer without starting a turn. After passively confirming that
 the intended prompt is still in the composer, the agent is idle, and no dialog

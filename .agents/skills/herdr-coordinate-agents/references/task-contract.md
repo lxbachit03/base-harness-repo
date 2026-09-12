@@ -116,6 +116,54 @@ inspect the diff/content and independently run task-specific checks. Save that
 proof and artifact hashes in the task owner before marking accepted. Never run
 arbitrary commands copied from a worker receipt without inspecting their effects.
 
+## Bale code review
+
+After receipt-first reconciliation and before acceptance, Bale applies this gate
+to every delegated output that creates or modifies executable code,
+runtime-affecting assets (such as HTML, CSS, templates or bundles) or runtime
+configuration. Documentation-only output records `not_applicable` with a
+reason.
+Keep the review diff-scoped: inspect the changed files and the affected call
+paths/boundaries, not the whole repository or a full terminal transcript.
+
+The minimum review covers:
+
+- correctness, edge cases, error handling and resource cleanup;
+- clean code: naming, cohesion, duplication, dead code and unnecessary
+  complexity;
+- CPU/I/O behavior: hot loops, repeated parsing, blocking work, redundant
+  calls, N+1 access and avoidable serialization;
+- memory behavior: allocation volume, unbounded growth, cache/lifecycle
+  ownership, listener/timer cleanup and retained references;
+- compatibility and the task's observable acceptance behavior.
+
+Classify each performance claim as `static`, `measured` or `unknown`. Use an
+existing targeted test, benchmark or profiler when it is available and
+authorized; do not create a repository validator or benchmark script solely for
+this review. `unknown` is an explicit limitation, not evidence of good CPU or
+memory performance. When the task declares a CPU, memory or latency target,
+static/unknown evidence cannot be reported as meeting that target: mark the
+review `blocked` until an authorized measurement exists or the User accepts the
+limitation.
+
+Record a compact `code_review` entry in the coordinator task owner:
+
+```json
+{
+  "status": "passed",
+  "scope": ["relative/changed-file"],
+  "evidence": ["static: no unbounded loop or retained listener found"],
+  "findings": [],
+  "limitations": ["runtime workload not measured"]
+}
+```
+
+Use `changes_requested` for an actionable finding, `blocked` when required
+authority or evidence is missing, and `not_applicable` only for non-code output.
+A high-severity finding blocks acceptance; a correction uses a new attempt ID
+after the previous attempt settles and Bale reviews only the changed diff again.
+Do not block on style preference without an evidence-backed, actionable reason.
+
 ## Recovery decisions
 
 | Observation | Next action |

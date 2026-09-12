@@ -10,6 +10,7 @@ docs-harness/harness-improvements/*
 !docs-harness/harness-improvements/0912-agent-self-validation.md
 !docs-harness/harness-improvements/0912-herdr-agent-catalog.md
 !docs-harness/harness-improvements/0912-herdr-bounded-observation.md
+!docs-harness/harness-improvements/0913-herdr-bale-code-review.md
 !docs-harness/HERDR-AGENTS.md
 !docs-harness/plans/
 docs-harness/plans/*

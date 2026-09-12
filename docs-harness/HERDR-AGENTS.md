@@ -40,7 +40,9 @@ Completion criterion: a worker is dispatchable only when exactly one model is
 selected, every required checklist nested under that model has exactly one
 selection, the resulting transport is supported, the permission/capability
 contract is proven, and effective configuration evidence is captured before
-submission.
+submission. For delegated code, runtime-affecting assets or runtime-configuration
+output, acceptance also requires the Bale code-review gate in the Herdr task
+contract.
 
 ## Latency and token guidance
 
@@ -55,8 +57,11 @@ inspect the matching receipt and output diff after a settled success, without
 calling `agent read`. If receipt, lifecycle or artifact evidence is ambiguous,
 read one recent text snapshot capped at 80 lines; keep the attempt pending when
 that does not resolve the ambiguity. Full terminal transcripts are incident-only
-and require explicit User authority. Fast/standard remains provider-specific and
-must be proven natively.
+and require explicit User authority. Then apply one diff-scoped Bale code review
+for executable code, runtime-affecting assets or runtime configuration,
+classifying CPU and memory evidence as static, measured or unknown; record
+limitations before acceptance. Fast/standard remains provider-specific and must
+be proven natively.
 
 When a model entry lists more than one provider model ID, BALE must resolve and
 record the exact ID used for the attempt. Effort labels do not select an ID

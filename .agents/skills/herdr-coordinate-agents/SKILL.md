@@ -144,8 +144,14 @@ presence alone are insufficient.
 
 Only Bale marks an attempt accepted after checking identity, current artifact
 contents, allowed diff and verification output. Integrate accepted changes in
-order and verify the combined result. Release dependent work with the accepted
-artifact and its revision/hash, not an unverified summary. A failed result gets
+order and verify the combined result. For any output that creates or modifies
+executable code, runtime-affecting assets or runtime configuration, apply the
+`Bale code review` gate in [task-contract.md](references/task-contract.md)
+before marking the attempt accepted. Review the changed diff and affected
+paths, classify evidence as static, measured or unknown, and record a compact
+verdict; a worker receipt is not a substitute for this review. Release dependent
+work with the accepted artifact and its revision/hash, not an unverified
+summary. A failed result gets
 a focused correction; a missing product/authority decision goes to the User.
 
 Record completion evidence, unresolved gaps, elapsed time and correction count;
@@ -156,8 +162,10 @@ behavior without claiming cost/speed improvements from a successful trial alone.
 ## Local proof
 
 Perform a targeted agent self-review: inspect affected instructions, deleted
-paths, active links, model/permission contracts and the final diff. Confirm that
-no repository validation or dispatch script is required or invoked. A fresh
-role-routing replay and a bounded live Herdr trial remain behavioral proof
-obligations; manual evidence and independent task checks cannot be replaced by a
-repository script.
+paths, active links, model/permission contracts and the final diff. For a code
+output, confirm that the Bale code-review verdict, evidence class and any
+limitations are recorded before acceptance. Confirm that no repository
+validation, benchmark or dispatch script is required or invoked. A fresh
+role-routing replay, a bounded live Herdr trial and a representative code
+review remain behavioral proof obligations; manual evidence and independent
+task checks cannot be replaced by a repository script.

@@ -44,6 +44,11 @@ Antigravity hoặc Claude, BALE chỉ dùng permission adapter native tương �
 khi đã chứng minh Herdr transport và capability inventory; không trộn cờ quyền
 giữa các provider. Việc cần Herdr được báo rõ khi thiếu runtime hoặc adapter.
 
+Sau khi nhận receipt và diff, Bale phải review các output code, asset ảnh hưởng
+runtime hoặc cấu hình runtime về correctness, clean code, CPU/I/O và memory
+trước khi accept; chi tiết và cách phân loại static/measured/unknown nằm trong
+[task contract](.agents/skills/herdr-coordinate-agents/references/task-contract.md).
+
 Các skill nằm trong `.agents/skills/`. Chỉ dùng workflow phù hợp; goal shaping,
 ticket intake, strict onboarding audit và tool selection không phải bước bắt
 buộc của mọi task. Cải tiến Harness cần một yêu cầu có phạm vi và bằng chứng.
