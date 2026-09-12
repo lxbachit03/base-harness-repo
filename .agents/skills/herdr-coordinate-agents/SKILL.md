@@ -1,13 +1,26 @@
 ---
 name: herdr-coordinate-agents
-description: Coordinate independent Codex sessions through Herdr as Bale. Use to establish Bale's alias, delegate bounded work, collect and verify results, or resume an existing delegation. Workers execute their assignment without coordinating further agents.
+description: Coordinate independent worker sessions through Herdr as Bale, using the repository model catalog to select and prove a supported profile. Use to establish Bale's alias, delegate bounded work, collect and verify results, or resume an existing delegation. Workers execute their assignment without coordinating further agents.
 ---
 
 # Bale coordination
 
 AGENTS.md owns authority and session-role precedence. This skill owns Herdr
-coordination. Keep the primary model; workers use gpt-5.6-luna, max effort and
-Fast mode. Default to at most two live workers until the User changes that limit.
+coordination. Before any launch, reassignment, or worker-model change, read
+[`docs-harness/HERDR-AGENTS.md`](../../../docs-harness/HERDR-AGENTS.md) after
+`docs-harness/INDEX.md`. That catalog is the user-editable source of the
+worker configuration: use exactly one model, then complete only the effort and
+Fast checklists nested under that model when present. Prove the resulting
+effective runtime configuration. Codex workers must use the catalog's
+process-scoped YOLO/full-access form
+(`--dangerously-bypass-approvals-and-sandbox`; use `--yolo` only when local
+help exposes that alias; the auditable equivalent is `--sandbox danger-full-access`
+plus `--ask-for-approval never`) and prove the inherited tool/plugin/MCP
+inventory.
+Pause on zero/multiple selections, missing capability/authentication, or
+unavailable transport. Do not silently substitute a different choice. Keep the
+primary model and the default maximum of two live workers until the User changes
+those limits.
 
 ## 1. Identify the session and choose the work
 
@@ -55,17 +68,25 @@ verify its outcome without guessing User intent or inheriting unrelated rights.
 
 ## 3. Launch, prove configuration, then submit once
 
-Use the runtime reference to create the owned pane and launch a fresh Codex
-session with the worker role set before its first task. Record returned IDs and
-verify working directory, terminal identity and requested configuration. Preserve
-the primary model. Unsupported Luna/max/Fast pauses dependent work; report the
-gap without silently substituting another configuration.
+Use the runtime reference to create the owned pane and launch a fresh worker
+session with the role and transport selected in `HERDR-AGENTS.md` set before
+its first task. Record returned IDs and verify working directory, terminal
+identity, selected provider/model, and any scoped reasoning-effort or Fast
+configuration values, the effective permission profile, and the redacted
+tool/plugin/MCP inventory. A Codex worker is not ready for submission until
+native output proves YOLO/full access (or the equivalent `danger-full-access`
+and approval policy `never`).
+The current runtime reference documents a Codex launch path; a profile for
+another provider is dispatchable only after its Herdr adapter is independently
+proven. An unsupported or unprovable selected profile pauses dependent work;
+report the gap without silently substituting another configuration.
 
-Use `scripts/submit-once.cjs` for task submission. It records a durable dispatch
-claim before invoking Herdr with an argument array. On a timeout/crash the claim
-remains: inspect the same agent and matching receipt rather than sending again.
-The helper prevents a repeated dispatch for that attempt directory; Bale must
-also reconcile the logical task before creating another attempt directory.
+Use Herdr's native `agent prompt` exactly once for each reconciled attempt. Before
+sending, Bale records the attempt ID, prompt/configuration hashes, target identity
+and delivery state in the coordinator-owned task record. On a timeout or crash,
+inspect the same agent and matching receipt rather than sending again. Keep
+duplicate prevention and logical-task lifecycle reconciliation in that task owner;
+no repository dispatch helper enforces them.
 
 Do not submit a new assignment while that worker is working, blocked or unknown.
 A deliberate correction goes to a reconciled, idle session, with a new attempt
@@ -77,9 +98,10 @@ only; it does not prove the task finished.
 Wait with a finite timeout (at most 60 seconds per observation), then reobserve
 the same handle as needed. Herdr idle/done is only a cue to inspect the receipt.
 Read [task-contract.md](references/task-contract.md) for restart, missing receipt,
-blocked state and ambiguous delivery. Use `inspect-receipt` to reject a stale
-attempt or missing artifact; then independently run the actual task acceptance
-checks. Worker prose, check claims and artifact presence alone are insufficient.
+blocked state and ambiguous delivery. Inspect the matching attempt ID and required
+artifacts, reject stale or incomplete evidence, then independently run the actual
+task acceptance checks. Worker prose, check claims and artifact presence alone are
+insufficient.
 
 Only Bale marks an attempt accepted after checking identity, current artifact
 contents, allowed diff and verification output. Integrate accepted changes in
@@ -94,7 +116,9 @@ behavior without claiming cost/speed improvements from a successful trial alone.
 
 ## Local proof
 
-Run `node --test .agents/skills/herdr-coordinate-agents/scripts/submit-once.test.cjs`
-for dispatch/receipt invariants. A new deployment of this guidance also needs a
-fresh role-routing replay and a bounded live Herdr trial; these unit tests do not
-establish model availability, successful task semantics or agent effectiveness.
+Perform a targeted agent self-review: inspect affected instructions, deleted
+paths, active links, model/permission contracts and the final diff. Confirm that
+no repository validation or dispatch script is required or invoked. A fresh
+role-routing replay and a bounded live Herdr trial remain behavioral proof
+obligations; manual evidence and independent task checks cannot be replaced by a
+repository script.

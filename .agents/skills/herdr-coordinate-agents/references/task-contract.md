@@ -33,28 +33,28 @@ Write `job.json` in a new coordinator-owned attempt directory with:
 }
 ```
 
-Fill values from observed state. Capture effective model/effort/Fast in the
-configuration evidence before submission. The helper checks evidence exists;
-Bale checks what it proves. List every immutable packet/dependency input referred
-to by the prompt in context_files; use an empty list only for a self-contained
+Fill values from observed state. Capture the selected model entry and only the
+effort/Fast entries nested under that model (when present), the resulting
+provider/transport, the effective model/effort/Fast values, the process-scoped
+permission profile and approval policy, and a redacted tool/plugin/MCP
+inventory in the configuration evidence before submission. Bale checks that the
+evidence exists and what it proves. List every immutable
+packet/dependency input referred to by the prompt in context_files; use an empty
+list only for a self-contained
 prompt with no such files. Keep task inputs distinct from output/control paths.
 Files intentionally edited belong in expected_outputs; record their initial
 revision/hash in the packet rather than treating them as immutable context_files.
-The helper pins the complete job, prompt, configuration evidence and referenced
-input hashes in its claim. It verifies that the caller owns Bale's alias and
-uses the recorded pane for delivery. Use:
-
-```text
-node <skill>/scripts/submit-once.cjs dispatch <absolute-attempt-directory>
-node <skill>/scripts/submit-once.cjs inspect-receipt <absolute-attempt-directory>
-```
-
-The dispatcher creates `dispatch.json` exclusively before sending text. It never
-overwrites a prior dispatch, including one with ambiguous delivery. Read the
-saved claim, prompt hash, Herdr response/error and current handle on continuation.
-The directory is single-writer coordinator state; a worker must not edit it.
-Version-2 claims require the immutable manifest/context snapshot. Reconcile an
-older claim using its recorded helper/evidence; never delete it to force a resend.
+Bale snapshots the complete job, prompt, configuration evidence and referenced
+input hashes in the attempt claim. Before native `agent prompt` delivery, record
+that the caller owns Bale's alias, the recorded pane and target identity, and the
+delivery response. Create `dispatch.json` exclusively in the coordinator-owned
+attempt directory before sending text; never overwrite a prior claim, including
+one with ambiguous delivery. Read the saved claim, prompt hash, Herdr
+response/error and current handle on continuation. The directory is
+single-writer coordinator state; a worker must not edit it. Version-2 claims
+require the immutable manifest/context snapshot. Reconcile an older claim from
+its recorded evidence; never delete it to force a resend. This is a manual Bale
+responsibility, not a repository validation or dispatch script.
 
 ## Receipt and acceptance
 
@@ -72,8 +72,8 @@ The worker writes the final receipt only after outputs/checks are finished:
 ```
 
 For incomplete work use status `blocked` or `failed`, explain the unresolved
-condition and preserve partial artifacts. The checker rejects these for
-acceptance. A successful receipt inspection only establishes matching identity,
+condition and preserve partial artifacts. Bale rejects these for acceptance. A
+successful receipt inspection only establishes matching identity,
 required regular files within cwd and reported passing checks. Bale must still
 inspect the diff/content and independently run task-specific checks. Save that
 proof and artifact hashes in the task owner before marking accepted. Never run
@@ -94,5 +94,5 @@ arbitrary commands copied from a worker receipt without inspecting their effects
 Record state as prepared, delivery-uncertain/submitted, observed, rejected or
 accepted. Terminal lifecycle is separate from these task states. Before changing
 an attempt, reconcile the preceding one, even if a new directory would allow
-another helper invocation. On restart load task working memory and requery live
+another native prompt. On restart load task working memory and requery live
 handles; a file or stale status alone does not prove a worker is still running.

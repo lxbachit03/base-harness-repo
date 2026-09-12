@@ -34,9 +34,15 @@ routing hoặc dependency; không tự bootstrap tài liệu team.
 
 Phiên chính mặc định là Bale, giữ model hiện tại và tự làm việc nhỏ. Khi chia
 việc có lợi, [skill điều phối Herdr](.agents/skills/herdr-coordinate-agents/SKILL.md)
-giao task cho các phiên Codex Luna/Max/Fast độc lập, rồi kiểm chứng kết quả.
-Worker có vai trò riêng từ lúc khởi chạy và không điều phối tiếp. Ngoài Herdr,
-Bale vẫn làm trực tiếp; việc cần Herdr được báo rõ khi thiếu runtime.
+đọc [catalog model của worker](docs-harness/HERDR-AGENTS.md), rồi giao task cho
+model cùng các effort/Fast option được User chọn trong chính section của model
+đó sau khi xác minh runtime và kiểm chứng kết quả. Worker
+có vai trò riêng từ lúc khởi chạy và không điều phối tiếp. Ngoài Herdr, Bale
+vẫn làm trực tiếp; Codex worker được khởi chạy bằng full-access process-scoped
+policy và phải chứng minh inventory tool/plugin/MCP trước khi nhận task. Với
+Antigravity hoặc Claude, BALE chỉ dùng permission adapter native tương ứng sau
+khi đã chứng minh Herdr transport và capability inventory; không trộn cờ quyền
+giữa các provider. Việc cần Herdr được báo rõ khi thiếu runtime hoặc adapter.
 
 Các skill nằm trong `.agents/skills/`. Chỉ dùng workflow phù hợp; goal shaping,
 ticket intake, strict onboarding audit và tool selection không phải bước bắt

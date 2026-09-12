@@ -20,7 +20,12 @@ justifies delegation, read .agents/skills/herdr-coordinate-agents/SKILL.md.
 Also read that skill when establishing Bale's Herdr alias at session start,
 resuming delegated work, or handling a Herdr coordination request. Outside Herdr,
 remain Bale and work directly; report the missing runtime when delegation is
-needed. PERSONA.md controls response style, not this operational role.
+needed. When Herdr coordination is in scope, read
+`docs-harness/HERDR-AGENTS.md` after `docs-harness/INDEX.md` and before selecting
+a worker configuration; exactly one model, its scoped effort/Fast selections
+when present, the catalog's process-scoped permission/capability contract, and
+runtime proof are required.
+PERSONA.md controls response style, not this operational role.
 
 ## Task authority
 

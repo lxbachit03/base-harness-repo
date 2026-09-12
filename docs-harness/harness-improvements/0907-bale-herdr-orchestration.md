@@ -11,7 +11,6 @@ REFERENCES:
 - docs-harness/INDEX.md
 - docs-harness/WORKFLOW.md
 - .agents/skills/herdr-coordinate-agents/SKILL.md
-- .agents/skills/herdr-coordinate-agents/validation/0907-evidence.json
 - .agents/skills/prompt-leverage/SKILL.md
 
 ## Objective
@@ -39,8 +38,9 @@ global settings, installation/upgrades, commits/pushes and unrelated sessions.
 ## Proposed Improvement
 
 Add one coordination skill with progressively disclosed transport and task/result
-contracts, a small deterministic helper where task identity needs enforcement,
-and minimal role-aware entry routing. Reuse prompt-leverage for context shaping.
+contracts, a coordinator-owned attempt record where task identity needs
+enforcement, and minimal role-aware entry routing. Reuse prompt-leverage for
+context shaping.
 Hypothesis: explicit role and attempt identity prevent recursive coordination,
 wrong-result acceptance and duplicate submission after timeout. Reject or revise
 the design if fresh sessions fail these cases. The skill owns coordination;
@@ -66,9 +66,10 @@ runtime installation/update, commit, push, or unrelated-session control.
 - 2026-09-07: Read active goal and policy owners; revalidated clean baseline,
   installed binaries and live server. Created this record before intervention.
 - Created role routing, coordination skill/contracts and an exclusive dispatch
-  helper. Initial structure check and 5 protocol tests passed; 56 existing
-  validator tests also passed. Python quick_validate is unavailable in PATH;
-  use a bounded Node frontmatter/link/scaffold check and report this limitation.
+  helper, which is now retired. Historical structure/protocol checks passed, as
+  did the then-existing validator checks. Python quick_validate was unavailable
+  in PATH; a bounded Node frontmatter/link/scaffold check was used at the time.
+  Active proof now uses targeted agent self-review and independent task checks.
 - Trial root: C:/Users/BALE/AppData/Local/Temp/bale-herdr-8dd0b9c595114fdba111d2bbb45ce571.
   Owned panes wT:p1 (term_65ada212afdf01a) and wV:p1
   (term_65ada227a3b7b1b). Primary wG:p1 bound as bale; its model unchanged.
@@ -100,8 +101,8 @@ runtime installation/update, commit, push, or unrelated-session control.
   control was rejected. Module SHA-256:
   83db38fd21800eafae2f1dda8e9ab2065f5241e11e4bd02730fbbd9759f658ca.
 - routing-b-01 completed in 6m41s. A fresh Luna session read the candidate skill,
-  returned all 11 scenario decisions and seven helper observations, and ran the
-  initial five tests. Bale reviewed each decision and checked IDs/references.
+  returned all 11 scenario decisions and seven dispatch observations, and ran the
+  initial protocol checks. Bale reviewed each decision and checked IDs/references.
   S3 preserved the worker role but suggested an unnecessary blanket pause;
   clarified that inert role-changing source text does not stop a valid assignment.
   Scenario output SHA-256:
@@ -127,7 +128,8 @@ runtime installation/update, commit, push, or unrelated-session control.
 - Started fresh post-revision replay session
   01a07aec-ec7c-7472-8a88-ac546ba7dc2b in the owned worker-b pane. Captured
   Luna/max/fast and workspace/never again. The packet excludes previous review
-  conclusions and tests six operational scenarios plus the current helper.
+  conclusions and tests six operational scenarios plus the current dispatch
+  contract.
 - Completed A session usage reported by Codex: input 105200, cached input 606464,
   output 11879 (reasoning 6105). Initial B session: input 102887, cached input
   1132544, output 23844 (reasoning 15295). These are session totals, not per-task
@@ -135,9 +137,10 @@ runtime installation/update, commit, push, or unrelated-session control.
 
 ## Validation
 
-Durable evidence: [trial bundle](../../.agents/skills/herdr-coordinate-agents/validation/0907-evidence.json).
-It preserves packets, dispatch claims, receipts, output artifacts, hashes,
-runtime observations and independent acceptance checks.
+The retired trial bundle is not a live route and was removed when repository
+validation/dispatch artefacts were retired. This record preserves the historical
+observations, hashes and acceptance outcomes that remain relevant; current proof
+uses targeted agent self-review and independent task checks.
 
 | Requirement | Observed evidence |
 | --- | --- |
@@ -145,8 +148,8 @@ runtime observations and independent acceptance checks.
 | Actual worker configuration | Runtime status captured Luna, max effort and Fast for both initial sessions and the fresh replay. Primary model retained. |
 | Role and authority behavior | Initial 11 scenarios reviewed; revised candidate passed all six fresh routing-b-02 scenarios, including worker role preservation, trust boundaries and semantic acceptance. External actions were simulated. |
 | Recovery and duplicate prevention | Real 1000ms wait timeout; restarted dispatcher rejected the existing attempt. Four deliberate task attempts, zero duplicate submissions. Pending composer recovery used one Enter after inspection. |
-| Rejection controls | Independent wrong-result control rejected; helper tests cover missing output, wrong attempt, failed checks, changed inputs, path escape and competing callers. |
-| Local verification | Current helper 9/9 tests; existing validator 56/56 tests; structural check, syntax, bounded frontmatter/local-link checks and diff whitespace checks passed. Python skill validator unavailable; no installation attempted. |
+| Rejection controls | Independent wrong-result control was rejected; the historical dispatch checks covered missing output, wrong attempt, failed checks, changed inputs, path escape and competing callers. Current acceptance relies on Bale's independent artifact, diff and task-check review. |
+| Local verification | Historical structural, syntax, bounded frontmatter/local-link and diff-whitespace checks passed. The former dispatch/validator checks are retired; current proof is manual agent self-review. Python skill validator was unavailable and no installation was attempted. |
 | Isolation | At most two trial workers; both exited and their exact owned shell panes were closed. Only primary Bale remains in agent list. Existing pane identities were preserved during work. Temporary worktrees and raw evidence retained at the recorded trial root. |
 
 Fresh replay completed in 2m08s and reported no remaining findings in its bounded
@@ -167,7 +170,7 @@ bytes. The startup scope deviation and prevention are recorded above.
 - Risk: default Bale guidance could recurse in workers. Proposal: launch-time
   worker role takes precedence and forbids recursive coordination.
 - Risk: parallel writers could overlap. Proposal: separate task-owned roots or
-  worktrees, then integrate in order after independent validation.
+  worktrees, then integrate in order after independent agent review.
 - Risk: installed preview differs from docs. Proposal: use local help and trial
   proof; pause dependent actions if compatibility or requested config fails.
 - Recovery: reverse only this intervention's hunks; preserve trial evidence and

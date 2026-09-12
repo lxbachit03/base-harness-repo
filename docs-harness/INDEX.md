@@ -94,6 +94,10 @@ Resources:
 - [Manual self-validation policy](../AGENTS.md): inspect affected routes,
   metadata, links, and diff; disclose unattempted proof and script authority.
 - [Bale and Herdr coordination](../.agents/skills/herdr-coordinate-agents/SKILL.md): read for primary-session alias binding, delegation, or resumption; workers retain their assigned role.
+- [Herdr worker configuration catalog](HERDR-AGENTS.md): read before BALE launches,
+  reassigns, or changes a Herdr worker model; exactly one model, its scoped
+  effort/Fast selections when present, the process-scoped permission/capability
+  contract, and effective runtime proof are required.
 
 ## TAG: [IMPROVE_HARNESS]
 
@@ -111,6 +115,7 @@ Resources:
 - [Harness improvement guide](harness-improvements/README.md)
 - [Bale orchestration through independent Herdr agents](harness-improvements/0907-bale-herdr-orchestration.md) — `#016_IMPROVE_HARNESS_0907`, `PRIORITY: [MEDIUM]`
 - [Agent self-validation and validator retirement](harness-improvements/0912-agent-self-validation.md) — `#017_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
+- [User-selected Herdr worker model catalog](harness-improvements/0912-herdr-agent-catalog.md) — `#018_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
