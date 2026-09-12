@@ -118,6 +118,7 @@ Resources:
 - [Agent self-validation and validator retirement](harness-improvements/0912-agent-self-validation.md) — `#017_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [Receipt-first Herdr observation with bounded transcript fallback](harness-improvements/0912-herdr-bounded-observation.md) — `#019_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [Bale review gate for delegated code quality and resource efficiency](harness-improvements/0913-herdr-bale-code-review.md) — `#020_IMPROVE_HARNESS_0913`, `PRIORITY: [MEDIUM]`
+- [OpenCode Go worker model catalog](harness-improvements/0913-opencode-go-model-catalog.md) — `#021_IMPROVE_HARNESS_0913`, `PRIORITY: [MEDIUM]`
 - [User-selected Herdr worker model catalog](harness-improvements/0912-herdr-agent-catalog.md) — `#018_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`

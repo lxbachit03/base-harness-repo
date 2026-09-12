@@ -72,6 +72,9 @@ list only for a self-contained
 prompt with no such files. Keep task inputs distinct from output/control paths.
 Files intentionally edited belong in expected_outputs; record their initial
 revision/hash in the packet rather than treating them as immutable context_files.
+For a model with continuous effort, capture the selected range and the exact
+numeric value accepted by the provider; the range label alone is not effective
+configuration evidence.
 Do not put catalog, AGENTS.md or INDEX.md prose into the prompt. Reference those
 files for a new worker's one-time role/context read; a reused session may retain
 that context when their revision/hash is unchanged. Provide Bale's resolved

@@ -14,11 +14,15 @@ can launch that profile.
    previous task.
 2. After choosing a model, use only the **Effort** and **Fast mode** checklists
    nested under that model. Check exactly one effort value when that model has
-   an effort checklist. When the section is explicitly omitted, the provider
-   does not expose a selectable effort for that model and no effort checkbox is
-   required. Check exactly one Fast value only when that model has a Fast mode
-   checklist. When that section is omitted, Fast mode is not documented for the
-   model and standard speed is the only permitted interpretation.
+   an effort checklist. When a provider exposes a continuous effort range,
+   check exactly one documented range option and record the exact numeric value
+   actually sent or accepted in configuration evidence; the range checkbox is
+   not itself the effective number. When the section is explicitly omitted, the
+   provider does not expose a selectable effort for that model and no effort
+   checkbox is required. Check exactly one Fast value only when that model has
+   a Fast mode checklist. When that section is omitted, Fast mode is not
+   documented for the model and standard speed is the only permitted
+   interpretation.
 3. These choices are model-scoped, not global. Do not combine an effort or
    Fast value copied from another model section, and do not add an option that
    the model's source does not list.
@@ -28,7 +32,10 @@ can launch that profile.
    adapter and a bounded Antigravity calculator trial; an Antigravity profile
    is dispatchable only after its native permission/configuration proof is
    complete, and direct Claude entries remain catalog-only until an adapter is
-   demonstrated.
+   demonstrated. OpenCode Go entries require a current Herdr `--kind opencode`
+   adapter and native proof; the 2026-09-13 replay proves that path only in the
+   captured local environment. Never pass an `opencode-go/<model-id>` to the
+   current `--kind codex` dispatcher.
 5. Preserve the selected configuration exactly. If a model, scoped option,
    account entitlement, adapter, or runtime result is unavailable, stale,
    incompatible, or unprovable, pause and report the gap instead of silently
@@ -121,9 +128,12 @@ full-access requests to use when such an adapter is added:
 | `codex` | `--dangerously-bypass-approvals-and-sandbox`; use `--yolo` only if local help exposes the alias; equivalent pair `--sandbox danger-full-access --ask-for-approval never` | Codex `/status` + `/permissions`; `codex plugin list`; `codex mcp list` in the worker's `CODEX_HOME` | Dispatch path implemented; process-scoped YOLO/full-access required |
 | `agy` | `--dangerously-skip-permissions`; keep terminal sandbox disabled when host-level access is intended | Antigravity headless `stream-json` `init.permission_mode` and `tools`; `agy plugin list`; `agy mcp list`; inspect `settings.json` deny/managed rules and `allowNonWorkspaceAccess` | Bounded calculator trial completed 2026-09-12; complete permission/configuration proof remains per profile |
 | `claude` | `--dangerously-skip-permissions` (equivalent to `--permission-mode bypassPermissions`) | Claude `/permissions` or native startup output; `claude plugin list`; `claude mcp list`; inspect managed/project deny rules and authentication | Herdr kind is documented, but Claude CLI is not installed in the current runtime |
+| `opencode` | Documented `--auto` (root TUI or `run`); auto-approves permissions not explicitly denied. OpenCode v1.18.30 also has hidden aliases `--yolo` and `--dangerously-skip-permissions`, but do not make them the default | Native startup screen/process command proving auto state and selected model/variant; `opencode mcp list`; no separate plugin-list command is exposed | Bounded OpenCode Go replay passed 2026-09-13 with documented `--auto`; account/adapter/capability proof remains per profile |
 
 The Antigravity and Claude requests still do not override explicit deny rules,
 managed policy, provider authentication, or an MCP server's own access policy.
+OpenCode `--auto` has the same process-scoped limitation: it is not an OS
+sandbox removal or a bypass of provider/managed deny rules.
 `--sandbox` on Antigravity or Claude sandbox settings intentionally retain an
 OS boundary and therefore are not equivalent to host-level full access. For
 Antigravity, `allowNonWorkspaceAccess` and any deny/managed rule must also
@@ -480,6 +490,141 @@ Effort is not supported for this model, so no effort checklist is provided.
 Fast mode is not available, so no Fast checklist is provided. Use the model's
 standard behavior only.
 
+### OpenCode Go
+
+These profiles use the OpenCode Go provider and its OpenAI-compatible endpoint,
+not the Herdr `--kind codex` path. The installed Herdr preview accepts
+`--kind opencode`; a bounded replay on `2026-09-13` launched the worker and
+proved the native model/variant screen and artifact receipt in an isolated
+worktree. On Windows the replay needed a task-local executable shim because
+Herdr's `Start-Process opencode` resolved `opencode.ps1`; this is environment
+evidence, not a global adapter installation. The exact OpenCode configuration form
+is `opencode-go/<model-id>`; the provider endpoint is
+`https://opencode.ai/zen/go/v1` and the current model list is available from
+`https://opencode.ai/zen/go/v1/models`. The five entries below are the only
+OpenCode Go models requested in this catalog. OpenCode Go's list, account
+entitlements and adapter behavior can change, so BALE must recheck the native
+CLI/API before selection.
+
+When the User authorizes automatic permission approval, the OpenCode launch
+request is the documented `opencode --auto` flag (or `opencode run --auto` for
+non-interactive execution). It approves permissions that are not explicitly
+denied; it does not remove the OS sandbox or override provider/managed deny
+rules. The v1.18.30 replay used this documented flag and showed `Build auto` in
+the native TUI. Hidden aliases are retained only as version-scoped compatibility
+notes, not as the catalog default.
+
+No Fast mode checklist is provided for these entries: the official OpenCode Go
+model/endpoint documentation does not document a separate Fast variant for any
+of the five models. Omitted Fast means standard speed only; do not infer Fast
+from a low effort value or a model name. A checkbox records user intent, not
+provider authentication, host permission, enabled plugins/MCPs or Herdr
+dispatchability.
+
+#### `opencode-go-deepseek-v4.1-flash`
+
+- [ ] **Model** `opencode-go-deepseek-v4.1-flash` - provider `opencode-go`;
+  transport `opencode-cli`; model ID `deepseek-v4.1-flash`; OpenCode config ID
+  `opencode-go/deepseek-v4.1-flash`; availability
+  `account/adapter/runtime-check required`; source
+  <https://opencode.ai/docs/go/> and
+  <https://raw.githubusercontent.com/anomalyco/models.dev/dev/providers/opencode-go/models/deepseek-v4.1-flash.toml>;
+  last verified `2026-09-13`.
+
+##### Effort checklist (select one for this model)
+
+- [ ] `default` (TUI label: **Default**; sends no explicit variant)
+- [ ] `low`
+- [ ] `high`
+- [ ] `max`
+
+OpenCode Go's provider metadata declares `low`, `high` and `max` variants for
+this model. OpenCode v1.18.30's TUI adds a synthetic `Default` choice; selecting
+it stores no explicit variant and is not a fourth provider effort. Do not claim
+that it equals the model-native default: record the no-override request and the
+effective server/provider behavior separately before dispatch. The upstream
+model card's continuous native control does not override the provider-effective
+OpenCode Go variant contract.
+
+#### `opencode-go-kimi-k3`
+
+- [ ] **Model** `opencode-go-kimi-k3` - provider `opencode-go`;
+  transport `opencode-cli`; model ID `kimi-k3`; OpenCode config ID
+  `opencode-go/kimi-k3`; availability `account/adapter/runtime-check
+  required`; source <https://opencode.ai/docs/go/> and
+  <https://huggingface.co/moonshotai/Kimi-K3/blob/main/README.md>; last
+  verified `2026-09-13`.
+
+##### Effort checklist (select one for this model)
+
+- [ ] `max`
+
+The current OpenCode Go metadata and CLI expose only `max` for Kimi K3. The
+model card documents `low`, `high` and `max`, but those native choices are not
+selectable through this Go adapter unless a later catalog/runtime check proves
+otherwise.
+
+#### `opencode-go-glm-5.2`
+
+- [ ] **Model** `opencode-go-glm-5.2` - provider `opencode-go`;
+  transport `opencode-cli`; model ID `glm-5.2`; OpenCode config ID
+  `opencode-go/glm-5.2`; availability `account/adapter/runtime-check
+  required`; source <https://opencode.ai/docs/go/>,
+  <https://docs.z.ai/guides/llm/glm-5.2>, and
+  <https://github.com/anomalyco/opencode/blob/v1.18.30/packages/opencode/src/provider/transform.ts>;
+  last verified `2026-09-13`.
+
+##### Effort checklist (select one for this model)
+
+- [ ] `high`
+- [ ] `max`
+
+Z.ai documents additional compatibility labels for GLM 5.2, but the installed
+OpenCode v1.18.30 openai-compatible transform exposes `high` and `max` for this
+model. Do not add or silently map another label until the effective Go adapter
+proves it.
+
+#### `opencode-go-glm-5.3`
+
+- [ ] **Model** `opencode-go-glm-5.3` - provider `opencode-go`;
+  transport `opencode-cli`; model ID `glm-5.3`; OpenCode config ID
+  `opencode-go/glm-5.3`; availability `account/adapter/runtime-check
+  required`; source <https://opencode.ai/docs/go/>,
+  <https://docs.z.ai/guides/llm/glm-5.3>, and
+  <https://github.com/anomalyco/opencode/blob/v1.18.30/packages/opencode/src/provider/transform.ts>;
+  last verified `2026-09-13`.
+
+##### Effort checklist (select one for this model)
+
+- [ ] `low`
+- [ ] `high`
+- [ ] `max`
+
+The current OpenCode Go metadata and CLI expose exactly `low`, `high` and `max`
+for GLM 5.3. The v1.18.30 generic OpenAI-compatible transform does not add a
+`medium` variant for this model; BALE must still prove the effective value at
+runtime and must not silently substitute another label.
+
+#### `opencode-go-deepseek-v4-pro`
+
+- [ ] **Model** `opencode-go-deepseek-v4-pro` - provider `opencode-go`;
+  transport `opencode-cli`; model ID `deepseek-v4-pro`; OpenCode config ID
+  `opencode-go/deepseek-v4-pro`; availability `account/adapter/runtime-check
+  required`; source <https://opencode.ai/docs/go/>,
+  <https://api-docs.deepseek.com/guides/thinking_mode/>, and
+  <https://github.com/anomalyco/opencode/blob/v1.18.30/packages/opencode/src/provider/transform.ts>;
+  last verified `2026-09-13`.
+
+##### Effort checklist (select one for this model)
+
+- [ ] `high`
+- [ ] `max`
+
+The current OpenCode Go metadata and CLI expose exactly `high` and `max` for
+DeepSeek V4 Pro. DeepSeek's native/model-card `low` choice is not selectable
+through this Go adapter; compatibility labels such as `medium` or `xhigh` are
+not additional checkboxes.
+
 ## User-added model template
 
 Copy this block when the User wants a model not yet listed. Replace every
@@ -524,7 +669,7 @@ Do not pass an Antigravity or Claude model ID to a Codex launch.
 
 ## Sources and freshness
 
-Catalog snapshot: 2026-09-12. Re-check availability, exact IDs, account
+Catalog snapshot: 2026-09-13. Re-check availability, exact IDs, account
 entitlements, and Herdr adapter support before selecting a profile. Research
 sources:
 
@@ -547,6 +692,26 @@ sources:
 - [Antigravity MCP](https://antigravity.google/docs/cli/mcp/)
 - [Claude Code CLI](https://code.claude.com/docs/en/cli-usage)
 - [Claude Code permissions](https://code.claude.com/docs/en/permissions)
+- [OpenCode Go](https://opencode.ai/go)
+- [OpenCode Go documentation](https://opencode.ai/docs/go/)
+- [OpenCode Go model endpoint](https://opencode.ai/zen/go/v1/models)
+- [OpenCode CLI and run variants](https://dev.opencode.ai/docs/cli/)
+- [OpenCode TUI command and `--auto` (v1.18.30)](https://github.com/anomalyco/opencode/blob/v1.18.30/packages/opencode/src/cli/cmd/tui.ts)
+- [OpenCode model configuration](https://opencode.ai/docs/models/)
+- [OpenCode Go DeepSeek V4.1 Flash metadata](https://raw.githubusercontent.com/anomalyco/models.dev/dev/providers/opencode-go/models/deepseek-v4.1-flash.toml)
+- [OpenCode Go Kimi K3 metadata](https://raw.githubusercontent.com/anomalyco/models.dev/dev/providers/opencode-go/models/kimi-k3.toml)
+- [OpenCode Go GLM 5.2 metadata](https://raw.githubusercontent.com/anomalyco/models.dev/dev/providers/opencode-go/models/glm-5.2.toml)
+- [OpenCode Go GLM 5.3 metadata](https://raw.githubusercontent.com/anomalyco/models.dev/dev/providers/opencode-go/models/glm-5.3.toml)
+- [OpenCode Go DeepSeek V4 Pro metadata](https://raw.githubusercontent.com/anomalyco/models.dev/dev/providers/opencode-go/models/deepseek-v4-pro.toml)
+- [OpenCode TUI variant selector (v1.18.30)](https://github.com/anomalyco/opencode/blob/v1.18.30/packages/tui/src/component/dialog-variant.tsx)
+- [OpenCode variant resolution (v1.18.30)](https://github.com/anomalyco/opencode/blob/v1.18.30/packages/opencode/src/acp/config-option.ts)
+- [DeepSeek V4.1 Flash model card](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/main/README.md)
+- [Kimi K3 model card](https://huggingface.co/moonshotai/Kimi-K3/blob/main/README.md)
+- [Z.ai GLM-5.2](https://docs.z.ai/guides/llm/glm-5.2)
+- [Z.ai GLM-5.3](https://docs.z.ai/guides/llm/glm-5.3)
+- [Z.ai thinking controls](https://docs.z.ai/guides/capabilities/thinking)
+- [DeepSeek thinking mode](https://api-docs.deepseek.com/guides/thinking_mode/)
+- [OpenCode provider variants (v1.18.30)](https://github.com/anomalyco/opencode/blob/v1.18.30/packages/opencode/src/provider/transform.ts)
 - [Anthropic effort controls](https://platform.claude.com/docs/en/build-with-claude/effort)
 - [Anthropic Fast mode](https://platform.claude.com/docs/en/build-with-claude/fast-mode)
 - [Anthropic model overview](https://platform.claude.com/docs/en/models/overview)

@@ -27,11 +27,14 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    Then use only the effort and Fast checklists
    nested under that model, selecting one value in each checklist that exists.
    Omit unsupported settings when the catalog explicitly omits that section.
+   For a continuous effort range, record the exact numeric value selected and
+   pass it through the provider-native adapter; never pass the range label as
+   if it were an effective effort value.
    If a catalog entry lists multiple provider model IDs, resolve and record the
    exact ID in the attempt packet; do not infer an ID from the selected effort
    unless the catalog explicitly maps them.
    Launch with the resulting configuration's verified Herdr adapter. The
-   current repository path is
+   current Codex path is
    `herdr agent start <unique-name> --kind codex --pane <returned-id>`; profiles using
    another provider are not dispatchable through that command unless a
    compatible adapter has been proven. For a Codex profile, pass its exact
@@ -91,6 +94,26 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    `CODEX_HOME` context and record the redacted capability inventory. Full
    local access does not install or authenticate plugins/MCP servers.
 
+   The installed Herdr preview also accepts `--kind opencode`. A 2026-09-13
+   OpenCode Go replay proved this path in a task-owned worktree with native
+   model/variant output and a completed receipt. On Windows, first verify that
+   `Start-Process opencode` resolves to a runnable executable: the default
+   `opencode.ps1` wrapper can fail with `%1 is not a valid Win32 application`.
+   If needed, use only a task-local shim that invokes the installed executable;
+   never rename or overwrite global wrappers. OpenCode v1.18.30's root TUI does
+   not accept `--variant`; select a provider variant through its native TUI
+   state or the supported `opencode run --variant` path, and record the
+   effective value. When the User has authorized automatic permission approval,
+   use the documented root-TUI flag `opencode --auto` (or `opencode run --auto`)
+   and prove the resulting native state. It approves permissions that are not
+   explicitly denied; it does not remove an OS sandbox or override provider or
+   managed deny rules. OpenCode v1.18.30 also accepts hidden `--yolo` and
+   `--dangerously-skip-permissions` aliases, but those aliases are not the
+   catalog default and must not be assumed on another version. `opencode mcp
+   list` is the available capability check in this CLI; no plugin-list command
+   is exposed, so record that limitation and do not install an integration
+   merely to make detection appear ready.
+
    For Antigravity, record the native execution mode, the Fast/standard
    indicator, terminal-sandbox setting, `allowNonWorkspaceAccess`, and the
    applicable deny/managed rules once in configuration evidence. Treat a status
@@ -120,8 +143,8 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    Claude OS sandbox still remains a separate boundary. Neither request
    overrides provider deny/managed rules, authentication, or MCP policy. Do not
    use `--bare` for Claude when inheriting plugins, skills or MCP is required.
-   The current repository's complete permission/capability proof is Codex-only;
-   a bounded Antigravity calculator task has exercised the local transport, but
+   The current repository has complete Codex proof and a bounded OpenCode Go
+   proof; a bounded Antigravity calculator task has exercised the local transport, but
    its provider settings proof is still incomplete. Do not dispatch another
    Antigravity profile until its adapter and capability inventory are independently
    proven. Record the attempt and target identity manually in the coordinator
@@ -225,6 +248,8 @@ recheck commands and configuration in a different environment.
 - [Antigravity headless CLI](https://antigravity.google/docs/cli/headless/)
 - [Claude Code CLI](https://code.claude.com/docs/en/cli-usage)
 - [Claude Code permissions](https://code.claude.com/docs/en/permissions)
+- [OpenCode CLI](https://dev.opencode.ai/docs/cli/)
+- [OpenCode TUI command (v1.18.30)](https://github.com/anomalyco/opencode/blob/v1.18.30/packages/opencode/src/cli/cmd/tui.ts)
 
 Upstream docs are references, not a reason to upgrade a running server. Changes
 to installation, global config or unrelated panes need their own authority.
