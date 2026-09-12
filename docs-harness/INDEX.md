@@ -70,9 +70,10 @@ tree and canonical routes in the same task when their structure, classification,
 priority, or links change. Content-only edits need no routing rewrite.
 In read-only work report drift without repairing it.
 
-Run the structural check documented in .agents/validators/README.md before
-claiming routing consistency. Its tree, sections, links, IDs, metadata, and
-domain-state checks do not prove claim truth or agent effectiveness.
+Before claiming routing consistency, the AI agent must inspect the relevant
+folder tree, route metadata, links, IDs, domain state, and final diff and report
+the evidence and any unattempted proof. Do not create or invoke a repository
+validator script for this review unless the User explicitly authorizes it.
 
 ## Root Routing
 
@@ -90,7 +91,8 @@ Resources:
 - [INDEX.md](INDEX.md)
 - [WORKFLOW.md](WORKFLOW.md)
 - [PERSONA.md](PERSONA.md)
-- [Local validator guide](../.agents/validators/README.md)
+- [Manual self-validation policy](../AGENTS.md): inspect affected routes,
+  metadata, links, and diff; disclose unattempted proof and script authority.
 - [Bale and Herdr coordination](../.agents/skills/herdr-coordinate-agents/SKILL.md): read for primary-session alias binding, delegation, or resumption; workers retain their assigned role.
 
 ## TAG: [IMPROVE_HARNESS]
@@ -108,6 +110,7 @@ Resources:
 
 - [Harness improvement guide](harness-improvements/README.md)
 - [Bale orchestration through independent Herdr agents](harness-improvements/0907-bale-herdr-orchestration.md) — `#016_IMPROVE_HARNESS_0907`, `PRIORITY: [MEDIUM]`
+- [Agent self-validation and validator retirement](harness-improvements/0912-agent-self-validation.md) — `#017_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`

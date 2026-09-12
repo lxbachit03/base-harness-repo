@@ -59,8 +59,11 @@ do not receive repository-aware hash verification. Require the authenticated
 transcript, its expected digest, the tested revision, and explicit hunk IDs. Do
 not infer the requested hunk set.
 
-Run the evidence-capsule validator, then inspect only material needed to decide
-the requested hunks. For each requested hunk:
+Manually authenticate the evidence capsule, then inspect only material needed to
+decide the requested hunks. Do not create or invoke a validation script unless
+the User explicitly authorizes script-based proof for this audit. If that
+authority is granted, the helper command remains read-only; otherwise report
+its proof as unattempted. For each requested hunk:
 
 1. retrieve and hash every cited source range at the pinned revision;
 2. split its changed wording into atomic clauses and verify every clause;
@@ -110,16 +113,18 @@ machine-emitted bundle before task completion. The producer's final assistant
 message references its digest and hunk IDs rather than duplicating its bytes.
 Legacy producer revisions may instead include the marked JSON capsule and
 marked diff hunks in the completed assistant message. After authenticating the
-raw transcript, run:
+raw transcript, perform the checks below by direct inspection. The helper
+command is optional and requires explicit User authority for script-based
+validation:
 
 ```text
 python3 .agents/skills/audit-onboarding-proposal/scripts/validate_evidence_capsule.py --transcript <raw-session.jsonl> --expected-transcript-sha256 <sha256> --repository <tested-worktree>
 ```
 
-The validator is read-only. It verifies capsule structure, referential
-integrity, boundary-result hash invariants, pinned producer/source blobs,
-displayed patch hashes, exact patch applicability, and whole-destination
-before/after hashes. For a machine bundle it also reports
+When explicitly authorized, the helper is read-only. It verifies capsule
+structure, referential integrity, boundary-result hash invariants, pinned
+producer/source blobs, displayed patch hashes, exact patch applicability, and
+whole-destination before/after hashes. For a machine bundle it also reports
 `evidence_source=machine_tool_output` and verifies the exact inner-bundle
 digest. Treat a missing, truncated, or invalid required bundle/capsule as a
 gate-3 failure and return **NO APPLY** for its unverified hunks. V1 capsules

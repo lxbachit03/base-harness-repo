@@ -14,9 +14,7 @@ REFERENCES:
 - docs-harness/domain/README.md
 - docs-harness/tickets/README.md
 - docs-harness/plans/completed/0906-task-authority-and-policy-consistency.md
-- .agents/validators/sync-harness-index.js
-- .agents/validators/sync-harness-index.test.js
-- .agents/validators/README.md
+- docs-harness/harness-improvements/0912-agent-self-validation.md
 
 ## Objective
 
@@ -44,6 +42,11 @@ After the explicit question about running the Node suite with isolated temporary
 fixture setup/cleanup, the User replied "tiếp tục đi". This continuation was
 interpreted and announced as approval of that specifically proposed command
 class, not acceptance of P01 or any other general authority-policy change.
+
+Policy continuation (2026-09-12): improvement #017 retires the repository-local
+validator tree and makes agent-led self-review the current Harness proof path.
+The validator paths and commands retained below are historical evidence from
+the pre-retirement audit; they are not current instructions or dependencies.
 
 ## Proposed Improvement
 
@@ -148,7 +151,11 @@ by this repair, not that it supersedes instructions supplied by the User/runtime
 | P15: ignore behavior | Empty local .gitignore -> ignore-by-default docs-harness and validators with exact exceptions | Prefer narrow exceptions that do not hide future relevant files; no broad ignore rewrite applied without choosing the intended local/global convention |
 | P16: navigation/compatibility prose | Root README repeats loader rules and links team tool manuals; WORKFLOW explicitly names Rust CLI support -> owner table and optional SQLite/control-plane summary | Keep single owners; restore specific discovery links if required. No underlying compatibility code or team document was removed |
 
-## Validator Check Comparison
+## Historical Validator Check Comparison
+
+This comparison is retained as pre-retirement evidence from the 2026-09-06
+audit. It is not a current command contract; current Harness work follows the
+manual self-validation policy in `AGENTS.md` and improvement #017.
 
 Legacy source owners: validate-risk-proposal-links.py (scope, parser, metadata,
 relationships, INDEX, snapshot/main); sync-harness-index.py and the former
@@ -190,7 +197,7 @@ those checks. No fabricated accepted contract is inferred from a default.
 
 ## File Coverage
 
-The following inventory accounts for all 60 paths returned by
+The following historical inventory accounts for all 60 paths returned by
 git diff --name-only 7cf83c1 c4c8389. Paths are literal, including template braces.
 R = rules above; P = pending policy choice; V = validator checks above.
 
@@ -275,16 +282,18 @@ R = rules above; P = pending policy choice; V = validator checks above.
 - Read-only mocked UTF-8 and raw line-ending drift cases passed against the real
   installed Node runtime while preserving the working INDEX bytes. Mocks change
   returned bytes in memory only; they do not replace an OS-level fixture replay.
-- node .agents/validators/sync-harness-index.js --check: exit 0 after initial
-  repairs; checks tree, sections, links, routes, metadata, IDs, domain and pairs.
-- node .agents/validators/sync-harness-index.js --risk-links: exit 0; this checks
-  its documented restricted groups, not full INDEX routing parity.
+- Historical pre-retirement proof: `node .agents/validators/sync-harness-index.js
+  --check` exited 0 after initial repairs; it checked tree, sections, links,
+  routes, metadata, IDs, domain and pairs.
+- Historical pre-retirement proof: `node .agents/validators/sync-harness-index.js
+  --risk-links` exited 0; it checked its documented restricted groups, not full
+  INDEX routing parity.
 - git diff --check: exit 0 (expected Windows LF/CRLF conversion warnings only).
 - Historical preservation: all eight changed old active plans exactly match
   their old content after removing only the added current-policy notice.
-- Scope: exactly 60 enhancement/cleanup paths mapped; validators still has only
-  the Node engine, Node test file, and README. No wrappers/runtime installations,
-  commit, push, team documentation or product code changes were made.
+- Scope: exactly 60 enhancement/cleanup paths mapped before the validator
+  retirement. No wrappers/runtime installations, commit, push, team
+  documentation or product code changes were made in that earlier audit.
 - Independent validator audit: confirmed eight baseline loss groups and listed
   preserved/strengthened checks plus the explicit policy gaps above; read-only
   monkeypatch probes reproduced baseline UTF-8 and line-ending acceptance.
@@ -293,10 +302,11 @@ R = rules above; P = pending policy choice; V = validator checks above.
 - Fresh post-repair behavioral replay: repair_fresh_replay failed with a service
   usage-limit error before returning evidence. It is not a passing replay and
   the earlier independent source reviews do not substitute for it.
-- Full post-repair suite: after the User's continuation approving the specifically
-  proposed fixture command, node --test .agents/validators/sync-harness-index.test.js
-  exited 0: 56 tests, 56 pass, 0 fail. All five real CLI/drift fixture cases ran;
-  task-owned temporary roots were cleaned, and working INDEX preservation passed.
+- Historical pre-retirement proof: after the User's continuation approving the
+  specifically proposed fixture command, `node --test
+  .agents/validators/sync-harness-index.test.js` exited 0: 56 tests, 56 pass,
+  0 fail. All five real CLI/drift fixture cases ran; task-owned temporary roots
+  were cleaned, and working INDEX preservation passed.
 - Skill validation: the newly available skill-creator guide was read. Its
   quick_validate.py was inspected but not run: Python was unavailable, and its
   allowed-key list does not include the existing disable-model-invocation key.
@@ -339,9 +349,11 @@ decision. This is not a behavior-neutral enhancement or complete legacy parity.
 Decision: pending fresh rerun, as required by improve-harness. Native proof is
 complete; the service usage limit blocks the separate behavioral replay.
 Owner: main agent when a fresh agent session is available. Replay task: use the
-current validator guide in a fresh session to exercise invalid duplicate/alias,
-malformed link/label, scope, UTF-8, raw-drift and domain-placeholder cases, plus
-valid controls; verify low-severity reported risks still get a proposal and the
-domain template does not assert CURRENT without evidence. Keep external actions
-simulated. Review the observed result before moving this record to completed/;
-preserve the User's unresolved policy choices and unrelated old experiments.
+current manual self-validation policy in a fresh session to inspect invalid
+duplicate/alias, malformed link/label, scope, UTF-8, raw-drift and
+domain-placeholder cases, plus valid controls; verify low-severity reported
+risks still get a proposal and the domain template does not assert CURRENT
+without evidence. The fresh agent must not create or invoke a validator script
+without explicit User authority. Keep external actions simulated. Review the
+observed result before moving this record to completed/; preserve the User's
+unresolved policy choices and unrelated old experiments.

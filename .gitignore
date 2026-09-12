@@ -1,8 +1,5 @@
-# Keep global Harness ignores for unrelated local context, but expose these
-# source artifacts added by the approved policy/validator update.
-!.agents/validators/
-.agents/validators/*
-!.agents/validators/sync-harness-index.test.js
+# Keep global Harness ignores for unrelated local context, but expose approved
+# policy and improvement records explicitly below.
 
 !docs-harness/
 docs-harness/*
@@ -10,6 +7,7 @@ docs-harness/*
 docs-harness/harness-improvements/*
 !docs-harness/harness-improvements/0906-per-improvement-records.md
 !docs-harness/harness-improvements/0907-bale-herdr-orchestration.md
+!docs-harness/harness-improvements/0912-agent-self-validation.md
 !docs-harness/plans/
 docs-harness/plans/*
 !docs-harness/plans/active/

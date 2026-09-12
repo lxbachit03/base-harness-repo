@@ -91,8 +91,13 @@ contract lives in docs-harness/harness-constraints/0812-risk-proposal-suggestion
 ## Completion
 
 Claim the outcome only with relevant executable or observable evidence. Report
-the changes, checks, unattempted proof, and unresolved limitations. Structural
-validation proves its named checks; agent effectiveness requires behavioral
+the changes, checks, unattempted proof, and unresolved limitations. For
+Harness routing, guidance, metadata, and link consistency, the AI agent
+performs a targeted self-review and reports the exact evidence inspected. Do
+not create or invoke a repository validation script for that proof unless the
+User explicitly authorizes script-based validation for the task. Product tests,
+builds, and other behavior-appropriate commands remain available when they
+are in scope and authorized. Agent effectiveness still requires behavioral
 evidence. Optional SQLite/control-plane operations run only when requested or
 required by an external orchestrator.
 <!-- HARNESS:END -->

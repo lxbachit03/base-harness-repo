@@ -15,7 +15,7 @@ làm việc, kế hoạch, ticket và kiến thức domain. Bắt đầu từ
 | Domain capture, confirmation, freshness | [domain/README.md](docs-harness/domain/README.md) |
 | Ticket và artifact theo nhu cầu | [tickets/README.md](docs-harness/tickets/README.md) |
 | Template, ID và metadata | [templates/README.md](docs-harness/templates/README.md) |
-| Kiểm tra cấu trúc | [validator guide](.agents/validators/README.md) |
+| Tự kiểm tra Harness | [AGENTS.md](AGENTS.md) và [WORKFLOW.md](docs-harness/WORKFLOW.md) |
 
 Ở đầu phiên, agent đọc persona và thông tin định danh/trạng thái của công việc
 đang mở, sau đó chỉ nạp nội dung liên quan. Quyền đã cấp được giữ trong task;
@@ -42,8 +42,10 @@ Các skill nằm trong `.agents/skills/`. Chỉ dùng workflow phù hợp; goal 
 ticket intake, strict onboarding audit và tool selection không phải bước bắt
 buộc của mọi task. Cải tiến Harness cần một yêu cầu có phạm vi và bằng chứng.
 
-Chạy `node .agents/validators/sync-harness-index.js --check` để kiểm tra cấu trúc.
-Kết quả pass không thay thế đánh giá ý nghĩa quy tắc hoặc replay hành vi agent.
+Agent tự kiểm tra cấu trúc, route, metadata, link và diff theo `AGENTS.md` và
+`docs-harness/WORKFLOW.md`. Không tạo hoặc chạy script validator cho Harness
+nếu User chưa cấp authority rõ ràng; bằng chứng hành vi vẫn phải được báo cáo
+riêng khi có thể thực hiện.
 
 Global Git excludes có thể chứa `docs-harness/` để giữ context cá nhân khỏi
 consumer repo. Quy tắc ignore không untrack các file đã được quản lý trong base

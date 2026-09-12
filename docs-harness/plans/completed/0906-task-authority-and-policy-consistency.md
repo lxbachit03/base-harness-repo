@@ -13,7 +13,7 @@ REFERENCES:
 - docs-harness/domain/README.md
 - docs-harness/tickets/README.md
 - .agents/skills/improve-harness/SKILL.md
-- .agents/validators/sync-harness-index.js
+- docs-harness/harness-improvements/0912-agent-self-validation.md
 
 ## Objective
 
@@ -28,6 +28,10 @@ Baseline: D:/repos/base-harness-repo, main,
 recorded origin/main by two commits. The previous staged domain changes are
 already in this commit. No commit, push, external write, or installation is
 part of this intervention.
+
+Retirement note (2026-09-12): this historical plan previously named the local
+validator engine in its reference list. Improvement #017 removes that current
+dependency; any validator commands retained below describe past evidence only.
 
 The preceding conversation inspected the rules and found conflicting domain
 capture and schema gates, two plan templates, unconditional ticket status

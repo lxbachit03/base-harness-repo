@@ -78,8 +78,8 @@
 - **Nguyên nhân gốc rễ**: Agent chỉ đánh giá hoàn thành dựa trên việc "lệnh ghi file đã chạy thành công" chứ không thực sự chạy lệnh test/kiểm thử để đối chiếu kết quả đầu ra.
 - **Tác động**: Làm mất lòng tin của người dùng, biến người dùng thành người đi test lỗi cho AI.
 - **Đề xuất / Giải pháp**:
-  - *Nguyên tắc "Claim completion ONLY with observable proof"*: Agent chỉ được tuyên bố hoàn thành khi có bằng chứng thực thi rõ ràng (terminal output sạch sẽ, test suites pass, script validator báo PASSED).
-  - *Tạo các Script Validator Tự Động (Deterministic Tooling)*: Ví dụ `.agents/validators/*.py` hoặc `*.js` có exit code `0`/`1` rõ ràng.
+  - *Nguyên tắc "Claim completion ONLY with observable proof"*: Agent chỉ được tuyên bố hoàn thành khi có bằng chứng rõ ràng từ việc tự kiểm tra các file, diff, liên kết, hành vi liên quan và các test/build phù hợp; script validation không phải mặc định.
+  - *Authority cho Script*: Agent chỉ tạo hoặc chạy script validation khi User cấp authority rõ ràng, với phạm vi, lý do và bằng chứng đầu ra được báo cáo.
 
 ---
 
@@ -89,7 +89,7 @@
 - **Tác động**: Cạn kiệt token trong phiên, làm hỏng workspace hoặc tạo rác trên hệ thống file.
 - **Đề xuất / Giải pháp**:
   - *Quy tắc Pause If*: Nếu gặp lỗi bất thường quá 2 lần liên tiếp hoặc không có giải pháp an toàn, Agent phải dừng lại giải thích lý do và xin ý kiến người dùng.
-  - *Hỗ trợ Script Đa Nền Tảng*: Viết các script tiện ích tương thích cả Windows và POSIX.
+  - *Hỗ trợ Script Đa Nền Tảng*: Chỉ viết script tiện ích sau khi User cấp authority; khi được cấp, giữ chúng tương thích cả Windows và POSIX.
 
 ---
 
@@ -123,7 +123,7 @@
 | **3** | **Vague Intent & Guessing** | Prompt mơ hồ, Agent tự phỏng đoán | Vòng phỏng vấn làm rõ (`Interview Loop`), yêu cầu xác nhận trước khi code. |
 | **4** | **Scope Creep / Over-editing** | Tiện tay sửa thêm các file ngoài lề | Xác định `Scope Boundary` (In-scope / Out-of-scope), quy tắc Bounded Change. |
 | **5** | **Hallucination of Authority** | Tự ý đặt chính sách/mặc định mới | Quy tắc kiểm tra thẩm quyền (`Authority Check`), tách biệt Proposal với Decision. |
-| **6** | **Premature Completion** | Tuyên bố xong việc khi chưa kiểm thử | Quy tắc kiểm chứng bằng chứng thực thi (`Observable Proof`), dùng Script Validator. |
-| **7** | **Tool Looping & Cascades** | Lặp vô tận khi gặp lỗi môi trường | `Pause If` rules, dừng lại khi bế tắc, script đa nền tảng chuẩn hóa. |
+| **6** | **Premature Completion** | Tuyên bố xong việc khi chưa kiểm thử | Quy tắc kiểm chứng bằng chứng thực thi (`Observable Proof`), tự kiểm tra có checklist và báo cáo rõ giới hạn. |
+| **7** | **Tool Looping & Cascades** | Lặp vô tận khi gặp lỗi môi trường | `Pause If` rules, dừng lại khi bế tắc, tự kiểm tra bounded; script chỉ sau khi có authority. |
 | **8** | **Session Amnesia** | Quên toàn bộ ngữ cảnh khi mở session mới | Lưu trạng thái lên ổ đĩa (`plans/active/`, `tickets/active/`), tự nạp ở Session Start. |
 | **9** | **Persona Mismatch** | Giọng văn không đúng kỳ vọng người dùng | Cấu hình phong cách phản hồi qua Checklist tại `docs-harness/PERSONA.md`. |

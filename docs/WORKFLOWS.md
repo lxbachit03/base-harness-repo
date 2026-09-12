@@ -48,7 +48,7 @@
 ### 3. Đề Xuất & Giải Pháp Cải Thiện
 - **Thiết lập Hard Iteration Limits & Timeout**: Giới hạn tối đa số bước trong một loop và có bộ đếm thời gian thực.
 - **Cơ chế Checkpoint & Context Pruning**: Rút gọn log sau mỗi bước; chỉ giữ lại bản tóm tắt trạng thái (State Delta) thay vì toàn bộ lịch sử stdout/stderr.
-- **Cơ chế Hard Gates & Observable Proofs**: Buộc Agent phải chạy script kiểm chứng độc lập trước khi được phép kích hoạt trạng thái "Done".
+- **Cơ chế Hard Gates & Observable Proofs**: Buộc Agent phải tự kiểm tra bằng chứng độc lập trước khi được phép kích hoạt trạng thái "Done"; script validation chỉ dùng khi User cấp authority rõ ràng.
 
 ---
 
@@ -66,7 +66,7 @@
 ### 3. Đề Xuất & Giải Pháp Cải Thiện
 - **Tối Giản Số Lượng Subagents (Lean Agent Architecture)**: Chỉ chia nhỏ agent khi thực sự cần phân tách quyền hạn (Read-only Investigator vs Write Executor); tránh việc tạo ra quá nhiều "chuyên gia" nói chuyện phiếm với nhau.
 - **Shared State Schema Tinh Gọn**: Dùng schema dữ liệu chung rõ ràng, có phiên bản (Versioning) cho trạng thái của đồ thị.
-- **Cổng Phê Duyệt Của Con Người (Human Checkpoints)**: Đặt điểm dừng yêu cầu con người xác nhận trước các node có tác động lớn (triển khai production, xóa database).
+- **Cổng Phê Duyệt Của Con Người (Human Checkpoints)**: Đặt điểm dừng yêu cầu con người xác nhận trước các node có tác động lớn (triển khai production, xóa database) hoặc trước khi tạo/chạy script ngoài phạm vi proof mặc định.
 
 ---
 
@@ -95,7 +95,7 @@
   - **Top-Down Navigation Router (`INDEX.md`)**: Định tuyến ngữ cảnh có cấu trúc, ngăn ngừa quét file bừa bãi ($O(1)$ token routing).
   - **Kế hoạch Linh hoạt vs Kế hoạch Bền vững**: Dùng *Ephemeral Plans* cho tác vụ nhỏ có ranh giới rõ và *Durable Plans (`plans/active/`)* cho các tác vụ phức tạp dài hơi.
   - **Bộ Lọc Cổng Chặt Chẽ (Hard Gates qua `goal-griller`)**: Làm rõ 6 tiêu chí (Outcome, Success Condition, Scope Boundary, Context, Validation Loop, Stop Rules) trước khi cho phép Agent viết code.
-  - **Công Cụ Kiểm Chứng Xác Định ($O(1)$ Deterministic Validators)**: Dùng script Python/Node.js để kiểm tra tính toàn vẹn thay vì bắt AI tự suy luận ngữ nghĩa tốn kém.
+  - **Agent-led Evidence Review**: Agent tự kiểm tra tree, route, metadata, liên kết, diff và hành vi liên quan; không mặc định dựa vào validator script.
   - **Ràng Buộc Kép Rủi ro - Đề xuất (Risk-to-Proposal Constraint)**: Mọi rủi ro phát hiện đều phải đi kèm đề xuất giải pháp khả thi.
 - **Trường hợp sử dụng tối ưu**: Phát triển phần mềm nghiêm ngặt, tự động hóa tác vụ code phức tạp nhiều phiên, duy trì tính bền vững và nhất quán lâu dài của dự án AI-assisted.
 
@@ -104,7 +104,7 @@
 - **Đòi hỏi Kỷ luật Cao (Discipline Requirement)**: Người dùng có thể cảm thấy phiền nếu Agent liên tục hỏi làm rõ (Hard Gate Interview) cho các tác vụ cực kỳ đơn giản.
 
 ### 3. Đề Xuất & Giải Pháp Cải Thiện
-- **Script Tự Động Đồng Bộ Cục Bộ (`sync-harness-index.js --fix`)**: Tự động phát hiện và chèn các liên kết mới vào `INDEX.md`, giải phóng con người khỏi việc cập nhật thủ công.
+- **Cập Nhật INDEX Có Kiểm Soát**: Agent tự đối chiếu filesystem với `INDEX.md` và cập nhật thủ công trong cùng task; chỉ tạo hoặc chạy script hỗ trợ khi User cấp authority riêng.
 - **Cơ Chế Phân Luồng Linh Hoạt (Triage & Route)**: Tự động phân loại tác vụ: việc nhỏ thì dùng nhánh `direct` (không tạo goal rườm rà), việc lớn thì mới kích hoạt `goal-griller` đầy đủ.
 - **Cá Nhân Hóa Trải Nghiệm Qua `PERSONA.md`**: Cho phép người dùng chuyển đổi phong cách giao tiếp (Minimalist, Mentor, Pair Programmer) mà không làm ảnh hưởng đến kỷ luật kỹ thuật.
 

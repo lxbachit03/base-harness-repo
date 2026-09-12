@@ -38,6 +38,10 @@ structural validator suffice; no new script or runtime dependency is needed.
 Hypothesis: explicit create/resume branches prevent both missing records and
 duplicate records on continuation. Revise if a fresh scenario chooses otherwise.
 
+Historical note (2026-09-12): the structural validator named by this completed
+record was retired by improvement #017. The validation result below records
+past evidence and is not a current Harness requirement.
+
 ## Scope
 
 Change the improve-harness skill, its folder guide, improvement template,
