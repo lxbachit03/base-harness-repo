@@ -117,6 +117,54 @@ Must not change:
   evidence and dispatch-helper trees. Active guidance now uses native Herdr
   operations, coordinator-owned attempt records and manual agent self-review;
   direct references to the removed artefacts were deleted from the codebase.
+- 2026-09-12: Practical calculator trial completed through the Antigravity
+  adapter. An unsupported `fast` choice paused before submission; after the
+  User selected `standard`, one prompt produced the three calculator files and
+  Bale's independent checks passed. The run also exposed avoidable orchestrator
+  overhead: repeated repository/catalog and capability context, two pre-waits
+  before the final observation, overlapping acceptance reads, and a main-checkout
+  write boundary. Worker effort was a selected input, not the target of this
+  intervention; no per-model token telemetry was captured.
+  The active guidance now adds `direct`/`tight`/`full` attempt profiles, compact
+  packets, worker reuse conditions, one bounded prompt/wait path, proportional
+  acceptance, exact model-ID resolution, and stronger Antigravity proof fields.
+  The trial proves local transport and task delivery, but did not capture the
+  provider settings/deny-rule evidence required for a complete Antigravity
+  permission claim; that gap remains explicit.
+- 2026-09-12: Installed `herdr agent prompt --help` confirms the native
+  `--wait --until <status> --timeout <ms>` path used by the lean handoff; no
+  repository dispatch helper was added.
+- 2026-09-12: User clarified that the cost target is BALE's orchestrator, not
+  the delegated model. Reframed the guidance to preserve worker selections and
+  reduce coordinator context/tool calls through cached hashes, compact ledgers,
+  receipt-first inspection and no repeated catalog read for unchanged profiles;
+  updated the INDEX route to match.
+- 2026-09-12: Fresh lean calculator replay used one prompt and zero pre-poll
+  waits. The bounded call timed out at 60 seconds, but reconciliation found the
+  same worker `done`; no prompt was resent. Three files and independent checks
+  passed. The worker returned a concise terminal receipt but did not persist the
+  packet's receipt file because the prompt omitted its absolute path; the
+  coordinator recorded a receipt-gap observation and kept the experiment active.
+  No orchestrator token telemetry was exposed.
+- Coordinator acceptance snapshot for `herdr-calculator/`: `index.html`
+  `FCFA5E43C1CF34932FBEF13D959ECCD2AF3AFACCC85F7472034E14B949F0FE58`,
+  `styles.css` `CB91EB85E4F089A180EC0549FBA082AC3EA109B2040325391059F944FE4C4659`,
+  and `app.js` `9A001353D6EBBAB8B77CFA0E5FD5A0EA657E186F47913890526C867913B82D01`.
+- 2026-09-12: Revised the tight handoff contract so the prompt must include the
+  absolute receipt path and require the worker to write JSON before its terminal
+  summary. The trial scratch packet remains disposable; the durable record keeps
+  the hashes, state reconciliation and receipt-gap limitation.
+
+## Performance observations and decision
+
+The trial establishes process overhead, not a controlled token or latency
+benchmark, and it did not attribute tokens between models. The user's target is
+BALE's orchestrator cost, so worker effort/Fast choices stay unchanged. Reduce
+orchestrator work by caching unchanged routing/configuration hashes, keeping a
+compact ledger and one-sentence scope, sending one bounded prompt/wait, reading
+the receipt/output diff before any transcript, and doing one proportional
+acceptance pass. Use `full` packets only when dependencies, shared outputs,
+external risk or recovery justify the additional evidence.
 
 ## Validation
 
@@ -132,6 +180,13 @@ Targeted agent inspection will check:
 - Codex YOLO/full-access mode (or the equivalent permission mode), approval
   policy, and redacted plugin/MCP capability evidence are captured before prompt
   submission;
+- tight handoffs keep configuration evidence in the coordinator, use one bounded
+  prompt/wait path, keep BALE's ledger/context compact, avoid duplicate broad
+  checks, and reuse a worker only when its identity/worktree/configuration
+  evidence is unchanged;
+- multi-ID catalog entries resolve to an exact provider model ID in the attempt
+  record, while Antigravity evidence includes native speed state, sandbox,
+  `allowNonWorkspaceAccess`, and applicable deny/managed rules;
 - metadata, IDs, ignore exceptions and final diff are coherent.
 
 Observed native proof on 2026-09-12: all scoped files and both new resources
@@ -140,18 +195,22 @@ only where the dated sources document support, with zero choices selected; the
 new skill/runtime links resolve; the active-owner scan found no legacy
 Luna-only hard-code; `git diff --check` passed. Manual self-review confirmed
 that no Harness validator or dispatch script was created or invoked and that no
-direct references to the retired Herdr artefacts remain. The fresh-routing replay
-is pending; until it runs, this record must remain active.
+direct references to the retired Herdr artefacts remain. The fresh lean replay
+completed with one prompt, zero pre-poll waits and passing independent checks,
+but its worker receipt file was missing because the prompt omitted the absolute
+path; the Antigravity settings/deny-rule proof is also incomplete. The record
+therefore remains active for contract revision and a later bounded replay.
 
 ## Risks
 
 - Model catalogs and account entitlements change. Mitigation: keep source URLs
   and verification dates beside each profile, re-check runtime status before
   dispatch, and pause on stale or missing evidence.
-- The existing Herdr path is Codex-only. Mitigation: record transport/adapter
-  explicitly and treat Antigravity/Claude entries as non-dispatchable until a
-  compatible Herdr launch path is proven; never pass a foreign model ID to
-  `--kind codex`.
+- Complete permission/capability proof is still Codex-only, although the
+  calculator trial exercised an Antigravity transport. Mitigation: record the
+  transport/adapter explicitly and treat each Antigravity profile as
+  non-dispatchable until its native settings proof is complete; direct Claude
+  remains catalog-only. Never pass a foreign model ID to `--kind codex`.
 - Zero or multiple checked boxes could make selection ambiguous. Mitigation:
   require exactly one model plus exactly one value in each applicable
   model-scoped checklist, and make BALE pause for User choice when a required
@@ -164,13 +223,19 @@ is pending; until it runs, this record must remain active.
   provider-native adapter mapping, preserve explicit deny/managed rules and
   authentication requirements, and keep unproven Antigravity/Claude profiles
   catalog-only until the dispatcher and native proof support them.
+- A tight path or reused context could under-verify a task whose dependencies
+  changed. Mitigation: promote work to `full` when dependencies, shared outputs,
+  external risk or recovery are present; otherwise require unchanged identity,
+  input hashes and configuration evidence before reuse.
+- A single bounded wait can time out a genuinely long task. Mitigation: keep the
+  attempt pending, reobserve the same handle and receipt, and issue at most a
+  focused correction after the prior attempt settles; never resend blindly.
 
 ## Decision and Result
 
-Pending intervention and fresh rerun. Keep the registry and consumer guidance
-only after native inspection and a bounded fresh routing scenario show that BALE
-retrieves the file, preserves the selected model and its scoped effort/Fast
-choices, applies process-scoped full access only to the worker, and pauses on
-unsupported or ambiguous selections. Owner for the
-pending replay: the next fresh BALE session handling a Herdr coordination
-request.
+Keep the lean coordinator path provisionally: the fresh replay preserved the
+selected profile, used one prompt without pre-polling, produced the requested
+files, and passed independent checks. The receipt-path contract is now revised;
+complete one bounded replay with the path included and finish the Antigravity
+settings proof before marking the improvement completed. Owner for that replay:
+the next fresh BALE session handling a Herdr coordination request.

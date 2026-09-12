@@ -16,10 +16,20 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    Parse the returned root pane ID; never predict IDs. Record creation output
    before the next mutation. On Windows verify cwd at launch; later shell `cd`
    tracking may be incomplete. Use a task-owned directory/worktree for writers.
-3. Read [`docs-harness/HERDR-AGENTS.md`](../../../../docs-harness/HERDR-AGENTS.md)
-   and select exactly one model. Then use only the effort and Fast checklists
+   For full-access workers, prefer a task-owned detached worktree when the scope
+   is broader than an explicitly authorized output root; a narrowly scoped main
+   checkout may be reused only with User authority for that write boundary.
+   Keep product output roots separate from coordinator packet and receipt files.
+3. For a new launch or worker-model change, read
+   [`docs-harness/HERDR-AGENTS.md`](../../../../docs-harness/HERDR-AGENTS.md)
+   and select exactly one model. For an unchanged reassignment, use the
+   recorded catalog hash and configuration evidence and reread only on drift.
+   Then use only the effort and Fast checklists
    nested under that model, selecting one value in each checklist that exists.
    Omit unsupported settings when the catalog explicitly omits that section.
+   If a catalog entry lists multiple provider model IDs, resolve and record the
+   exact ID in the attempt packet; do not infer an ID from the selected effort
+   unless the catalog explicitly maps them.
    Launch with the resulting configuration's verified Herdr adapter. The
    current repository path is
    `herdr agent start <unique-name> --kind codex --pane <returned-id>`; profiles using
@@ -81,6 +91,13 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    `CODEX_HOME` context and record the redacted capability inventory. Full
    local access does not install or authenticate plugins/MCP servers.
 
+   For Antigravity, record the native execution mode, the Fast/standard
+   indicator, terminal-sandbox setting, `allowNonWorkspaceAccess`, and the
+   applicable deny/managed rules once in configuration evidence. Treat a status
+   label such as `OFF` as standard only when the installed CLI/version mapping
+   proves that interpretation. A reused worker may carry forward this evidence
+   only when its pane/process, cwd/worktree and configuration hash are unchanged.
+
    Provider-specific permission adapters are only provisional until the
    dispatcher accepts that provider and native proof is captured:
 
@@ -103,8 +120,10 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    Claude OS sandbox still remains a separate boundary. Neither request
    overrides provider deny/managed rules, authentication, or MCP policy. Do not
    use `--bare` for Claude when inheriting plugins, skills or MCP is required.
-   The current repository launch proof is Codex-only, so these examples must not
-   be used until a provider adapter and its capability inventory are independently
+   The current repository's complete permission/capability proof is Codex-only;
+   a bounded Antigravity calculator task has exercised the local transport, but
+   its provider settings proof is still incomplete. Do not dispatch another
+   Antigravity profile until its adapter and capability inventory are independently
    proven. Record the attempt and target identity manually in the coordinator
    task record; no repository helper enforces this boundary.
    Use an argument array, not a shell-built string containing a prompt. Match
@@ -124,18 +143,25 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    in the initial trial and are not a verified workaround.
    Before work, capture the real session's `/status`, `/permissions`, and
    `/fast status` (when Fast exists), or equivalent native configuration views.
+   An unchanged reused worker may carry forward those captured views after a
+   lifecycle, identity and cwd/worktree check; recapture on process or config drift.
    Check the selected model, any scoped effort/speed values, full-access mode,
    and approval policy are effective rather than merely present in a requested
    command. Record native session ID where available. If output cannot establish
    the selected settings, permission state, capability inventory, or adapter,
    pause task submission and report the missing proof. Do not ask the model to
-   infer its own configuration as evidence.
+   infer its own configuration as evidence. The first worker call must also
+   report its effective `HARNESS_ROLE` and cwd. For a tight handoff, do not
+   reread the full catalog or repeat unchanged capability discovery; the
+   coordinator's resolved configuration evidence is the source of truth.
 
 ## Read and wait
 
 `agent prompt` accepts text and presses Enter. `agent read` returns terminal text,
-while creation/get/wait operations return JSON. `agent wait --timeout 30000`
-is bounded; repeat observations of the same handle after a timeout. `blocked`
+while creation/get/wait operations return JSON. For a tight handoff, use one
+bounded `agent prompt ... --wait --until done --timeout 60000` call after startup
+proof. `agent wait --timeout 30000` is bounded; repeat observations of the same
+handle only after a timeout or ambiguous result. `blocked`
 means a recognized input UI, not permission to approve it. Inspect the dialog
 and resolve only already-authorized operations; otherwise preserve the session
 and ask for the missing decision. Use deliberate keys only after that inspection.
@@ -143,8 +169,10 @@ and ask for the missing decision. Use deliberate keys only after that inspection
 Herdr does not identify individual turns. A wait may be satisfied by earlier work;
 matching task/attempt receipts and actual acceptance checks establish completion.
 `pane wait-output` may match old text immediately. An unknown state or a read
-error is not terminal failure. Large transcript reads may be unavailable while
-working; use a visible snapshot, then the worker's result file after it settles.
+error is not terminal failure. For a tight handoff, inspect the matching receipt
+and output files first; fetch only a short visible snapshot when they are missing
+or the lifecycle state is ambiguous. Large transcript reads may be unavailable
+while working.
 
 On the tested Windows preview, `agent prompt` sometimes left the exact text in
 Codex's input composer without starting a turn. After passively confirming that

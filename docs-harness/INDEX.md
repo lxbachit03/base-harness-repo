@@ -94,10 +94,11 @@ Resources:
 - [Manual self-validation policy](../AGENTS.md): inspect affected routes,
   metadata, links, and diff; disclose unattempted proof and script authority.
 - [Bale and Herdr coordination](../.agents/skills/herdr-coordinate-agents/SKILL.md): read for primary-session alias binding, delegation, or resumption; workers retain their assigned role.
-- [Herdr worker configuration catalog](HERDR-AGENTS.md): read before BALE launches,
-  reassigns, or changes a Herdr worker model; exactly one model, its scoped
-  effort/Fast selections when present, the process-scoped permission/capability
-  contract, and effective runtime proof are required.
+- [Herdr worker configuration catalog](HERDR-AGENTS.md): read before BALE launches
+  or changes a Herdr worker model; an unchanged reassignment may reuse its
+  recorded catalog hash/configuration evidence and reread on drift. Exactly one
+  model, its scoped effort/Fast selections when present, the process-scoped
+  permission/capability contract, and effective runtime proof are required.
 
 ## TAG: [IMPROVE_HARNESS]
 

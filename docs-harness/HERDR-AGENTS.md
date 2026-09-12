@@ -1,9 +1,11 @@
 # Herdr worker configuration catalog
 
 This file is BALE's user-editable model registry for Herdr workers. Read it
-after `AGENTS.md` and `docs-harness/INDEX.md`, before every Herdr launch,
-reassignment, or worker-model change. A checkbox is a user choice; it is not
-proof that the current Herdr installation can launch that profile.
+after `AGENTS.md` and `docs-harness/INDEX.md` before a new Herdr launch or
+worker-model change. For a reassignment that keeps the same resolved profile,
+reuse the recorded catalog hash and configuration evidence; reread on drift.
+A checkbox is a user choice; it is not proof that the current Herdr installation
+can launch that profile.
 
 ## Selection contract
 
@@ -22,9 +24,10 @@ proof that the current Herdr installation can launch that profile.
    the model's source does not list.
 4. Prove the effective model ID, effort (when applicable), speed/Fast state
    (when applicable), provider, transport, and permission/capability state in
-   native runtime output before submission. The current repository runtime
-   documents a Codex adapter; Antigravity and direct Claude entries remain
-   catalog-only until a compatible Herdr adapter and permission mapping are
+   native runtime output before submission. The current repository has a Codex
+   adapter and a bounded Antigravity calculator trial; an Antigravity profile
+   is dispatchable only after its native permission/configuration proof is
+   complete, and direct Claude entries remain catalog-only until an adapter is
    demonstrated.
 5. Preserve the selected configuration exactly. If a model, scoped option,
    account entitlement, adapter, or runtime result is unavailable, stale,
@@ -38,6 +41,22 @@ selected, every required checklist nested under that model has exactly one
 selection, the resulting transport is supported, the permission/capability
 contract is proven, and effective configuration evidence is captured before
 submission.
+
+## Latency and token guidance
+
+This section targets BALE orchestrator context and tool-call overhead; it does
+not change the User's worker model, effort or Fast selections. For a bounded,
+single-output task, use one `tight` handoff, a compact task-specific prompt, one
+bounded wait, and one proportional acceptance pass. Read the catalog and routing
+context once per unchanged session, retain their hashes, and do not paste their
+prose into a worker prompt. Prefer the matching idle worker when identity,
+worktree and configuration evidence are unchanged. Inspect the matching receipt
+and output diff rather than replaying a full terminal transcript. Fast/standard
+remains provider-specific and must be proven natively.
+
+When a model entry lists more than one provider model ID, BALE must resolve and
+record the exact ID used for the attempt. Effort labels do not select an ID
+unless the catalog or provider adapter explicitly maps them.
 
 ## Permission and capability contract
 
@@ -91,7 +110,7 @@ full-access requests to use when such an adapter is added:
 | Herdr kind | Provider-native request | Native proof and capability inventory | Current repository status |
 | :--- | :--- | :--- | :--- |
 | `codex` | `--dangerously-bypass-approvals-and-sandbox`; use `--yolo` only if local help exposes the alias; equivalent pair `--sandbox danger-full-access --ask-for-approval never` | Codex `/status` + `/permissions`; `codex plugin list`; `codex mcp list` in the worker's `CODEX_HOME` | Dispatch path implemented; process-scoped YOLO/full-access required |
-| `agy` | `--dangerously-skip-permissions`; keep terminal sandbox disabled when host-level access is intended | Antigravity headless `stream-json` `init.permission_mode` and `tools`; `agy plugin list`; `agy mcp list`; inspect `settings.json` deny/managed rules and `allowNonWorkspaceAccess` | Herdr kind exists locally, but no repository dispatcher/adapter proof |
+| `agy` | `--dangerously-skip-permissions`; keep terminal sandbox disabled when host-level access is intended | Antigravity headless `stream-json` `init.permission_mode` and `tools`; `agy plugin list`; `agy mcp list`; inspect `settings.json` deny/managed rules and `allowNonWorkspaceAccess` | Bounded calculator trial completed 2026-09-12; complete permission/configuration proof remains per profile |
 | `claude` | `--dangerously-skip-permissions` (equivalent to `--permission-mode bypassPermissions`) | Claude `/permissions` or native startup output; `claude plugin list`; `claude mcp list`; inspect managed/project deny rules and authentication | Herdr kind is documented, but Claude CLI is not installed in the current runtime |
 
 The Antigravity and Claude requests still do not override explicit deny rules,
@@ -223,7 +242,7 @@ are not automatically equivalent to Codex `service_tier=fast`.
 
 #### `antigravity-gemini-3.8-flash`
 
-- [ ] **Model** `antigravity-gemini-3.8-flash` - provider `antigravity`;
+- [x] **Model** `antigravity-gemini-3.8-flash` - provider `antigravity`;
   transport `antigravity-cli`; model IDs `gemini-3.8-flash-medium` or
   `gemini-3.8-flash-high`; availability `account/adapter/runtime-check
   required`.
@@ -232,12 +251,12 @@ are not automatically equivalent to Codex `service_tier=fast`.
 
 - [ ] `low`
 - [ ] `medium`
-- [ ] `high`
+- [x] `high`
 
 ##### Fast mode checklist (select one for this model)
 
 - [ ] `fast` (selector entry)
-- [ ] `standard`
+- [x] `standard`
 
 #### `antigravity-gemini-3.7-flash`
 
