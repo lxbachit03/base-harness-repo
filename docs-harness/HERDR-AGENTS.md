@@ -261,7 +261,7 @@ are not automatically equivalent to Codex `service_tier=fast`.
 
 #### `antigravity-gemini-3.8-flash`
 
-- [x] **Model** `antigravity-gemini-3.8-flash` - provider `antigravity`;
+- [ ] **Model** `antigravity-gemini-3.8-flash` - provider `antigravity`;
   transport `antigravity-cli`; model IDs `gemini-3.8-flash-medium` or
   `gemini-3.8-flash-high`; availability `account/adapter/runtime-check
   required`.
@@ -270,12 +270,12 @@ are not automatically equivalent to Codex `service_tier=fast`.
 
 - [ ] `low`
 - [ ] `medium`
-- [x] `high`
+- [ ] `high`
 
 ##### Fast mode checklist (select one for this model)
 
 - [ ] `fast` (selector entry)
-- [x] `standard`
+- [ ] `standard`
 
 #### `antigravity-gemini-3.7-flash`
 
@@ -523,7 +523,7 @@ dispatchability.
 
 #### `opencode-go-deepseek-v4.1-flash`
 
-- [ ] **Model** `opencode-go-deepseek-v4.1-flash` - provider `opencode-go`;
+- [x] **Model** `opencode-go-deepseek-v4.1-flash` - provider `opencode-go`;
   transport `opencode-cli`; model ID `deepseek-v4.1-flash`; OpenCode config ID
   `opencode-go/deepseek-v4.1-flash`; availability
   `account/adapter/runtime-check required`; source
@@ -536,7 +536,7 @@ dispatchability.
 - [ ] `default` (TUI label: **Default**; sends no explicit variant)
 - [ ] `low`
 - [ ] `high`
-- [ ] `max`
+- [x] `max`
 
 OpenCode Go's provider metadata declares `low`, `high` and `max` variants for
 this model. OpenCode v1.18.30's TUI adds a synthetic `Default` choice; selecting
