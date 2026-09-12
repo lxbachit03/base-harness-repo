@@ -133,9 +133,14 @@ state. Herdr idle/done is only a cue to inspect the receipt.
 Read [task-contract.md](references/task-contract.md) for restart, missing receipt,
 blocked state and ambiguous delivery. Inspect the matching attempt ID and required
 artifacts, reject stale or incomplete evidence, then independently run the actual
-task acceptance checks. For a tight handoff, read the receipt and output diff
-first; fetch a terminal transcript only when the receipt or state is ambiguous.
-Worker prose, check claims and artifact presence alone are insufficient.
+task acceptance checks. Use receipt-first observation for a tight handoff: after a
+settled successful state, read the matching receipt and output diff, then run one
+proportional acceptance pass; do not fetch terminal output on that path. If the
+lifecycle, receipt or artifact evidence is ambiguous, use one bounded recent
+snapshot (at most 80 lines in text format) and keep the attempt pending when it
+does not resolve the ambiguity. A full terminal transcript is incident-only and
+requires explicit User authority. Worker prose, check claims and artifact
+presence alone are insufficient.
 
 Only Bale marks an attempt accepted after checking identity, current artifact
 contents, allowed diff and verification output. Integrate accepted changes in

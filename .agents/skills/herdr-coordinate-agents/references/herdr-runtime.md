@@ -169,10 +169,21 @@ and ask for the missing decision. Use deliberate keys only after that inspection
 Herdr does not identify individual turns. A wait may be satisfied by earlier work;
 matching task/attempt receipts and actual acceptance checks establish completion.
 `pane wait-output` may match old text immediately. An unknown state or a read
-error is not terminal failure. For a tight handoff, inspect the matching receipt
-and output files first; fetch only a short visible snapshot when they are missing
-or the lifecycle state is ambiguous. Large transcript reads may be unavailable
-while working.
+error is not terminal failure. Use receipt-first observation: on a settled success,
+inspect the matching receipt and output files, then finish the proportional
+acceptance check without calling `agent read`. When the receipt, lifecycle state
+or artifacts are ambiguous, fetch one bounded recent snapshot instead:
+
+```text
+herdr agent read <TARGET> --source recent --lines 80 --format text
+```
+
+If that snapshot cannot resolve the ambiguity, keep the attempt pending and
+report the missing evidence. Full or unbounded transcript reads are
+incident-only and require explicit User authority. The installed `agent prompt
+--help` has no `--quiet` option, so retain only its state/exit evidence in the
+coordinator ledger and do not replay terminal prose into the context. Large
+transcript reads may be unavailable while working.
 
 On the tested Windows preview, `agent prompt` sometimes left the exact text in
 Codex's input composer without starting a turn. After passively confirming that

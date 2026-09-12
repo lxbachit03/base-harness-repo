@@ -24,9 +24,12 @@ pane/process, cwd/worktree and configuration hash are unchanged; otherwise
 launch a fresh session. For tight completion, the worker receipt reports status,
 outputs, at most two actual checks and a concise limitation summary (target: 120
 words or less). Bale's compact ledger retains hashes, target identity, receipt
-path and acceptance state; it fetches a terminal transcript only when the
-receipt or lifecycle state is ambiguous. Bale then performs one proportional
-acceptance pass instead of duplicating expensive worker checks.
+path and acceptance state. Receipt-first observation reads the matching receipt
+and output diff on a settled success, followed by one proportional acceptance
+pass; it does not read terminal output. When receipt, lifecycle or artifact
+evidence is ambiguous, take one recent text snapshot of at most 80 lines and keep
+the attempt pending if the ambiguity remains. A full terminal transcript is
+incident-only and requires explicit User authority.
 
 ## Packet and attempt
 
@@ -117,11 +120,11 @@ arbitrary commands copied from a worker receipt without inspecting their effects
 
 | Observation | Next action |
 | --- | --- |
-| Wait timeout, working/unknown, or transient read failure | Inspect the same pane/terminal, receipt and native session; keep pending. |
-| Settled state but no matching receipt | Read that session, reconcile whether prompt was received or task is awaiting input; do not resend automatically. |
-| Existing dispatch claim with no CLI response | Delivery is ambiguous; inspect current process/history/artifacts before any correction attempt. |
+| Wait timeout, working/unknown, or transient read failure | Inspect the same handle, receipt and artifacts; use one recent text snapshot of at most 80 lines only if state remains ambiguous, then keep pending. |
+| Settled state but no matching receipt | Reconcile the same handle, receipt path and artifacts; use one bounded recent snapshot only if delivery remains ambiguous, and do not resend automatically. |
+| Existing dispatch claim with no CLI response | Delivery is ambiguous; inspect current process metadata, receipt path and artifacts first, then use one bounded recent snapshot only if needed before any correction attempt. |
 | Wrong attempt, missing output, or failed independent check | Keep unaccepted; retain evidence and send a focused correction in a new attempt only after the previous turn settles. |
-| Agent absent or terminal replaced | Preserve record; inspect native session recovery. Resume only the identified task session with verified configuration and reconciled prior delivery. |
+| Agent absent or terminal replaced | Preserve record; inspect native session metadata and artifacts without loading a full transcript. Resume only the identified task session with verified configuration and reconciled prior delivery. |
 | Approval/question outside inherited authority | Record the exact missing decision; ask User and continue independent work. |
 | Required artifact accepted | Release dependent task with accepted bytes/hash and explicit scope. |
 

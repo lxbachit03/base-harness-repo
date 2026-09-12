@@ -50,9 +50,13 @@ single-output task, use one `tight` handoff, a compact task-specific prompt, one
 bounded wait, and one proportional acceptance pass. Read the catalog and routing
 context once per unchanged session, retain their hashes, and do not paste their
 prose into a worker prompt. Prefer the matching idle worker when identity,
-worktree and configuration evidence are unchanged. Inspect the matching receipt
-and output diff rather than replaying a full terminal transcript. Fast/standard
-remains provider-specific and must be proven natively.
+worktree and configuration evidence are unchanged. Use receipt-first observation:
+inspect the matching receipt and output diff after a settled success, without
+calling `agent read`. If receipt, lifecycle or artifact evidence is ambiguous,
+read one recent text snapshot capped at 80 lines; keep the attempt pending when
+that does not resolve the ambiguity. Full terminal transcripts are incident-only
+and require explicit User authority. Fast/standard remains provider-specific and
+must be proven natively.
 
 When a model entry lists more than one provider model ID, BALE must resolve and
 record the exact ID used for the attempt. Effort labels do not select an ID
