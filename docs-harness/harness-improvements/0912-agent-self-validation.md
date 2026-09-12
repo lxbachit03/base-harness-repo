@@ -16,8 +16,8 @@ REFERENCES:
 - .agents/skills/domain-audit/SKILL.md
 - .agents/skills/onboard-repository/SKILL.md
 - .agents/skills/audit-onboarding-proposal/SKILL.md
-- .harness-core/base/.agents/skills/onboard-repository/SKILL.md
-- .harness-core/base/.agents/skills/audit-onboarding-proposal/SKILL.md
+- [historical snapshot removed 2026-09-13] .harness-core/base/.agents/skills/onboard-repository/SKILL.md
+- [historical snapshot removed 2026-09-13] .harness-core/base/.agents/skills/audit-onboarding-proposal/SKILL.md
 - docs-harness/plans/active/0906-behavior-parity-audit.md
 - .gitignore
 

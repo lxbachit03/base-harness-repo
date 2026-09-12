@@ -67,13 +67,6 @@ Read applicable instructions and the smallest repository map available. Record
 pre-existing dirt before doing anything else. If instructions conflict, follow
 the narrower instruction and report the conflict.
 
-When `.harness-core/manifest.json` exists and an installed managed file
-conflicts with `.harness-core/base/<path>`, treat the installed file as active
-instructions for the current run. For a correction proposal, verify the base
-file against its manifest checksum and show the conflict. Propose replacing
-only content inside managed markers and preserve all consumer-owned content
-outside them. Do not treat the managed base as permission to edit.
-
 A checksum-verified conflict in an active mandatory instruction that caused a
 failed, unavailable, or unsafe command is the first proposal priority. Preview
 that correction before proposing additive documentation elsewhere.
