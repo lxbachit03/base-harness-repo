@@ -14,8 +14,8 @@ REFERENCES:
 - docs/WORKFLOWS.md
 - docs/AI_PROBLEMS.md
 - .agents/skills/domain-audit/SKILL.md
-- .agents/skills/onboard-repository/SKILL.md
-- .agents/skills/audit-onboarding-proposal/SKILL.md
+- [removed 2026-09-13 by #023_IMPROVE_HARNESS_0913] .agents/skills/onboard-repository/SKILL.md
+- [removed 2026-09-13 by #023_IMPROVE_HARNESS_0913] .agents/skills/audit-onboarding-proposal/SKILL.md
 - [historical snapshot removed 2026-09-13] .harness-core/base/.agents/skills/onboard-repository/SKILL.md
 - [historical snapshot removed 2026-09-13] .harness-core/base/.agents/skills/audit-onboarding-proposal/SKILL.md
 - docs-harness/plans/active/0906-behavior-parity-audit.md

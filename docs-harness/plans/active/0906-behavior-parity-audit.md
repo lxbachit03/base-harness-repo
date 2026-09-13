@@ -48,6 +48,12 @@ validator tree and makes agent-led self-review the current Harness proof path.
 The validator paths and commands retained below are historical evidence from
 the pre-retirement audit; they are not current instructions or dependencies.
 
+Policy continuation (2026-09-13): improvement #023 removes the
+`onboard-repository` and `audit-onboarding-proposal` skills, closing the P13
+strict-onboarding activation variant by removing the protocol body. The skill
+paths in File Coverage remain historical evidence from the pre-removal audit;
+they are not current routes.
+
 ## Proposed Improvement
 
 Use the existing pure analyze/planFix seams and Node regression suite. Capture

@@ -81,7 +81,6 @@ Analyze the User prompt and match the task domain with the optimal Antigravity c
 - `improve-harness`: Run authorized improvements to Harness repo (`$improve-harness`).
 - `writing-for-agents`: Author clean, token-efficient instructions for AI agents.
 - `onboarding`: Map brownfield data flows into isolated workspaces (`docs-harness/onboarding/<flow-name>/`).
-- `onboard-repository`: Audit and map unfamiliar codebases to generate evidence bundles.
 - `xia`: Conduct deep technical research before coding.
 
 **Completion Criterion**: Exact set of tools, plugins, and target scopes determined.

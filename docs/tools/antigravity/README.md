@@ -136,8 +136,6 @@ Nằm trong thư mục `.agents/skills/`:
 - **`improve-harness`**: Thử nghiệm và nâng cấp các quy tắc của Harness repo (`$improve-harness`).
 - **`writing-for-agents`**: Chuẩn mực soạn thảo tài liệu và chỉ dẫn cho AI Agents.
 - **`onboarding`**: Khảo sát và phân tách luồng dữ liệu cho dự án brownfield thành từng thư mục độc lập (`docs-harness/onboarding/<flow-name>/`).
-- **`onboard-repository`**: Khảo sát mã nguồn dự án lớn và xuất evidence capsule.
-- **`audit-onboarding-proposal`**: Độc lập kiểm toán đề xuất onboarding trước khi áp dụng.
 - **`xia`**: Nghiên cứu kỹ thuật, tìm kiếm các mẫu thiết kế và tài liệu trước khi code.
 
 ---

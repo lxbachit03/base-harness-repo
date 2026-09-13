@@ -12,17 +12,12 @@ upstream-maintenance material only when the task explicitly needs it.
 - `decisions/`: lasting product and architecture choices.
 - `templates/decision.md`: lasting-decision template.
 - `templates/plan.md`: canonical durable execution-plan template.
-- `.agents/skills/onboard-repository/`: explicit, read-only-first brownfield
-  repository mapping and improvement proposals.
-- `.agents/skills/audit-onboarding-proposal/`: explicit independent proposal
-  and patch verification.
 
 These files are generic Harness structure. They do not select an application
 stack, replace a consumer README or architecture, fabricate validation
 commands, or require the optional SQLite control-plane lifecycle. The installed
 `harness` binary only maintains this core structure. The skills do not run
-automatically; invoke `$onboard-repository` only for the explicitly requested strict
-onboarding/evidence-bundle protocol; use `$onboarding` for a named flow.
+automatically; use `$onboarding` for a named flow.
 
 ## Consumer-Owned Truth
 
