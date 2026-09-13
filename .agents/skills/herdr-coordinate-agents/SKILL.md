@@ -6,20 +6,22 @@ description: Coordinate independent worker sessions through Herdr as Bale, using
 # Bale coordination
 
 AGENTS.md owns authority and session-role precedence. This skill owns Herdr
-coordination. Before a new launch or worker-model change, read
+coordination. When selecting or changing a worker profile, read
 [`docs-harness/HERDR-AGENTS.md`](../../../docs-harness/HERDR-AGENTS.md) after
 `docs-harness/INDEX.md`; for an unchanged reassignment, use the recorded catalog
 hash and configuration evidence and reread only on drift. That catalog is the
 user-editable source of worker configuration: use exactly one model, then complete
-only the effort and Fast checklists nested under that model when present. Prove
-the resulting effective runtime configuration. Codex workers must use the
+only the effort and Fast checklists nested under that model when present. Launch
+with the resolved profile and perform one bounded post-launch configuration check;
+do not add a separate full Herdr preflight. Codex workers must use the
 catalog's process-scoped YOLO/full-access form
 (`--dangerously-bypass-approvals-and-sandbox`; use `--yolo` only when local
 help exposes that alias; the auditable equivalent is `--sandbox danger-full-access`
-plus `--ask-for-approval never`) and prove the inherited tool/plugin/MCP
-inventory.
-Pause on zero/multiple selections, missing capability/authentication, or
-unavailable transport. Do not silently substitute a different choice. Keep the
+plus `--ask-for-approval never`). Prove an inherited tool/plugin/MCP inventory
+only when the task requires a named capability or native startup does not
+expose it.
+Pause on zero/multiple selections, a missing required capability/authentication,
+or unavailable transport. Do not silently substitute a different choice. Keep the
 primary model and the default maximum of two live workers until the User changes
 those limits. Worker model/effort/Fast selections are pass-through inputs; the
 lean path below optimizes BALE's context and tool-call cost.
@@ -95,21 +97,23 @@ not a model-token guarantee. Keep a compact coordinator ledger with only hashes,
 target identity, receipt path and acceptance state; do not reload unchanged
 policy prose.
 
-## 3. Launch, prove configuration, then submit once
+## 3. Launch, perform one bounded post-launch check, then submit once
 
 Use the runtime reference to reuse an idle worker only when its pane, terminal,
-cwd/worktree, provider, model, effort/Fast and permission evidence still match
-the task. Otherwise create an owned pane and launch a fresh worker with the role
-and transport selected in `HERDR-AGENTS.md` set before its first task. Record
-returned IDs and verify working directory, terminal identity, selected
-provider/model, and any scoped reasoning-effort or Fast configuration values,
-the effective permission profile, and the redacted tool/plugin/MCP inventory. A
-Codex worker is not ready for submission until native output proves YOLO/full
-access (or the equivalent `danger-full-access` and approval policy `never`).
-The current runtime reference documents a Codex launch path; a profile for
-another provider is dispatchable only after its Herdr adapter is independently
-proven. An unsupported or unprovable selected profile pauses dependent work;
-report the gap without silently substituting another configuration.
+cwd/worktree and resolved profile are already known to match the task. Otherwise
+create an owned pane and launch a fresh worker with the role, transport and
+process-scoped permission form selected in `HERDR-AGENTS.md`. Do not block the
+launch on a broad plugin/MCP inventory or a repeated catalog read. After the
+process starts, perform one bounded check of working directory, terminal
+identity, selected provider/model, scoped effort/Fast values when applicable,
+and the effective permission profile. Record a capability inventory only when
+the task requires a named plugin/MCP or the provider exposes it as part of
+startup; never run a side-effecting discovery command to manufacture evidence.
+A Codex worker is not ready for submission until native output proves
+YOLO/full access (or the equivalent `danger-full-access` and approval policy
+`never`). The current runtime reference documents provider launch paths; an
+unsupported or mismatched profile pauses task submission without silently
+substituting another configuration.
 
 Use Herdr's native `agent prompt` exactly once for each reconciled attempt. For a
 `tight` handoff, prefer one bounded call with `--wait --until done --timeout 60000`;

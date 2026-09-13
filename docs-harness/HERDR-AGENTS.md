@@ -1,9 +1,10 @@
 # Herdr worker configuration catalog
 
 This file is BALE's user-editable model registry for Herdr workers. Read it
-after `AGENTS.md` and `docs-harness/INDEX.md` before a new Herdr launch or
-worker-model change. For a reassignment that keeps the same resolved profile,
+after `AGENTS.md` and `docs-harness/INDEX.md` when selecting or changing a
+Herdr worker profile. For a reassignment that keeps the same resolved profile,
 reuse the recorded catalog hash and configuration evidence; reread on drift.
+A profile selection is launch input, not a separate full Herdr preflight gate.
 A checkbox is a user choice; it is not proof that the current Herdr installation
 can launch that profile.
 
@@ -26,9 +27,12 @@ can launch that profile.
 3. These choices are model-scoped, not global. Do not combine an effort or
    Fast value copied from another model section, and do not add an option that
    the model's source does not list.
-4. Prove the effective model ID, effort (when applicable), speed/Fast state
-   (when applicable), provider, transport, and permission/capability state in
-   native runtime output before submission. The current repository has a Codex
+4. Launch the selected profile with its process-scoped permission form, then
+   perform one bounded post-launch check of the effective model ID, effort (when
+   applicable), speed/Fast state (when applicable), provider, transport and
+   permission state before submission. Inspect a capability only when the task
+   requires a named plugin/MCP or the provider exposes it at startup. The
+   current repository has a Codex
    adapter and a bounded Antigravity calculator trial; an Antigravity profile
    is dispatchable only after its native permission/configuration proof is
    complete, and direct Claude entries remain catalog-only until an adapter is
@@ -43,13 +47,15 @@ can launch that profile.
 6. The primary session remains BALE's current model. This registry selects
    workers only; the default maximum remains two live workers.
 
-Completion criterion: a worker is dispatchable only when exactly one model is
+Completion criterion: a worker is dispatchable when exactly one model is
 selected, every required checklist nested under that model has exactly one
-selection, the resulting transport is supported, the permission/capability
-contract is proven, and effective configuration evidence is captured before
-submission. For delegated code, runtime-affecting assets or runtime-configuration
-output, acceptance also requires the Bale code-review gate in the Herdr task
-contract.
+selection, the resulting transport is supported, the launch starts with the
+selected process-scoped permission form, and one bounded post-launch check
+captures the effective configuration before submission. A required named
+capability must also be present or the task pauses; broad capability inventory
+is not a launch gate. For delegated code, runtime-affecting assets or
+runtime-configuration output, acceptance also requires the Bale code-review
+gate in the Herdr task contract.
 
 ## Latency and token guidance
 
@@ -57,9 +63,11 @@ This section targets BALE orchestrator context and tool-call overhead; it does
 not change the User's worker model, effort or Fast selections. For a bounded,
 single-output task, use one `tight` handoff, a compact task-specific prompt, one
 bounded wait, and one proportional acceptance pass. Read the catalog and routing
-context once per unchanged session, retain their hashes, and do not paste their
-prose into a worker prompt. Prefer the matching idle worker when identity,
-worktree and configuration evidence are unchanged. Use receipt-first observation:
+context only when selecting/changing a profile, retain their hashes, and do not
+paste their prose into a worker prompt. Prefer the matching idle worker when
+identity, worktree and resolved launch input are unchanged. There is no separate
+full Herdr preflight: launch first, then perform one bounded native configuration
+check before prompt delivery. Use receipt-first observation:
 inspect the matching receipt and output diff after a settled success, without
 calling `agent read`. If receipt, lifecycle or artifact evidence is ambiguous,
 read one recent text snapshot capped at 80 lines; keep the attempt pending when
@@ -100,19 +108,21 @@ a task-owned trusted worktree is an operating boundary, not an OS sandbox:
   inherits the selected Codex host's built-in tools, enabled plugins, skills,
   and configured MCP servers. MCP servers and external plugins retain their
   own authentication and tool-level policies.
-- Before dispatch, inspect the same `CODEX_HOME` used by the worker with
-  `codex plugin list` and `codex mcp list`. Record only names, enabled state,
-  and authentication status; never copy tokens into task evidence. If a
-  required capability is absent or unauthenticated, pause instead of
-  claiming that full permission created it.
+- After launch, inspect the same `CODEX_HOME` used by the worker with
+  `codex plugin list` and `codex mcp list` only when the task requires a named
+  plugin/MCP or startup does not expose the needed capability. Record only
+  names, enabled state and authentication status; never copy tokens into task
+  evidence. If a required capability is absent or unauthenticated, pause
+  instead of claiming that full permission created it.
 - For a non-Codex provider, BALE must use that provider's documented full-access
   adapter and equivalent capability inventory. Do not pass Codex flags to an
   Antigravity or Claude process.
 
-Dispatch gate: the selected worker must show the requested model/effort/Fast
-values, its provider-native full-access and approval state, and the observed
-tool/plugin/MCP inventory in configuration evidence before the task prompt is
-submitted. For Codex this means YOLO/bypass mode, or the equivalent
+Dispatch gate: after launch, the selected worker must show the requested
+model/effort/Fast values and its provider-native full-access and approval state
+in one bounded configuration check before the task prompt is submitted. Add a
+tool/plugin/MCP inventory only for a named required capability or when native
+startup exposes it. For Codex this means YOLO/bypass mode, or the equivalent
 `danger-full-access` plus approval policy `never`; other providers must show the
 equivalent native state from a proven adapter.
 
@@ -123,12 +133,12 @@ the child agent permission or install its tools. The provider must expose a
 verified adapter before BALE may dispatch it. These are the provider-native
 full-access requests to use when such an adapter is added:
 
-| Herdr kind | Provider-native request | Native proof and capability inventory | Current repository status |
+| Herdr kind | Provider-native request | Native post-launch proof; capability only when required | Current repository status |
 | :--- | :--- | :--- | :--- |
 | `codex` | `--dangerously-bypass-approvals-and-sandbox`; use `--yolo` only if local help exposes the alias; equivalent pair `--sandbox danger-full-access --ask-for-approval never` | Codex `/status` + `/permissions`; `codex plugin list`; `codex mcp list` in the worker's `CODEX_HOME` | Dispatch path implemented; process-scoped YOLO/full-access required |
 | `agy` | `--dangerously-skip-permissions`; keep terminal sandbox disabled when host-level access is intended | Antigravity headless `stream-json` `init.permission_mode` and `tools`; `agy plugin list`; `agy mcp list`; inspect `settings.json` deny/managed rules and `allowNonWorkspaceAccess` | Bounded calculator trial completed 2026-09-12; complete permission/configuration proof remains per profile |
 | `claude` | `--dangerously-skip-permissions` (equivalent to `--permission-mode bypassPermissions`) | Claude `/permissions` or native startup output; `claude plugin list`; `claude mcp list`; inspect managed/project deny rules and authentication | Herdr kind is documented, but Claude CLI is not installed in the current runtime |
-| `opencode` | Documented `--auto` (root TUI or `run`); auto-approves permissions not explicitly denied. OpenCode v1.18.30 also has hidden aliases `--yolo` and `--dangerously-skip-permissions`, but do not make them the default | Native startup screen/process command proving auto state and selected model/variant; `opencode mcp list`; no separate plugin-list command is exposed | Bounded OpenCode Go replay passed 2026-09-13 with documented `--auto`; account/adapter/capability proof remains per profile |
+| `opencode` | Documented `--auto` (root TUI or `run`); auto-approves permissions not explicitly denied. OpenCode v1.18.30 also has hidden aliases `--yolo` and `--dangerously-skip-permissions`, but do not make them the default | Native post-launch screen/process command proving auto state and selected model/variant; run `opencode mcp list` only for a named MCP requirement; no separate plugin-list command is exposed | Bounded OpenCode Go replay passed 2026-09-13 with documented `--auto`; account/adapter/capability proof remains per profile |
 
 The Antigravity and Claude requests still do not override explicit deny rules,
 managed policy, provider authentication, or an MCP server's own access policy.
@@ -496,9 +506,12 @@ These profiles use the OpenCode Go provider and its OpenAI-compatible endpoint,
 not the Herdr `--kind codex` path. The installed Herdr preview accepts
 `--kind opencode`; a bounded replay on `2026-09-13` launched the worker and
 proved the native model/variant screen and artifact receipt in an isolated
-worktree. On Windows the replay needed a task-local executable shim because
-Herdr's `Start-Process opencode` resolved `opencode.ps1`; this is environment
-evidence, not a global adapter installation. The exact OpenCode configuration form
+worktree. On Windows use
+`.agents/skills/herdr-coordinate-agents/scripts/prepare-opencode-windows.ps1`
+to create a task-local `opencode.cmd` shim and pass its returned `path` as the
+new workspace's process-scoped PATH. This avoids Herdr's `Start-Process
+opencode` resolving `opencode.ps1`; it is environment preparation, not a global
+adapter installation. The exact OpenCode configuration form
 is `opencode-go/<model-id>`; the provider endpoint is
 `https://opencode.ai/zen/go/v1` and the current model list is available from
 `https://opencode.ai/zen/go/v1/models`. The five entries below are the only

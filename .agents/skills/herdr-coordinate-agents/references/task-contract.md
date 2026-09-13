@@ -63,9 +63,12 @@ Write `job.json` in a new coordinator-owned attempt directory with:
 
 Fill values from observed state. Capture the selected model entry and only the
 effort/Fast entries nested under that model (when present), the resulting
-provider/transport, the effective model/effort/Fast values, the process-scoped
-permission profile and approval policy, and a redacted tool/plugin/MCP
-inventory in the configuration evidence before submission. Bale checks that the
+provider/transport and intended process-scoped permission form in the launch
+input. After the worker starts, complete one bounded post-launch check and add
+the effective model/effort/Fast values and approval policy to configuration
+evidence. Record a redacted tool/plugin/MCP inventory only when the task
+requires a named capability or the provider exposes it as part of startup; do
+not run a broad preflight just to populate this field. Bale checks that the
 evidence exists and what it proves. List every immutable
 packet/dependency input referred to by the prompt in context_files; use an empty
 list only for a self-contained
@@ -78,7 +81,8 @@ configuration evidence.
 Do not put catalog, AGENTS.md or INDEX.md prose into the prompt. Reference those
 files for a new worker's one-time role/context read; a reused session may retain
 that context when their revision/hash is unchanged. Provide Bale's resolved
-model, effort/Fast and permission evidence as configuration input.
+model, effort/Fast and launch permission input, then attach the bounded
+post-launch effective evidence before prompt delivery.
 For a tight prompt, state a bounded timebox, a correction cap, the concise
 receipt fields and the absolute receipt path; require the worker to write that
 JSON before its terminal summary. These constrain coordination work but do not

@@ -24,8 +24,10 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    [`docs-harness/HERDR-AGENTS.md`](../../../../docs-harness/HERDR-AGENTS.md)
    and select exactly one model. For an unchanged reassignment, use the
    recorded catalog hash and configuration evidence and reread only on drift.
-   Then use only the effort and Fast checklists
-   nested under that model, selecting one value in each checklist that exists.
+   Then use only the effort and Fast checklists nested under that model,
+   selecting one value in each checklist that exists. This is launch input, not
+   a separate full preflight: do not repeat broad capability discovery before
+   the worker process exists.
    Omit unsupported settings when the catalog explicitly omits that section.
    For a continuous effort range, record the exact numeric value selected and
    pass it through the provider-native adapter; never pass the range label as
@@ -90,17 +92,22 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    Codex full-access form (YOLO or the equivalent pair); do not pass both.
    Record the trusted task worktree or external sandbox because YOLO removes
    the local filesystem/network boundary.
-   Before submission, run `codex plugin list` and `codex mcp list` in the same
-   `CODEX_HOME` context and record the redacted capability inventory. Full
-   local access does not install or authenticate plugins/MCP servers.
+   After launch, inspect `codex plugin list` and `codex mcp list` only when the
+   task requires a named plugin/MCP or the worker's native startup does not
+   already expose the needed capability. Full local access does not install or
+   authenticate plugins/MCP servers; a missing required capability still pauses
+   submission.
 
    The installed Herdr preview also accepts `--kind opencode`. A 2026-09-13
    OpenCode Go replay proved this path in a task-owned worktree with native
-   model/variant output and a completed receipt. On Windows, first verify that
-   `Start-Process opencode` resolves to a runnable executable: the default
-   `opencode.ps1` wrapper can fail with `%1 is not a valid Win32 application`.
-   If needed, use only a task-local shim that invokes the installed executable;
-   never rename or overwrite global wrappers. OpenCode v1.18.30's root TUI does
+   model/variant output and a completed receipt. On Windows, run
+   `.agents/skills/herdr-coordinate-agents/scripts/prepare-opencode-windows.ps1`
+   once for the task before creating the worker workspace. Pass its JSON `path`
+   value as the workspace's process-scoped `--env PATH=<value>` and keep the
+   returned shim directory in the attempt evidence. The helper selects an
+   `opencode.cmd`/`.exe` entry and never uses or edits `opencode.ps1`; do not
+   rename or overwrite global wrappers. This is launch preparation, not a
+   capability preflight. OpenCode v1.18.30's root TUI does
    not accept `--variant`; select a provider variant through its native TUI
    state or the supported `opencode run --variant` path, and record the
    effective value. When the User has authorized automatic permission approval,
@@ -110,9 +117,9 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    managed deny rules. OpenCode v1.18.30 also accepts hidden `--yolo` and
    `--dangerously-skip-permissions` aliases, but those aliases are not the
    catalog default and must not be assumed on another version. `opencode mcp
-   list` is the available capability check in this CLI; no plugin-list command
-   is exposed, so record that limitation and do not install an integration
-   merely to make detection appear ready.
+   list` is the available capability check in this CLI when the task requires
+   MCP evidence; no plugin-list command is exposed, so record that limitation
+   and do not install an integration merely to make detection appear ready.
 
    For Antigravity, record the native execution mode, the Fast/standard
    indicator, terminal-sandbox setting, `allowNonWorkspaceAccess`, and the
@@ -164,19 +171,20 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    global changes are excluded, use an isolated worktree of an already-trusted
    repository or pause. Per-process trust overrides did not suppress onboarding
    in the initial trial and are not a verified workaround.
-   Before work, capture the real session's `/status`, `/permissions`, and
-   `/fast status` (when Fast exists), or equivalent native configuration views.
-   An unchanged reused worker may carry forward those captured views after a
-   lifecycle, identity and cwd/worktree check; recapture on process or config drift.
-   Check the selected model, any scoped effort/speed values, full-access mode,
-   and approval policy are effective rather than merely present in a requested
-   command. Record native session ID where available. If output cannot establish
-   the selected settings, permission state, capability inventory, or adapter,
-   pause task submission and report the missing proof. Do not ask the model to
-   infer its own configuration as evidence. The first worker call must also
-   report its effective `HARNESS_ROLE` and cwd. For a tight handoff, do not
-   reread the full catalog or repeat unchanged capability discovery; the
-   coordinator's resolved configuration evidence is the source of truth.
+   After startup, perform one bounded post-launch check using `/status`,
+   `/permissions`, `/fast status` (when Fast exists), or the provider's native
+   equivalent. An unchanged reused worker may carry forward that check after a
+   lifecycle, identity and cwd/worktree check; recapture on process or config
+   drift. Check the selected model, any scoped effort/speed values, full-access
+   mode and approval policy as effective values, not merely requested flags.
+   Record a native session ID where available. Enumerate capabilities only when
+   the task requires a named plugin/MCP or native startup does not expose it.
+   If output cannot establish the selected settings, cwd, permission state or
+   required capability, pause task submission and report the missing proof. Do
+   not ask the model to infer its own configuration as evidence. The first
+   worker call must also report its effective `HARNESS_ROLE` and cwd. For a
+   tight handoff, do not reread the full catalog or repeat unchanged discovery;
+   the coordinator's resolved launch input is the source of truth.
 
 ## Read and wait
 
