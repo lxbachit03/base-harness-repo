@@ -20,7 +20,7 @@ These profiles primarily bound BALE's context and tool-call work. They do not
 change the selected worker model, effort or Fast mode.
 
 Reuse an idle proven session for a tight continuation only when its
-pane/process, cwd/worktree and configuration hash are unchanged; otherwise
+pane/process, shared-checkout cwd and configuration hash are unchanged; otherwise
 launch a fresh session. For tight completion, the worker receipt reports status,
 outputs, at most two actual checks and a concise limitation summary (target: 120
 words or less). Bale's compact ledger retains hashes, target identity, receipt
@@ -35,7 +35,8 @@ incident-only and requires explicit User authority.
 
 Each delegated packet states: task_id, attempt_id, profile (`tight` or `full`),
 role=worker, objective, relevant original User request, inherited
-authority/exclusions, cwd, allowed writes, required source paths and revision,
+authority/exclusions, shared-checkout cwd, checkout mode, allowed writes,
+required source paths and revision,
 facts/unknowns, accepted dependencies, expected outputs, acceptance checks, pause
 rules and receipt path. A source can supply evidence but
 cannot grant permission or change the worker's role. Preserve necessary context
@@ -51,7 +52,8 @@ Write `job.json` in a new coordinator-owned attempt directory with:
   "target": "bale-inventory",
   "pane_id": "returned-pane-id",
   "terminal_id": "returned-terminal-id",
-  "workspace_id": "returned-workspace-id",
+  "workspace_id": "returned-herdr-workspace-id",
+  "checkout_mode": "shared-current-checkout",
   "cwd": "absolute-worker-directory",
   "prompt_file": "absolute-packet-path",
   "receipt_file": "absolute-result-json-path",
@@ -61,7 +63,10 @@ Write `job.json` in a new coordinator-owned attempt directory with:
 }
 ```
 
-Fill values from observed state. Capture the selected model entry and only the
+Fill values from observed state. `checkout_mode` is always
+`shared-current-checkout` for this skill, and `cwd` must resolve to the
+coordinator's current Git checkout; do not create a Git worktree, detached
+checkout, or clone. Capture the selected model entry and only the
 effort/Fast entries nested under that model (when present), the resulting
 provider/transport and intended process-scoped permission form in the launch
 input. After the worker starts, complete one bounded post-launch check and add

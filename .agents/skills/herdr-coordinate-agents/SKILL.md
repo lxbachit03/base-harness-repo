@@ -23,8 +23,13 @@ expose it.
 Pause on zero/multiple selections, a missing required capability/authentication,
 or unavailable transport. Do not silently substitute a different choice. Keep the
 primary model and the default maximum of two live workers until the User changes
-those limits. Worker model/effort/Fast selections are pass-through inputs; the
-lean path below optimizes BALE's context and tool-call cost.
+those limits. Herdr workspaces are terminal panes, not Git worktrees: every
+worker uses the coordinator's current checkout as its `cwd`. Never create or
+select a Git worktree, detached checkout, or clone for coordination. Serialize
+write-capable workers on the shared checkout; parallel workers are allowed only
+for read-only work or explicitly disjoint output paths. Worker model/effort/Fast
+selections are pass-through inputs; the lean path below optimizes BALE's context
+and tool-call cost.
 
 ## 1. Identify the session and choose the work
 
@@ -62,11 +67,15 @@ Before delegation read [task-contract.md](references/task-contract.md), then
 write the task packet and coordinator-owned attempt record in task working
 memory. Use an existing plan/ticket/improvement record as the owner; do not make
 a competing task registry. Keep runtime scratch outside canonical docs routes.
-Prepare a distinct session for unrelated work. Continue the same task in its
-existing session, with a new attempt only after reconciling the previous one.
+Prepare a distinct Herdr pane for unrelated work, but keep its `cwd` at the
+current checkout. Continue the same task in its existing session, with a new
+attempt only after reconciling the previous one. Do not create a Git worktree,
+detached checkout, or clone to obtain that pane.
 
-Give parallel writers separate owned paths or isolated worktrees. If they need
-the same files, serialize them or integrate isolated changes in dependency order.
+Give each worker explicit allowed paths. If workers would write overlapping files
+or shared repository metadata, serialize them on the shared checkout. Parallel
+workers may share the checkout only when they are read-only or their output roots
+are provably disjoint and the acceptance diff is checked against both scopes.
 The packet is ready when it contains all contract fields and the worker can
 verify its outcome without guessing User intent or inheriting unrelated rights.
 
@@ -100,13 +109,14 @@ policy prose.
 ## 3. Launch, perform one bounded post-launch check, then submit once
 
 Use the runtime reference to reuse an idle worker only when its pane, terminal,
-cwd/worktree and resolved profile are already known to match the task. Otherwise
-create an owned pane and launch a fresh worker with the role, transport and
-process-scoped permission form selected in `HERDR-AGENTS.md`. Do not block the
-launch on a broad plugin/MCP inventory or a repeated catalog read. After the
-process starts, perform one bounded check of working directory, terminal
-identity, selected provider/model, scoped effort/Fast values when applicable,
-and the effective permission profile. Record a capability inventory only when
+checkout `cwd` and resolved profile are already known to match the task. Otherwise
+create an owned pane in the current checkout and launch a fresh worker with the
+role, transport and process-scoped permission form selected in `HERDR-AGENTS.md`.
+Do not block launch on a broad plugin/MCP inventory or a repeated catalog
+read. After the process starts, perform one bounded check of working directory,
+terminal identity, selected provider/model, scoped effort/Fast values when
+applicable, and the effective permission profile. Record a capability inventory
+only when
 the task requires a named plugin/MCP or the provider exposes it as part of
 startup; never run a side-effecting discovery command to manufacture evidence.
 A Codex worker is not ready for submission until native output proves

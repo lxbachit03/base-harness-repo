@@ -14,6 +14,7 @@ docs-harness/harness-improvements/*
 !docs-harness/harness-improvements/0913-opencode-go-model-catalog.md
 !docs-harness/harness-improvements/0913-opencode-windows-launch-and-lean-herdr.md
 !docs-harness/harness-improvements/0913-remove-strict-onboarding-skills.md
+!docs-harness/harness-improvements/0919-herdr-shared-checkout.md
 !docs-harness/HERDR-AGENTS.md
 !docs-harness/plans/
 docs-harness/plans/*

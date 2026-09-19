@@ -12,14 +12,16 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    bale`; rename only the current agent when that name is free, or retain it when
    already bound to the same terminal. Do not take another terminal's alias.
 2. Record the current pane/terminal, repo baseline and owned trial paths. Create
-   each worker workspace with explicit cwd and `--no-focus --env HARNESS_ROLE=worker`.
-   Parse the returned root pane ID; never predict IDs. Record creation output
-   before the next mutation. On Windows verify cwd at launch; later shell `cd`
-   tracking may be incomplete. Use a task-owned directory/worktree for writers.
-   For full-access workers, prefer a task-owned detached worktree when the scope
-   is broader than an explicitly authorized output root; a narrowly scoped main
-   checkout may be reused only with User authority for that write boundary.
-   Keep product output roots separate from coordinator packet and receipt files.
+   each Herdr terminal workspace with `--cwd <current-checkout>` and
+   `--no-focus --env HARNESS_ROLE=worker`. A Herdr workspace is a terminal pane,
+   not a Git worktree. Never run `git worktree`, create a detached checkout, or
+   clone the repository for coordination. Parse the returned root pane ID; never
+   predict IDs. Record creation output before the next mutation. On Windows
+   verify cwd at launch; later shell `cd` tracking may be incomplete. Serialize
+   write-capable workers on the shared checkout; parallel workers need
+   read-only or explicitly disjoint allowed paths. For full-access workers,
+   require User authority for the exact shared-checkout write boundary and keep
+   product output roots separate from coordinator packet and receipt files.
 3. For a new launch or worker-model change, read
    [`docs-harness/HERDR-AGENTS.md`](../../../../docs-harness/HERDR-AGENTS.md)
    and select exactly one model. For an unchanged reassignment, use the
@@ -90,8 +92,8 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    adapter requires a different form, and record the equivalent effective
    values. Never pass a non-Codex model ID to `--kind codex`. Use exactly one
    Codex full-access form (YOLO or the equivalent pair); do not pass both.
-   Record the trusted task worktree or external sandbox because YOLO removes
-   the local filesystem/network boundary.
+   Record the trusted current checkout and exact write boundary because YOLO
+   removes the local filesystem/network boundary.
    After launch, inspect `codex plugin list` and `codex mcp list` only when the
    task requires a named plugin/MCP or the worker's native startup does not
    already expose the needed capability. Full local access does not install or
@@ -99,8 +101,9 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    submission.
 
    The installed Herdr preview also accepts `--kind opencode`. A 2026-09-13
-   OpenCode Go replay proved this path in a task-owned worktree with native
-   model/variant output and a completed receipt. On Windows, run
+   OpenCode Go replay proved this path with native model/variant output and a
+   completed receipt; that replay is historical evidence, not a separate
+   checkout requirement. On Windows, run
    `.agents/skills/herdr-coordinate-agents/scripts/prepare-opencode-windows.ps1`
    once for the task before creating the worker workspace. Pass its JSON `path`
    value as the workspace's process-scoped `--env PATH=<value>` and keep the
@@ -126,7 +129,7 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    applicable deny/managed rules once in configuration evidence. Treat a status
    label such as `OFF` as standard only when the installed CLI/version mapping
    proves that interpretation. A reused worker may carry forward this evidence
-   only when its pane/process, cwd/worktree and configuration hash are unchanged.
+   only when its pane/process, checkout cwd and configuration hash are unchanged.
 
    Provider-specific permission adapters are only provisional until the
    dispatcher accepts that provider and native proof is captured:
@@ -157,7 +160,7 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    proven. Record the attempt and target identity manually in the coordinator
    task record; no repository helper enforces this boundary.
    Use an argument array, not a shell-built string containing a prompt. Match
-   the task-owned worktree and inherited authority; keep global config intact.
+   the current checkout and inherited authority; keep global config intact.
    `agent start` requires an available shell pane. Inspect a startup failure in
    that same pane before deciding whether another launch is safe.
    Include the absolute task cwd in the worker's launch instructions. Require
@@ -168,13 +171,15 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    sending input. The tested preview can report ready before Codex's trust UI
    appears. Never use a prompt (even `/status`) to probe an uninspected startup
    screen: its Enter can confirm a dialog. Inspect trust effects first; when
-   global changes are excluded, use an isolated worktree of an already-trusted
-   repository or pause. Per-process trust overrides did not suppress onboarding
-   in the initial trial and are not a verified workaround.
+   global changes are excluded, keep the worker in the current checkout only
+   when its trust and write boundary are already authorized; otherwise pause.
+   Do not create a separate checkout as a workaround. Per-process trust
+   overrides did not suppress onboarding in the initial trial and are not a
+   verified workaround.
    After startup, perform one bounded post-launch check using `/status`,
    `/permissions`, `/fast status` (when Fast exists), or the provider's native
    equivalent. An unchanged reused worker may carry forward that check after a
-   lifecycle, identity and cwd/worktree check; recapture on process or config
+   lifecycle, identity and checkout-cwd check; recapture on process or config
    drift. Check the selected model, any scoped effort/speed values, full-access
    mode and approval policy as effective values, not merely requested flags.
    Record a native session ID where available. Enumerate capabilities only when

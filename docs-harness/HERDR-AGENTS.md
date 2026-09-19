@@ -65,7 +65,7 @@ single-output task, use one `tight` handoff, a compact task-specific prompt, one
 bounded wait, and one proportional acceptance pass. Read the catalog and routing
 context only when selecting/changing a profile, retain their hashes, and do not
 paste their prose into a worker prompt. Prefer the matching idle worker when
-identity, worktree and resolved launch input are unchanged. There is no separate
+identity, checkout cwd and resolved launch input are unchanged. There is no separate
 full Herdr preflight: launch first, then perform one bounded native configuration
 check before prompt delivery. Use receipt-first observation:
 inspect the matching receipt and output diff after a settled success, without
@@ -86,24 +86,28 @@ unless the catalog or provider adapter explicitly maps them.
 
 Permission is a host-runtime property, not a model property. For a Codex
 worker, the User-authorized Herdr policy is the provider's YOLO/full-host mode;
-a task-owned trusted worktree is an operating boundary, not an OS sandbox:
+the current trusted checkout with an explicit output boundary is an operating
+boundary, not an OS sandbox:
 
 - Launch with `--dangerously-bypass-approvals-and-sandbox` after Herdr's `--`
   separator. This is the canonical Codex YOLO request: it removes the
   filesystem/network sandbox and suppresses approval prompts, so the process
-  can reach paths and network resources outside the worktree. Use the `--yolo`
-  alias only when the installed `codex --help` exposes it; the current 0.153.4
+  can reach paths and network resources outside the checkout boundary. Use the
+  `--yolo` alias only when the installed `codex --help` exposes it; the current
+  0.153.4
   help exposes the long form only.
 - The equivalent auditable form is the pair `--sandbox danger-full-access`
   plus `--ask-for-approval never`; use one form or the other, not both. Native
   runtime output must prove the resulting full-access/approval state.
 - Do not put those flags in the primary session's global configuration as part
   of this catalog. Apply them to the worker process only and keep the worker
-  in a task-owned, trusted worktree. A global `config.toml` change needs a
-  separate User decision.
-- The YOLO form is high risk. Use it only for a trusted task-owned worktree or
-  an environment with an independently enforced external sandbox; it must not
-  be silently applied to the primary session or shared global configuration.
+  in the current trusted checkout with an explicit output boundary. A global
+  `config.toml` change needs a separate User decision.
+- The YOLO form is high risk. Use it only for a trusted current checkout with an
+  explicit User-authorized output boundary, or an environment with an
+  independently enforced external sandbox; coordination stays in the current
+  checkout and does not create a Git worktree. It must not be silently applied
+  to the primary session or shared global configuration.
 - Full access does not install, authenticate, or enable tools. The worker
   inherits the selected Codex host's built-in tools, enabled plugins, skills,
   and configured MCP servers. MCP servers and external plugins retain their
@@ -505,8 +509,7 @@ standard behavior only.
 These profiles use the OpenCode Go provider and its OpenAI-compatible endpoint,
 not the Herdr `--kind codex` path. The installed Herdr preview accepts
 `--kind opencode`; a bounded replay on `2026-09-13` launched the worker and
-proved the native model/variant screen and artifact receipt in an isolated
-worktree. On Windows use
+proved the native model/variant screen and artifact receipt. On Windows use
 `.agents/skills/herdr-coordinate-agents/scripts/prepare-opencode-windows.ps1`
 to create a task-local `opencode.cmd` shim and pass its returned `path` as the
 new workspace's process-scoped PATH. This avoids Herdr's `Start-Process
