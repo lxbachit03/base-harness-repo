@@ -13,6 +13,10 @@ REFERENCES:
 
 <Describe the Harness improvement outcome.>
 
+## Purposes
+
+- [ ] <Concrete reason or intended value for this improvement>
+
 ## Current State
 
 <Describe the observed current state and evidence.>

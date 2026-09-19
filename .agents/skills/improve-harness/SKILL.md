@@ -26,6 +26,16 @@ Asia/Bangkok with zero-padded month/day, for example 0906-update-index-routing.m
 Follow docs-harness/templates/README.md for the global ID, metadata and collision
 checks; use TAG: [IMPROVE_HARNESS] and index the record in that classification.
 
+Every new or continued improvement record must include a `## Purposes` section
+directly after `## Objective`. `Objective` states the observable change;
+`Purposes` records why the improvement exists and what intended value it should
+preserve or create. Write at least one concrete purpose as a checklist item
+using `- [ ]` or `- [x]`. Mark an item `[x]` only when that purpose is accepted
+or explicitly intended; leave `[ ]` for a candidate purpose awaiting User
+clarification. Checkbox state records intent, not implementation proof or
+completion. Preserve the section through reruns and completion, and do not
+invent purposes when continuing a legacy record without supporting evidence.
+
 On continuation, identify the same intervention by its objective, scope and
 existing record; update that record and preserve its ID, creation date and path.
 A different improvement gets a new record even on the same day. If its intended
@@ -80,7 +90,9 @@ relevant replay decision, record the result and set STATUS: completed in the
 same file under harness-improvements/; retain its path, ID and creation date.
 Pending replay keeps STATUS: active with the missing proof and next case.
 Legacy experiments already under plans/ retain that plan lifecycle. Preserve
-their history without retroactively claiming they passed earlier reruns.
+their history without retroactively claiming they passed earlier reruns. Before
+completion, confirm the `Purposes` checklist remains intact and distinct from
+the Objective, Scope, Validation and Result sections.
 
 Report the record path, baseline, changed owners, checks, fresh scenario results, decision, and
 limitations. If a replay exposes a defect, revise and rerun the affected case.
