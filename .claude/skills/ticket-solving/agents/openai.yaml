@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ticket Solving"
+  short_description: "Organize and solve tickets in a local workspace"
+  default_prompt: "Use $ticket-solving to process the supplied ticket file, create the matching ticket folders, and keep source and generated artifacts together."
