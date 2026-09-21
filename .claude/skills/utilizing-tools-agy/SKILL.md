@@ -1,113 +1,139 @@
 ---
 name: utilizing-tools-agy
-description: Select and execute optimal combinations of Antigravity (AGY) built-in tools, MCP servers, and specialized skills for any task. Use when asked to leverage AGY tools/MCPs effectively, with mandatory tool declaration table and seamless execution.
+description: Select and execute effective combinations of Antigravity (AGY) built-in tools, MCP plugins, skills, and subagents for a task. Use when asked to leverage AGY tools, MCPs, plugins, or skills effectively, with a mandatory capability declaration table and seamless execution.
 ---
 
 # Utilizing Antigravity (AGY) Tools, MCPs & Skills
 
-Select, declare, and execute the most effective combination of Google Antigravity (AGY) built-in core tools, MCP plugins, and specialized skills for any given task.
+Select the smallest effective combination of Antigravity capabilities, declare
+it, execute it, and leave observable proof. The current session's exposed tool
+and skill definitions are the runtime authority; this skill routes to them and
+never promises that a documented capability is enabled here.
 
-AGENTS.md owns task authority and persistent permissions. The actual runtime
-capabilities override the example tool catalog below. Use only exposed tools
-and inspect effects before external or destructive actions.
+AGENTS.md owns task authority and persistent permissions. Inspect the effects of
+an unfamiliar command before running it.
 
 ## Mandatory Response Contract
 
-Whenever this skill is triggered, you **MUST** begin the response by declaring your selected tools/MCPs/skills in a concise Markdown table, followed immediately by seamless execution:
+When this skill triggers, begin the response with a concise Markdown table
+before calling tools, then continue directly into execution:
 
 ```markdown
-### 🛠️ Selected Tools & MCPs
-| Tool / MCP / Skill Name | Purpose in this Task | Target Scope |
+### Selected AGY Capabilities
+| Tool / MCP / Plugin / Skill | Purpose in this task | Target scope |
 | :--- | :--- | :--- |
-| `<tool_name_or_plugin:skill>` | `<Concise rationale for selection>` | `<Target files, endpoints, or system modules>` |
+| `<actual_name>` | `<concise rationale>` | `<files, endpoints, or user-visible scope>` |
 ```
 
----
+Use actual exposed names. A plugin skill carries its `<plugin>:<skill>` name. If
+a skill is selected, name the skill and the concrete tool it enables. If no
+external capability is needed, declare the native tool that carries the task.
+Never invent a tool, MCP server, plugin, skill, connection, or permission.
 
-## 3-Phase Execution Workflow
+## Workflow
 
 ```text
-1. Task Classification & Tool/Skill Selection
+1. Classify the task and discover what the session actually exposes
    ↓
-2. Mandatory Tool Declaration Table
+2. Declare the selected capabilities
    ↓
-3. Seamless Execution & Proof Verification
+3. Execute the smallest useful sequence and verify with observable proof
 ```
 
-### Phase 1: Task Classification & Tool/Skill Selection
+### Phase 1: Classify & Discover
 
-Analyze the User prompt and match the task domain with the optimal Antigravity capabilities:
+Classify before selecting; every selected capability needs a concrete purpose
+and a bounded target.
 
-#### 1. Antigravity Built-in Core Tools
-- **Filesystem & Code**:
-  - `view_file`: Read specific lines or file contents with line-number precision.
-  - `replace_file_content`: Make contiguous, verified edits to existing files.
-  - `write_to_file`: Create new files or persist structured User Artifacts.
-  - `grep_search`: Scan codebase for exact patterns or regex matches across directories.
-  - `list_dir`: Inspect directory structure and file sizes.
-- **Terminal & Execution Lifecycle**:
-  - `run_command`: Run shell/PowerShell commands (tests, builds, linter, git).
-  - `manage_task`: Manage long-running background tasks (`list`, `status`, `send_input`, `kill`).
-  - `schedule`: Set one-shot timers or cron triggers for deferred wakeup (never use `sleep`).
-- **Multi-Agent Orchestration**:
-  - `invoke_subagent` / `define_subagent`: Delegate token-heavy surveys, broad searches, or isolated tasks to background subagents.
-  - `manage_subagents` / `send_message`: Coordinate active subagents.
-- **Web & Visual Synthesis**:
-  - `search_web`: Search live technical documentation and current library specifications.
-  - `read_url_content`: Fetch public web documentation as clean Markdown.
-  - `generate_image`: Create UI mockups, visual assets, or diagrams.
-- **User Interaction**:
-  - `ask_question`: Display interactive modal for clarifying ambiguous requirements or selecting design choices.
+| Task type | Preferred AGY capability |
+| :--- | :--- |
+| Read a known file | `view_file` with a line range |
+| Inspect directory layout | `list_dir` |
+| Search content across files | `grep_search` |
+| Edit an existing file | `replace_file_content` |
+| Create a file or persist an artifact | `write_to_file` |
+| Shell, build, test, git | `run_command`, within task authority |
+| Long-running process | `manage_task` (`list`, `status`, `send_input`, `kill`) |
+| Deferred or recurring wakeup | `schedule` (one-shot timer or cron) |
+| Bounded independent investigation | `invoke_subagent`; `define_subagent` for a reusable role |
+| Coordinate running subagents | `manage_subagents`, `send_message` |
+| Current web facts | `read_url_content` for a known URL, `search_web` for discovery |
+| Visual asset or mockup | `generate_image` |
+| A decision only the User can make | `ask_question` |
+| Browser automation or web debugging | `chrome-devtools-plugin` skills |
+| Modern web platform guidance | `modern-web-guidance-plugin` skills |
+| AGY configuration or SDK work | `builtin` and SDK skills |
+| Repository procedure | the matching repository workflow skill |
 
-#### 2. Antigravity MCP Plugins & Built-in Skills (`plugin:skill`)
-- **`chrome-devtools-plugin` (Chrome DevTools MCP)**:
-  - `chrome-devtools-plugin:chrome-devtools`: Browser automation, navigation, element interaction, screenshot capture.
-  - `chrome-devtools-plugin:debug-optimize-lcp`: Diagnose and optimize Largest Contentful Paint & Core Web Vitals.
-  - `chrome-devtools-plugin:memory-leak-debugging`: Diagnose and fix JS/Node.js memory leaks and heap snapshots.
-  - `chrome-devtools-plugin:a11y-debugging`: Audit and repair Web Accessibility (a11y), contrast, and ARIA labels.
-  - `chrome-devtools-plugin:troubleshooting`: Fix MCP connection and browser target issues.
-- **`modern-web-guidance-plugin`**:
-  - `modern-web-guidance-plugin:chrome-extensions`: Build and publish Chrome Extensions Manifest V3.
-  - `modern-web-guidance-plugin:modern-web-guidance`: Modern HTML5/CSS, View Transitions, modern web APIs.
-- **`builtin` Packages**:
-  - `builtin:antigravity-guide`: Reference guide for Antigravity CLI, IDE, keybindings, SDK, slash commands.
-  - `builtin:agy-customizations`: Guide to customizing Rules, Plugins, Hooks, and MCP servers.
-  - `google-antigravity-sdk:google-antigravity-sdk`: Design and orchestrate autonomous agents.
+Capability discovery rules:
 
-#### 3. Repository Governance & Workflow Skills
-- `goal-griller`: Clarify ambiguous intent into verifiable goals (`/goal`).
-- `prompt-leverage`: Upgrade raw prompts into execution-ready contracts.
-- `sequence-execution-plan`: Build dependency-aware execution plans.
-- `improve-harness`: Run authorized improvements to Harness repo (`$improve-harness`).
-- `writing-for-agents`: Author clean, token-efficient instructions for AI agents.
-- `onboarding`: Map brownfield data flows into isolated workspaces (`docs-harness/onboarding/<flow-name>/`).
-- `xia`: Conduct deep technical research before coding.
+- **Built-in tools**: trust the session's exposed tool definitions. Configuration
+  can gate a tool the release ships.
+- **Plugins and their skills**: discover from the session's exposed skill list,
+  not from memory of what a plugin usually provides. A plugin being known is not
+  a plugin being enabled in this workspace.
+- **MCP**: an MCP-backed plugin needs a reachable server and, where applicable,
+  an authenticated account before its tools do real work.
+- **Repository skills**: read the repository's own routing before selecting one,
+  so the skill and the task's authority agree.
 
-**Completion Criterion**: Exact set of tools, plugins, and target scopes determined.
+### Phase 2: Mandatory Declaration
 
----
+Render the declaration table at the top of the response before tool calls. Keep
+it small: prefer one native tool over several overlapping tools, and one
+specialist skill over a bundle of unrelated skills.
 
-### Phase 2: Mandatory Tool Declaration
+**Completion criterion**: every row has a real capability name, a task-specific
+purpose, and a bounded target scope.
 
-Render the tool declaration table directly at the top of your response before calling the tools.
+### Phase 3: Execute & Verify
 
-**Completion Criterion**: Markdown table printed with non-empty `Tool / MCP / Skill Name`, `Purpose in this Task`, and `Target Scope` columns.
+1. Inspect the target, connection, and permission state first when they are not
+   already established.
+2. Perform only authorized mutations; preserve unrelated worktree changes.
+3. Verify with an observable check: tool response, file diff, command output,
+   screenshot, or rendered artifact.
+4. Report selected capabilities, changed paths, validation evidence, and
+   unattempted checks.
 
----
+**Completion criterion**: the result is observable and every declared row maps
+to executed work or a reported gap.
 
-### Phase 3: Seamless Execution & Verification
+## Loading Model: Tool vs Plugin vs Skill vs Subagent
 
-1. Immediately execute the planned tool actions without pausing or asking for redundant confirmation.
-2. Observe tool outputs, handle error cases, and verify results with concrete evidence.
-3. Report the final outcome, important changes, and validation proof.
+| Layer | What it is | How it loads | Availability proof |
+| :--- | :--- | :--- | :--- |
+| Built-in tool | Native function (`view_file`, `run_command`, ...) | Exposed in the session | Tool schema present in session |
+| MCP plugin | External server contributing tools and skills | Plugin configuration for the workspace | Reachable server plus callable tools |
+| Plugin skill | Procedure shipped by a plugin, named `<plugin>:<skill>` | Loaded with its plugin | Entry in the session's skill list |
+| Repository skill | Workflow procedure owned by this repository | Repository skill directories | Entry in the session's skill list |
+| Subagent | Isolated agent run with its own context | `invoke_subagent`, optionally `define_subagent` | Subagent starts and returns work |
 
-**Completion Criterion**: Task completed with observable evidence from executed tools.
+## Permission & Connection Boundaries
 
----
+- Read-only inspection is the default for investigation. Mutating files,
+  installing or enabling a plugin, changing configuration, and any external or
+  destructive action need authority for that specific target.
+- Connection state is a ladder, not a boolean: configured plugin → reachable
+  server → authenticated account → permitted tool → authorized action. Report the
+  missing rung rather than the top one.
+- When a capability is missing or unauthenticated, name the missing layer,
+  propose the smallest User-authorized step, and continue with the closest
+  available native capability when the task permits. Never simulate a tool's
+  output or claim its effects.
+- Delegate only bounded, non-overlapping work with a clear return artifact, and
+  review what a subagent returns before claiming completion.
 
-## Anti-Patterns & Guardrails
+## Anti-Patterns
 
-- **Always render the Tool Declaration Table**: Never execute tools silently without declaring them upfront.
-- **Execute seamlessly after the table**: Never stop after printing the table; proceed straight into execution.
-- **Always prefer precise tools**: Use `grep_search` and `view_file` with line slices instead of dumping entire large files.
-- **Never guess facts**: Use `view_file` or `run_command` to inspect real code instead of hallucinating implementation details.
+- Executing tools before declaring the selected set.
+- Stopping after the declaration table instead of continuing into execution.
+- Listing every available capability when one or two are relevant.
+- Guessing a tool name, plugin status, connection state, or opaque identifier.
+- Dumping a whole large file when a line range or `grep_search` answers the task.
+- Asserting implementation details instead of inspecting them with `view_file` or
+  `run_command`.
+- Using `run_command` to sleep when `schedule` expresses the wait.
+- Treating a successful tool call as proof without inspecting its result.
+- Claiming completion while a required connection, proof, or decision remains
+  missing.

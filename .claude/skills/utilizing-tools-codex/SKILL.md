@@ -1,172 +1,149 @@
 ---
 name: utilizing-tools-codex
-description: Select and execute effective combinations of Codex built-in tools, MCP servers, plugins, and specialized skills for a task. Use when asked to leverage Codex tools, MCPs, plugins, or skills effectively, with a mandatory tool declaration table and seamless execution.
+description: Select and execute effective combinations of Codex built-in tools, MCP servers, Codex Apps, plugins, skills, and subagents for a task. Use when asked to leverage Codex tools, MCPs, plugins, or skills effectively, with a mandatory capability declaration table and seamless execution.
 ---
 
 # Utilizing Codex Tools, MCPs & Skills
 
 Select the smallest effective combination of Codex capabilities, declare it,
-execute it, and leave observable proof. Treat the current session's exposed
-tool and skill definitions as the runtime authority; this skill is a routing
-guide, not a promise that every capability is enabled in every session.
+execute it, and leave observable proof. The current session's exposed tool and
+skill definitions are the runtime authority; this skill routes to them and never
+promises that a documented capability is enabled here.
+
+AGENTS.md owns task authority, including routine local proof. The workflow name
+is not a grant for external writes.
 
 ## Mandatory Response Contract
 
-Whenever this skill is triggered, begin the response with a concise Markdown
-table before calling tools, then continue directly into execution:
+When this skill triggers, begin the response with a concise Markdown table
+before calling tools, then continue directly into execution:
 
 ```markdown
-### Selected Codex Tools & MCPs
-| Tool / MCP / Skill | Purpose in this task | Target scope |
+### Selected Codex Capabilities
+| Tool / MCP / Plugin / Skill | Purpose in this task | Target scope |
 | :--- | :--- | :--- |
 | `<actual_name>` | `<concise rationale>` | `<files, services, or user-visible scope>` |
 ```
 
-Use actual exposed names. If a skill is selected, name the skill as well as
-the concrete tool it enables. If no external capability is needed, declare the
-native inspection or editing tool that will carry the task. Do not invent a
-tool, MCP server, plugin, connection, or permission.
+Use actual exposed names. MCP tools carry their full prefix. If a skill is
+selected, name the skill and the concrete tool it enables. If no external
+capability is needed, declare the native inspection or editing tool that will
+carry the task. Never invent a tool, MCP server, plugin, connection, or
+permission.
 
-## 3-Phase Execution Workflow
+## Workflow
 
 ```text
-1. Classify the task and inspect the available runtime capabilities
+1. Classify the task and discover what the session actually exposes
    ↓
-2. Declare the selected Codex tools, MCPs, plugins, and skills
+2. Declare the selected capabilities
    ↓
-3. Execute the smallest useful sequence and verify the result
+3. Execute the smallest useful sequence and verify with observable proof
 ```
 
-### Phase 1: Task Classification & Capability Selection
+### Phase 1: Classify & Discover
 
-Classify the task before choosing tools. The selected set must have a concrete
-purpose and a bounded target.
+Classify before selecting; every selected capability needs a concrete purpose
+and a bounded target.
 
-#### Codex built-in tools
+| Task type | Preferred Codex capability |
+| :--- | :--- |
+| Inspect files, search, run commands | `shell_command`, within task authority |
+| Edit repository files | `apply_patch` |
+| Inspect a local image | `view_image` |
+| Current web facts, docs, URLs | `web__run` |
+| Create or edit a raster image | `image_gen__imagegen` |
+| Persistent JavaScript work | the `node_repl` MCP tools |
+| Bounded independent investigation | the `multi_agent_v1` spawn and wait tools |
+| Track a multi-step task | `update_plan` |
+| Autonomous goal state | `create_goal`, `get_goal`, `update_goal` — only on an explicit User request |
+| Inspect MCP-provided resources | the MCP resource listing and read tools |
+| Site build, deploy, or hosting | the Codex Apps site tools, with the sites skills |
+| Connected spreadsheet, slides, or docs session | the Codex Apps Document Control tools |
+| Durable document artifact | the documents, pdf, presentations, or spreadsheets skill |
+| Browser interaction on a local or in-app target | the browser control skill |
+| Interactive chart, map, or simulation | the visualize skill |
+| Plugin discovery, permissions, dependencies | the plugin management skill |
+| Repository procedure | the matching repository workflow skill |
 
-- **Filesystem and code**: `shell_command` for PowerShell inspection or
-  explicitly authorized commands; `apply_patch` for precise file edits;
-  `view_image` for local image inspection.
-- **Web and visual work**: `web__run` for current web research, official docs,
-  URLs, screenshots, and other supported lookups;
-  `image_gen__imagegen` for new or edited raster images.
-- **JavaScript runtime**: `mcp__node_repl__js`,
-  `mcp__node_repl__js_add_node_module_dir`, and
-  `mcp__node_repl__js_reset` for persistent JavaScript work when the task or a
-  selected skill requires it.
-- **Multi-agent orchestration**: `multi_agent_v1__spawn_agent`,
-  `multi_agent_v1__wait_agent`, `multi_agent_v1__send_input`,
-  `multi_agent_v1__resume_agent`, and `multi_agent_v1__close_agent`.
-- **Goals and plans**: `create_goal`, `get_goal`, `update_goal`, and
-  `update_plan`. Do not create or change autonomous goal state unless the User
-  explicitly requests it.
-- **MCP introspection**: `list_mcp_resources`,
-  `list_mcp_resource_templates`, and `read_mcp_resource` when the task needs
-  to inspect available MCP-provided resources.
+Capability discovery rules:
 
-#### Codex Apps MCP surface
+- **Built-in tools**: trust the session's exposed tool definitions rather than a
+  remembered catalog. Availability differs by session and account.
+- **Codex Apps**: use only the concrete app tools exposed now. A tool being
+  exposed does not prove that an account, document session, site, or permission
+  is connected.
+- **Plugins**: discover status through the plugin management surface. Do not
+  claim a plugin is installed or connected without verification.
+- **Skills**: discover from the session's skill list, and prefer one specialist
+  skill over a bundle of unrelated ones.
 
-Use only the concrete `mcp__codex_apps__*` tools exposed in the current
-session. The current families are:
+### Phase 2: Mandatory Declaration
 
-- **Sites**: create, save, deploy, inspect, version, domain, environment,
-  access-control, worker-log, and site-database operations. Read
-  `.openai/hosting.json` first when present and preserve its project identity.
-- **Document Control**: connected Excel, PowerPoint, or Google Sheets
-  sessions. Discover a session first, fetch the selected tool schema second,
-  then execute with a stable idempotency key.
-- **Plugin Management**: inspect one named plugin's permissions or
-  dependencies; uninstall or change permissions only for an explicit,
-  unambiguous User request.
-- **Safety settings**: read or prepare the applicable parental-control or
-  trusted-contact state, and require the connector's approval boundary before
-  updates.
-- **Local hotline**: use only when the User needs location-specific hotline
-  information; never infer hotline details.
-
-#### Specialized skills
-
-Select a skill when it supplies task-specific procedure or quality gates:
-
-- `browser:control-in-app-browser` for opening, navigating, inspecting,
-  clicking, typing, or screenshotting local or in-app web targets.
-- `documents:documents`, `pdf:pdf`, `presentations:Presentations`, and
-  `spreadsheets:Spreadsheets` for durable document artifacts; use
-  `spreadsheets:excel-live-control` for an already-connected live Excel
-  session.
-- `sites:sites-building` and `sites:sites-hosting` for local site work and
-  hosting/deployment operations.
-- `visualize:visualize` for interactive charts, maps, diagrams, simulations,
-  and exploratory visual tools.
-- `template-creator:template-creator` for reusable artifact templates.
-- `plugin-management:plugin-management` for plugin discovery, permissions,
-  dependencies, and connection decisions.
-- `imagegen`, `openai-docs`, `plugin-creator`, `skill-creator`, or
-  `skill-installer` when the task matches their stated scope.
-- Repository workflow skills such as `goal-griller`, `onboarding`,
-  `prompt-leverage`, `sequence-execution-plan`, `ticket-solving`,
-  `utilizing-tools-agy`, `writing-for-agents`, and `xia` when their routing
-  conditions are met.
-
-**Selection criterion**: the exact set of selected tools, MCPs, plugins, and
-skills is named, each item has a target scope, and every selected capability is
-actually available or its absence is reported before execution.
-
-### Phase 2: Mandatory Tool Declaration
-
-Render the declaration table at the top of the response before tool calls.
-Keep it small: prefer one native tool over several overlapping tools, and one
+Render the declaration table at the top of the response before tool calls. Keep
+it small: prefer one native tool over several overlapping tools, and one
 specialist skill over a bundle of unrelated skills.
 
 **Completion criterion**: every row has a real capability name, a task-specific
 purpose, and a bounded target scope.
 
-### Phase 3: Seamless Execution & Proof
+### Phase 3: Execute & Verify
 
 1. Execute the declared read-only inspection first when the target, connection,
    or authority is not yet established.
-2. Perform only the User-authorized mutations or side-effecting commands. Use
-   `apply_patch` for repository file edits and preserve unrelated worktree
-   changes.
-3. Verify each meaningful result using an executable check, tool response,
-   rendered artifact, screenshot, deployment status, or other observable proof.
+2. Perform only authorized mutations. Use `apply_patch` for repository file
+   edits and preserve unrelated worktree changes.
+3. Verify with an observable check: executable result, tool response, rendered
+   artifact, screenshot, or deployment status.
 4. Report selected capabilities, changed paths or external targets, validation
-   evidence, and any unattempted checks.
+   evidence, and unattempted checks.
 
-**Completion criterion**: the task has an observable result and the final
-report ties that result to the declared tools and proof.
+**Completion criterion**: the result is observable and every declared row maps
+to executed work or a reported gap.
 
-## Tool-Specific Guardrails
+## Loading Model: Tool vs MCP vs Plugin vs Skill vs Subagent
 
-- **Authority**: follow AGENTS.md task authority. Carry existing permissions across turns; inspect command effects and use the specific boundary for external or destructive actions.
-- **Freshness**: use `web__run` for facts that may have changed. For OpenAI
-  product or Codex questions, use an available official-documentation skill or
-  local product evidence, then official OpenAI sources as needed.
-- **Connected apps**: a tool being exposed does not prove that an account,
-  document session, site, or permission is connected. Discover and report the
-  connection state before relying on it.
-- **Sites**: never invent project IDs, site IDs, cursors, commit SHAs, or
-  deployment state. Read the project configuration and copy opaque IDs exactly
-  from configuration or tool responses.
+| Layer | What it is | How it loads | Availability proof |
+| :--- | :--- | :--- | :--- |
+| Built-in tool | Native function (`shell_command`, `apply_patch`, ...) | Exposed in the session | Tool schema present in session |
+| MCP server | External process exposing a prefixed tool family | Session MCP configuration | Callable tool plus a reachable server |
+| Codex App | Connected service surface (sites, document control, plugins) | Account and connector state | A discovery call that returns a live session |
+| Plugin | Installed capability bundle | Plugin installation for the account | Plugin management reports it installed |
+| Skill | On-demand procedure | Session skill list | Entry in the session's skill list |
+| Subagent | Isolated agent run with its own context | The multi-agent spawn tools | Subagent starts and returns work |
+
+## Permission & Connection Boundaries
+
+- Carry existing task permissions across turns. Inspect command effects, and use
+  the specific boundary for external or destructive actions.
+- Connection state is a ladder, not a boolean: configured service → reachable
+  server → authenticated account → live session → permitted tool → authorized
+  action. Report the missing rung rather than the top one.
+- **Opaque identifiers**: never invent a project id, site id, cursor, commit SHA,
+  or deployment state. Read the project configuration and copy identifiers
+  exactly from configuration or tool responses. Read `.openai/hosting.json` first
+  when it exists and preserve its project identity.
 - **Document Control**: call session discovery, schema discovery, and command
   execution in that order. Reuse an idempotency key only when retrying the same
   logical command.
-- **Plugins**: do not claim a plugin is installed or connected without
-  verification. Do not suggest or use an external integration when an enabled
-  native capability already solves the task.
-- **Subagents**: delegate only bounded, non-overlapping work with a clear
-  return artifact. Review returned changes before claiming completion.
-- **Scope**: do not expand from local work to external deployment, account
-  changes, or unrelated repository cleanup without pausing for User input.
+- **Freshness**: use `web__run` for facts that may have changed. For product
+  questions, prefer local evidence and an official-documentation skill over
+  memory.
+- Delegate only bounded, non-overlapping work with a clear return artifact, and
+  review what a subagent returns before claiming completion.
+- Do not expand from local work to external deployment, account changes, or
+  unrelated repository cleanup without pausing for User input.
 
 ## Anti-Patterns
 
 - Executing tools before declaring the selected set.
-- Listing every available tool when only one or two are relevant.
+- Listing every available capability when one or two are relevant.
 - Guessing a tool name, plugin status, app connection, or external identifier.
+- Treating "documented" or "configured" as "available and authenticated".
 - Using web search for a task that local files or a native tool can answer.
-- Asking again for routine local verification already included in task authority,
+- Asking again for routine local verification already covered by task authority,
   or treating a command name as permission for external effects.
+- Creating or changing autonomous goal state the User did not request.
 - Treating a successful tool call as proof without inspecting its result.
-- Claiming completion while a required connection, validation check, or User
-  decision remains unresolved.
+- Claiming completion while a required connection, proof, or decision remains
+  missing.
