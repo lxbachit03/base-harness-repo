@@ -154,9 +154,27 @@ full-access requests to use when such an adapter is added:
 | Herdr kind | Provider-native request | Native post-launch proof; capability only when required | Current repository status |
 | :--- | :--- | :--- | :--- |
 | `codex` | `--dangerously-bypass-approvals-and-sandbox`; use `--yolo` only if local help exposes the alias; equivalent pair `--sandbox danger-full-access --ask-for-approval never` | Codex `/status` + `/permissions`; `codex plugin list`; `codex mcp list` in the worker's `CODEX_HOME` | Dispatch path implemented; process-scoped YOLO/full-access required |
-| `agy` | `--dangerously-skip-permissions`; keep terminal sandbox disabled when host-level access is intended | Antigravity headless `stream-json` `init.permission_mode` and `tools`; `agy plugin list`; `agy mcp list`; inspect `settings.json` deny/managed rules and `allowNonWorkspaceAccess` | Bounded calculator trial completed 2026-09-12; complete permission/configuration proof remains per profile |
+| `agy` | `--dangerously-skip-permissions`; keep terminal sandbox disabled when host-level access is intended | Antigravity headless `stream-json` `init.permission_mode` and `tools`; `agy plugin list`; `agy mcp list`; inspect `settings.json` deny/managed rules and `allowNonWorkspaceAccess` | Bounded calculator trial completed 2026-09-12; complete permission/configuration proof remains per profile. A 2026-09-22 `antigravity-gemini-3.8-flash` (effort `high`) replay observed `agent_status` report `done`/`idle` six times while the worker was still genuinely working within one turn — see the `agy` note after this table before trusting a single status signal |
 | `claude` | `--dangerously-skip-permissions` (equivalent to `--permission-mode bypassPermissions`) | Claude `/permissions` or native startup output; `claude plugin list`; `claude mcp list`; inspect managed/project deny rules and authentication | Herdr kind is documented, but Claude CLI is not installed in the current runtime |
 | `opencode` | Documented `--auto` (root TUI or `run`); auto-approves permissions not explicitly denied. OpenCode v1.18.30 also has hidden aliases `--yolo` and `--dangerously-skip-permissions`, but do not make them the default | Native post-launch screen/process command proving auto state and selected model/variant; run `opencode mcp list` only for a named MCP requirement; no separate plugin-list command is exposed | Bounded OpenCode Go replay passed 2026-09-13 with documented `--auto`; account/adapter/capability proof remains per profile |
+
+**`agy` done-signal note:** for a `--kind agy` worker specifically, a settled
+`agent_status: "done"` (or `"idle"`) signal counts as ambiguous evidence
+under the general reobservation rule even when it looks clean, until receipt
+and artifact both confirm it — treat repeated `agent wait`/`agent read`
+reobservation with receipt-plus-artifact verification as the *expected* path
+for this kind, not an exceptional fallback triggered only by a timeout. A
+2026-09-22 bounded replay (`antigravity-gemini-3.8-flash`, effort `high`)
+observed six false settlements — Herdr reported `done`/`idle` while the
+worker's own transcript showed it still actively reasoning or running tool
+calls — before a seventh observation coincided with genuine completion. The
+existing receipt-first verification rule (check for the receipt file and
+expected output before accepting, per `task-contract.md`) already catches
+this; the gap this note closes is that its necessity for `agy` was not
+previously called out, so a coordinator could otherwise accept an
+unfinished result on the first "done" it sees. This does not change the "at
+most 60 seconds per observation" bound or the reobserve-not-resend rule for
+any Herdr kind, including `agy` itself.
 
 The Antigravity and Claude requests still do not override explicit deny rules,
 managed policy, provider authentication, or an MCP server's own access policy.
@@ -289,7 +307,7 @@ are not automatically equivalent to Codex `service_tier=fast`.
 
 #### `antigravity-gemini-3.8-flash`
 
-- [ ] **Model** `antigravity-gemini-3.8-flash` - provider `antigravity`;
+- [x] **Model** `antigravity-gemini-3.8-flash` - provider `antigravity`;
   transport `antigravity-cli`; model IDs `gemini-3.8-flash-medium` or
   `gemini-3.8-flash-high`; availability `account/adapter/runtime-check
   required`.
@@ -298,12 +316,12 @@ are not automatically equivalent to Codex `service_tier=fast`.
 
 - [ ] `low`
 - [ ] `medium`
-- [ ] `high`
+- [x] `high`
 
 ##### Fast mode checklist (select one for this model)
 
 - [ ] `fast` (selector entry)
-- [ ] `standard`
+- [x] `standard`
 
 #### `antigravity-gemini-3.7-flash`
 
@@ -553,7 +571,7 @@ dispatchability.
 
 #### `opencode-go-deepseek-v4.1-flash`
 
-- [x] **Model** `opencode-go-deepseek-v4.1-flash` - provider `opencode-go`;
+- [ ] **Model** `opencode-go-deepseek-v4.1-flash` - provider `opencode-go`;
   transport `opencode-cli`; model ID `deepseek-v4.1-flash`; OpenCode config ID
   `opencode-go/deepseek-v4.1-flash`; availability
   `account/adapter/runtime-check required`; source
@@ -566,7 +584,7 @@ dispatchability.
 - [ ] `default` (TUI label: **Default**; sends no explicit variant)
 - [ ] `low`
 - [ ] `high`
-- [x] `max`
+- [ ] `max`
 
 OpenCode Go's provider metadata declares `low`, `high` and `max` variants for
 this model. OpenCode v1.18.30's TUI adds a synthetic `Default` choice; selecting

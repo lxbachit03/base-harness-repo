@@ -159,6 +159,17 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    Antigravity profile until its adapter and capability inventory are independently
    proven. Record the attempt and target identity manually in the coordinator
    task record; no repository helper enforces this boundary.
+   For a `--kind agy` worker specifically, a settled `agent_status: "done"`
+   (or `"idle"`) signal counts as ambiguous evidence under the reobservation
+   rule below, even when it looks clean, until receipt and artifact both
+   confirm it — treat repeated `agent wait`/`agent read` reobservation with
+   receipt-plus-artifact verification as the expected path for this kind, not
+   an exceptional fallback triggered only by a timeout: a 2026-09-22 bounded
+   replay (`antigravity-gemini-3.8-flash`, effort `high`) observed six false
+   settlements — Herdr reported `done`/`idle` while the worker was still
+   genuinely working — before a seventh observation coincided with real
+   completion. The receipt-first verification rule below already catches
+   this; do not accept an `agy` result on status alone.
    Use an argument array, not a shell-built string containing a prompt. Match
    the current checkout and inherited authority; keep global config intact.
    `agent start` requires an available shell pane. Inspect a startup failure in

@@ -126,6 +126,7 @@ Resources:
 - [Claude Code capability routing skill and team catalog](harness-improvements/0921-utilizing-tools-claude-capability-catalog.md) — `#026_IMPROVE_HARNESS_0921`, `PRIORITY: [MEDIUM]`
 - [Converge the utilizing-tools skills on the routing pattern](harness-improvements/0921-utilizing-tools-skill-parity.md) — `#027_IMPROVE_HARNESS_0921`, `PRIORITY: [MEDIUM]`
 - [Tune tight-handoff wait/observation timeout guidance for OpenCode Go workers](harness-improvements/0922-opencode-go-tight-handoff-wait-timeout.md) — `#028_IMPROVE_HARNESS_0922`, `PRIORITY: [MEDIUM]`
+- [Document Herdr `--kind agy` (Antigravity) done-signal unreliability as expected, not exceptional](harness-improvements/0922-agy-done-signal-reliability.md) — `#029_IMPROVE_HARNESS_0922`, `PRIORITY: [MEDIUM]`
 - [User-selected Herdr worker model catalog](harness-improvements/0912-herdr-agent-catalog.md) — `#018_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
