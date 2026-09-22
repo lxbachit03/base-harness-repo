@@ -62,7 +62,21 @@ gate in the Herdr task contract.
 This section targets BALE orchestrator context and tool-call overhead; it does
 not change the User's worker model, effort or Fast selections. For a bounded,
 single-output task, use one `tight` handoff, a compact task-specific prompt, one
-bounded wait, and one proportional acceptance pass. Read the catalog and routing
+`agent prompt --wait --until done` call with no `--timeout` value, and one
+proportional acceptance pass. Herdr's own wait is then indefinite until a
+settled state, removing the need to guess a numeric floor for a
+generation-heavy request (writing a non-trivial file, or an OpenCode Go worker
+generally). This relies on the calling coordinator's own tool-call timeout as
+the practical safety valve. Verified on Claude Code's Bash tool (2026-09-22):
+a command that exceeds its own timeout is moved to the background rather than
+killed, so the coordinator regains control immediately and is notified on
+completion instead of blocking forever. Before relying on an unbounded
+`agent prompt --wait` on a different coordinator runtime, verify its
+shell/exec tool has the same non-killing, auto-backgrounding behavior; if it
+instead hard-kills on timeout, pass an explicit `--timeout` (for example
+`120000`) so Herdr's own state, not the shell wrapper, determines the outcome.
+This does not change the per-observation bound on a later reobservation call,
+and does not replace reobserving with resending the same prompt. Read the catalog and routing
 context only when selecting/changing a profile, retain their hashes, and do not
 paste their prose into a worker prompt. Prefer the matching idle worker when
 identity, checkout cwd and resolved launch input are unchanged. There is no separate

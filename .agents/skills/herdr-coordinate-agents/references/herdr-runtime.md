@@ -195,8 +195,22 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
 
 `agent prompt` accepts text and presses Enter. `agent read` returns terminal text,
 while creation/get/wait operations return JSON. For a tight handoff, use one
-bounded `agent prompt ... --wait --until done --timeout 60000` call after startup
-proof. `agent wait --timeout 30000` is bounded; repeat observations of the same
+`agent prompt ... --wait --until done` call after startup proof, with no
+`--timeout` value: Herdr's own wait is then indefinite until a settled state,
+removing the need to guess a numeric floor for a generation-heavy request
+(writing a non-trivial file, or an OpenCode Go worker generally). This relies
+on the calling coordinator's own tool-call timeout as the practical safety
+valve. Verified on Claude Code's Bash tool (2026-09-22): a command that
+exceeds its own timeout is moved to the background rather than killed, so the
+coordinator regains control immediately and is notified on completion instead
+of blocking forever. Before relying on an unbounded `agent prompt --wait` on a
+different coordinator runtime, verify its shell/exec tool has the same
+non-killing, auto-backgrounding behavior; if it instead hard-kills on timeout,
+pass an explicit `--timeout` (for example `120000`) so Herdr's own state, not
+the shell wrapper, determines the outcome. This does not change the
+per-observation bound on a later reobservation call, and never replaces
+reobserving with resending the same prompt. `agent wait --timeout 30000` is
+bounded; repeat observations of the same
 handle only after a timeout or ambiguous result. `blocked`
 means a recognized input UI, not permission to approve it. Inspect the dialog
 and resolve only already-authorized operations; otherwise preserve the session

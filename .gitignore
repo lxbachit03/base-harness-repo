@@ -28,3 +28,4 @@ docs-harness/plans/completed/*
 !docs-harness/plans/completed/0906-behavior-parity-audit.md
 !docs-harness/harness-improvements/0921-utilizing-tools-claude-capability-catalog.md
 !docs-harness/harness-improvements/0921-utilizing-tools-skill-parity.md
+!docs-harness/harness-improvements/0922-opencode-go-tight-handoff-wait-timeout.md
