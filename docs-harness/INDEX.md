@@ -10,6 +10,10 @@ At session start, inspect the folder names and INDEX alignment without changing
 files. Read PERSONA.md and use the single selected style, or Default when the
 selection is empty or ambiguous. Apply persona to conversation only.
 
+Then follow [layers/README.md](layers/README.md) to load any add-on prompt
+layer matching the current session's model/runtime family, announcing each
+loaded file's path to the User before applying it.
+
 Discover current work by metadata, not by loading every body:
 
 - plans/active/: ID, title, status, priority, references;
@@ -32,6 +36,10 @@ docs-harness/
 ├── decisions/
 ├── domain/
 ├── harness-improvements/
+├── layers/
+│   └── layer-1/
+│       └── agents/
+│           └── gemini/
 ├── onboarding/
 ├── plans/
 │   ├── active/
@@ -128,6 +136,7 @@ Resources:
 - [Tune tight-handoff wait/observation timeout guidance for OpenCode Go workers](harness-improvements/0922-opencode-go-tight-handoff-wait-timeout.md) — `#028_IMPROVE_HARNESS_0922`, `PRIORITY: [MEDIUM]`
 - [Document Herdr `--kind agy` (Antigravity) done-signal unreliability as expected, not exceptional](harness-improvements/0922-agy-done-signal-reliability.md) — `#029_IMPROVE_HARNESS_0922`, `PRIORITY: [MEDIUM]`
 - [User-selected Herdr worker model catalog](harness-improvements/0912-herdr-agent-catalog.md) — `#018_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
+- [Model-family add-on prompt layers](harness-improvements/0926-model-family-layer-prompts.md) — `#030_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
 - [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
@@ -364,6 +373,23 @@ Resources:
 - [Proposal guide](proposals/README.md)
 
 No proposal resources are indexed yet.
+
+### layers/
+
+Folder: [layers/](layers/)
+
+Purpose: model-family-specific add-on prompt layers that extend the current
+session's instructions based on which AI model/runtime is active.
+
+Read when: every session, at the same session-start point PERSONA.md is read,
+to load any add-on layer matching the current model/runtime family.
+
+Skip when: never skip the check itself; skip loading only when no family
+folder in a given layer matches the current session's identity.
+
+Resources:
+
+- [Layer loading contract and family matching table](layers/README.md)
 
 ### onboarding/
 
