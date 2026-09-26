@@ -137,6 +137,7 @@ Resources:
 - [User-selected Herdr worker model catalog](harness-improvements/0912-herdr-agent-catalog.md) — `#018_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [Model-specific add-on prompt layers](harness-improvements/0926-model-family-layer-prompts.md) — `#030_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
 - [Orca ADE documentation, capability routing skill, and Herdr coordination](harness-improvements/0926-utilizing-tools-orca-ade.md) — `#031_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
+- [Pure Orca ADE multi-agent coordination skill and Claude sync](harness-improvements/0926-orca-ade-coordinate-agents.md) — `#032_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
 - [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
