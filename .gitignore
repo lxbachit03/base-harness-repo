@@ -24,10 +24,8 @@ docs-harness/layers/*
 docs-harness/layers/layer-1/*
 !docs-harness/layers/layer-1/agents/
 docs-harness/layers/layer-1/agents/*
-!docs-harness/layers/layer-1/agents/gemini/
-docs-harness/layers/layer-1/agents/gemini/*
-!docs-harness/layers/layer-1/agents/gemini/gemini-3.8-flash-high.md
-!docs-harness/layers/layer-1/agents/gemini/reasons-and-purposes.md
+!docs-harness/layers/layer-1/agents/gemini-3.8-flash-high.md
+!docs-harness/layers/layer-1/agents/reasons-and-purposes.md
 !docs-harness/plans/
 docs-harness/plans/*
 !docs-harness/plans/active/

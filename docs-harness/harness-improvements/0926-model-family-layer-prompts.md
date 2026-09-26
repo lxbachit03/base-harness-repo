@@ -3,7 +3,7 @@
 ID: #030_IMPROVE_HARNESS_0926
 TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
-TITLE: Model-family add-on prompt layers under docs-harness/layers/
+TITLE: Model-specific add-on prompt layers under docs-harness/layers/
 CREATED: 2026-09-26
 STATUS: completed
 REFERENCES:
@@ -12,8 +12,8 @@ REFERENCES:
 - docs-harness/PERSONA.md
 - docs-harness/HERDR-AGENTS.md
 - docs-harness/layers/README.md
-- docs-harness/layers/layer-1/agents/gemini/gemini-3.8-flash-high.md
-- docs-harness/layers/layer-1/agents/gemini/reasons-and-purposes.md
+- docs-harness/layers/layer-1/agents/gemini-3.8-flash-high.md
+- docs-harness/layers/layer-1/agents/reasons-and-purposes.md
 - .gitignore
 
 ## Objective
@@ -29,6 +29,11 @@ after release, and author the first real add-on
 (`gemini-3.8-flash-high.md`) plus its rationale log. Corrected 2026-09-26:
 the User's actual effort value is `high`, not `max`; the file was authored
 and then renamed within this same continuation before being validated.
+Further continuation (2026-09-26, same day): the User moved both files out of
+the `gemini/` subfolder directly into `agents/` and decided against wrapping
+model files in any provider/family subfolder going forward — collapsing the
+mechanism from two tiers (family folder, then exact model file) to one flat
+tier (exact model file directly under `agents/`).
 
 ## Purposes
 
@@ -45,6 +50,9 @@ and then renamed within this same continuation before being validated.
   use for research, post-write self-review, CPU/memory awareness) over
   response speed, per the User's observed friction with that model/effort
   combination.
+- [x] Keep `agents/` flat (no provider/family subfolder), per the User's
+  explicit later decision, so a new model's add-on is always exactly one file
+  at one predictable path regardless of which provider it comes from.
 
 ## Current State
 
@@ -110,23 +118,35 @@ existed.
   Added the same nested allow/deny chain used by `docs-harness/plans/active/`
   for `docs-harness/layers/layer-1/agents/gemini/PLACEHOLDER.md`, plus one
   line for this record, so both are now visible to git like their siblings.
+- Further continuation: removed the Family matching table and the
+  `agents/<family>/` folder tier entirely from `layers/README.md`. The
+  User manually moved `gemini-3.8-flash-high.md` and
+  `reasons-and-purposes.md` out of `agents/gemini/` directly into `agents/`
+  and decided every model's add-on lives flat there from now on, regardless
+  of provider. Rewrote Structure, replaced "Family matching table" +
+  "Model-specific file matching" with a single "Model-specific file
+  matching" section describing one exact-match tier, rewrote the Loading
+  procedure to a single walk-and-match step, replaced "Adding a new AI model
+  family" (now moot) with the existing "Adding a model-specific add-on
+  prompt" section pointed at the flat path, removed the empty leftover
+  `agents/gemini/` directory, and updated `docs-harness/INDEX.md` (folder
+  tree, Session retrieval wording, Supporting Folders route, IMPROVE_HARNESS
+  title) and `.gitignore` (flat allow lines) to match.
 
 ## Scope
 
-In scope: `docs-harness/layers/` (structure and content), `docs-harness/layers/README.md`
-(owning contract, including the model-specific matching tier added in this
-continuation), `docs-harness/layers/layer-1/agents/gemini/gemini-3.8-flash-high.md`
-(real add-on content) and `.../reasons-and-purposes.md` (rationale log), and
-`docs-harness/INDEX.md` (session retrieval, folder tree, Supporting Folders
-route, IMPROVE_HARNESS index entry).
+In scope: `docs-harness/layers/README.md` (owning contract, now single-tier
+exact-model matching, no family layer), `docs-harness/layers/layer-1/agents/gemini-3.8-flash-high.md`
+and `docs-harness/layers/layer-1/agents/reasons-and-purposes.md` (moved flat,
+content unchanged), `docs-harness/INDEX.md` (wording/paths), and `.gitignore`
+(flat allow lines).
 
 Out of scope: AGENTS.md (no session-role or task-authority change needed);
 authoring add-on content for any other specific model (only
-`gemini-3.8-flash-high` was requested); the `claude`/`chatgpt`/`opencode`
-family folders themselves (reserved as table rows only, per the User's
-"later" framing); a family-wide (non-model-specific) loading tier — the User
-explicitly confirmed this is not needed, so it is a settled decision, not an
-open gap.
+`gemini-3.8-flash-high` was requested); a family-wide (non-model-specific)
+loading tier — the User explicitly confirmed this is not needed, so it is a
+settled decision, not an open gap; any provider/family subfolder — the User
+explicitly decided against ever introducing one.
 
 ## Progress
 
@@ -170,14 +190,30 @@ simulated Claude fixture) running the exact target model/effort to prove the
 session, per `.agents/skills/herdr-coordinate-agents/SKILL.md`. See Validation
 for the full attempt record.
 
+2026-09-26 (flatten, same day): User manually moved
+`gemini-3.8-flash-high.md` and `reasons-and-purposes.md` out of
+`docs-harness/layers/layer-1/agents/gemini/` directly into
+`docs-harness/layers/layer-1/agents/` and stated models will never be
+wrapped in a provider/family subfolder again. Removed the Family matching
+table and the `agents/<family>/` tier from `layers/README.md` entirely,
+collapsing the design to one flat exact-model-match tier; removed the
+now-empty `agents/gemini/` directory; updated `docs-harness/INDEX.md`
+(folder tree, session-retrieval and Supporting Folders wording, IMPROVE_HARNESS
+title) and `.gitignore` (flat allow lines replacing the nested
+`gemini/`-scoped ones) to match. No new fresh-agent or live-Herdr replay was
+run for this step: it removes one level of directory indirection without
+changing the exact-match rule itself, which the prior fresh-agent replays and
+the live `--kind agy` Antigravity trial already proved; verification here was
+a targeted self-review of the edited files instead (see Validation).
+
 ## Validation
 
 Native/static checks:
 - Re-read `docs-harness/INDEX.md` after editing: folder tree lists `layers/`
-  with its `layer-1/agents/gemini/` descendant; Session retrieval references
-  `layers/README.md`; a `### layers/` Supporting Folders route exists with a
-  working relative link; the `IMPROVE_HARNESS` list carries this record's
-  entry with matching ID/priority.
+  with its `layer-1/agents/` descendant (no `gemini/` subfolder); Session
+  retrieval references `layers/README.md`; a `### layers/` Supporting Folders
+  route exists with a working relative link; the `IMPROVE_HARNESS` list
+  carries this record's entry with matching ID/priority.
 - Confirmed `#030_IMPROVE_HARNESS_0926` is the next unused ID (highest prior
   ID in `docs-harness/` was `#029_IMPROVE_HARNESS_0922`, found by scanning all
   `#NNN_TAG_MMDD` occurrences under `docs-harness/`).
@@ -288,30 +324,51 @@ authorized); no multi-model production replay across ChatGPT or OpenCode-
 hosted sessions was run (those rows remain reserved, folder-less; no adapter
 proof exists for them yet).
 
+Flatten self-review (targeted, per AGENTS.md's manual self-validation
+policy, no new replay):
+- Confirmed on disk that only `docs-harness/layers/layer-1/agents/` exists
+  (no `gemini/` subfolder, no stray files left behind) and that
+  `gemini-3.8-flash-high.md`/`reasons-and-purposes.md` sit directly in it.
+- Re-read the rewritten `layers/README.md` end to end: Structure, Model-
+  specific file matching, Loading procedure, and "Adding a model-specific
+  add-on prompt" are internally consistent with the flat layout and contain
+  no remaining `<family>`/family-folder reference.
+- Grepped the repository for `agents/gemini`, `Family matching`, `model-
+  family`, and `agents/<family>` after all edits: matches remain only in this
+  record's own historical Progress/Validation narrative (accurately
+  describing what was true before the flatten) and in the unrelated
+  `docs-harness/harness-improvements/0922-opencode-go-tight-handoff-wait-timeout.md`
+  (a different model's `effort max`, not this record's topic).
+- Confirmed `.gitignore`'s allow chain now ends at
+  `!docs-harness/layers/layer-1/agents/gemini-3.8-flash-high.md` and
+  `!docs-harness/layers/layer-1/agents/reasons-and-purposes.md` with no
+  `gemini/`-scoped lines remaining, and that `git status -s` shows the two
+  files as renames/moves, not new untracked content.
+
 ## Risks
 
-- The Family matching table's identity signals (e.g., "model ID/name
-  containing gemini") are heuristic text matches, not a verified API; a future
-  model naming change could silently stop matching. Mitigation: the table is
-  the single edit point, so a mismatch is a one-row fix, not a multi-file
-  routing change.
+- Obsolete (2026-09-26): the Family matching table's identity signals (e.g.,
+  "model ID/name containing gemini") were heuristic text matches, not a
+  verified API. The table was removed entirely in the flattening
+  continuation; matching is now a single exact-string comparison against the
+  resolved model+effort identifier, which is precise by construction rather
+  than a substring heuristic, so this risk no longer applies.
 - Per-session file announcements add small, bounded token/latency overhead
-  proportional to the number of files in a matching family folder. Mitigation:
-  the procedure explicitly skips non-matching layers/families with no
-  notification, keeping the no-match case (today's default, since only
-  `gemini` has content and no session here is Gemini/Antigravity) effectively
-  free.
-- The `gemini` row's "regardless of which model Antigravity is hosting"
-  clause groups Antigravity-as-runtime with Gemini-as-model per the User's own
-  grouping; if the User later wants per-model granularity inside Antigravity
-  (e.g. a separate folder for `antigravity-claude-*` presets), the row will
-  need splitting. Mitigation: flagged here for the User's awareness; not
-  blocking since it matches the literal request.
-- A future contributor could add a new `agents/<family>/` folder/file and
-  forget the required `.gitignore` allowlist lines, silently leaving the new
-  add-on uncommitted (this happened during this task's own implementation).
-  Mitigation: `docs-harness/layers/README.md`'s "Adding a new AI model family"
-  steps now explicitly call out the `.gitignore` allowlist as step 3.
+  proportional to the number of files directly under a layer's `agents/`
+  folder. Mitigation: the procedure explicitly skips a non-matching layer
+  with no notification, keeping the no-match case (today's default, since
+  only one model has content) effectively free.
+- Obsolete (2026-09-26): the prior `gemini` row's "regardless of which model
+  Antigravity is hosting" grouping clause no longer exists — there is no
+  Family matching table or per-provider row to split; each model, including
+  any future Antigravity-hosted Claude/GPT-OSS preset, gets its own flat file
+  named after its own exact resolved identifier.
+- A future contributor could add a new `agents/<identifier>.md` file and
+  forget the required `.gitignore` allowlist line, silently leaving the new
+  add-on uncommitted (this happened during this task's own implementation,
+  for the original nested `gemini/` path). Mitigation:
+  `docs-harness/layers/README.md`'s "Adding a model-specific add-on prompt"
+  steps explicitly call out the `.gitignore` allowlist as step 3.
 - Resolved (2026-09-26): the file was initially named `-max.md`, an effort
   value `docs-harness/HERDR-AGENTS.md`'s catalog does not document for
   `antigravity-gemini-3.8-flash` (only `low`/`medium`/`high`). The User
@@ -336,10 +393,21 @@ Antigravity worker, which independently confirmed the resolved model ID,
 the exact-match, the required path announcement, and the receipt contract —
 with no unintended repository changes. The `.gitignore` allowlist gap found
 in the initial pass was fixed and is now documented as an explicit step for
-future family/model additions. The real `gemini-3.8-flash-high.md` add-on
-(corrected from an initial `-max.md` per the User's own correction) and its
+future model additions. The real `gemini-3.8-flash-high.md` add-on (corrected
+from an initial `-max.md` per the User's own correction) and its
 `reasons-and-purposes.md` rationale entry are in place and now natively
 proven to load; the family-wide-tier question is settled (not needed) rather
 than left open. No open limitations remain for the `gemini-3.8-flash-high`
-case; `chatgpt`/`opencode` rows remain reserved pending their own adapter
-proof and add-on content, not requested yet.
+case.
+
+Final continuation (2026-09-26): the User decided against any
+provider/family subfolder at all — `docs-harness/layers/layer-1/agents/`
+is now flat, one file per exact model. The Family matching table and its
+reserved `claude`/`chatgpt`/`opencode` rows are removed along with the tier
+they supported; a future model of any provider is simply a new file named
+after its own resolved identifier, directly under `agents/`, with no
+provider grouping to choose or maintain. This is a strict simplification of
+already-proven matching logic (one exact-match tier instead of two), verified
+by targeted self-review rather than a new replay; the underlying exact-match
+behavior itself remains covered by the prior fresh-agent replays and the live
+Herdr `--kind agy` trial.
