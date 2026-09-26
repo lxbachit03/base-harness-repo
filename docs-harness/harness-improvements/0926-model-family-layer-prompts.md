@@ -13,6 +13,7 @@ REFERENCES:
 - docs-harness/HERDR-AGENTS.md
 - docs-harness/layers/README.md
 - docs-harness/layers/layer-1/agents/gemini-3.8-flash-high.md
+- docs-harness/layers/layer-1/agents/deepseek-v4.1-flash-max.md
 - docs-harness/layers/layer-1/agents/reasons-and-purposes.md
 - .gitignore
 
@@ -33,7 +34,12 @@ Further continuation (2026-09-26, same day): the User moved both files out of
 the `gemini/` subfolder directly into `agents/` and decided against wrapping
 model files in any provider/family subfolder going forward — collapsing the
 mechanism from two tiers (family folder, then exact model file) to one flat
-tier (exact model file directly under `agents/`).
+tier (exact model file directly under `agents/`). Second real add-on
+(2026-09-26, same day): author `deepseek-v4.1-flash-max.md` for DeepSeek V4.1
+Flash (effort max, OpenCode Go) with the same reason and purpose as
+`gemini-3.8-flash-high.md`, then verify with a live Herdr `--kind opencode`
+worker — the first cross-provider proof that the flat, exact-match mechanism
+generalizes beyond Antigravity.
 
 ## Purposes
 
@@ -53,6 +59,9 @@ tier (exact model file directly under `agents/`).
 - [x] Keep `agents/` flat (no provider/family subfolder), per the User's
   explicit later decision, so a new model's add-on is always exactly one file
   at one predictable path regardless of which provider it comes from.
+- [x] Bias `deepseek-v4.1-flash-max` toward the same thoroughness-over-speed
+  behavior as `gemini-3.8-flash-high`, per the User's explicit instruction to
+  reuse the same reason and purpose for a second, different-provider model.
 
 ## Current State
 
@@ -132,18 +141,34 @@ existed.
   `agents/gemini/` directory, and updated `docs-harness/INDEX.md` (folder
   tree, Session retrieval wording, Supporting Folders route, IMPROVE_HARNESS
   title) and `.gitignore` (flat allow lines) to match.
+- Second real add-on: authored
+  `docs-harness/layers/layer-1/agents/deepseek-v4.1-flash-max.md`, content
+  mirroring `gemini-3.8-flash-high.md` exactly (same Why/Before/After
+  structure and wording) per the User's explicit instruction to reuse the
+  same reason and purpose for a different model. Added a matching
+  `deepseek-v4.1-flash-max.md` entry to the shared
+  `agents/reasons-and-purposes.md` and generalized that file's own title from
+  "Gemini / Antigravity add-on prompt rationale" to "Layer add-on prompt
+  rationale", since it now documents more than one provider. Re-selected the
+  Herdr worker catalog in `docs-harness/HERDR-AGENTS.md`: unchecked
+  `antigravity-gemini-3.8-flash` (model/effort/Fast), checked
+  `opencode-go-deepseek-v4.1-flash` with effort `max`, to dispatch the
+  matching live worker for verification. Added the new file's
+  `!docs-harness/layers/...` line to `.gitignore`.
 
 ## Scope
 
 In scope: `docs-harness/layers/README.md` (owning contract, now single-tier
-exact-model matching, no family layer), `docs-harness/layers/layer-1/agents/gemini-3.8-flash-high.md`
-and `docs-harness/layers/layer-1/agents/reasons-and-purposes.md` (moved flat,
-content unchanged), `docs-harness/INDEX.md` (wording/paths), and `.gitignore`
-(flat allow lines).
+exact-model matching, no family layer), `docs-harness/layers/layer-1/agents/gemini-3.8-flash-high.md`,
+`docs-harness/layers/layer-1/agents/deepseek-v4.1-flash-max.md`, and
+`docs-harness/layers/layer-1/agents/reasons-and-purposes.md` (rationale log
+for both), `docs-harness/INDEX.md` (wording/paths), `docs-harness/HERDR-AGENTS.md`
+(worker catalog selection), and `.gitignore` (flat allow lines).
 
 Out of scope: AGENTS.md (no session-role or task-authority change needed);
-authoring add-on content for any other specific model (only
-`gemini-3.8-flash-high` was requested); a family-wide (non-model-specific)
+authoring add-on content for any other specific model beyond the two the User
+named (`gemini-3.8-flash-high`, `deepseek-v4.1-flash-max`); a family-wide
+(non-model-specific)
 loading tier — the User explicitly confirmed this is not needed, so it is a
 settled decision, not an open gap; any provider/family subfolder — the User
 explicitly decided against ever introducing one.
@@ -205,6 +230,16 @@ run for this step: it removes one level of directory indirection without
 changing the exact-match rule itself, which the prior fresh-agent replays and
 the live `--kind agy` Antigravity trial already proved; verification here was
 a targeted self-review of the edited files instead (see Validation).
+
+2026-09-26 (second model, same day): User asked for the same treatment for
+DeepSeek V4.1 Flash (effort `max`), explicitly reusing the same reason and
+purpose as `gemini-3.8-flash-high.md`, then to verify with
+`herdr-coordinate-agents`. Authored `deepseek-v4.1-flash-max.md` (mirrored
+content), added its entry to `agents/reasons-and-purposes.md` and generalized
+that file's title (no longer Gemini-specific), re-selected the Herdr catalog
+in `HERDR-AGENTS.md` to `opencode-go-deepseek-v4.1-flash`/`max`, and dispatched
+a live `--kind opencode` worker to prove the flat mechanism also works for a
+second, different provider. See Validation for the full attempt record.
 
 ## Validation
 
@@ -319,10 +354,11 @@ Claude simulation), per `herdr-coordinate-agents`:
   disposable JSON receipt in a runtime-scratch directory, not executable code,
   a runtime-affecting asset, or runtime configuration.
 
-Not attempted: no repository validator script was created or invoked (not
-authorized); no multi-model production replay across ChatGPT or OpenCode-
-hosted sessions was run (those rows remain reserved, folder-less; no adapter
-proof exists for them yet).
+Not attempted (at this point in the record): no repository validator script
+was created or invoked (not authorized); no live replay across ChatGPT or a
+second OpenCode Go model was run yet (the `chatgpt` case remains reserved,
+folder-less; a live OpenCode Go trial for `deepseek-v4.1-flash-max` follows
+below).
 
 Flatten self-review (targeted, per AGENTS.md's manual self-validation
 policy, no new replay):
@@ -344,6 +380,61 @@ policy, no new replay):
   `!docs-harness/layers/layer-1/agents/reasons-and-purposes.md` with no
   `gemini/`-scoped lines remaining, and that `git status -s` shows the two
   files as renames/moves, not new untracked content.
+
+Live Herdr `--kind opencode` validation (DeepSeek V4.1 Flash, effort `max`),
+per `herdr-coordinate-agents`:
+- Re-selected `docs-harness/HERDR-AGENTS.md`'s catalog: unchecked
+  `antigravity-gemini-3.8-flash` (model/effort `high`/Fast `standard`),
+  checked `opencode-go-deepseek-v4.1-flash` with effort `max`.
+- Resolved the exact provider model ID natively before launch:
+  `opencode models opencode-go` listed `opencode-go/deepseek-v4.1-flash`.
+- Ran `.agents/skills/herdr-coordinate-agents/scripts/prepare-opencode-windows.ps1`
+  for a task-local `opencode.cmd` shim (global wrapper untouched), created an
+  owned pane (`herdr tab create --workspace w2B --cwd D:\repos\base-harness-repo
+  --no-focus --env HARNESS_ROLE=worker --env PATH=<shim-path>`, pane
+  `w2B:p3`), and launched `herdr agent start deepseek-layer-verify-01 --kind
+  opencode --pane w2B:p3 -- --auto -m opencode-go/deepseek-v4.1-flash`.
+- Post-launch check (native status bar, read passively before any input):
+  `Build auto · DeepSeek V4.1 Flash OpenCode Go · max` — effort `max` was
+  already the effective variant (carried over from the 2026-09-22 OpenCode Go
+  trial's persisted state), so no manual TUI variant reselection was needed;
+  cwd and no dialog also confirmed.
+- Sent the same-shaped tight task packet
+  (`.herdr-runtime/layer-load-verify-deepseek-01/`) asking the worker to run
+  its own real session-start routing against the new flat `agents/` layout
+  and report via receipt.
+- `herdr agent prompt ... --wait --until done` exceeded the Bash tool's own
+  180s call timeout and was auto-backgrounded (the documented non-killing
+  behavior) rather than treated as a failure; a passive `agent read` while it
+  ran showed the worker actively resolving its identity, reading
+  `model.json`/`opencode.jsonc`/`kv.json`, printing `Loading layer add-on:
+  docs-harness/layers/layer-1/agents/deepseek-v4.1-flash-max.md`, reading that
+  file, and stating it would apply its guidance — genuinely working, not a
+  false-done case this time.
+- Settled result (`agent get` returned `idle`; total build time ~52.5s):
+  receipt `resolved_identity: "deepseek-v4.1-flash-max"`,
+  `layer_file_matched:
+  "docs-harness/layers/layer-1/agents/deepseek-v4.1-flash-max.md"`,
+  `layer_file_announced: true`, `status: "completed"`, with a summary
+  confirming end-to-end success and no other file edited.
+- The worker's own resolved-identity evidence, quoted from its transcript:
+  "system prompt reports model ID opencode-go/deepseek-v4.1-flash; process
+  command line is opencode --auto -m opencode-go/deepseek-v4.1-flash; opencode
+  state (model.json) records variant max for that model" — an independent,
+  native confirmation of the `deepseek-v4.1-flash-max` filename, mirroring how
+  `agy models` independently confirmed `gemini-3.8-flash-high` earlier.
+- `git status -s` after the run showed no unintended repository changes
+  beyond this task's own intended edits; the worker touched only its own
+  receipt file under the disposable `.herdr-runtime/` directory, removed
+  after this record captured the evidence above. The worker's tab
+  (`w2B:t3`) was closed after evidence collection.
+- Bale code review gate: `not_applicable` — the only artifact produced was a
+  disposable JSON receipt in a runtime-scratch directory.
+
+This is the first cross-provider proof for the flattened mechanism: the same
+`layers/README.md` procedure, unmodified, correctly matched two different
+providers' sessions (Antigravity/Gemini and OpenCode Go/DeepSeek) purely by
+exact filename, with no per-provider branching in the instructions.
 
 ## Risks
 
@@ -400,7 +491,7 @@ proven to load; the family-wide-tier question is settled (not needed) rather
 than left open. No open limitations remain for the `gemini-3.8-flash-high`
 case.
 
-Final continuation (2026-09-26): the User decided against any
+Flatten continuation (2026-09-26): the User decided against any
 provider/family subfolder at all — `docs-harness/layers/layer-1/agents/`
 is now flat, one file per exact model. The Family matching table and its
 reserved `claude`/`chatgpt`/`opencode` rows are removed along with the tier
@@ -411,3 +502,15 @@ already-proven matching logic (one exact-match tier instead of two), verified
 by targeted self-review rather than a new replay; the underlying exact-match
 behavior itself remains covered by the prior fresh-agent replays and the live
 Herdr `--kind agy` trial.
+
+Final continuation (2026-09-26): added `deepseek-v4.1-flash-max.md` for
+DeepSeek V4.1 Flash (effort `max`, OpenCode Go), mirroring
+`gemini-3.8-flash-high.md`'s reason and purpose exactly per the User's
+instruction, and verified it with a live Herdr `--kind opencode` worker —
+independently confirming the flat, exact-match mechanism generalizes across
+providers (Antigravity and OpenCode Go so far) with zero mechanism changes,
+only a new data file and one new catalog selection. `agents/reasons-and-purposes.md`
+now documents both models and no longer reads as Gemini-specific. No open
+limitations remain for either `gemini-3.8-flash-high` or
+`deepseek-v4.1-flash-max`; `chatgpt` remains reserved, folder-less, pending
+its own request.
