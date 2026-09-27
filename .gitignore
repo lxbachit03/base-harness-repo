@@ -43,3 +43,5 @@ docs-harness/plans/completed/*
 !docs-harness/harness-improvements/0926-model-family-layer-prompts.md
 !docs-harness/harness-improvements/0926-utilizing-tools-orca-ade.md
 !docs-harness/harness-improvements/0926-orca-ade-coordinate-agents.md
+!docs-harness/harness-improvements/0927-typesafe-ai-skill-integration.md
+

@@ -64,6 +64,7 @@ and a bounded target.
 | Browser interaction on a local or in-app target | the browser control skill |
 | Interactive chart, map, or simulation | the visualize skill |
 | Plugin discovery, permissions, dependencies | the plugin management skill |
+| Semantic judgment, ticket triage, fast classification, Jev primitives | `typesafe-ai` (`.agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1`) |
 | Repository procedure | the matching repository workflow skill |
 
 Capability discovery rules:

@@ -62,6 +62,7 @@ and a bounded target.
 | Watch a long-running condition | `Monitor` (deferred); background `Bash` for detached commands |
 | Recurring or scheduled work | `CronCreate` / `CronList` / `CronDelete` (deferred) |
 | Load a repository procedure | `Skill` |
+| Semantic judgment, ticket triage, fast classification, Jev primitives | `typesafe-ai` (`.agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1`) |
 | Publish a page the User or team will use | `Artifact` |
 | External service data | `mcp__<server>__<tool>` from a connected, authenticated server |
 | Bounded independent investigation | `Agent`, only under the delegation rule below |

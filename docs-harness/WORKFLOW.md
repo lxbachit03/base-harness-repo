@@ -40,6 +40,14 @@ If a new decision or external action is needed, finish independent preparation
 and present the concrete boundary for approval. An unavailable tool is an
 unattempted check, not a failing product test.
 
+When leveraging external semantic judgment primitives (such as TypeSafe Jev)
+for fast evaluation, triage, or guardrails, workflows must implement graceful
+fallback. In offline environments, unauthenticated CI runners, or when API
+credentials are absent, execution must degrade gracefully to static heuristics,
+default categories, or human escalation rather than aborting repository
+operations. Credentials must always be read dynamically from process environment
+or host registry contexts and never hardcoded or committed to repository records.
+
 ## Choose proof
 
 Use checks matched to the changed behavior: focused tests for local rules,
