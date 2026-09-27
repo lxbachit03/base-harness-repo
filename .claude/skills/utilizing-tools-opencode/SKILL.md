@@ -58,6 +58,8 @@ and a bounded target.
 | Delegate bounded work | `task` (subagents: `general`, `explore`, `scout` by default) |
 | User decision | `question` |
 | Load a procedure | `skill` |
+| Semantic judgment, ticket triage, fast classification, Jev primitives | `typesafe-ai` (`.agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1`) |
+| Customizing Jev semantic scripts & manifest for target projects | `enhance-jev` (`docs-harness/JEV-AI.md`) |
 | External service | MCP tools from a configured, authenticated server |
 | Lifecycle hooks or custom tools | OpenCode plugins (JS/TS modules) |
 

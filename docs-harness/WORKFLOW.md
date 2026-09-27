@@ -55,6 +55,11 @@ for fast evaluation, triage, or guardrails, workflows adhere to four core best p
 4. **Domain Contract Freshness Verification (`check-domain-freshness.ps1`)**: Audit code diffs
    against canonical specifications in `docs-harness/domain/` using Noul staleness judgments,
    flagging documents as `[UNCERTAIN]` when code changes invalidate domain assertions.
+5. **Dynamic Manifest Synchronization (`$enhance-jev`)**: When adapting Jev primitives for target
+   project domains, agents consult and update [`docs-harness/JEV-AI.md`](JEV-AI.md) as the single
+   source of truth. If user requirements are ambiguous, the agent must pause and ask clarifying
+   questions before synchronizing (adding, modifying, or pruning) executable scripts in
+   `.agents/skills/typesafe-ai/scripts/`.
 
 Workflows must implement graceful fallback: in offline environments, unauthenticated CI runners,
 or when API credentials are absent, execution degrades gracefully to static heuristics, default

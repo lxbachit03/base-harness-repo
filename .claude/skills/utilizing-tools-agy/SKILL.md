@@ -63,6 +63,8 @@ and a bounded target.
 | Browser automation or web debugging | `chrome-devtools-plugin` skills |
 | Modern web platform guidance | `modern-web-guidance-plugin` skills |
 | AGY configuration or SDK work | `builtin` and SDK skills |
+| Semantic judgment, ticket triage, fast classification, Jev primitives | `typesafe-ai` (`.agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1`) |
+| Customizing Jev semantic scripts & manifest for target projects | `enhance-jev` (`docs-harness/JEV-AI.md`) |
 | Repository procedure | the matching repository workflow skill |
 
 Capability discovery rules:
