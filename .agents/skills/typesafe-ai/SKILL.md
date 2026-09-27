@@ -51,6 +51,10 @@ API contracts, SDK usage, models, limits, and worked examples.
 | Decide how to handle uncertainty | [Confidence](https://docs.typesafe.ai/confidence.md) |
 | Write API code | [HTTP API](https://docs.typesafe.ai/api.md), [Python SDK](https://docs.typesafe.ai/sdk/python.md), or [JavaScript SDK](https://docs.typesafe.ai/sdk/javascript.md) |
 | Local zero-dependency invocation | [scripts/invoke-typesafe.ps1](scripts/invoke-typesafe.ps1) with dynamic key resolution and graceful fallback |
+| Hybrid Task Authority Precheck (0822) | [scripts/precheck-authority.ps1](scripts/precheck-authority.ps1) for sub-millisecond regex + Jev semantic mutation gating |
+| Selective Smart Skill Router | [scripts/suggest-skill.ps1](scripts/suggest-skill.ps1) with explicit-mention bypass and on-demand Jev Choice |
+| Probabilistic Ticket Intake Triage | [scripts/triage-ticket.ps1](scripts/triage-ticket.ps1) for automated category, severity, and complexity scoring |
+| Domain Freshness & Drift Verification | [scripts/check-domain-freshness.ps1](scripts/check-domain-freshness.ps1) for validating code diffs against domain specs |
 | Update an older integration | [Migration guide](https://docs.typesafe.ai/migrating-to-v1.md) and the installed SDK's current reference |
 
 ## Find the useful shape

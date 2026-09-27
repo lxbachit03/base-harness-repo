@@ -41,12 +41,25 @@ and present the concrete boundary for approval. An unavailable tool is an
 unattempted check, not a failing product test.
 
 When leveraging external semantic judgment primitives (such as TypeSafe Jev)
-for fast evaluation, triage, or guardrails, workflows must implement graceful
-fallback. In offline environments, unauthenticated CI runners, or when API
-credentials are absent, execution must degrade gracefully to static heuristics,
-default categories, or human escalation rather than aborting repository
-operations. Credentials must always be read dynamically from process environment
-or host registry contexts and never hardcoded or committed to repository records.
+for fast evaluation, triage, or guardrails, workflows adhere to four core best practices:
+1. **Hybrid Task Authority Precheck (`precheck-authority.ps1`)**: Fast regex allowlists (<5ms)
+   clear routine read-only commands immediately, while ambiguous mutations query Jev semantic
+   primitives (<500ms) to enforce the 0822 User Authority Gate and prevent unauthorized Git staging,
+   commits, or destructive operations.
+2. **Selective On-Demand Skill Routing (`suggest-skill.ps1`)**: Avoid prompt context bloat by
+   invoking the smart skill router only when user intent is ambiguous or lacks an explicit skill
+   name; requests with explicit skill mentions bypass routing entirely.
+3. **Probabilistic Ticket Intake Triage (`triage-ticket.ps1`)**: Inbound tickets are triaged
+   with typed Choice (category), Score (severity & implementation complexity), and Noul
+   (reproducibility clarity) to standardize priority without heavy LLM reasoning loops.
+4. **Domain Contract Freshness Verification (`check-domain-freshness.ps1`)**: Audit code diffs
+   against canonical specifications in `docs-harness/domain/` using Noul staleness judgments,
+   flagging documents as `[UNCERTAIN]` when code changes invalidate domain assertions.
+
+Workflows must implement graceful fallback: in offline environments, unauthenticated CI runners,
+or when API credentials are absent, execution degrades gracefully to static heuristics, default
+categories, or human escalation rather than aborting repository operations. Credentials must always
+be resolved dynamically from environment or host registry contexts and never hardcoded or committed.
 
 ## Choose proof
 

@@ -139,6 +139,7 @@ Resources:
 - [Orca ADE documentation, capability routing skill, and Herdr coordination](harness-improvements/0926-utilizing-tools-orca-ade.md) — `#031_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
 - [Pure Orca ADE multi-agent coordination skill and Claude sync](harness-improvements/0926-orca-ade-coordinate-agents.md) — `#032_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
 - [TypeSafe Jev semantic primitives and native PowerShell helper with graceful fallback](harness-improvements/0927-typesafe-ai-skill-integration.md) — `#033_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]`
+- [TypeSafe Jev best practices implementation for task authority, selective routing, ticket triage, and domain freshness](harness-improvements/0927-typesafe-best-practices-integration.md) — `#034_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]`
 - [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
