@@ -29,6 +29,9 @@ docs-harness/layers/
   ChatGPT file all live side by side in the same `agents/` folder, each
   distinguished only by its own filename. This was a deliberate User decision
   (2026-09-26): the flat layout was chosen over grouping by provider.
+- A layer may also contain a `hooks/` subfolder whose files are not
+  model-matched: they load through the same walk per its `hooks/README.md`,
+  each governed by its own activation checklist.
 
 ## Model-specific file matching
 
@@ -72,9 +75,13 @@ INDEX itself.
       rest of the session. Announcing the path satisfies the notification
       requirement; no content preview is required.
    3. If no file matches, or the layer has no `agents/` folder, or the exact
-      identifier could not be resolved, skip that layer with no notification.
+      identifier could not be resolved, skip that layer's agents matching
+      with no notification.
       This is the normal outcome whenever no add-on has been authored for the
       current exact model yet, not an error.
+   4. If the layer contains a `hooks/` folder, read each hook file there and
+      apply only hooks whose activation checklist is checked, per its
+      `hooks/README.md`.
 3. If the identifier itself cannot be determined, skip layer loading entirely
    and continue the task unaffected; note the gap only if the task directly
    depends on a specific model's add-on.
