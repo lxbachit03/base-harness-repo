@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Layer-2 hooks mechanism with jev-hook pre-action Jev gate
 CREATED: 2026-09-30
-STATUS: completed
+STATUS: completed (revised 2026-09-30: consult observability rule)
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -112,6 +112,19 @@ git staging/commits, Herdr coordination, and record #005
   correctly (9 files); no mutations. In-session gates also observed: two
   invoke-typesafe.ps1 consults by the primary session (coordination
   `proceed` 0.96/921ms; record edit `proceed` 0.98/440ms).
+- 2026-09-30 (revision): User reported that Jev request/response logs were
+  missing in the main session. Root cause: the original request contained no
+  explicit logging clause and the hook contract did not forbid `-Quiet`, so
+  the primary session's direct consults ran quiet and showed only one-line
+  summaries (full payloads appeared only in the precheck-authority.ps1
+  semantic run). Fix: `jev-hook.md` gains a `Consult observability` rule —
+  every consult must run without `-Quiet` so the full request payload,
+  response answers, model, and latency appear in session output. Verified by
+  the two revision consults themselves (non-quiet, full payloads visible:
+  `proceed` 0.89/535ms and `proceed` 0.99/458ms, jev-1.13.0). Optional
+  follow-up proposal, not implemented: durable file logging would need a
+  `-LogPath` parameter on invoke-typesafe.ps1 plus a JEV-AI.md manifest
+  sync.
 
 ## Validation
 

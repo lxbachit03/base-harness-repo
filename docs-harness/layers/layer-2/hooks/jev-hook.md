@@ -51,6 +51,13 @@ the gate and cannot gate themselves.
 
   Follow docs-harness/JEV-AI.md section 3 for state and question shapes.
 
+## Consult observability
+
+Invoke every consult without `-Quiet`: the full request payload, response
+answers, model, and latency must appear in the session output. A one-line
+summary alone does not satisfy the gate; the request and response stay
+observable so a skipped or truncated consult is detectable.
+
 ## Verdict handling
 
 - `proceed` or `proceed_with_caution`: execute; surface the caution.
