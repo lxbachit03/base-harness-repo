@@ -146,10 +146,10 @@ Resources:
 - [TypeSafe Jev best practices implementation for task authority, selective routing, ticket triage, and domain freshness](harness-improvements/0927-typesafe-best-practices-integration.md) — `#034_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]`
 - [Dynamic Jev manifest and enhance-jev skill for project-specific customization](harness-improvements/0927-dynamic-jev-manifest-and-enhance-skill.md) — `#035_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]`
 - [Layer-2 hooks mechanism with jev-hook pre-action Jev gate](harness-improvements/0930-layer-2-hooks-and-jev-gate.md) — `#036_IMPROVE_HARNESS_0930`, `PRIORITY: [MEDIUM]`
+- [Retire the missing #012 plan route from INDEX](harness-improvements/1003-retire-missing-012-plan-route.md) — `#037_IMPROVE_HARNESS_1003`, `PRIORITY: [NORMAL]`
 - [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
-- [Evidence-backed domain capture and freshness validation](plans/completed/0902-evidence-backed-domain-freshness.md) - `#012_IMPROVE_HARNESS_0902`, `PRIORITY: [MEDIUM]`
 - [Service E2E domain-flow template improvement](plans/active/0822-domain-e2e-flow-template.md) — `#011_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [Ticket evidence workspace templates](plans/active/0822-ticket-evidence-workspace.md) — `#010_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
 - [User authority operation gate](plans/active/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
@@ -308,8 +308,6 @@ Skip when: the task has no dependency on completed work.
 Resources:
 
 - [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
-
-- [Evidence-backed domain capture and freshness validation](plans/completed/0902-evidence-backed-domain-freshness.md) — `#012_IMPROVE_HARNESS_0902`, `PRIORITY: [MEDIUM]`
 - [Goal-griller specialist routing improvement](plans/completed/0812-harness-improvement-goal-routing.md) — `#002_IMPROVE_HARNESS_0812`, `PRIORITY: [MEDIUM]`
 
 ### tickets/
