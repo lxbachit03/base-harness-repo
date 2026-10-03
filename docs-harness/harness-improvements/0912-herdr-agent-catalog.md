@@ -16,6 +16,16 @@ REFERENCES:
 - .agents/skills/herdr-coordinate-agents/references/task-contract.md
 - docs-harness/harness-improvements/0912-agent-self-validation.md
 
+## Current policy notice (2026-10-03)
+
+This record replaced the mandatory Luna worker rule of
+[#016](0907-bale-herdr-orchestration.md). Its mandatory pre-submission
+preflight was later replaced by one bounded post-launch check in
+[#022](0913-opencode-windows-launch-and-lean-herdr.md). This record retains
+its original scope, evidence and pending replay; current Herdr policy lives in
+AGENTS.md, `docs-harness/HERDR-AGENTS.md` and the `herdr-coordinate-agents`
+skill.
+
 ## Objective
 
 Replace the active Herdr policy's mandatory GPT-5.6 Luna/max/Fast worker

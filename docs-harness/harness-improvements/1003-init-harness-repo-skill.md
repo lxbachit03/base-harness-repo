@@ -11,7 +11,7 @@ REFERENCES:
 - .agents/skills/init-harness-repo/scaffold.md
 - .claude/skills/init-harness-repo/
 - .agents/skills/writing-for-agents/SKILL-MECHANICS.md
-- GOAL.md (User-set goal, untracked)
+- [not retained] GOAL.md (User-set goal file, untracked; no longer present after the goal completed)
 
 ## Objective
 

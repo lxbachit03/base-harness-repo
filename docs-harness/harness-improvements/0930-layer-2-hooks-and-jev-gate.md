@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Layer-2 hooks mechanism with jev-hook pre-action Jev gate
 CREATED: 2026-09-30
-STATUS: completed (revised 2026-09-30: consult observability rule)
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -125,6 +125,9 @@ git staging/commits, Herdr coordination, and record #005
   follow-up proposal, not implemented: durable file logging would need a
   `-LogPath` parameter on invoke-typesafe.ps1 plus a JEV-AI.md manifest
   sync.
+- 2026-10-03: STATUS normalized from "completed (revised 2026-09-30: consult
+  observability rule)" to "completed" by #040; the revision is recorded in the
+  entry above.
 
 ## Validation
 

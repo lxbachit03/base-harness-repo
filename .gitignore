@@ -5,6 +5,7 @@
 docs-harness/*
 !docs-harness/harness-improvements/
 docs-harness/harness-improvements/*
+!docs-harness/harness-improvements/README.md
 !docs-harness/harness-improvements/0906-per-improvement-records.md
 !docs-harness/harness-improvements/0907-bale-herdr-orchestration.md
 !docs-harness/harness-improvements/0912-agent-self-validation.md
@@ -36,12 +37,31 @@ docs-harness/layers/layer-2/hooks/*
 !docs-harness/layers/layer-2/hooks/jev-hook.md
 !docs-harness/plans/
 docs-harness/plans/*
+!docs-harness/plans/README.md
 !docs-harness/plans/active/
 docs-harness/plans/active/*
+!docs-harness/plans/active/0815-ticket-lifecycle-routing.md
+!docs-harness/plans/active/0815-writing-for-agents-routing.md
+!docs-harness/plans/active/0816-filesystem-index-sync-rule.md
+!docs-harness/plans/active/0816-onboarding-skill-folder-routing.md
+!docs-harness/plans/active/0816-persona-response-style-routing.md
+!docs-harness/plans/active/0822-domain-e2e-flow-template.md
+!docs-harness/plans/active/0822-ticket-evidence-workspace.md
+!docs-harness/plans/active/0822-user-authority-operation-gate.md
 !docs-harness/plans/active/0906-behavior-parity-audit.md
 !docs-harness/plans/completed/
 docs-harness/plans/completed/*
+!docs-harness/plans/completed/0812-harness-improvement-goal-routing.md
 !docs-harness/plans/completed/0906-task-authority-and-policy-consistency.md
+# Lifecycle targets of active plans, so a move to completed/ stays tracked.
+!docs-harness/plans/completed/0815-ticket-lifecycle-routing.md
+!docs-harness/plans/completed/0815-writing-for-agents-routing.md
+!docs-harness/plans/completed/0816-filesystem-index-sync-rule.md
+!docs-harness/plans/completed/0816-onboarding-skill-folder-routing.md
+!docs-harness/plans/completed/0816-persona-response-style-routing.md
+!docs-harness/plans/completed/0822-domain-e2e-flow-template.md
+!docs-harness/plans/completed/0822-ticket-evidence-workspace.md
+!docs-harness/plans/completed/0822-user-authority-operation-gate.md
 !docs-harness/plans/completed/0906-behavior-parity-audit.md
 !docs-harness/harness-improvements/0921-utilizing-tools-claude-capability-catalog.md
 !docs-harness/harness-improvements/0921-utilizing-tools-skill-parity.md
@@ -57,4 +77,5 @@ docs-harness/plans/completed/*
 !docs-harness/harness-improvements/1003-retire-missing-012-plan-route.md
 !docs-harness/harness-improvements/1003-init-harness-repo-skill.md
 !docs-harness/harness-improvements/1003-optimization-review-correctness-fixes.md
+!docs-harness/harness-improvements/1003-record-metadata-cleanup.md
 

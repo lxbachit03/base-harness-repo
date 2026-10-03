@@ -8,7 +8,7 @@ CREATED: 2026-10-03
 STATUS: completed
 REFERENCES:
 - docs-harness/INDEX.md
-- #026_IMPROVE_HARNESS_0921
+- docs-harness/harness-improvements/0921-utilizing-tools-claude-capability-catalog.md
 - .gitignore
 
 ## Objective
