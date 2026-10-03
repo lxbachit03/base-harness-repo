@@ -3,7 +3,7 @@
     Suggests optimal Harness skill(s) for a given user prompt using TypeSafe Jev (System One).
 
 .DESCRIPTION
-    Analyzes a user request or task description against the repository's 17 skills catalog
+    Analyzes a user request or task description against the skill catalog in $skillsCriteria below
     using Jev's Choice primitive. Supports both single-skill and Multi-Skill Chain routing (Top-N thresholding)
     for composite tasks, returning PrimarySkill, SupportingSkills, and SkillChain.
     Includes an explicit-mention bypass and automatic heuristic fallback for offline environments.

@@ -126,7 +126,8 @@ unsupported or mismatched profile pauses task submission without silently
 substituting another configuration.
 
 Use Herdr's native `agent prompt` exactly once for each reconciled attempt. For a
-`tight` handoff, prefer one bounded call with `--wait --until done --timeout 60000`;
+`tight` handoff, prefer one call with `--wait --until done` and no `--timeout`
+value, per the runtime reference's Read and wait section;
 do not pre-poll and then send the same prompt. Before sending,
 Bale records the attempt ID, prompt/configuration hashes, target identity and
 delivery state in the coordinator-owned task record. On a timeout or crash,

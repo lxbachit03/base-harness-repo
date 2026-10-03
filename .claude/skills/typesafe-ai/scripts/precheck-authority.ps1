@@ -47,11 +47,19 @@ param(
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 $trimmedCmd = $Command.Trim()
 
+# Classify every segment of a chained, piped or substituted command, so a
+# read-only prefix cannot carry a mutation (e.g. "git status; git push").
+# A quoted separator may over-split; that only routes the command to Jev.
+$segments = @([regex]::Split($trimmedCmd, '\|\||&&|;|\||\r?\n|\$\(|`') |
+    ForEach-Object { $_.Trim().TrimStart('(', '{').TrimEnd(')', '}').Trim() } |
+    Where-Object { $_ })
+
 # -------------------------------------------------------------------------
 # Step 1: Sub-millisecond Regex Fast-Path for Known Read-Only Operations
 # -------------------------------------------------------------------------
 $readOnlyPattern = '^(Get-ChildItem|dir\b|ls\b|Get-Content|cat\b|type\b|Get-Item|Test-Path|view_file|git\s+(status|diff|log|branch|show)|read_file|findstr|Select-String|grep\b|pwd\b|echo\b|Write-Host)'
-if ($trimmedCmd -match $readOnlyPattern -and $trimmedCmd -notmatch '(>|>>|Set-Content|Out-File|Remove-Item|del\b|rm\b)') {
+$allSegmentsReadOnly = $segments.Count -gt 0 -and @($segments | Where-Object { $_ -notmatch $readOnlyPattern }).Count -eq 0
+if ($allSegmentsReadOnly -and $trimmedCmd -notmatch '(>|>>|Set-Content|Out-File|Remove-Item|del\b|rm\b)') {
     $stopwatch.Stop()
     $latency = [math]::Round($stopwatch.Elapsed.TotalMilliseconds, 2)
     if (-not $Quiet) {
@@ -72,7 +80,7 @@ if ($trimmedCmd -match $readOnlyPattern -and $trimmedCmd -notmatch '(>|>>|Set-Co
 # Step 2: Sub-millisecond Regex Hard Boundary for Critical Mutations
 # -------------------------------------------------------------------------
 $hardBoundaryPattern = '^(git\s+(add\b|commit\b|push\b|rebase\b|reset\s+--hard|clean\s+-[a-zA-Z]*f)|rm\s+-[a-zA-Z]*r|Remove-Item\s+.*-Recurse|format\s+[a-zA-Z]:|Drop-Database)'
-if ($trimmedCmd -match $hardBoundaryPattern) {
+if (@($segments | Where-Object { $_ -match $hardBoundaryPattern }).Count -gt 0) {
     $stopwatch.Stop()
     $latency = [math]::Round($stopwatch.Elapsed.TotalMilliseconds, 2)
     if (-not $Quiet) {

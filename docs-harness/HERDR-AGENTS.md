@@ -186,6 +186,7 @@ Antigravity, `allowNonWorkspaceAccess` and any deny/managed rule must also
 permit the requested scope; the bypass flag alone does not prove that. Never
 use a global wildcard or rewrite shared provider settings merely to make an
 unverified adapter appear ready; use a task-owned provider configuration when
+the provider supports one, and record its effective state.
 
 ### Orca ADE host environment integration (Worktrees and Terminal Multiplexing)
 

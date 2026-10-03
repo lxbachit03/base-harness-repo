@@ -66,7 +66,7 @@ All active Jev scripts reside flatly in `.agents/skills/typesafe-ai/scripts/` an
   { "user_prompt": "<raw prompt>" }
   ```
 - **Questions**:
-  - `suggested_skill` (`choice`): Evaluates against 17 skills catalog.
+  - `suggested_skill` (`choice`): Evaluates against the skill criteria listed in `suggest-skill.ps1`.
 - **Decision Logic**:
   - Explicit-mention bypass: if prompt contains `$skill-name`, immediately return `ExplicitMention` (0ms API).
   - Ambiguous prompt: calls Jev; top skill is `PrimarySkill`; any skill with `probability >= 0.12` becomes `SupportingSkills`.
@@ -83,7 +83,7 @@ All active Jev scripts reside flatly in `.agents/skills/typesafe-ai/scripts/` an
   - `severity` (`score`): 0 (Cosmetic), 1 (Degraded/Workaround), 2 (Blocking/Critical).
   - `reproducibility` (`noul`): Steps to reproduce present (prob >= 0.5).
   - `complexity` (`score`): 0 (Trivial), 1 (Moderate), 2 (Complex/Architectural).
-- **Priority Mapping**: `Severity >= 1.4` -> `[CRITICAL]`, `>= 0.7` -> `[MEDIUM]`, else `[NORMAL]`.
+- **Priority Mapping**: `Severity >= 1.4` -> `[CRITIAL]` (the catalog spelling in `templates/README.md`), `>= 0.7` -> `[MEDIUM]`, else `[NORMAL]`.
 
 ### 3.4. `check-domain-freshness.ps1`
 - **Purpose**: Audit code changes against `docs-harness/domain/`.
@@ -97,7 +97,30 @@ All active Jev scripts reside flatly in `.agents/skills/typesafe-ai/scripts/` an
 - **Questions**:
   - `is_domain_stale` (`noul`): Probability code invalidates domain specification.
   - `staleness_severity` (`score`): 0 (No impact), 1 (Minor drift), 2 (Breaking staleness).
-- **Decision Logic**: If `is_domain_stale >= 0.5` -> flag `[UNCERTAIN]`; if `staleness_severity >= 1.4` -> `ImmediateDomainUpdateRequired`.
+- **Decision Logic**: If `is_domain_stale >= 0.5` -> flag the claim `STATUS: needs-review` and `Freshness: STALE` (`MarkStaleAndScheduleReview`); if `staleness_severity >= 1.4` -> `ImmediateDomainUpdateRequired`. Confirmation tags stay unchanged; only the User changes them (`docs-harness/domain/README.md`).
+
+### 3.5. jev-hook generic consult (`invoke-typesafe.ps1`)
+- **Purpose**: The gate consult that `layers/layer-2/hooks/jev-hook.md` requires for file, coordination and other tool groups.
+- **State Shape** (PowerShell hashtable passed as `-State`):
+  ```powershell
+  @{
+    user_intent       = "<the User's current request>"
+    action_group      = "<file_ops_read | file_ops_write | coordination | other>"
+    pending_action    = "<what will run, on which targets>"
+    targets           = @("<paths or resources>")
+    authority_excerpt = "<the applicable AGENTS.md Task authority lines>"
+  }
+  ```
+- **Questions** (hashtable passed as `-Questions`; a `choice` takes a criteria hashtable, a `score` takes an ordered criteria array):
+  ```powershell
+  @{
+    gate_decision = @{ type = "choice"; instructions = "<decide whether the pending action may run now>"
+      criteria = @{ proceed = "<...>"; proceed_with_caution = "<...>"; pause_ask_user = "<...>"; veto = "<...>" } }
+    risk_score    = @{ type = "score"; instructions = "<rate the risk>"
+      criteria = @("Safe; read-only", "Local reversible change", "External or hard to undo") }
+  }
+  ```
+- **Decision Logic**: Act on `Answers.gate_decision.choice` per the hook's Verdict handling; `Fallback = $true` means the hook's bypass rule applies.
 
 ---
 

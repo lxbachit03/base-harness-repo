@@ -13,9 +13,9 @@ that workflow is involved.
 - **Durable change:** use one evolving plan when work spans sessions, coordinates
   contributors, has meaningful dependencies, or needs recovery steps. Follow
   docs-harness/plans/README.md and docs-harness/templates/plan.md.
-- **Strict audit:** use the selected audit skill's evidence protocol only when
-  that audit is requested. Cryptographic evidence bundles and a fresh reviewer
-  are not prerequisites for ordinary inspection or implementation.
+- **Audit:** follow an explicitly invoked audit skill's protocol only when that
+  audit is requested. Audits are not prerequisites for ordinary inspection or
+  implementation.
 
 Keep task-local progress and decisions together. Add a separate accepted
 decision only when future work must inherit a consequential product,
@@ -41,7 +41,7 @@ and present the concrete boundary for approval. An unavailable tool is an
 unattempted check, not a failing product test.
 
 When leveraging external semantic judgment primitives (such as TypeSafe Jev)
-for fast evaluation, triage, or guardrails, workflows adhere to four core best practices:
+for fast evaluation, triage, or guardrails, workflows adhere to five core best practices:
 1. **Hybrid Task Authority Precheck (`precheck-authority.ps1`)**: Fast regex allowlists (<5ms)
    clear routine read-only commands immediately, while ambiguous mutations query Jev semantic
    primitives (<500ms) to enforce the 0822 User Authority Gate and prevent unauthorized Git staging,
@@ -54,7 +54,8 @@ for fast evaluation, triage, or guardrails, workflows adhere to four core best p
    (reproducibility clarity) to standardize priority without heavy LLM reasoning loops.
 4. **Domain Contract Freshness Verification (`check-domain-freshness.ps1`)**: Audit code diffs
    against canonical specifications in `docs-harness/domain/` using Noul staleness judgments,
-   flagging documents as `[UNCERTAIN]` when code changes invalidate domain assertions.
+   flagging contradicted claims `STATUS: needs-review` and `Freshness: STALE` per
+   `docs-harness/domain/README.md`; confirmation tags stay with the User.
 5. **Dynamic Manifest Synchronization (`$enhance-jev`)**: When adapting Jev primitives for target
    project domains, agents consult and update [`docs-harness/JEV-AI.md`](JEV-AI.md) as the single
    source of truth. If user requirements are ambiguous, the agent must pause and ask clarifying

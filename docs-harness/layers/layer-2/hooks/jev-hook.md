@@ -29,7 +29,8 @@ One consult covers one action group per turn:
 One verdict covers the same-intent actions of that group in the same turn; a
 new intent starts a new consult.
 
-Exempt: the Jev consult itself, and session-start retrieval (AGENTS.md,
+Exempt: the Jev consult itself (including reading docs-harness/JEV-AI.md
+section 3.5 to build it), and session-start retrieval (AGENTS.md,
 docs-harness/INDEX.md, PERSONA.md, layers walk, hook files) — they enable
 the gate and cannot gate themselves.
 
@@ -49,7 +50,7 @@ the gate and cannot gate themselves.
   - `risk_score` (score): 0 safe read-only / 1 local reversible /
     2 external or hard to undo.
 
-  Follow docs-harness/JEV-AI.md section 3 for state and question shapes.
+  Follow docs-harness/JEV-AI.md section 3.5 for state and question shapes.
 
 ## Consult observability
 

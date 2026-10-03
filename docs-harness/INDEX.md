@@ -12,7 +12,8 @@ selection is empty or ambiguous. Apply persona to conversation only.
 
 Then follow [layers/README.md](layers/README.md) to load any add-on prompt
 layer matching the current session's exact resolved model, announcing each
-loaded file's path to the User before applying it.
+loaded file's path to the User before applying it, and to apply every hook
+whose activation checklist is checked.
 
 Discover current work by metadata, not by loading every body:
 
@@ -148,6 +149,7 @@ Resources:
 - [Layer-2 hooks mechanism with jev-hook pre-action Jev gate](harness-improvements/0930-layer-2-hooks-and-jev-gate.md) — `#036_IMPROVE_HARNESS_0930`, `PRIORITY: [MEDIUM]`
 - [Retire the missing #012 plan route from INDEX](harness-improvements/1003-retire-missing-012-plan-route.md) — `#037_IMPROVE_HARNESS_1003`, `PRIORITY: [NORMAL]`
 - [User-invoked init-harness-repo skill for scaffolding a minimal Harness](harness-improvements/1003-init-harness-repo-skill.md) — `#038_IMPROVE_HARNESS_1003`, `PRIORITY: [MEDIUM]`
+- [Correctness fixes from the 2026-10-03 optimization review (group A)](harness-improvements/1003-optimization-review-correctness-fixes.md) — `#039_IMPROVE_HARNESS_1003`, `PRIORITY: [MEDIUM]`
 - [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
@@ -393,8 +395,9 @@ Read when: every session, at the same session-start point PERSONA.md is read,
 to load any add-on layer matching the current session's exact resolved
 model.
 
-Skip when: never skip the check itself; skip loading only when no file in a
-given layer's `agents/` folder matches the current session's identity.
+Skip when: never skip the check itself; skip loading a layer's `agents/`
+files only when none matches the current session's identity. Hooks are read
+in every session and apply per their own activation checklist.
 
 Resources:
 
@@ -433,7 +436,7 @@ Skip when: no new resource is being created.
 
 Resources:
 
-- [Service E2E domain-flow template catalog](templates/README.md)
+- [Template catalog, resource IDs and metadata](templates/README.md)
 - [Activity diagram template](templates/activity-diagram.md)
 - [Harness improvement template](templates/harness-improvement.md)
 - [Constraint template](templates/constraint.md)

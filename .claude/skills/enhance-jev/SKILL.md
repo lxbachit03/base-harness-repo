@@ -6,7 +6,7 @@ description: Customize and synchronize TypeSafe Jev semantic scripts with projec
 # Enhance Jev
 
 Use this skill to adapt and customize TypeSafe Jev System One semantic primitives for target applications and real-world project domains.
-[`docs-harness/JEV-AI.md`](../../docs-harness/JEV-AI.md) is the single source of truth (manifest). This skill keeps that manifest and the executable PowerShell scripts under `.agents/skills/typesafe-ai/scripts/` synchronized.
+[`docs-harness/JEV-AI.md`](../../../docs-harness/JEV-AI.md) is the single source of truth (manifest). This skill keeps that manifest and the executable PowerShell scripts under `.agents/skills/typesafe-ai/scripts/` synchronized.
 
 ## Workflow Phases
 
@@ -23,11 +23,11 @@ flowchart TD
 
 ### Phase 1: Clarification Gate & Manifest Evolution
 
-1. **Read Existing Manifest**: Read [`docs-harness/JEV-AI.md`](../../docs-harness/JEV-AI.md) to understand current active scripts, criteria, thresholds, and project context.
+1. **Read Existing Manifest**: Read [`docs-harness/JEV-AI.md`](../../../docs-harness/JEV-AI.md) to understand current active scripts, criteria, thresholds, and project context.
 2. **Intent Clarification Gate**:
    - If the user's prompt is underspecified, ambiguous, or lacks key domain facts (e.g. tech stack, error shapes, or evaluation dimensions), **PAUSE and ask the user clarifying questions immediately**.
    - Do NOT guess project-specific schemas or mutate scripts on speculative intent.
-3. **Update Manifest**: Once intent is clear, edit [`docs-harness/JEV-AI.md`](../../docs-harness/JEV-AI.md):
+3. **Update Manifest**: Once intent is clear, edit [`docs-harness/JEV-AI.md`](../../../docs-harness/JEV-AI.md):
    - Update **Section 1 (Project Context & Environment)** with the target domain facts.
    - Update **Section 2 (Active Semantic Scripts Catalog)** with any added, modified, or retired scripts.
    - Detail the input state shapes, question types (`Choice`, `Score`, `Noul`), and criteria in **Section 3**.
@@ -50,7 +50,7 @@ Verify each added or modified script locally before claiming completion:
 
 ## Completion Criteria
 
-- [ ] [`docs-harness/JEV-AI.md`](../../docs-harness/JEV-AI.md) reflects the updated project context, script catalog, and questions.
+- [ ] [`docs-harness/JEV-AI.md`](../../../docs-harness/JEV-AI.md) reflects the updated project context, script catalog, and questions.
 - [ ] All new/modified scripts in `.agents/skills/typesafe-ai/scripts/` have been created or updated.
 - [ ] Local verification commands executed with observable proof.
 - [ ] Working tree remains unstaged and uncommitted (strictly honoring User Authority).

@@ -25,7 +25,7 @@
       - ComplexityScore (double): 0.0 to 2.0.
       - ComplexityLabel (string): Descriptive complexity level.
       - HasReproductionSteps (bool): Whether reproduction steps are clearly present.
-      - RecommendedPriority (string): '[CRITICAL]', '[MEDIUM]', or '[NORMAL]'.
+      - RecommendedPriority (string): '[CRITIAL]', '[MEDIUM]', or '[NORMAL]'.
       - RecommendedModelTier (string): 'flash' (low complexity) or 'pro' (high complexity).
       - LatencyMs (double): Execution latency in milliseconds.
 #>
@@ -139,7 +139,7 @@ $compLegend = $eval.Answers.complexity.legend
 $compIndex = [math]::Min([int][math]::Round($compScore), 2)
 $compLabel = $compLegend."$compIndex"
 
-$recommendedPriority = if ($sevScore -ge 1.4) { "[CRITICAL]" } elseif ($sevScore -ge 0.7) { "[MEDIUM]" } else { "[NORMAL]" }
+$recommendedPriority = if ($sevScore -ge 1.4) { "[CRITIAL]" } elseif ($sevScore -ge 0.7) { "[MEDIUM]" } else { "[NORMAL]" }
 $recommendedModelTier = if ($compScore -ge 1.3) { "pro" } else { "flash" }
 
 if (-not $Quiet) {

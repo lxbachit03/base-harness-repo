@@ -6,8 +6,9 @@
     Best Practice 4: Domain Spec Freshness Validation Cascade.
     Compares code diffs or implementation changes against canonical domain specifications
     (docs-harness/domain/README.md) using Noul and Score primitives.
-    Automatically flags when domain knowledge should transition from [CONFIRMED] to [UNCERTAIN]
-    due to code-level schema or business logic drift.
+    Flags domain knowledge for STATUS: needs-review and Freshness: STALE when code-level
+    schema or business logic drift contradicts it. Confirmation tags stay unchanged;
+    only the User changes them (docs-harness/domain/README.md).
 
 .PARAMETER DomainPath
     Path to the domain Markdown file (e.g. docs-harness/domain/0902-auth-service/README.md).
@@ -27,7 +28,7 @@
       - StalenessProbability (double): Noul probability (0.0 to 1.0).
       - SeverityScore (double): 0.0 to 2.0.
       - SeverityLabel (string): Descriptive severity level.
-      - Recommendation (string): 'KeepConfirmed', 'MarkUncertainAndScheduleReview', or 'ImmediateDomainUpdateRequired'.
+      - Recommendation (string): 'KeepCurrent', 'MarkStaleAndScheduleReview', or 'ImmediateDomainUpdateRequired'.
       - LatencyMs (double): Execution latency in milliseconds.
 #>
 [CmdletBinding()]
@@ -103,7 +104,7 @@ if ($eval.Fallback -or (-not $eval.Success)) {
         StalenessProbability = 0.5
         SeverityScore        = 0.5
         SeverityLabel        = "Indeterminate (Fallback)"
-        Recommendation       = "MarkUncertainAndScheduleReview"
+        Recommendation       = "MarkStaleAndScheduleReview"
         Mode                 = "GracefulFallback"
         LatencyMs            = $latency
     }
@@ -118,11 +119,11 @@ $sevIndex = [math]::Min([int][math]::Round($sevScore), 2)
 $sevLabel = $sevLegend."$sevIndex"
 
 $recommendation = if ($staleProb -lt 0.4) {
-    "KeepConfirmed"
+    "KeepCurrent"
 } elseif ($sevScore -ge 1.4) {
     "ImmediateDomainUpdateRequired"
 } else {
-    "MarkUncertainAndScheduleReview"
+    "MarkStaleAndScheduleReview"
 }
 
 if (-not $Quiet) {
@@ -130,7 +131,7 @@ if (-not $Quiet) {
     Write-Host "Is Stale / Outdated    : $(if ($isStale) { 'YES (Drift Detected)' } else { 'NO (Synchronized)' })" -ForegroundColor White
     Write-Host "Staleness Probability  : $([math]::Round($staleProb * 100, 1))%" -ForegroundColor White
     Write-Host "Drift Severity Score   : $([math]::Round($sevScore, 2)) ($sevLabel)" -ForegroundColor White
-    Write-Host "Recommendation         : $recommendation" -ForegroundColor $(if ($recommendation -eq 'KeepConfirmed') { "Green" } else { "Yellow" })
+    Write-Host "Recommendation         : $recommendation" -ForegroundColor $(if ($recommendation -eq 'KeepCurrent') { "Green" } else { "Yellow" })
     Write-Host "[DomainFreshness] =============================================`n" -ForegroundColor $(if ($isStale) { "Yellow" } else { "Green" })
 }
 
