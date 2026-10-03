@@ -17,8 +17,8 @@ REFERENCES:
 
 A user-invoked skill `init-harness-repo` exists in `.agents/skills/` and is
 mirrored byte-for-byte in `.claude/skills/`. Run in another repository, it
-interviews the User and scaffolds a minimal Harness (root `AGENTS.md`, a
-routing file, `harness-improvements/`, `layers/layer-1/`,
+interviews the User and scaffolds a minimal Harness (root `AGENTS.md` with a
+`CLAUDE.md` that imports it, a routing file, `harness-improvements/`, `layers/layer-1/`,
 `harness-constraints/`, `templates/`) exactly as the specification below
 describes, without overwriting existing files.
 
@@ -146,7 +146,17 @@ user-invoked), and the User's `GOAL.md`. No commit or push.
   after questions 1 and 4; `git check-ignore` added to step 4; cancel and
   merge-text paths added to the report. `scaffold.md` unchanged. Re-mirrored.
 - 2026-10-03: Replays A2 and B2 against v2 passed; coordinator re-verified
-  both fixtures independently. Record completed.
+  both fixtures independently. Record completed; committed as `c8fea5e`.
+- 2026-10-03: User requirement-verification review found two gaps; the User
+  asked to fix both (record reopened, STATUS active). Skill v3:
+  1. Spec 1.2 ("attached to every prompt") depends on the host loading
+     `AGENTS.md`; some hosts load only `CLAUDE.md`. `scaffold.md` now also
+     generates root `CLAUDE.md` containing only `@AGENTS.md`; step 1 treats an
+     existing `CLAUDE.md` like `AGENTS.md`; step 4 checks the import line.
+  2. With a kept `AGENTS.md`, the report now warns that sessions are not
+     routed into the harness repo until the handed-back text is merged.
+- 2026-10-03: Replays A3 and B3 against v3 passed; coordinator re-verified
+  both fixtures. Record completed again.
 
 ## Validation
 
@@ -174,7 +184,7 @@ user-invoked), and the User's `GOAL.md`. No commit or push.
 
 ## Decision and Result
 
-Decision: **keep** (skill v2).
+Decision: **keep** (skill v3; v2 kept at `c8fea5e`).
 
 Native checks (2026-10-03): frontmatter has `name`, a one-line description
 and `disable-model-invocation: true`; `.agents` and `.claude` copies are
@@ -192,9 +202,11 @@ each seeded with a one-line TODO-app `README.md`; User answers scripted):
 | B1 | v1 | existing `AGENTS.md` | defaults, conflict "Cancel" | paused at conflict; nothing written; `AGENTS.md` sha256 `f066f774…` unchanged |
 | A2 | v2 | empty repo | as A1 | four questions posed recommended-first with free text, Q3 unranked; 7 files; 18 links, 0 missing; 0 `{{`; ignore check run |
 | B2 | v2 | existing `AGENTS.md` | "Keep it", defaults, goal free text | asked in step 1 before the interview; 6 files under `docs-harness/`; 12 links, 0 missing; `AGENTS.md` sha256 unchanged; report included the generated `AGENTS.md` merge text |
+| A3 | v3 | empty repo | as A1 | 8 files incl. `CLAUDE.md` = `@AGENTS.md`; 18 links, 0 missing; 0 `{{`; all 8 files matched a rebuild from `scaffold.md` |
+| B3 | v3 | existing `AGENTS.md` | "Keep them", defaults, goal free text | asked in step 1; 7 files incl. `CLAUDE.md`; 12 links, 0 missing; `AGENTS.md` sha256 unchanged; report carried the not-routed-until-merged warning and merge text |
 
 The coordinator re-ran file listings, link resolution, placeholder search and
-the `AGENTS.md` hash for A1, B1, A2 and B2 and matched each receipt.
+the `AGENTS.md` hash for every case and matched each receipt.
 
 Specification coverage: 1.1 and 1.4 note 1 (four questions with defaults and
 free text) observed in A2 and B2; 1.2, 1.4 note 2, 2.1–2.4 and 2.2.1/2.3.1
@@ -210,9 +222,14 @@ Limits and follow-up proposals (suggestions until authorized):
   (line 45) and `docs-harness` (line 43), so a scaffold in a new repository is
   untracked. v2 detects and reports it; it does not ask. Proposal: if the User
   wants it, step 4 could turn an ignored scaffold into a User question.
-- With "Keep it", the route from `AGENTS.md` to the routing file stays one-way
-  until the User merges the handed-back text. Proposal: state that explicitly
-  in the step 5 report.
+- With "Keep them", the route from `AGENTS.md` to the routing file stays
+  one-way until the User merges the handed-back text; v3 states this in the
+  report. B3 also showed that a new `CLAUDE.md` then imports the old
+  `AGENTS.md`. Proposal: name the existing files in the step 1 option label.
+- B3 noted that step 2's conflict check uses the scaffold path list that
+  `SKILL.md` tells the agent to read only at step 3. All replays read
+  `scaffold.md` early and checked correctly. Proposal: name the scaffold paths
+  in step 2 or point to `scaffold.md` there.
 - `{{TO_ROOT}}` was exercised only with a one-segment harness folder.
 - Replay workers ran some read-only commands before their first jev-hook
   consult, and A1 noted that `precheck-authority.ps1`'s regex fast path

@@ -64,6 +64,15 @@ main agent of the current session coordinates other main agents for the task.
   [harness-improvements/]({{HARNESS_DIR}}/harness-improvements/README.md).
 ```
 
+## `CLAUDE.md`
+
+Imports `AGENTS.md` for hosts that load only `CLAUDE.md`, so `AGENTS.md`
+stays the single source.
+
+```markdown
+@AGENTS.md
+```
+
 ## `{{HARNESS_DIR}}/{{ROUTING_FILE}}`
 
 ```markdown

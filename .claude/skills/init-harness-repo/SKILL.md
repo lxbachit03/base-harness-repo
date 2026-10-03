@@ -30,14 +30,16 @@ when the repository gives a concrete reason for them.
 Work at the repository root (the current working directory unless the User
 named another). List the root.
 
-If root `AGENTS.md` exists, ask now, before the interview:
+If root `AGENTS.md` or `CLAUDE.md` exists, list which ones and ask now,
+before the interview:
 
-- **Keep it** (recommended): create the rest of the scaffold and, in the
-  report, hand the User the generated `AGENTS.md` text to merge by hand.
+- **Keep them** (recommended): create the rest of the scaffold and, in the
+  report, hand the User the generated text of each kept file to merge by
+  hand.
 - **Cancel**: create nothing; go to step 5.
 
-Done when you know whether root `AGENTS.md` exists and, if it does, the User
-has chosen.
+Done when you know whether root `AGENTS.md` and `CLAUDE.md` exist and, if
+either does, the User has chosen.
 
 ## 2. Interview the User
 
@@ -82,8 +84,8 @@ resolving each target from the directory of the file that contains it:
 
 - every link target exists;
 - the routing file links to `AGENTS.md` and to each folder README;
-- `AGENTS.md` links to the routing file (skip this one when the User kept an
-  existing `AGENTS.md`);
+- `AGENTS.md` links to the routing file, and `CLAUDE.md` contains the line
+  `@AGENTS.md` (skip the check for a file the User kept);
 - every folder README links back to the routing file;
 - `layers/README.md` and `harness-constraints/README.md` state the toggle
   rule.
@@ -102,8 +104,9 @@ Tell the User:
 - each created path and each skipped path, with the reason;
 - the link-check evidence (links checked, zero missing) and any git-ignored
   paths with the ignore rule that matched;
-- when the User kept an existing `AGENTS.md`: the generated `AGENTS.md` text,
-  to merge by hand so it links to the routing file.
+- for each existing `AGENTS.md` or `CLAUDE.md` the User kept: its generated
+  text to merge by hand, and a warning that until it is merged, sessions are
+  not routed into the harness repo.
 
 After a successful scaffold, add the next steps: layer instructions under
 `layers/layer-1/` and constraints under `harness-constraints/`, each with its
