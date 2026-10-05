@@ -6,10 +6,11 @@ AGENTS.md owns task authority; templates and skills apply this contract.
 ## Capture and layout
 
 Capture a domain when the User requests onboarding of a named flow, domain
-addition (including domain-audit), ticket work that discovers domain behavior,
-or Q&A explicitly marked as domain discovery. Ordinary Q&A stays in the answer.
-A capture request includes the bounded domain and INDEX edits; it does not
-confirm business policy.
+addition, ticket work that discovers domain behavior, or Q&A explicitly marked
+as domain discovery. Ordinary Q&A stays in the answer. A capture request
+includes the bounded domain and INDEX edits; it does not confirm business
+policy. domain-audit is the exception: it records the scope the User
+explicitly confirmed, typically after onboarding, as [CONFIRMED].
 
 Use docs-harness/templates/domain.md for the canonical
 docs-harness/domain/<MMDD>-<lowercase-kebab-case-name>/README.md.

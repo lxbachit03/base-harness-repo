@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: User-selected Herdr worker configuration catalog
 CREATED: 2026-09-12
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -249,3 +249,9 @@ files, and passed independent checks. The receipt-path contract is now revised;
 complete one bounded replay with the path included and finish the Antigravity
 settings proof before marking the improvement completed. Owner for that replay:
 the next fresh BALE session handling a Herdr coordination request.
+
+2026-10-03: Completed by User decision
+([#041](1003-group-d-policy-decisions.md)). The receipt-path replay and
+Antigravity settings proof named above were not separately recorded. Related
+later evidence: a live Antigravity Herdr run checked model, effort and cwd
+after launch (`0926-model-family-layer-prompts.md:319-326`).

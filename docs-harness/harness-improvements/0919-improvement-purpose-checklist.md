@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Preserve improvement purposes as a checklist
 CREATED: 2026-09-19
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -93,3 +93,7 @@ Out of scope:
 Implementation complete; fresh replay pending. The requested purpose checklist
 is accepted by the User; effectiveness remains unverified until a new or
 continued improvement record exercises the contract.
+
+2026-10-03: Completed by User decision
+([#041](1003-group-d-policy-decisions.md)). Related later evidence: the later
+improvement records #026–#041 each carry a `## Purposes` checklist.

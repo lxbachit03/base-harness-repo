@@ -31,8 +31,9 @@ before calling tools, then continue directly into execution:
 
 Use actual exposed commands and parameters. If an in-browser task is selected,
 name the exact sub-commands (`orca tab`, `orca snapshot`, `orca click`, `orca eval`).
-If an isolated worker coordination task is selected, declare the worktree and
-terminal commands alongside the Herdr profile. If no external Orca capability is
+If Herdr worker coordination is selected, declare the terminal commands
+alongside the Herdr profile; declare worktree commands only for Orca
+coordination the User selected. If no external Orca capability is
 needed, declare the native tool carrying the task. Never invent an Orca command,
 worktree selector, terminal handle, or permission.
 
@@ -58,21 +59,21 @@ and a bounded target.
 | Interactive web automation | `orca snapshot`, `orca click --element @e#`, `orca fill` |
 | Visual UI evidence / screenshot | `orca screenshot --format png` |
 | Browser session / persistent login | `orca tab profile list/set/create` |
-| Isolated task sandbox | `orca worktree create --name <name> --json` |
+| Isolated task sandbox (Orca coordination the User selected) | `orca worktree create --name <name> --json` |
 | Inspect active checkouts | `orca worktree list --json`, `orca worktree ps --json` |
 | Review visual diffs before merge | `orca file open-changed --mode diff`, `orca file diff <path>` |
 | Clean up task workspace | `orca worktree rm --worktree <selector> --json` |
 | Non-blocking process execution | `orca terminal create --command <cmd> --json` |
 | Monitor long-running task | `orca terminal read --terminal <handle> --json` |
 | Deliver input to interactive CLI | `orca terminal send --terminal <handle> --text <text> --enter` |
-| Herdr worker containment | `orca worktree create` + `orca terminal create` for Herdr worker dispatch |
+| Herdr worker panes | `orca terminal create` on the current checkout for Herdr worker dispatch (no worktree) |
 | Herdr visual review gate | `orca file diff` + `orca tab create` for artifact verification |
 
 Capability discovery rules:
 - **Runtime status**: Always check `orca status --json` before browser or terminal commands if the connection state is unverified.
 - **Browser state**: Tab operations require an active tab or explicit `--page <id>`. Element refs (`@e1`, `@e2`) from `orca snapshot` expire upon page navigation; always take a fresh snapshot after clicks or URL changes.
 - **Worktree hygiene**: An Orca worktree is a real Git checkout. Creating one creates an independent directory and branch; removing it without `--force` ensures uncommitted work is not accidentally destroyed.
-- **Herdr alignment**: Coordination defaults to the current Git checkout unless the User authorizes an isolated Orca worktree sandbox for multi-worker parallel execution.
+- **Herdr alignment**: Herdr coordination always uses the current Git checkout. Orca worktree coordination runs only through `orca-ade-coordinate-agents` when the User explicitly selects it.
 
 ### Phase 2: Mandatory Declaration
 
@@ -102,33 +103,28 @@ and every declared capability is accounted for.
 | Browser Engine | Embedded Chromium host | `orca tab`, `snapshot`, `click`, `eval` | Active tab listed in `orca tab list --json` |
 | Worktree Sandbox | Isolated Git worktree | `orca worktree create/rm/set` | Worktree listed in `orca worktree list --json` |
 | Terminal Multiplexer | Headless PTY terminal pane | `orca terminal create/read/send/wait` | Active terminal handle in `orca terminal list` |
-| Herdr Coordination | Multi-agent dispatch | Herdr worker launched in Orca worktree/terminal | Settled worker receipt + `orca file diff` review |
+| Herdr Coordination | Multi-agent dispatch | Herdr worker launched in an Orca terminal on the current checkout | Settled worker receipt + `orca file diff` review |
 
 ## Herdr Worker Coordination via Orca ADE
 
-When Bale coordinates independent Herdr workers within an Orca ADE environment:
+When Bale coordinates independent Herdr workers within an Orca ADE environment,
+`herdr-coordinate-agents` owns the rules: every worker uses the coordinator's
+current checkout and no Git worktree is created. Orca supplies panes, diff
+review and the browser. Orca worktree coordination belongs to
+`orca-ade-coordinate-agents` and runs only when the User explicitly selects it.
 
-1. **Sandbox Allocation**:
-   - For complex, destructive, or competing multi-agent tasks, create an isolated worktree:
+1. **Worker Launch**:
+   - Spawn the Herdr worker in an Orca terminal pane on the current checkout:
      ```bash
-     orca worktree create --name herdr-<task-id> --json
+     orca terminal create --command "herdr launch --kind <kind> ..." --json
      ```
-   - This provides an isolated branch and directory, leaving the primary checkout untouched.
-2. **Worker Launch**:
-   - Spawn the Herdr worker inside an Orca terminal pane scoped to that worktree:
-     ```bash
-     orca terminal create --worktree <selector> --command "herdr launch --kind <kind> ..." --json
-     ```
-3. **Receipt-First Observation**:
+2. **Receipt-First Observation**:
    - Use `orca terminal read` or Herdr's native receipt checks to observe worker completion.
-4. **Bale Visual Review**:
-   - Inspect the worker's changes via `orca file open-changed --mode diff --worktree <selector>`.
+3. **Bale Visual Review**:
+   - Inspect the worker's changes via `orca file open-changed --mode diff`.
    - If the worker created web assets, verify visually via `orca tab create --url <preview-url>`.
-5. **Settlement & Cleanup**:
-   - Merge or cherry-pick verified commits into the base branch, then safely prune the worktree:
-     ```bash
-     orca worktree rm --worktree <selector> --json
-     ```
+4. **Settlement**:
+   - Accept or correct the changes in the shared checkout per `herdr-coordinate-agents`, then close the worker's terminal pane.
 
 ## Anti-Patterns
 
@@ -136,5 +132,5 @@ When Bale coordinates independent Herdr workers within an Orca ADE environment:
 - Assuming an element ref (`@e1`, `@e2`) remains stable after a click, navigation, or form submission without taking a fresh `orca snapshot`.
 - Failing to pass `--json` on Orca CLI calls, producing unstructured text that is difficult to parse reliably.
 - Leaving temporary browser tabs or unused worktrees open after task completion.
-- Launching an unconstrained Herdr worker into the primary checkout when the task required an isolated Orca worktree sandbox.
+- Creating an Orca worktree for Herdr coordination, or starting Orca worktree coordination the User did not select.
 - Claiming web or browser automation success without inspecting the evaluated JS return value or snapshot output.

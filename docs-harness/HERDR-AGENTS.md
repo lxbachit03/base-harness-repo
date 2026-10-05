@@ -188,14 +188,13 @@ use a global wildcard or rewrite shared provider settings merely to make an
 unverified adapter appear ready; use a task-owned provider configuration when
 the provider supports one, and record its effective state.
 
-### Orca ADE host environment integration (Worktrees and Terminal Multiplexing)
+### Orca ADE host environment integration (Terminal Multiplexing)
 
-When BALE operates within an Orca ADE environment (calibrated to v1.4.212), BALE may leverage Orca's native Git worktree sandboxing and terminal multiplexer to host Herdr worker sessions:
+When BALE operates within an Orca ADE environment (calibrated to v1.4.212), BALE may use Orca's terminal multiplexer and review tools to host Herdr worker sessions on the current checkout:
 
-- **Task Sandbox**: Instead of dispatching directly into the shared primary checkout when isolating experimental or competing worker runs, BALE may create an isolated worktree via `orca worktree create --name herdr-<task-id> --json`. The worker then runs with process-scoped permissions strictly confined to that worktree's path.
-- **Terminal Execution**: Workers can be spawned into dedicated Orca terminal panes via `orca terminal create --worktree <selector> --command "..." --json`, avoiding background command blocking on the primary coordinator shell.
-- **Visual Review Gate**: Acceptance of worker-generated code or assets can be visually reviewed using `orca file open-changed --mode diff` and verified in-browser with `orca tab create --url <url>` before settling or removing the task worktree with `orca worktree rm`.
-- **Policy boundary**: Coordination defaults to the current Git checkout. Using an Orca worktree is a task-scoped containment option, not an alternative worker model catalog.
+- **Terminal Execution**: Workers can be spawned into dedicated Orca terminal panes via `orca terminal create --command "..." --json`, avoiding background command blocking on the primary coordinator shell.
+- **Visual Review Gate**: Acceptance of worker-generated code or assets can be visually reviewed using `orca file open-changed --mode diff` and verified in-browser with `orca tab create --url <url>`.
+- **Policy boundary**: Herdr coordination always uses the current Git checkout and never an Orca worktree (#024). Orca worktree coordination belongs to `orca-ade-coordinate-agents` and runs only when the User explicitly selects Orca coordination for the task (User decision 2026-10-03, #041). Neither choice changes this worker model catalog.
 
 ## Catalog by provider
 

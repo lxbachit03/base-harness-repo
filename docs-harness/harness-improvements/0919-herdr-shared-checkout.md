@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Keep Herdr coordination in the current Git checkout
 CREATED: 2026-09-19
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -97,3 +97,9 @@ Out of scope:
 Implementation complete; fresh replay pending. The requested policy is
 accepted by the User; effectiveness remains unverified until a bounded
 no-worktree coordination case is run.
+
+2026-10-03: Completed by User decision
+([#041](1003-group-d-policy-decisions.md)), which also confirmed this rule
+over the Orca worktree path of #031. Related later evidence: live Herdr runs
+used the current checkout as cwd (`0926-model-family-layer-prompts.md:319-320`);
+no `git worktree list` before/after check was recorded.

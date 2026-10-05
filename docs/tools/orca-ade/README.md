@@ -26,7 +26,7 @@
 |  - AI Vault & Local Credential Store            - Issue Tracker (GitHub/Linear)   |
 +-----------------------------------------------------------------------------------+
 |                 [Multi-Agent Coordination & Herdr Integration]                   |
-|  - Dispatch Herdr workers (Codex, OpenCode, AGY) into isolated Orca worktrees     |
+|  - Dispatch Herdr workers (Codex, OpenCode, AGY) into Orca panes, shared checkout|
 |  - Live terminal monitoring without terminal blocking                             |
 |  - In-browser visual verification of generated artifacts & web UIs                |
 +-----------------------------------------------------------------------------------+
@@ -120,6 +120,11 @@ Orca ADE tích hợp sâu với kiến trúc mở rộng hiện đại:
 
 Trong kiến trúc Harness, **Herdr** là cơ chế điều phối worker session của BALE. Khi kết hợp với Orca ADE, sự phối hợp đạt hiệu quả tối ưu:
 
+> **Quy tắc hiện hành (User quyết định 2026-10-03, #041):** worker Herdr luôn chạy
+> trên checkout hiện tại của coordinator, không tạo Orca worktree (#024). Orca
+> worktree chỉ dùng khi User chủ động chọn điều phối bằng Orca, qua skill
+> `orca-ade-coordinate-agents`.
+
 ```text
 +---------------------------------------------------------------------------------+
 |                       BALE (Herdr Coordinator Session)                         |
@@ -129,12 +134,12 @@ Trong kiến trúc Harness, **Herdr** là cơ chế điều phối worker sessio
               | Dispatch Task                                 | Dispatch Task
               v                                               v
 +-------------------------------+             +-------------------------------+
-|  Orca Worktree: worker-1      |             |  Orca Worktree: worker-2      |
-|  (Branch: feature/auth-refactor) |             |  (Branch: feature/api-cache)  |
+|  Orca Pane: worker-1          |             |  Orca Pane: worker-2          |
+|  (Shared current checkout)    |             |  (Shared current checkout)    |
 |                               |             |                               |
 |  Terminal: OpenCode Go Worker |             |  Terminal: Codex YOLO Worker  |
-|  - Process-scoped sandbox     |             |  - Process-scoped sandbox     |
-|  - Independent Git commit log |             |  - Independent Git commit log |
+|  - Process-scoped permissions |             |  - Process-scoped permissions |
+|  - Disjoint outputs or serial |             |  - Disjoint outputs or serial |
 +-------------------------------+             +-------------------------------+
               |                                               |
               +-----------------------+-----------------------+
@@ -143,13 +148,13 @@ Trong kiến trúc Harness, **Herdr** là cơ chế điều phối worker sessio
 |                     Visual Review & Validation via Orca                         |
 |  - orca file open-changed --mode diff : Review mã nguồn song song 2 worker     |
 |  - orca tab create --url http://localhost:3000 : Kiểm thử giao diện web live    |
-|  - orca worktree rm : Giải phóng workspace an toàn khi hoàn thành               |
+|  - orca terminal close : Đóng pane của worker khi hoàn thành                    |
 +---------------------------------------------------------------------------------+
 ```
 
 ### Lợi Ích Của Việc Kết Hợp Herdr + Orca ADE:
-1. **Cách ly hoàn toàn không gian làm việc (Worktree Isolation)**:
-   - Thay vì chạy thẳng trong working tree chính của coordinator, BALE có thể yêu cầu tạo một Orca worktree riêng (`orca worktree create --name herdr-worker-1`). Worker thoải mái thay đổi file mà không làm bẩn repo gốc.
+1. **Checkout chung (Shared Checkout)**:
+   - Worker Herdr chạy trên checkout hiện tại của coordinator; worker có quyền ghi được chạy tuần tự, hoặc song song khi đầu ra tách biệt (`herdr-coordinate-agents`). Orca worktree chỉ dùng khi User chọn điều phối bằng Orca (`orca-ade-coordinate-agents`).
 2. **Theo dõi song song không nghẽn lệnh (Terminal Multiplexing)**:
    - Thay vì dùng lệnh nền hệ điều hành phức tạp, BALE có thể mở một pane terminal (`orca terminal create --command "herdr launch ..."`) và theo dõi tiến độ qua `orca terminal read`.
 3. **Kiểm toán chất lượng & Trực quan hóa Diff (Visual Review Gate)**:

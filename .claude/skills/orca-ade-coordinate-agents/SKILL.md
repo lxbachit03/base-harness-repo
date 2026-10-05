@@ -1,11 +1,14 @@
 ---
 name: orca-ade-coordinate-agents
-description: Coordinate independent coding agent sessions purely through Orca ADE as a control plane using Git worktree sandboxing, terminal multiplexing, and Hub-and-Spoke artifact relay. Use when orchestrating multiple agents, workers, or parallel tasks without Herdr.
+description: Coordinate independent coding agent sessions purely through Orca ADE as a control plane using Git worktree sandboxing, terminal multiplexing, and Hub-and-Spoke artifact relay. Use when the User explicitly selects Orca coordination for multiple agents, workers, or parallel tasks.
 ---
 
 # Orca ADE Agent Coordination
 
 Coordinate independent AI worker sessions purely through the Orca ADE control plane (`orca.exe`). AGENTS.md owns task authority and session boundaries. This skill owns Orca ADE multi-agent orchestration without Herdr dependencies.
+Use it only when the User explicitly selects Orca coordination for the task;
+that selection authorizes its worktrees. Otherwise coordination follows
+`herdr-coordinate-agents`, which keeps every worker in the current checkout.
 
 When coordinating workers:
 - **Sandbox Isolation**: Every write-capable worker runs in an independent Git worktree created via `orca worktree create`. The coordinator's primary checkout stays untouched.

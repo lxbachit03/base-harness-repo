@@ -25,7 +25,10 @@ or unavailable transport. Do not silently substitute a different choice. Keep th
 primary model and the default maximum of two live workers until the User changes
 those limits. Herdr workspaces are terminal panes, not Git worktrees: every
 worker uses the coordinator's current checkout as its `cwd`. Never create or
-select a Git worktree, detached checkout, or clone for coordination. Serialize
+select a Git worktree, detached checkout, or clone for coordination. When the
+User explicitly selects Orca coordination for a task, use
+`orca-ade-coordinate-agents` instead; that selection is what authorizes its
+worktrees. Serialize
 write-capable workers on the shared checkout; parallel workers are allowed only
 for read-only work or explicitly disjoint output paths. Worker model/effort/Fast
 selections are pass-through inputs; the lean path below optimizes BALE's context

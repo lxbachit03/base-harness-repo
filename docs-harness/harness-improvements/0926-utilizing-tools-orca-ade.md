@@ -15,6 +15,15 @@ REFERENCES:
 - .agents/skills/writing-for-agents/SKILL.md
 - .agents/skills/improve-harness/SKILL.md
 
+## Current policy notice (2026-10-03)
+
+The User resolved the overlap between this record's Orca worktree sandbox for
+Herdr workers and [#024](0919-herdr-shared-checkout.md): Herdr coordination
+always uses the current checkout, and Orca worktree coordination runs only
+when the User explicitly selects it
+([#041](1003-group-d-policy-decisions.md)). This record retains its original
+scope, evidence and decision as history.
+
 ## Objective
 
 Author comprehensive team-facing documentation for Orca ADE under `docs/tools/orca-ade/README.md`, create an agent capability routing skill `.agents/skills/utilizing-tools-orca-ade/SKILL.md` following the repository's `writing-for-agents` and `utilizing-tools-*` pattern (supporting both standalone Orca ADE power and Herdr worker coordination via Orca worktrees/terminals), update `docs-harness/HERDR-AGENTS.md` with Orca environment integration guidance, and synchronize repository index and routing.

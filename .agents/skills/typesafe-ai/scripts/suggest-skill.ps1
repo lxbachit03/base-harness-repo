@@ -111,11 +111,11 @@ $skillsCriteria = @{
     "improve-harness"            = "Applying scoped improvements to harness repo guidance, routing, skills, tools, or validation"
     "ticket-solving"             = "Investigating, organizing, and solving user tickets and bug reports"
     "herdr-coordinate-agents"    = "Coordinating multi-agent worker sessions via Herdr"
-    "orca-ade-coordinate-agents" = "Multi-agent coordination using Orca ADE terminal multiplexing and worktrees"
+    "orca-ade-coordinate-agents" = "Multi-agent coordination through Orca ADE worktrees, only when the User explicitly selects Orca coordination"
     "sequence-execution-plan"    = "Building dependency-aware execution plans, sequencing backlogs or prerequisites"
     "prompt-leverage"            = "Upgrading raw prompts into execution-ready instructions, rules, or templates"
     "onboarding"                 = "Mapping brownfield business or data flows into domain context"
-    "domain-audit"               = "Adding or auditing domain knowledge and checking freshness against codebase"
+    "domain-audit"               = "Recording domain knowledge the User confirmed (service or E2E data flow) and checking freshness; the User invokes it explicitly"
     "xia"                        = "Researching unfamiliar libraries, risky implementation, or external APIs before coding"
     "utilizing-tools-agy"        = "Selecting and declaring Antigravity tools, subagents, and plugins"
     "utilizing-tools-claude"     = "Selecting and declaring Claude Code tools, deferred tools, and subagents"
@@ -138,7 +138,8 @@ function Get-HeuristicFallbackSkill([string]$text) {
     if ($lower -match "research|investigate|explore|xia") { return "xia" }
     if ($lower -match "herdr|worker|dispatch|delegate") { return "herdr-coordinate-agents" }
     if ($lower -match "onboard|brownfield|data-flow") { return "onboarding" }
-    if ($lower -match "domain|audit|freshness") { return "domain-audit" }
+    # domain-audit is User-invoked only; suggest it only when the prompt names it.
+    if ($lower -match "domain-audit") { return "domain-audit" }
     if ($lower -match "prompt|template|leverage") { return "prompt-leverage" }
     return "typesafe-ai"
 }

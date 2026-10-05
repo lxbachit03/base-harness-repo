@@ -1,6 +1,6 @@
 # Proposal Resource
 
-ID: #<next-sequence>_RISK_<MMDD>
+ID: #<next-sequence>_<RISK|PROPOSAL>_<MMDD>
 TAG: [RISK]
 PRIORITY: [<CRITIAL|MEDIUM|NORMAL>]
 TITLE: <title>
@@ -8,6 +8,11 @@ CREATED: <YYYY-MM-DD>
 STATUS: <status>
 REFERENCES:
 - [#<risk-resource-id> <risk-title>](../risks/<MMDD>-<risk-slug>.md)
+
+<!-- Paired with a risk: creation kind RISK, keep TAG: [RISK] and the risk
+link. Not paired with a risk: creation kind PROPOSAL, delete the TAG line, the
+risk link and the Related Risks section (templates/README.md). Remove this
+comment. -->
 
 ## Problem
 

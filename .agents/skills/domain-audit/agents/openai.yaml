@@ -1,6 +1,6 @@
 interface:
   display_name: "Domain Audit"
-  short_description: "Add evidence-backed domain knowledge"
-  default_prompt: "Use $domain-audit to add this task's evidence-backed domain knowledge to the Harness repository."
+  short_description: "Record User-confirmed domain knowledge"
+  default_prompt: "Use $domain-audit to record the domain knowledge I confirmed (a service or an E2E data flow) in the Harness repository."
 policy:
   allow_implicit_invocation: false

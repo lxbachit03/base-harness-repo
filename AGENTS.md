@@ -18,9 +18,11 @@ Otherwise the primary session is Bale; retain its current model. Handle small
 work directly. When independent work, specialized context, or a separate review
 justifies delegation, read .agents/skills/herdr-coordinate-agents/SKILL.md.
 Also read that skill when establishing Bale's Herdr alias at session start,
-resuming delegated work, or handling a Herdr coordination request. Outside Herdr,
-remain Bale and work directly; report the missing runtime when delegation is
-needed. When Herdr coordination is in scope, read
+resuming delegated work, or handling a Herdr coordination request. When the
+User explicitly selects Orca coordination for a task, read
+.agents/skills/orca-ade-coordinate-agents/SKILL.md instead. Otherwise, outside
+Herdr, remain Bale and work directly; report the missing runtime when
+delegation is needed. When Herdr coordination is in scope, read
 `docs-harness/HERDR-AGENTS.md` after `docs-harness/INDEX.md` when selecting or
 changing a worker configuration; use exactly one model and its scoped effort/Fast
 selections when present. Launch with the catalog's process-scoped permission
@@ -48,8 +50,9 @@ skills refer here instead of defining competing general permission gates.
   global settings, credentials, or unrelated paths need specific authority.
   A test name alone does not make those effects routine.
 - Deployment, publishing, external messages, account/permission changes,
-  destructive data operations, commits, pushes, and deleting or overwriting
-  unrelated User work need explicit authority for that action and target.
+  destructive data operations, staging (`git add`), commits, pushes, and
+  deleting or overwriting unrelated User work need explicit authority for that
+  action and target.
 - Authority and constraints persist for the task across conversation turns
   until completed, revoked, or changed. A follow-up question does not cancel
   earlier permission. On resumption, use a recorded User authorization and
@@ -61,8 +64,9 @@ skills refer here instead of defining competing general permission gates.
   authorizes that scoped guidance/skill/tool intervention. Use improve-harness
   and writing-for-agents for it; ordinary tasks do not authorize self-improvement.
 - A skill invocation inherits this policy. Its narrower user-selected workflow
-  still matters: intake is not solving, an audit is read-only, and a draft goal
-  is not permission to start autonomous goal state.
+  still matters: intake is not solving, a review is read-only, domain-audit
+  records the domain knowledge the User confirmed, and a draft goal is not
+  permission to start autonomous goal state.
 - Preserve existing changes and use recoverable operations. Read-only tasks may
   report drift but must not normalize metadata or repair routing automatically.
 

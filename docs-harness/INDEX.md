@@ -151,6 +151,7 @@ Resources:
 - [User-invoked init-harness-repo skill for scaffolding a minimal Harness](harness-improvements/1003-init-harness-repo-skill.md) — `#038_IMPROVE_HARNESS_1003`, `PRIORITY: [MEDIUM]`
 - [Correctness fixes from the 2026-10-03 optimization review (group A)](harness-improvements/1003-optimization-review-correctness-fixes.md) — `#039_IMPROVE_HARNESS_1003`, `PRIORITY: [MEDIUM]`
 - [Record metadata cleanup from the 2026-10-03 optimization review (group E)](harness-improvements/1003-record-metadata-cleanup.md) — `#040_IMPROVE_HARNESS_1003`, `PRIORITY: [NORMAL]`
+- [Apply the User's group D policy decisions from the 2026-10-03 optimization review](harness-improvements/1003-group-d-policy-decisions.md) — `#041_IMPROVE_HARNESS_1003`, `PRIORITY: [MEDIUM]`
 - [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
