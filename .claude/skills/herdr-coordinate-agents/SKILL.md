@@ -5,34 +5,19 @@ description: Coordinate independent worker sessions through Herdr as Bale, using
 
 # Bale coordination
 
-AGENTS.md owns authority and session-role precedence. This skill owns Herdr
-coordination. When selecting or changing a worker profile, read
-[`docs-harness/HERDR-AGENTS.md`](../../../docs-harness/HERDR-AGENTS.md) after
-`docs-harness/INDEX.md`; for an unchanged reassignment, use the recorded catalog
-hash and configuration evidence and reread only on drift. That catalog is the
-user-editable source of worker configuration: use exactly one model, then complete
-only the effort and Fast checklists nested under that model when present. Launch
-with the resolved profile and perform one bounded post-launch configuration check;
-do not add a separate full Herdr preflight. Codex workers must use the
-catalog's process-scoped YOLO/full-access form
-(`--dangerously-bypass-approvals-and-sandbox`; use `--yolo` only when local
-help exposes that alias; the auditable equivalent is `--sandbox danger-full-access`
-plus `--ask-for-approval never`). Prove an inherited tool/plugin/MCP inventory
-only when the task requires a named capability or native startup does not
-expose it.
-Pause on zero/multiple selections, a missing required capability/authentication,
-or unavailable transport. Do not silently substitute a different choice. Keep the
-primary model and the default maximum of two live workers until the User changes
-those limits. Herdr workspaces are terminal panes, not Git worktrees: every
-worker uses the coordinator's current checkout as its `cwd`. Never create or
-select a Git worktree, detached checkout, or clone for coordination. When the
-User explicitly selects Orca coordination for a task, use
+AGENTS.md owns authority and session-role precedence. This skill and its
+references own every Herdr coordination rule. Worker configuration comes from
+the User's selections in
+[`docs-harness/HERDR-AGENTS.md`](../../../docs-harness/HERDR-AGENTS.md): read it
+after `docs-harness/INDEX.md` when selecting or changing a worker profile; for
+an unchanged reassignment, use the recorded catalog hash and configuration
+evidence and reread only on drift. Keep the primary model and the default
+maximum of two live workers until the User changes those limits. Herdr
+workspaces are terminal panes, not Git worktrees (step 2). When the User
+explicitly selects Orca coordination for a task, use
 `orca-ade-coordinate-agents` instead; that selection is what authorizes its
-worktrees. Serialize
-write-capable workers on the shared checkout; parallel workers are allowed only
-for read-only work or explicitly disjoint output paths. Worker model/effort/Fast
-selections are pass-through inputs; the lean path below optimizes BALE's context
-and tool-call cost.
+worktrees. Worker model/effort/Fast selections are pass-through inputs; the
+lean path below optimizes BALE's context and tool-call cost.
 
 ## 1. Identify the session and choose the work
 
@@ -71,9 +56,10 @@ write the task packet and coordinator-owned attempt record in task working
 memory. Use an existing plan/ticket/improvement record as the owner; do not make
 a competing task registry. Keep runtime scratch outside canonical docs routes.
 Prepare a distinct Herdr pane for unrelated work, but keep its `cwd` at the
-current checkout. Continue the same task in its existing session, with a new
-attempt only after reconciling the previous one. Do not create a Git worktree,
-detached checkout, or clone to obtain that pane.
+current checkout: every worker uses the coordinator's current checkout as its
+`cwd`. Continue the same task in its existing session, with a new attempt only
+after reconciling the previous one. Never create or select a Git worktree,
+detached checkout, or clone for coordination.
 
 Give each worker explicit allowed paths. If workers would write overlapping files
 or shared repository metadata, serialize them on the shared checkout. Parallel
@@ -115,16 +101,19 @@ Use the runtime reference to reuse an idle worker only when its pane, terminal,
 checkout `cwd` and resolved profile are already known to match the task. Otherwise
 create an owned pane in the current checkout and launch a fresh worker with the
 role, transport and process-scoped permission form selected in `HERDR-AGENTS.md`.
-Do not block launch on a broad plugin/MCP inventory or a repeated catalog
-read. After the process starts, perform one bounded check of working directory,
+Pause on zero/multiple selections, a missing required capability or
+authentication, or unavailable transport. There is no separate full Herdr
+preflight; do not block launch on a broad plugin/MCP inventory or a repeated
+catalog read. After the process starts, perform one bounded check of working directory,
 terminal identity, selected provider/model, scoped effort/Fast values when
 applicable, and the effective permission profile. Record a capability inventory
 only when
 the task requires a named plugin/MCP or the provider exposes it as part of
 startup; never run a side-effecting discovery command to manufacture evidence.
-A Codex worker is not ready for submission until native output proves
-YOLO/full access (or the equivalent `danger-full-access` and approval policy
-`never`). The current runtime reference documents provider launch paths; an
+A Codex worker launches with `--dangerously-bypass-approvals-and-sandbox` (the
+`--yolo` alias only when local help exposes it) or the equivalent pair
+`--sandbox danger-full-access --ask-for-approval never`, and is not ready for
+submission until native output proves that full-access state. The current runtime reference documents provider launch paths; an
 unsupported or mismatched profile pauses task submission without silently
 substituting another configuration.
 

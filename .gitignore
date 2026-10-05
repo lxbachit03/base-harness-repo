@@ -80,4 +80,5 @@ docs-harness/plans/completed/*
 !docs-harness/harness-improvements/1003-record-metadata-cleanup.md
 !docs-harness/harness-improvements/1003-group-d-policy-decisions.md
 !docs-harness/harness-improvements/1005-group-b-context-load-reduction.md
+!docs-harness/harness-improvements/1005-group-c-deduplication.md
 

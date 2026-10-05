@@ -10,17 +10,6 @@ Use this skill to adapt and customize TypeSafe Jev System One semantic primitive
 
 ## Workflow Phases
 
-```mermaid
-flowchart TD
-    A["User Request / Raw Prompt"] --> B{"Intent Clear?"}
-    B -- "No / Ambiguous" --> C["Ask Clarifying Questions"]
-    C --> B
-    B -- "Yes" --> D["Phase 1: Update docs-harness/JEV-AI.md"]
-    D --> E["Phase 2: Synchronize .agents/skills/typesafe-ai/scripts/"]
-    E --> F["Phase 3: Local Routine Verification"]
-    F --> G["Report Manifest Diff & Verification Results"]
-```
-
 ### Phase 1: Clarification Gate & Manifest Evolution
 
 1. **Read Existing Manifest**: Read [`docs-harness/JEV-AI.md`](../../../docs-harness/JEV-AI.md) to understand current active scripts, criteria, thresholds, and project context.
@@ -44,7 +33,7 @@ Synchronize the executable scripts in `.agents/skills/typesafe-ai/scripts/` to m
 ### Phase 3: Local Routine Verification
 
 Verify each added or modified script locally before claiming completion:
-1. Run a test invocation using PowerShell via `run_command`.
+1. Run a test invocation with the shell tool (PowerShell).
 2. Inspect latency (target: sub-second execution ~450ms - 550ms for live API calls).
 3. Validate output schema and verify that decisions match the defined criteria.
 

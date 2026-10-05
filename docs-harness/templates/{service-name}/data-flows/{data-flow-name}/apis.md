@@ -1,6 +1,6 @@
 # APIs: {data-flow-name}
 
-> Template-only: this file is not domain truth. Populate it only inside a
+> Template-only: this file is not domain truth. Populate it only inside an
 > authorized domain workspace under `docs-harness/domain/<MMDD>-<name>/`;
 > use `docs-harness/domain/README.md` for capture and evidence rules.
 > Until then, keep its placeholders and do not index it as a domain resource.

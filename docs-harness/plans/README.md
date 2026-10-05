@@ -8,8 +8,7 @@ a plan does not create a file; a request to save one does.
 When authorized work spans sessions, coordinates contributors, has meaningful
 dependencies, or needs recovery, maintain one plan under active/. Start from
 docs-harness/templates/plan.md and use the metadata/ID rules in
-docs-harness/templates/README.md. The former exec-plan.md path is a compatibility
-pointer to that template.
+docs-harness/templates/README.md.
 
 Record outcome, context, scope, task authority, approach, progress, decisions,
 risks/recovery, validation, and result. Keep task-local choices in this record.

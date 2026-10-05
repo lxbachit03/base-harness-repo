@@ -25,8 +25,7 @@ creating a resource. Templates contain placeholders and are not domain truth.
   and [{sample-big-ticket}/README.md]({sample-big-ticket}/README.md): layout examples.
 
 Follow ../domain/README.md for capture, confirmation, tracing, and freshness;
-follow ../tickets/README.md for optional ticket artifacts. Existing evidence
-files are preserved when adopting the smaller layout.
+follow ../tickets/README.md for optional ticket artifacts.
 
 ## Common metadata
 

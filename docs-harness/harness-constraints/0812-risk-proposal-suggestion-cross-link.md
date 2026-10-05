@@ -23,7 +23,8 @@ If an authorized task persists a risk as a resource under
 `docs-harness/risks/`, it must also persist a corresponding proposal resource
 under `docs-harness/proposals/`. The two resources must cross-link in both
 directions: each `REFERENCES:` section must include the other resource's
-canonical relative path or immutable resource ID.
+canonical relative path or immutable resource ID, and each resource's Related
+Risks or Related Proposals section lists the same links.
 
 ## Applies To
 

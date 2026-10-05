@@ -30,6 +30,21 @@ All active Jev scripts reside flatly in `.agents/skills/typesafe-ai/scripts/` an
 | [`triage-ticket.ps1`](../.agents/skills/typesafe-ai/scripts/triage-ticket.ps1) | `Choice` + `Score` + `Noul` | Automated ticket intake triage: category, severity, implementation complexity, and reproduction step verification | Raw ticket text or markdown file | `Active` |
 | [`check-domain-freshness.ps1`](../.agents/skills/typesafe-ai/scripts/check-domain-freshness.ps1) | `Noul` + `Score` | Domain contract drift detection: verifies code diffs against domain specifications and schemas | Domain document markdown, code diff summary | `Active` |
 
+Usage practices:
+
+1. **Authority precheck** (`precheck-authority.ps1`): regex clears routine
+   read-only commands and hard-blocks staging, commits and pushes; ambiguous
+   commands go to Jev.
+2. **On-demand skill routing** (`suggest-skill.ps1`): call the router only when
+   the prompt is ambiguous or names no skill; an explicit `$skill-name` bypasses
+   it.
+3. **Ticket triage** (`triage-ticket.ps1`): typed category, severity,
+   complexity and reproducibility judgments standardize priority.
+4. **Domain freshness** (`check-domain-freshness.ps1`): staleness judgments on
+   code diffs flag contradicted claims per `docs-harness/domain/README.md`.
+5. **Manifest synchronization** (`$enhance-jev`): adapting Jev to a project
+   updates this manifest and the scripts together.
+
 ---
 
 ## 3. Script Specifications & Primitives Mapping
@@ -124,14 +139,8 @@ All active Jev scripts reside flatly in `.agents/skills/typesafe-ai/scripts/` an
 
 ---
 
-## 4. Dynamic Customization & Enhancement Protocol (for `$enhance-jev`)
+## 4. Customization
 
-When the user invokes the `$enhance-jev` skill with a project intent:
-1. **Clarification Gate**: If user intent is ambiguous, conflicting, or lacks required domain specifics, the agent **MUST pause and ask clarifying questions** before editing this file or mutating scripts.
-2. **Manifest Evolution**: The agent updates sections 1, 2, and 3 of this file to reflect new project primitives (e.g., custom gRPC triage, SQL migration safety, API schema validation).
-3. **Script Synchronization**: The agent creates, modifies, or removes PowerShell scripts under `.agents/skills/typesafe-ai/scripts/` to match the updated manifest. All new scripts must:
-   - Reside flatly in `.agents/skills/typesafe-ai/scripts/<script-name>.ps1`.
-   - Call `invoke-typesafe.ps1` for communication.
-   - Include real-time observability (`Write-Host` logs and latency).
-   - Implement graceful fallback when offline.
-4. **Local Verification**: The agent runs live test calls for all created or modified scripts, verifying execution latency and correct object structures.
+Adapt this manifest and its scripts to a project with the
+[`enhance-jev`](../.agents/skills/enhance-jev/SKILL.md) skill, which owns the
+procedure.

@@ -19,6 +19,3 @@ remain in the active execution plan and do not require a separate decision.
   when they matter to future work.
 - Index each real decision in this file and `docs-harness/INDEX.md` as required;
   do not fabricate decisions for an empty installation.
-
-An installed consumer begins with no fabricated decisions. Add local decision
-documents here as real choices are accepted, then index them in this file.
