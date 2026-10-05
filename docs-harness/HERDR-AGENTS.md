@@ -1,14 +1,13 @@
 # Herdr worker configuration catalog
 
-This file is BALE's user-editable model registry for Herdr workers. Read it
-after `AGENTS.md` and `docs-harness/INDEX.md` when selecting or changing a
-Herdr worker profile. For a reassignment that keeps the same resolved profile,
-reuse the recorded catalog hash and configuration evidence; reread on drift.
-A profile selection is launch input, not a separate full Herdr preflight gate.
-A checkbox is a user choice; it is not proof that the current Herdr installation
-can launch that profile.
+This file is BALE's user-editable model registry for Herdr workers. The
+`herdr-coordinate-agents` skill and its references own every rule for
+selecting, launching, verifying and observing a worker; this file holds only
+the User's selections and the per-provider facts they rely on. A checkbox is a
+user choice; it is not proof that the current Herdr installation can launch
+that profile.
 
-## Selection contract
+## How to select
 
 1. Check exactly one **Model** checkbox in this catalog. The catalog starts
    with zero selections; BALE must not infer a model from list order or from a
@@ -27,174 +26,19 @@ can launch that profile.
 3. These choices are model-scoped, not global. Do not combine an effort or
    Fast value copied from another model section, and do not add an option that
    the model's source does not list.
-4. Launch the selected profile with its process-scoped permission form, then
-   perform one bounded post-launch check of the effective model ID, effort (when
-   applicable), speed/Fast state (when applicable), provider, transport and
-   permission state before submission. Inspect a capability only when the task
-   requires a named plugin/MCP or the provider exposes it at startup. The
-   current repository has a Codex
-   adapter and a bounded Antigravity calculator trial; an Antigravity profile
-   is dispatchable only after its native permission/configuration proof is
-   complete, and direct Claude entries remain catalog-only until an adapter is
-   demonstrated. OpenCode Go entries require a current Herdr `--kind opencode`
-   adapter and native proof; the 2026-09-13 replay proves that path only in the
-   captured local environment. Never pass an `opencode-go/<model-id>` to the
-   current `--kind codex` dispatcher.
-5. Preserve the selected configuration exactly. If a model, scoped option,
-   account entitlement, adapter, or runtime result is unavailable, stale,
-   incompatible, or unprovable, pause and report the gap instead of silently
-   substituting another choice.
-6. The primary session remains BALE's current model. This registry selects
-   workers only; the default maximum remains two live workers.
 
-Completion criterion: a worker is dispatchable when exactly one model is
-selected, every required checklist nested under that model has exactly one
-selection, the resulting transport is supported, the launch starts with the
-selected process-scoped permission form, and one bounded post-launch check
-captures the effective configuration before submission. A required named
-capability must also be present or the task pauses; broad capability inventory
-is not a launch gate. For delegated code, runtime-affecting assets or
-runtime-configuration output, acceptance also requires the Bale code-review
-gate in the Herdr task contract.
-
-## Latency and token guidance
-
-This section targets BALE orchestrator context and tool-call overhead; it does
-not change the User's worker model, effort or Fast selections. For a bounded,
-single-output task, use one `tight` handoff, a compact task-specific prompt, one
-`agent prompt --wait --until done` call with no `--timeout` value, and one
-proportional acceptance pass. Herdr's own wait is then indefinite until a
-settled state, removing the need to guess a numeric floor for a
-generation-heavy request (writing a non-trivial file, or an OpenCode Go worker
-generally). This relies on the calling coordinator's own tool-call timeout as
-the practical safety valve. Verified on Claude Code's Bash tool (2026-09-22):
-a command that exceeds its own timeout is moved to the background rather than
-killed, so the coordinator regains control immediately and is notified on
-completion instead of blocking forever. Before relying on an unbounded
-`agent prompt --wait` on a different coordinator runtime, verify its
-shell/exec tool has the same non-killing, auto-backgrounding behavior; if it
-instead hard-kills on timeout, pass an explicit `--timeout` (for example
-`120000`) so Herdr's own state, not the shell wrapper, determines the outcome.
-This does not change the per-observation bound on a later reobservation call,
-and does not replace reobserving with resending the same prompt. Read the catalog and routing
-context only when selecting/changing a profile, retain their hashes, and do not
-paste their prose into a worker prompt. Prefer the matching idle worker when
-identity, checkout cwd and resolved launch input are unchanged. There is no separate
-full Herdr preflight: launch first, then perform one bounded native configuration
-check before prompt delivery. Use receipt-first observation:
-inspect the matching receipt and output diff after a settled success, without
-calling `agent read`. If receipt, lifecycle or artifact evidence is ambiguous,
-read one recent text snapshot capped at 80 lines; keep the attempt pending when
-that does not resolve the ambiguity. Full terminal transcripts are incident-only
-and require explicit User authority. Then apply one diff-scoped Bale code review
-for executable code, runtime-affecting assets or runtime configuration,
-classifying CPU and memory evidence as static, measured or unknown; record
-limitations before acceptance. Fast/standard remains provider-specific and must
-be proven natively.
-
-When a model entry lists more than one provider model ID, BALE must resolve and
-record the exact ID used for the attempt. Effort labels do not select an ID
-unless the catalog or provider adapter explicitly maps them.
-
-## Permission and capability contract
-
-Permission is a host-runtime property, not a model property. For a Codex
-worker, the User-authorized Herdr policy is the provider's YOLO/full-host mode;
-the current trusted checkout with an explicit output boundary is an operating
-boundary, not an OS sandbox:
-
-- Launch with `--dangerously-bypass-approvals-and-sandbox` after Herdr's `--`
-  separator. This is the canonical Codex YOLO request: it removes the
-  filesystem/network sandbox and suppresses approval prompts, so the process
-  can reach paths and network resources outside the checkout boundary. Use the
-  `--yolo` alias only when the installed `codex --help` exposes it; the current
-  0.153.4
-  help exposes the long form only.
-- The equivalent auditable form is the pair `--sandbox danger-full-access`
-  plus `--ask-for-approval never`; use one form or the other, not both. Native
-  runtime output must prove the resulting full-access/approval state.
-- Do not put those flags in the primary session's global configuration as part
-  of this catalog. Apply them to the worker process only and keep the worker
-  in the current trusted checkout with an explicit output boundary. A global
-  `config.toml` change needs a separate User decision.
-- The YOLO form is high risk. Use it only for a trusted current checkout with an
-  explicit User-authorized output boundary, or an environment with an
-  independently enforced external sandbox; coordination stays in the current
-  checkout and does not create a Git worktree. It must not be silently applied
-  to the primary session or shared global configuration.
-- Full access does not install, authenticate, or enable tools. The worker
-  inherits the selected Codex host's built-in tools, enabled plugins, skills,
-  and configured MCP servers. MCP servers and external plugins retain their
-  own authentication and tool-level policies.
-- After launch, inspect the same `CODEX_HOME` used by the worker with
-  `codex plugin list` and `codex mcp list` only when the task requires a named
-  plugin/MCP or startup does not expose the needed capability. Record only
-  names, enabled state and authentication status; never copy tokens into task
-  evidence. If a required capability is absent or unauthenticated, pause
-  instead of claiming that full permission created it.
-- For a non-Codex provider, BALE must use that provider's documented full-access
-  adapter and equivalent capability inventory. Do not pass Codex flags to an
-  Antigravity or Claude process.
-
-Dispatch gate: after launch, the selected worker must show the requested
-model/effort/Fast values and its provider-native full-access and approval state
-in one bounded configuration check before the task prompt is submitted. Add a
-tool/plugin/MCP inventory only for a named required capability or when native
-startup exposes it. For Codex this means YOLO/bypass mode, or the equivalent
-`danger-full-access` plus approval policy `never`; other providers must show the
-equivalent native state from a proven adapter.
-
-### Provider adapter matrix (research, not an implicit enablement)
+## Provider adapter matrix (research, not an implicit enablement)
 
 Herdr only forwards the arguments after its `--` separator; it does not grant
-the child agent permission or install its tools. The provider must expose a
-verified adapter before BALE may dispatch it. These are the provider-native
+the child agent permission or install its tools. These are the provider-native
 full-access requests to use when such an adapter is added:
 
 | Herdr kind | Provider-native request | Native post-launch proof; capability only when required | Current repository status |
 | :--- | :--- | :--- | :--- |
 | `codex` | `--dangerously-bypass-approvals-and-sandbox`; use `--yolo` only if local help exposes the alias; equivalent pair `--sandbox danger-full-access --ask-for-approval never` | Codex `/status` + `/permissions`; `codex plugin list`; `codex mcp list` in the worker's `CODEX_HOME` | Dispatch path implemented; process-scoped YOLO/full-access required |
-| `agy` | `--dangerously-skip-permissions`; keep terminal sandbox disabled when host-level access is intended | Antigravity headless `stream-json` `init.permission_mode` and `tools`; `agy plugin list`; `agy mcp list`; inspect `settings.json` deny/managed rules and `allowNonWorkspaceAccess` | Bounded calculator trial completed 2026-09-12; complete permission/configuration proof remains per profile. A 2026-09-22 `antigravity-gemini-3.8-flash` (effort `high`) replay observed `agent_status` report `done`/`idle` six times while the worker was still genuinely working within one turn — see the `agy` note after this table before trusting a single status signal |
+| `agy` | `--dangerously-skip-permissions`; keep terminal sandbox disabled when host-level access is intended | Antigravity headless `stream-json` `init.permission_mode` and `tools`; `agy plugin list`; `agy mcp list`; inspect `settings.json` deny/managed rules and `allowNonWorkspaceAccess` | Bounded calculator trial completed 2026-09-12; complete permission/configuration proof remains per profile. A 2026-09-22 `antigravity-gemini-3.8-flash` (effort `high`) replay observed `agent_status` report `done`/`idle` six times while the worker was still genuinely working within one turn — see the `agy` done-signal guidance in the `herdr-coordinate-agents` runtime reference before trusting a single status signal |
 | `claude` | `--dangerously-skip-permissions` (equivalent to `--permission-mode bypassPermissions`) | Claude `/permissions` or native startup output; `claude plugin list`; `claude mcp list`; inspect managed/project deny rules and authentication | Herdr kind is documented, but Claude CLI is not installed in the current runtime |
 | `opencode` | Documented `--auto` (root TUI or `run`); auto-approves permissions not explicitly denied. OpenCode v1.18.30 also has hidden aliases `--yolo` and `--dangerously-skip-permissions`, but do not make them the default | Native post-launch screen/process command proving auto state and selected model/variant; run `opencode mcp list` only for a named MCP requirement; no separate plugin-list command is exposed | Bounded OpenCode Go replay passed 2026-09-13 with documented `--auto`; account/adapter/capability proof remains per profile |
-
-**`agy` done-signal note:** for a `--kind agy` worker specifically, a settled
-`agent_status: "done"` (or `"idle"`) signal counts as ambiguous evidence
-under the general reobservation rule even when it looks clean, until receipt
-and artifact both confirm it — treat repeated `agent wait`/`agent read`
-reobservation with receipt-plus-artifact verification as the *expected* path
-for this kind, not an exceptional fallback triggered only by a timeout. A
-2026-09-22 bounded replay (`antigravity-gemini-3.8-flash`, effort `high`)
-observed six false settlements — Herdr reported `done`/`idle` while the
-worker's own transcript showed it still actively reasoning or running tool
-calls — before a seventh observation coincided with genuine completion. The
-existing receipt-first verification rule (check for the receipt file and
-expected output before accepting, per `task-contract.md`) already catches
-this; the gap this note closes is that its necessity for `agy` was not
-previously called out, so a coordinator could otherwise accept an
-unfinished result on the first "done" it sees. This does not change the "at
-most 60 seconds per observation" bound or the reobserve-not-resend rule for
-any Herdr kind, including `agy` itself.
-
-The Antigravity and Claude requests still do not override explicit deny rules,
-managed policy, provider authentication, or an MCP server's own access policy.
-OpenCode `--auto` has the same process-scoped limitation: it is not an OS
-sandbox removal or a bypass of provider/managed deny rules.
-`--sandbox` on Antigravity or Claude sandbox settings intentionally retain an
-OS boundary and therefore are not equivalent to host-level full access. For
-Antigravity, `allowNonWorkspaceAccess` and any deny/managed rule must also
-permit the requested scope; the bypass flag alone does not prove that. Never
-use a global wildcard or rewrite shared provider settings merely to make an
-unverified adapter appear ready; use a task-owned provider configuration when
-the provider supports one, and record its effective state.
-
-### Orca ADE host environment integration (Terminal Multiplexing)
-
-When BALE operates within an Orca ADE environment (calibrated to v1.4.212), BALE may use Orca's terminal multiplexer and review tools to host Herdr worker sessions on the current checkout:
-
-- **Terminal Execution**: Workers can be spawned into dedicated Orca terminal panes via `orca terminal create --command "..." --json`, avoiding background command blocking on the primary coordinator shell.
-- **Visual Review Gate**: Acceptance of worker-generated code or assets can be visually reviewed using `orca file open-changed --mode diff` and verified in-browser with `orca tab create --url <url>`.
-- **Policy boundary**: Herdr coordination always uses the current Git checkout and never an Orca worktree (#024). Orca worktree coordination belongs to `orca-ade-coordinate-agents` and runs only when the User explicitly selects Orca coordination for the task (User decision 2026-10-03, #041). Neither choice changes this worker model catalog.
 
 ## Catalog by provider
 
@@ -721,8 +565,6 @@ model in the Herdr attempt's configuration evidence:
   state and any unavailable capability recorded
 - Adapter/runtime proof: `<command or native output and timestamp>`
 
-Do not pass an Antigravity or Claude model ID to a Codex launch.
-
 ## Sources and freshness
 
 Catalog snapshot: 2026-09-13. Re-check availability, exact IDs, account
@@ -773,7 +615,3 @@ sources:
 - [Anthropic model overview](https://platform.claude.com/docs/en/models/overview)
 - [Anthropic model status and deprecations](https://docs.anthropic.com/en/docs/about-claude/model-deprecations)
 - [Herdr agent automation](https://herdr.dev/docs/agent-automation/)
-
-When a source, account entitlement, Herdr adapter, or runtime output disagrees
-with this file, runtime evidence wins for dispatchability and BALE pauses for a
-User decision rather than rewriting the selected configuration silently.

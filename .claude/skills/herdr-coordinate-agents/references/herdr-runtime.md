@@ -98,7 +98,13 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    task requires a named plugin/MCP or the worker's native startup does not
    already expose the needed capability. Full local access does not install or
    authenticate plugins/MCP servers; a missing required capability still pauses
-   submission.
+   submission. Inspect them in the same `CODEX_HOME` the worker uses and record
+   only names, enabled state and authentication status, never tokens. Apply
+   the full-access form to the worker process only; a global `config.toml`
+   change needs a separate User decision. Do not pass Codex flags to an
+   Antigravity or Claude process. When a catalog entry lists more than one
+   provider model ID, resolve and record the exact ID used for the attempt; an
+   effort label does not select an ID unless the catalog or adapter maps it.
 
    The installed Herdr preview also accepts `--kind opencode`. A 2026-09-13
    OpenCode Go replay proved this path with native model/variant output and a
@@ -151,7 +157,10 @@ discovery. Herdr is a terminal transport, not an authorization or task scheduler
    and deny/managed rules must also permit the scope. For Claude,
    `--permission-mode bypassPermissions` is the equivalent explicit form, but a
    Claude OS sandbox still remains a separate boundary. Neither request
-   overrides provider deny/managed rules, authentication, or MCP policy. Do not
+   overrides provider deny/managed rules, authentication, or MCP policy. Never
+   use a global wildcard or rewrite shared provider settings to make an
+   unverified adapter appear ready; use a task-owned provider configuration
+   when the provider supports one, and record its effective state. Do not
    use `--bare` for Claude when inheriting plugins, skills or MCP is required.
    The current repository has complete Codex proof and a bounded OpenCode Go
    proof; a bounded Antigravity calculator task has exercised the local transport, but
@@ -269,7 +278,10 @@ successful work. No repository helper performs these checks.
 The initial trial environment was Windows PowerShell, Herdr
 0.7.5-preview.2026-07-21-0f10e1453a7f and Codex CLI 0.153.4. This is a tested
 baseline only after the linked improvement record contains successful proof;
-recheck commands and configuration in a different environment.
+recheck commands and configuration in a different environment. When a source,
+account entitlement, Herdr adapter or runtime output disagrees with the
+catalog, runtime evidence wins for dispatchability; pause for a User decision
+rather than rewriting the selected configuration.
 
 - [Upstream skill v0.8.2](https://github.com/herdrdev/herdr/blob/v0.8.2/skills/herdr/SKILL.md)
 - [Windows support](https://herdr.dev/docs/windows-beta/)

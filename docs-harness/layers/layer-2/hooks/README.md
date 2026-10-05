@@ -10,12 +10,13 @@ load through the same session-start layers walk that ../README.md describes.
 At the session-start layers walk (ascending `layer-<N>` order):
 
 1. In every layer that contains `hooks/`, read each `*.md` hook file there.
-2. Apply only hooks whose activation checklist is checked. The hook file's
-   current checkbox state is the only authority; User prose or conversation
-   does not override it.
+2. Apply only hooks whose activation checklist is checked; an unchecked hook
+   is dormant, so skip it and work normally. The hook file's current checkbox
+   state is the only authority; User prose or conversation does not override
+   it.
 3. Agents never toggle a checklist. Only the User toggles, anytime; the
    change applies at the next load point — session start, post-compaction
-   reload, or when the User reports a toggle mid-session.
+   reload, a workspace switch, or when the User reports a toggle mid-session.
 
 A hook's own tool invocations and the session-start retrieval are exempt
 from the hook's gate, so a hook cannot deadlock on itself.

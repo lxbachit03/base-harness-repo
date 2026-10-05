@@ -82,8 +82,7 @@ In read-only work report drift without repairing it.
 
 Before claiming routing consistency, the AI agent must inspect the relevant
 folder tree, route metadata, links, IDs, domain state, and final diff and report
-the evidence and any unattempted proof. Do not create or invoke a repository
-validator script for this review unless the User explicitly authorizes it.
+the evidence and any unattempted proof.
 
 ## Root Routing
 
@@ -101,14 +100,11 @@ Resources:
 - [INDEX.md](INDEX.md)
 - [WORKFLOW.md](WORKFLOW.md)
 - [PERSONA.md](PERSONA.md)
-- [Manual self-validation policy](../AGENTS.md): inspect affected routes,
-  metadata, links, and diff; disclose unattempted proof and script authority.
+- [Self-review policy](../AGENTS.md): inspect affected routes,
+  metadata, links, and diff; disclose unattempted proof.
 - [Bale and Herdr coordination](../.agents/skills/herdr-coordinate-agents/SKILL.md): read for primary-session alias binding, delegation, or resumption; workers retain their assigned role.
-- [Herdr worker configuration catalog](HERDR-AGENTS.md): read before BALE launches
-  or changes a Herdr worker model; an unchanged reassignment may reuse its
-  recorded catalog hash/configuration evidence and reread on drift. Exactly one
-  model, its scoped effort/Fast selections when present, the process-scoped
-  permission/capability contract, and effective runtime proof are required.
+- [Herdr worker configuration catalog](HERDR-AGENTS.md): the User's Herdr
+  worker selections; read it through the Herdr skill.
 - [Jev System One configuration manifest](JEV-AI.md): declarative manifest for
   project context, semantic scripts catalog, and dynamic criteria.
 
@@ -126,8 +122,14 @@ Skip when: the intent concerns only product behavior or unrelated domain work.
 Resources:
 
 - [Harness improvement guide](harness-improvements/README.md)
+
+Legacy improvement plans (`#002`–`#014`) are routed in the `plans/active/` and
+`plans/completed/` sections below.
+
+- [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Bale orchestration through independent Herdr agents](harness-improvements/0907-bale-herdr-orchestration.md) — `#016_IMPROVE_HARNESS_0907`, `PRIORITY: [MEDIUM]`
 - [Agent self-validation and validator retirement](harness-improvements/0912-agent-self-validation.md) — `#017_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
+- [User-selected Herdr worker model catalog](harness-improvements/0912-herdr-agent-catalog.md) — `#018_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [Receipt-first Herdr observation with bounded transcript fallback](harness-improvements/0912-herdr-bounded-observation.md) — `#019_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [Bale review gate for delegated code quality and resource efficiency](harness-improvements/0913-herdr-bale-code-review.md) — `#020_IMPROVE_HARNESS_0913`, `PRIORITY: [MEDIUM]`
 - [OpenCode Go worker model catalog](harness-improvements/0913-opencode-go-model-catalog.md) — `#021_IMPROVE_HARNESS_0913`, `PRIORITY: [MEDIUM]`
@@ -139,7 +141,6 @@ Resources:
 - [Converge the utilizing-tools skills on the routing pattern](harness-improvements/0921-utilizing-tools-skill-parity.md) — `#027_IMPROVE_HARNESS_0921`, `PRIORITY: [MEDIUM]`
 - [Tune tight-handoff wait/observation timeout guidance for OpenCode Go workers](harness-improvements/0922-opencode-go-tight-handoff-wait-timeout.md) — `#028_IMPROVE_HARNESS_0922`, `PRIORITY: [MEDIUM]`
 - [Document Herdr `--kind agy` (Antigravity) done-signal unreliability as expected, not exceptional](harness-improvements/0922-agy-done-signal-reliability.md) — `#029_IMPROVE_HARNESS_0922`, `PRIORITY: [MEDIUM]`
-- [User-selected Herdr worker model catalog](harness-improvements/0912-herdr-agent-catalog.md) — `#018_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [Model-specific add-on prompt layers](harness-improvements/0926-model-family-layer-prompts.md) — `#030_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
 - [Orca ADE documentation, capability routing skill, and Herdr coordination](harness-improvements/0926-utilizing-tools-orca-ade.md) — `#031_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
 - [Pure Orca ADE multi-agent coordination skill and Claude sync](harness-improvements/0926-orca-ade-coordinate-agents.md) — `#032_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
@@ -152,18 +153,7 @@ Resources:
 - [Correctness fixes from the 2026-10-03 optimization review (group A)](harness-improvements/1003-optimization-review-correctness-fixes.md) — `#039_IMPROVE_HARNESS_1003`, `PRIORITY: [MEDIUM]`
 - [Record metadata cleanup from the 2026-10-03 optimization review (group E)](harness-improvements/1003-record-metadata-cleanup.md) — `#040_IMPROVE_HARNESS_1003`, `PRIORITY: [NORMAL]`
 - [Apply the User's group D policy decisions from the 2026-10-03 optimization review](harness-improvements/1003-group-d-policy-decisions.md) — `#041_IMPROVE_HARNESS_1003`, `PRIORITY: [MEDIUM]`
-- [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
-- [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
-- [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
-- [Service E2E domain-flow template improvement](plans/active/0822-domain-e2e-flow-template.md) — `#011_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
-- [Ticket evidence workspace templates](plans/active/0822-ticket-evidence-workspace.md) — `#010_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
-- [User authority operation gate](plans/active/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
-- [Onboarding skill and flow-based workspace routing](plans/active/0816-onboarding-skill-folder-routing.md) — `#007_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
-- [Persona response style configuration and session start routing](plans/active/0816-persona-response-style-routing.md) — `#006_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
-- [Filesystem and INDEX synchronization check at session start](plans/active/0816-filesystem-index-sync-rule.md) — `#005_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
-- [Ticket lifecycle improvement](plans/active/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
-- [Writing-for-agents routing improvement](plans/active/0815-writing-for-agents-routing.md) — `#003_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
-- [Goal-griller specialist routing improvement](plans/completed/0812-harness-improvement-goal-routing.md) — `#002_IMPROVE_HARNESS_0812`, `PRIORITY: [MEDIUM]`
+- [Apply the User's group B decisions to reduce always-loaded Harness context](harness-improvements/1005-group-b-context-load-reduction.md) — `#042_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
 
 ## TAG: [CONSTRAINTS]
 
@@ -334,9 +324,7 @@ Resources:
 - [Ticket layout and lifecycle contract](tickets/README.md)
 
 See the dedicated `tickets/active/` and `tickets/completed/` routing sections
-below. The template remains available at
-[templates/ticket.md](templates/ticket.md), with the ticket `docs/` manifest at
-[templates/ticket-docs-README.md](templates/ticket-docs-README.md).
+below; ticket templates are listed under `templates/`.
 
 ### tickets/active/
 
@@ -460,6 +448,7 @@ Templates do not receive resource IDs or date-prefixed filenames.
 
 Resource metadata and IDs are owned by [the template catalog](templates/README.md).
 List each canonical resource once per applicable classification and lifecycle
-section. A link in two different routes is intentional; duplicate entries in the
-same route are not. Every resource entry carries its ID and current priority.
+section; legacy improvement plans under plans/ are listed only in their
+lifecycle section. A link in two different routes is intentional; duplicate
+entries in the same route are not. Every resource entry carries its ID and current priority.
 Ordinary tickets and supporting artifacts are reached through their owner.

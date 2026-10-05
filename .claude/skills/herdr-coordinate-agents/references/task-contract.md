@@ -151,8 +151,7 @@ The minimum review covers:
 
 Classify each performance claim as `static`, `measured` or `unknown`. Use an
 existing targeted test, benchmark or profiler when it is available and
-authorized; do not create a repository validator or benchmark script solely for
-this review. `unknown` is an explicit limitation, not evidence of good CPU or
+authorized. `unknown` is an explicit limitation, not evidence of good CPU or
 memory performance. When the task declares a CPU, memory or latency target,
 static/unknown evidence cannot be reported as meeting that target: mark the
 review `blocked` until an authorized measurement exists or the User accepts the

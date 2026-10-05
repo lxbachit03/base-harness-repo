@@ -182,8 +182,7 @@ behavior without claiming cost/speed improvements from a successful trial alone.
 Perform a targeted agent self-review: inspect affected instructions, deleted
 paths, active links, model/permission contracts and the final diff. For a code
 output, confirm that the Bale code-review verdict, evidence class and any
-limitations are recorded before acceptance. Confirm that no repository
-validation, benchmark or dispatch script is required or invoked. A fresh
+limitations are recorded before acceptance. A fresh
 role-routing replay, a bounded live Herdr trial and a representative code
 review remain behavioral proof obligations; manual evidence and independent
 task checks cannot be replaced by a repository script.

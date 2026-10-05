@@ -77,10 +77,8 @@ instruction scenarios; avoid tests that merely repeat the wording.
 
 For Harness routing, guidance, metadata, and link changes, the agent performs
 the proof by targeted inspection of the affected files, links, IDs, metadata,
-and final diff. Do not create or invoke a repository validation script unless
-the User explicitly authorizes script-based proof; report that proof as
-unattempted otherwise. Behavior-appropriate product tests remain valid when
-the task includes them.
+and final diff, and reports the evidence inspected. Behavior-appropriate
+product tests remain valid when the task includes them.
 
 Run repository-required checks that are within task authority. Broaden checks
 when failures, new changes, or unresolved concerns justify it. Never substitute

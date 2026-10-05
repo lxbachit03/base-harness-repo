@@ -22,14 +22,8 @@ resuming delegated work, or handling a Herdr coordination request. When the
 User explicitly selects Orca coordination for a task, read
 .agents/skills/orca-ade-coordinate-agents/SKILL.md instead. Otherwise, outside
 Herdr, remain Bale and work directly; report the missing runtime when
-delegation is needed. When Herdr coordination is in scope, read
-`docs-harness/HERDR-AGENTS.md` after `docs-harness/INDEX.md` when selecting or
-changing a worker configuration; use exactly one model and its scoped effort/Fast
-selections when present. Launch with the catalog's process-scoped permission
-contract, then perform one bounded post-launch runtime check before submitting
-work. A separate full Herdr preflight is not required; pause only when the
-post-launch identity, permission, or required-capability check is missing or
-mismatched.
+delegation is needed. The Herdr skill owns worker selection, launch and
+verification rules.
 PERSONA.md controls response style, not this operational role.
 
 ## Task authority
@@ -105,9 +99,7 @@ contract lives in docs-harness/harness-constraints/0812-risk-proposal-suggestion
 Claim the outcome only with relevant executable or observable evidence. Report
 the changes, checks, unattempted proof, and unresolved limitations. For
 Harness routing, guidance, metadata, and link consistency, the AI agent
-performs a targeted self-review and reports the exact evidence inspected. Do
-not create or invoke a repository validation script for that proof unless the
-User explicitly authorizes script-based validation for the task. Product tests,
+performs a targeted self-review and reports the exact evidence inspected. Product tests,
 builds, and other behavior-appropriate commands remain available when they
 are in scope and authorized. Agent effectiveness still requires behavioral
 evidence. Optional SQLite/control-plane operations run only when requested or

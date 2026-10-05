@@ -44,7 +44,8 @@ the folder supplies the route. Do not invent a
 product domain or a new TAG solely to file a plan.
 
 A canonical file is stored once and linked from every applicable classification
-and lifecycle route. Templates, ordinary tickets, and child evidence artifacts
+and lifecycle route; a legacy improvement plan under plans/ is linked only from
+its lifecycle route. Templates, ordinary tickets, and child evidence artifacts
 do not receive independent resource IDs. A schema may remain supporting evidence
 linked from its canonical domain; give it an ID only when separately promoted.
 

@@ -45,10 +45,8 @@ ID and creation date. Keep detailed source artifacts with their owner.
 
 Add applicable supporting schema/flow evidence, then update INDEX tree and
 classification routes. Perform a targeted manual review of the tree, route
-links, metadata, IDs, evidence state, and diff. Do not create or invoke a
-repository validation script unless the User explicitly authorizes that proof;
-report it as unattempted otherwise. Do not automatically commit ignored or
-untracked domain files.
+links, metadata, IDs, evidence state, and diff, and report the evidence
+inspected. Do not automatically commit ignored or untracked domain files.
 
 Report canonical path, sources, current classification, freshness results,
 proof, and unresolved decisions. A source gap needs an evidence-gathering

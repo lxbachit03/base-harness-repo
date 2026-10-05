@@ -21,6 +21,14 @@ REFERENCES:
 - docs-harness/plans/active/0906-behavior-parity-audit.md
 - .gitignore
 
+## Current policy notice (2026-10-05)
+
+By User decision ([#042](1005-group-b-context-load-reduction.md)), current
+guidance no longer prohibits creating or invoking a repository validation
+script; agents still perform the targeted self-review and report the evidence
+inspected. This record retains its original scope, evidence and pending replay
+as history.
+
 ## Objective
 
 Make the AI agent's evidence-backed inspection the default Harness validation

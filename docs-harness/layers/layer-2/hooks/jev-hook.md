@@ -8,11 +8,7 @@ workers, when the activation checklist below is checked.
 - [x] Enable jev-hook: require a Jev verdict before each action group this
   session
 
-The checkbox state in this file is the hook's only switch. Only the User
-toggles it, anytime; agents read the current state and never edit it.
-Unchecked: the gate is dormant — skip this hook entirely and work normally.
-Checked: apply the gate for the rest of the session; re-read after
-compaction, a workspace switch, or when the User reports toggling it.
+Toggle rules live in [hooks/README.md](README.md) (Loading).
 
 ## Gate rule
 
