@@ -87,6 +87,19 @@ Before claiming routing consistency, the AI agent must inspect the relevant
 folder tree, route metadata, links, IDs, domain state, and final diff and report
 the evidence and any unattempted proof.
 
+## WARNING: User-owned raw requirements
+
+When the repository has `docs/raw-requirements/`, that folder is the User's
+single source of truth for what they want from the repository and its Harness.
+Read [its README](../docs/raw-requirements/README.md) when a task creates or
+changes something a requirement there describes, or when the User asks whether
+the repository meets their requirements. Do not create, edit, rename, move or
+delete files there, even when a task asks to fix, update or improve; propose
+the exact change in the reply and let the User edit the file. The only
+exception is a User request that spells out the exact result (the text to
+write, or the file to add, rename or delete). A mismatch found there does not
+by itself authorize changing code.
+
 ## Root Routing
 
 Folder: [docs-harness/](./)
@@ -161,6 +174,7 @@ section below.
 - [Make the shell gate always consult Jev and apply the User's Jev guidance decisions](harness-improvements/1005-gate-and-jev-decisions.md) — `#044_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
 - [Coordinate agents on the current branch without Git worktrees, for Herdr and Orca](harness-improvements/1005-coordination-without-worktrees.md) — `#045_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
 - [Apply the User's repository, record and template decisions from the optimization review](harness-improvements/1005-repo-and-record-decisions.md) — `#046_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
+- [User-owned raw requirements folder with an INDEX warning](harness-improvements/1005-raw-requirements-source.md) — `#047_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
 
 ## TAG: [CONSTRAINTS]
 
