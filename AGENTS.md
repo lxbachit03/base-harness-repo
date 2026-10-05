@@ -42,7 +42,8 @@ skills refer here instead of defining competing general permission gates.
   Task-owned disposable fixture setup/cleanup is included in local verification.
   Dependency installation and operations touching shared services, real data,
   global settings, credentials, or unrelated paths need specific authority.
-  A test name alone does not make those effects routine.
+  A test name alone does not make those effects routine. The Jev helpers' own
+  API-key lookup and TypeSafe API calls are permitted by default.
 - Deployment, publishing, external messages, account/permission changes,
   destructive data operations, staging (`git add`), commits, pushes, and
   deleting or overwriting unrelated User work need explicit authority for that

@@ -101,6 +101,10 @@ checkbox, policy wording in AGENTS.md. No commit or push without approval.
 - A1 sends more commands to Jev (about 0.5 s each) when a segment is not in
   the read-only list or a quoted `|` splits a segment. Mitigation: conservative
   by design; read-only chains still fast-pass.
+  Correction (2026-10-05, [#044](1005-gate-and-jev-decisions.md)): a quoted
+  `|` could also split off a hard-boundary segment and hard-block a read-only
+  command, not only re-route it. #044 made splitting quote-aware and removed
+  the fast path.
 - A4 renames two `check-domain-freshness.ps1` Recommendation values. No
   consumer in the repository reads them (grep, 2026-10-03).
 

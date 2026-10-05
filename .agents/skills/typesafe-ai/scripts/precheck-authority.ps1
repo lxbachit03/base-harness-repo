@@ -1,14 +1,16 @@
 <#
 .SYNOPSIS
-    Hybrid Preflight Hook for Task Authority Gate (docs-harness/harness-constraints/0822).
+    Task Authority Gate precheck for shell commands (docs-harness/harness-constraints/0822).
 
 .DESCRIPTION
-    Best Practice 1: Hybrid Task Authority Precheck.
+    Best Practice 1: Task Authority Precheck.
     Evaluates shell commands and proposed file actions against the repository's
     Task Authority Policy (AGENTS.md & 0822-user-authority-operation-gate.md).
-    Uses a sub-millisecond (<5ms) regex fast-path for obvious read-only and hard-blocked
-    mutations, and delegates ambiguous commands to TypeSafe Jev System One (~450ms)
-    for semantic classification.
+    Every command is classified by TypeSafe Jev System One (~450ms), so each
+    verdict carries an observable request and response. A regex hard boundary
+    runs on every command segment as an override: a segment that stages,
+    commits, pushes or destroys data always requires explicit User authority,
+    whatever Jev answers. Segments are split on shell separators outside quotes.
 
 .PARAMETER Command
     The shell command or tool invocation to inspect.
@@ -27,8 +29,10 @@
       - Permitted (bool): Whether the action can run under routine local authority.
       - RequiresUserPermission (bool): True if explicit User authority is mandatory.
       - Risk (string): 'Low', 'Moderate', or 'Critical'.
-      - Classification (string): 'ReadOnlyRoutine', 'LocalRoutineAuthorized', or 'CriticalMutationRequiresUserAuthority'.
-      - Mode (string): 'RegexFastPath', 'RegexHardBoundary', 'JevSemanticEvaluation', or 'GracefulFallback'.
+      - Classification (string): Jev's classification, 'CriticalMutationRequiresUserAuthority'
+        when the hard boundary overrides it, or a 'ConservativeFallback*' value.
+      - Mode (string): 'JevSemanticEvaluation', 'JevWithHardBoundary', or 'GracefulFallback'.
+      - HardBoundarySegments (string[]): Segments that matched the hard boundary.
       - LatencyMs (double): Execution latency in milliseconds.
       - Reason (string): Explanation of the determination.
 #>
@@ -47,60 +51,58 @@ param(
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 $trimmedCmd = $Command.Trim()
 
-# Classify every segment of a chained, piped or substituted command, so a
-# read-only prefix cannot carry a mutation (e.g. "git status; git push").
-# A quoted separator may over-split; that only routes the command to Jev.
-$segments = @([regex]::Split($trimmedCmd, '\|\||&&|;|\||\r?\n|\$\(|`') |
-    ForEach-Object { $_.Trim().TrimStart('(', '{').TrimEnd(')', '}').Trim() } |
-    Where-Object { $_ })
-
-# -------------------------------------------------------------------------
-# Step 1: Sub-millisecond Regex Fast-Path for Known Read-Only Operations
-# -------------------------------------------------------------------------
-$readOnlyPattern = '^(Get-ChildItem|dir\b|ls\b|Get-Content|cat\b|type\b|Get-Item|Test-Path|view_file|git\s+(status|diff|log|branch|show)|read_file|findstr|Select-String|grep\b|pwd\b|echo\b|Write-Host)'
-$allSegmentsReadOnly = $segments.Count -gt 0 -and @($segments | Where-Object { $_ -notmatch $readOnlyPattern }).Count -eq 0
-if ($allSegmentsReadOnly -and $trimmedCmd -notmatch '(>|>>|Set-Content|Out-File|Remove-Item|del\b|rm\b)') {
-    $stopwatch.Stop()
-    $latency = [math]::Round($stopwatch.Elapsed.TotalMilliseconds, 2)
-    if (-not $Quiet) {
-        Write-Host "[AuthorityGate] [FAST-PASS] Read-only command verified in ${latency}ms: $trimmedCmd" -ForegroundColor Green
+# Split a command into the segments a shell would run separately. Separators
+# (; | || && newline) inside single or double quotes do not split; command
+# substitution ($( and backtick) still splits inside double quotes because the
+# shell executes it there.
+function Split-CommandSegments([string]$Text) {
+    $parts = [System.Collections.Generic.List[string]]::new()
+    $current = [System.Text.StringBuilder]::new()
+    $quote = [char]0
+    $i = 0
+    while ($i -lt $Text.Length) {
+        $c = $Text[$i]
+        $pair = if ($i + 1 -lt $Text.Length) { $Text.Substring($i, 2) } else { '' }
+        if ($quote -eq [char]"'") {
+            if ($c -eq [char]"'") { $quote = [char]0 }
+            [void]$current.Append($c); $i++; continue
+        }
+        if ($pair -eq '$(' -or $c -eq [char]'`') {
+            $parts.Add($current.ToString()); [void]$current.Clear()
+            $i += $(if ($pair -eq '$(') { 2 } else { 1 }); continue
+        }
+        if ($quote -eq [char]'"') {
+            if ($c -eq [char]'"') { $quote = [char]0 }
+            [void]$current.Append($c); $i++; continue
+        }
+        if ($c -eq [char]"'" -or $c -eq [char]'"') {
+            $quote = $c; [void]$current.Append($c); $i++; continue
+        }
+        if ($pair -eq '&&' -or $pair -eq '||') {
+            $parts.Add($current.ToString()); [void]$current.Clear(); $i += 2; continue
+        }
+        if ($c -eq [char]';' -or $c -eq [char]'|' -or $c -eq [char]"`n" -or $c -eq [char]"`r") {
+            $parts.Add($current.ToString()); [void]$current.Clear(); $i++; continue
+        }
+        [void]$current.Append($c); $i++
     }
-    return [PSCustomObject]@{
-        Permitted              = $true
-        RequiresUserPermission = $false
-        Risk                   = "Low"
-        Classification         = "ReadOnlyRoutine"
-        Mode                   = "RegexFastPath"
-        LatencyMs              = $latency
-        Reason                 = "Matches known read-only pattern with zero file or repository state mutation."
-    }
+    $parts.Add($current.ToString())
+    return @($parts |
+        ForEach-Object { $_.Trim().TrimStart('(', '{').TrimEnd(')', '}').Trim() } |
+        Where-Object { $_ })
 }
 
+$segments = Split-CommandSegments $trimmedCmd
+
 # -------------------------------------------------------------------------
-# Step 2: Sub-millisecond Regex Hard Boundary for Critical Mutations
+# Hard boundary: evaluated on every segment, applied after the Jev verdict
 # -------------------------------------------------------------------------
 $hardBoundaryPattern = '^(git\s+(add\b|commit\b|push\b|rebase\b|reset\s+--hard|clean\s+-[a-zA-Z]*f)|rm\s+-[a-zA-Z]*r|Remove-Item\s+.*-Recurse|format\s+[a-zA-Z]:|Drop-Database)'
-if (@($segments | Where-Object { $_ -match $hardBoundaryPattern }).Count -gt 0) {
-    $stopwatch.Stop()
-    $latency = [math]::Round($stopwatch.Elapsed.TotalMilliseconds, 2)
-    if (-not $Quiet) {
-        Write-Host "`n[AuthorityGate] [HARD-BLOCK] Critical mutation requires explicit User permission (${latency}ms)!" -ForegroundColor Red
-        Write-Host "[AuthorityGate] Command: $trimmedCmd" -ForegroundColor Yellow
-        Write-Host "[AuthorityGate] Rule: Git index mutations (add/commit/push) and destructive commands violate policy without explicit User authority.`n" -ForegroundColor Red
-    }
-    return [PSCustomObject]@{
-        Permitted              = $false
-        RequiresUserPermission = $true
-        Risk                   = "Critical"
-        Classification         = "CriticalMutationRequiresUserAuthority"
-        Mode                   = "RegexHardBoundary"
-        LatencyMs              = $latency
-        Reason                 = "Violates strict User Authority constraint: Git staging, commits, pushes, and destructive operations require explicit User approval."
-    }
-}
+$hardSegments = @($segments | Where-Object { $_ -match $hardBoundaryPattern })
+$hardHit = $hardSegments.Count -gt 0
 
 # -------------------------------------------------------------------------
-# Step 3: Ambiguous Operations -> Delegate to TypeSafe Jev System One
+# Jev classification for every command
 # -------------------------------------------------------------------------
 $invokeScript = Join-Path $PSScriptRoot "invoke-typesafe.ps1"
 if (-not (Test-Path $invokeScript)) {
@@ -113,6 +115,7 @@ if (-not (Test-Path $invokeScript)) {
         Risk                   = "Moderate"
         Classification         = "AmbiguousFallback"
         Mode                   = "GracefulFallback"
+        HardBoundarySegments   = $hardSegments
         LatencyMs              = $latency
         Reason                 = "Helper script missing; defaulting to safe conservative gate."
     }
@@ -120,19 +123,20 @@ if (-not (Test-Path $invokeScript)) {
 
 $stateObj = @{
     command            = $trimmedCmd
+    segments           = $segments
     action_description = $ActionDescription
     target_files       = $TargetFiles
-    authority_policy   = "Policy 0822: Read-only answers require zero mutations. Local fix/build authorizes routine local edits and tests. Staging, commit, push, external network requests, or destructive file operations strictly require explicit User authorization."
+    authority_policy   = "Policy 0822: Read-only answers require zero mutations. Local fix/build authorizes routine local edits and tests. Staging, commit, push, external network requests, credential access, or destructive file operations strictly require explicit User authorization. The Jev helpers' own TypeSafe API calls and API-key lookup are routine (User decision 2026-10-05)."
 }
 
 $questionsObj = @{
     authority_classification = @{
         type         = "choice"
-        instructions = "Classify this command under the repository's 0822 Task Authority Policy."
+        instructions = "Classify this command, considering every segment, under the repository's 0822 Task Authority Policy."
         criteria     = @{
             "read_only_routine"                      = "Command only reads repository state, inspects files, runs read-only tests, or queries status without mutations"
             "local_routine_authorized"               = "Command performs routine local temporary builds, test fixtures, formatting, or edits authorized by a fix/build task"
-            "critical_mutation_requires_permission"  = "Command mutates git repository index (add/commit/push), touches external services, accesses credentials, or permanently deletes files"
+            "critical_mutation_requires_permission"  = "Command mutates git repository index or refs (add/commit/push/branch deletion), touches external services or accesses credentials (other than the Jev helpers' own TypeSafe calls and key lookup), or permanently deletes files"
         }
     }
     risk_score = @{
@@ -147,7 +151,7 @@ $questionsObj = @{
 }
 
 if (-not $Quiet) {
-    Write-Host "[AuthorityGate] Ambiguous command detected. Requesting Jev semantic judgment..." -ForegroundColor Cyan
+    Write-Host "[AuthorityGate] Requesting Jev judgment for $($segments.Count) segment(s)..." -ForegroundColor Cyan
 }
 
 $eval = & $invokeScript -State $stateObj -Questions $questionsObj -Quiet:$Quiet
@@ -157,13 +161,14 @@ $latency = [math]::Round($stopwatch.Elapsed.TotalMilliseconds, 2)
 
 if ($eval.Fallback -or (-not $eval.Success)) {
     # Conservative fallback when offline or missing key
-    $isSuspect = ($trimmedCmd -match '(\bSet-Content\b|\bOut-File\b|\bdel\b|\brm\b|\bInvoke-RestMethod\b|\bgit\b)')
+    $isSuspect = $hardHit -or ($trimmedCmd -match '(\bSet-Content\b|\bOut-File\b|\bdel\b|\brm\b|\bInvoke-RestMethod\b|\bgit\b)')
     return [PSCustomObject]@{
         Permitted              = (-not $isSuspect)
         RequiresUserPermission = $isSuspect
         Risk                   = if ($isSuspect) { "Moderate" } else { "Low" }
         Classification         = if ($isSuspect) { "ConservativeFallbackRestricted" } else { "ConservativeFallbackPermitted" }
         Mode                   = "GracefulFallback"
+        HardBoundarySegments   = $hardSegments
         LatencyMs              = $latency
         Reason                 = "Jev evaluation unavailable ($($eval.Error)). Conservative heuristic applied."
     }
@@ -171,16 +176,26 @@ if ($eval.Fallback -or (-not $eval.Success)) {
 
 $classification = $eval.Answers.authority_classification.choice
 $riskScore = $eval.Answers.risk_score.score
-$requiresUserPermission = ($classification -eq "critical_mutation_requires_permission" -or $riskScore -ge 1.4)
+$requiresUserPermission = ($hardHit -or $classification -eq "critical_mutation_requires_permission" -or $riskScore -ge 1.4)
 $permitted = (-not $requiresUserPermission)
 
-$riskLevel = if ($riskScore -lt 0.7) { "Low" } elseif ($riskScore -lt 1.4) { "Moderate" } else { "Critical" }
+$riskLevel = if ($hardHit -or $riskScore -ge 1.4) { "Critical" } elseif ($riskScore -lt 0.7) { "Low" } else { "Moderate" }
+$mode = if ($hardHit) { "JevWithHardBoundary" } else { "JevSemanticEvaluation" }
+$finalClass = if ($hardHit) { "CriticalMutationRequiresUserAuthority" } else { $classification }
+$reason = if ($hardHit) {
+    "Hard boundary matched segment(s) [$($hardSegments -join ' | ')]; explicit User authority required (Jev: '$classification', risk $riskScore)."
+} else {
+    "Jev evaluated classification as '$classification' with risk score $riskScore"
+}
 
 if (-not $Quiet) {
     if ($requiresUserPermission) {
         Write-Host "`n[AuthorityGate] [GATE REQUIRED] Explicit User authority needed before running (${latency}ms)!" -ForegroundColor Yellow
-        Write-Host "[AuthorityGate] Classification: $classification (Risk Score: $riskScore)" -ForegroundColor Yellow
-        Write-Host "[AuthorityGate] Reason: High risk or persistent mutation requires User confirmation.`n" -ForegroundColor Yellow
+        Write-Host "[AuthorityGate] Jev: $classification (Risk Score: $riskScore)" -ForegroundColor Yellow
+        if ($hardHit) {
+            Write-Host "[AuthorityGate] Hard boundary segment(s): $($hardSegments -join ' | ')" -ForegroundColor Red
+        }
+        Write-Host ""
     } else {
         Write-Host "[AuthorityGate] [SEMANTIC-PASS] Command authorized under routine local scope in ${latency}ms (Risk: $riskScore)" -ForegroundColor Green
     }
@@ -190,8 +205,9 @@ return [PSCustomObject]@{
     Permitted              = $permitted
     RequiresUserPermission = $requiresUserPermission
     Risk                   = $riskLevel
-    Classification         = $classification
-    Mode                   = "JevSemanticEvaluation"
+    Classification         = $finalClass
+    Mode                   = $mode
+    HardBoundarySegments   = $hardSegments
     LatencyMs              = $latency
-    Reason                 = "Jev evaluated classification as '$classification' with risk score $riskScore"
+    Reason                 = $reason
 }

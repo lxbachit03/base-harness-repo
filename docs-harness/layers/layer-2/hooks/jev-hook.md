@@ -14,10 +14,12 @@ Toggle rules live in [hooks/README.md](README.md) (Loading).
 
 Before performing any action outside the exemptions, run the matching Jev
 consult and wait for its verdict; execute only after the verdict arrives.
-One consult covers one action group per turn:
+One consult covers one action group per turn (a turn is one User message and
+the agent's work on it; a delegated worker's whole assignment is one turn):
 
-- File ops: read, write, edit any repository file.
-- Shell and external: bash commands, websearch, webfetch.
+- File ops: read, write, edit or search (Grep, Glob) any repository file.
+- Shell: Bash and PowerShell commands.
+- Web: web search and web fetch.
 - Coordination: delegating, spawning, or coordinating other agents (Herdr,
   Orca, native subagents).
 - Other tools: any further tool invocation not covered above.
@@ -25,15 +27,18 @@ One consult covers one action group per turn:
 One verdict covers the same-intent actions of that group in the same turn; a
 new intent starts a new consult.
 
-Exempt: the Jev consult itself (including reading docs-harness/JEV-AI.md
-section 3.5 to build it), and session-start retrieval (AGENTS.md,
-docs-harness/INDEX.md, PERSONA.md, layers walk, hook files) — they enable
+Exempt: the Jev consult itself (including locating and reading
+docs-harness/JEV-AI.md sections 3.1 and 3.5 to build it), and session-start retrieval (AGENTS.md,
+docs-harness/INDEX.md, PERSONA.md, layers walk, hook files, and listing
+folder and file names for INDEX's alignment check; reading file contents is
+gated) — they enable
 the gate and cannot gate themselves.
 
 ## Script selection
 
-- Bash commands → `.agents/skills/typesafe-ai/scripts/precheck-authority.ps1`
-  (`-Command`, `-ActionDescription`, `-TargetFiles`). Its returned
+- Shell commands (Bash or PowerShell) →
+  `.agents/skills/typesafe-ai/scripts/precheck-authority.ps1` (`-Command`,
+  `-ActionDescription`, `-TargetFiles`; see JEV-AI.md §3.1). Its returned
   Permitted/RequiresUserPermission result is the gate verdict.
 - All other groups → `.agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1`
   with state and questions built for the pending action (default when no
@@ -60,6 +65,9 @@ observable so a skipped or truncated consult is detectable.
 - `proceed` or `proceed_with_caution`: execute; surface the caution.
 - `pause_ask_user`: stop; report Jev's reason and one concrete question.
 - `veto`: do not execute; report the verdict and one alternative proposal.
+- Shell gate: `Permitted` means proceed; `RequiresUserPermission` means
+  pause_ask_user, unless the User has already given explicit authority for
+  that exact action and target.
 
 ## When Jev cannot answer
 

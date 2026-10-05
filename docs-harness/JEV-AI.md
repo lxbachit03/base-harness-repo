@@ -12,7 +12,7 @@ AI agents invoking the `$enhance-jev` skill read, calibrate, and synchronize thi
 - **Domain**: Agent Harness Infrastructure, Multi-Agent Orchestration, and Developer Tooling
 - **Primary Languages**: PowerShell (zero-dependency local scripts), Markdown (agent instructions)
 - **Host Platform**: Windows PowerShell 5.1+ / PowerShell Core (UTF-8 byte stream encoding)
-- **Core Security Invariant**: 0822 User Authority Gate — Read-only by default. Routine local test/edits authorized for fix/build tasks. Git index staging (`git add`), commits (`git commit`), pushes (`git push`), credential access, and destructive file operations strictly require explicit User authorization.
+- **Core Security Invariant**: 0822 User Authority Gate — Read-only by default. Routine local test/edits authorized for fix/build tasks. Git index staging (`git add`), commits (`git commit`), pushes (`git push`), credential access, and destructive file operations strictly require explicit User authorization. The Jev helpers' own API-key lookup and TypeSafe API calls are permitted by default (User decision 2026-10-05).
 - **Model Resolution**: `jev-latest` (resolving to `jev-1.13.0` via `https://api.typesafe.ai/v1/systemone`)
 - **Credential Storage**: Dynamic resolution via `$env:TYPESAFE_API_KEY`, Windows User Registry, or Machine Registry.
 
@@ -25,16 +25,16 @@ All active Jev scripts reside flatly in `.agents/skills/typesafe-ai/scripts/` an
 | Script Name | Jev Primitives | Purpose | Target Input | Status |
 | :--- | :--- | :--- | :--- | :--- |
 | [`invoke-typesafe.ps1`](../.agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1) | Core Transport | Dynamic key discovery, UTF-8 payload encoding, timing, real-time observability, and graceful offline fallback | `$State`, `$Questions` hashtable | `CoreInfrastructure` |
-| [`precheck-authority.ps1`](../.agents/skills/typesafe-ai/scripts/precheck-authority.ps1) | `Choice` + `Score` | Hybrid Task Authority Gate: <5ms regex fast-pass for read-only / hard-blocked commands, Jev evaluation for ambiguous mutations | Terminal command string, action description, target files | `Active` |
+| [`precheck-authority.ps1`](../.agents/skills/typesafe-ai/scripts/precheck-authority.ps1) | `Choice` + `Score` | Task Authority Gate: Jev evaluation for every command, with a quote-aware per-segment regex hard boundary that always requires User authority for staging, commits, pushes and destructive commands | Terminal command string, action description, target files | `Active` |
 | [`suggest-skill.ps1`](../.agents/skills/typesafe-ai/scripts/suggest-skill.ps1) | `Choice` (Top-N) | Selective Smart Skill Router: explicit-mention bypass, on-demand Jev Choice, and Multi-Skill Chain routing | User prompt text | `Active` |
 | [`triage-ticket.ps1`](../.agents/skills/typesafe-ai/scripts/triage-ticket.ps1) | `Choice` + `Score` + `Noul` | Automated ticket intake triage: category, severity, implementation complexity, and reproduction step verification | Raw ticket text or markdown file | `Active` |
 | [`check-domain-freshness.ps1`](../.agents/skills/typesafe-ai/scripts/check-domain-freshness.ps1) | `Noul` + `Score` | Domain contract drift detection: verifies code diffs against domain specifications and schemas | Domain document markdown, code diff summary | `Active` |
 
 Usage practices:
 
-1. **Authority precheck** (`precheck-authority.ps1`): regex clears routine
-   read-only commands and hard-blocks staging, commits and pushes; ambiguous
-   commands go to Jev.
+1. **Authority precheck** (`precheck-authority.ps1`): Jev classifies every
+   shell command; a hard-boundary segment (staging, commit, push, destructive)
+   always requires User authority.
 2. **On-demand skill routing** (`suggest-skill.ps1`): call the router only when
    the prompt is ambiguous or names no skill; an explicit `$skill-name` bypasses
    it.
@@ -51,10 +51,15 @@ Usage practices:
 
 ### 3.1. `precheck-authority.ps1`
 - **Purpose**: Enforce the 0822 User Authority Gate before running shell commands.
-- **State Shape**:
+- **Invocation** (run the script directly, without `-Quiet`; `-TargetFiles` is a string array):
+  ```powershell
+  & .\.agents\skills\typesafe-ai\scripts\precheck-authority.ps1 -Command '<exact command>' -ActionDescription '<why>' -TargetFiles @('<path>')
+  ```
+- **State Shape** (built by the script):
   ```json
   {
     "command": "<trimmed shell command>",
+    "segments": ["<segments split outside quotes>"],
     "action_description": "<optional context>",
     "target_files": ["<file paths>"],
     "authority_policy": "0822 policy summary"
@@ -64,15 +69,16 @@ Usage practices:
   - `authority_classification` (`choice`):
     - `read_only_routine`: Zero mutations, file inspection, read-only tests.
     - `local_routine_authorized`: Routine local build/test/edits authorized by fix/build.
-    - `critical_mutation_requires_permission`: Git add/commit/push, external requests, credentials, permanent deletion.
+    - `critical_mutation_requires_permission`: Git add/commit/push or branch deletion, external requests or credential access (other than the Jev helpers' own TypeSafe calls and key lookup), permanent deletion.
   - `risk_score` (`score`):
     - Level 0: Safe (zero persistence).
     - Level 1: Low to Moderate (local file change, easily discarded).
     - Level 2: High (persistent external mutation, commit/push, destructive).
 - **Decision Logic**:
-  - Fast regex clears read-only commands in <5ms.
-  - Fast regex hard-blocks unapproved git commits/adds/pushes in <5ms.
-  - Ambiguous commands: if Jev classifies as `critical_mutation_requires_permission` or `risk_score >= 1.4` -> Requires explicit User confirmation.
+  - The command is split into segments on `;`, `|`, `||`, `&&`, newlines, `$(` and backtick, ignoring separators inside quotes (substitution still splits inside double quotes).
+  - Jev classifies every command (no regex fast path; User decision 2026-10-05), so each verdict prints its request and response.
+  - Requires explicit User confirmation if Jev returns `critical_mutation_requires_permission`, `risk_score >= 1.4`, or any segment matches the hard boundary (`git add/commit/push/rebase/reset --hard/clean -f`, `rm -r`, recursive `Remove-Item`, format, drop database).
+  - When Jev is unavailable, a conservative heuristic restricts any `git`, delete, write or web command.
 
 ### 3.2. `suggest-skill.ps1`
 - **Purpose**: Select optimal skill(s) without context bloat.
@@ -115,12 +121,12 @@ Usage practices:
 - **Decision Logic**: If `is_domain_stale >= 0.5` -> flag the claim `STATUS: needs-review` and `Freshness: STALE` (`MarkStaleAndScheduleReview`); if `staleness_severity >= 1.4` -> `ImmediateDomainUpdateRequired`. Confirmation tags stay unchanged; only the User changes them (`docs-harness/domain/README.md`).
 
 ### 3.5. jev-hook generic consult (`invoke-typesafe.ps1`)
-- **Purpose**: The gate consult that `layers/layer-2/hooks/jev-hook.md` requires for file, coordination and other tool groups.
+- **Purpose**: The gate consult that `layers/layer-2/hooks/jev-hook.md` requires for the file, web, coordination and other tool groups.
 - **State Shape** (PowerShell hashtable passed as `-State`):
   ```powershell
   @{
     user_intent       = "<the User's current request>"
-    action_group      = "<file_ops_read | file_ops_write | coordination | other>"
+    action_group      = "<file_ops_read (includes Grep/Glob) | file_ops_write | web | coordination | other>"
     pending_action    = "<what will run, on which targets>"
     targets           = @("<paths or resources>")
     authority_excerpt = "<the applicable AGENTS.md Task authority lines>"
@@ -134,6 +140,11 @@ Usage practices:
     risk_score    = @{ type = "score"; instructions = "<rate the risk>"
       criteria = @("Safe; read-only", "Local reversible change", "External or hard to undo") }
   }
+  ```
+- **Invocation** (run the script directly, without `-Quiet`):
+  ```powershell
+  $r = & .\.agents\skills\typesafe-ai\scripts\invoke-typesafe.ps1 -State $state -Questions $questions
+  $r.Answers.gate_decision.choice
   ```
 - **Decision Logic**: Act on `Answers.gate_decision.choice` per the hook's Verdict handling; `Fallback = $true` means the hook's bypass rule applies.
 

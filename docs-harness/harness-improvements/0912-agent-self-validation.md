@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Replace repository validator scripts with agent self-validation
 CREATED: 2026-09-12
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -18,7 +18,7 @@ REFERENCES:
 - [removed 2026-09-13 by #023_IMPROVE_HARNESS_0913] .agents/skills/audit-onboarding-proposal/SKILL.md
 - [historical snapshot removed 2026-09-13] .harness-core/base/.agents/skills/onboard-repository/SKILL.md
 - [historical snapshot removed 2026-09-13] .harness-core/base/.agents/skills/audit-onboarding-proposal/SKILL.md
-- docs-harness/plans/active/0906-behavior-parity-audit.md
+- docs-harness/plans/completed/0906-behavior-parity-audit.md
 - .gitignore
 
 ## Current policy notice (2026-10-05)
@@ -131,3 +131,5 @@ manual evidence it inspected.
 Decision: pending fresh rerun. The requested implementation is bounded to the
 retired validator tree and current guidance; effectiveness remains unverified
 until the equivalent fresh agent scenario is exercised.
+
+2026-10-05: Completed by User decision ([#046](1005-repo-and-record-decisions.md)). The fresh replay named above was not separately recorded.

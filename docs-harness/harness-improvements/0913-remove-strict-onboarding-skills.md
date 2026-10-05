@@ -5,13 +5,13 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Remove strict onboarding and audit skills
 CREATED: 2026-09-13
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
 - docs-harness/README.md
 - docs-harness/harness-improvements/0912-agent-self-validation.md
-- docs-harness/plans/active/0906-behavior-parity-audit.md
+- docs-harness/plans/completed/0906-behavior-parity-audit.md
 - docs/tools/antigravity/README.md
 
 ## Objective
@@ -105,3 +105,5 @@ Implementation complete; fresh replay pending. Replay task: a fresh agent
 session asked to run the strict onboarding or audit protocol should report the
 skill unavailable and route to `onboarding`/WORKFLOW without dangling
 pointers. Owner: main agent when a fresh session is available.
+
+2026-10-05: Completed by User decision ([#046](1005-repo-and-record-decisions.md)). The fresh replay named above was not separately recorded.

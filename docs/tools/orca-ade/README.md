@@ -40,7 +40,7 @@ Orca cung cấp công cụ dòng lệnh `orca.exe` (trên Windows đặt tại `
 
 ### 2.1 Quản Lý Git Worktree Cách Ly (`orca worktree`)
 
-Orca tự động quản lý các Git worktree giúp mỗi tác vụ của AI agent diễn ra trên một nhánh và thư mục riêng biệt, tránh xung đột branch và không làm bẩn working directory chính.
+Orca có thể quản lý các Git worktree, mỗi worktree là một nhánh và thư mục riêng. Trong repo này, việc điều phối agent (Herdr hay Orca) không dùng worktree mà chạy trên checkout hiện tại (#045); các lệnh dưới đây chỉ dùng khi User yêu cầu rõ ràng một worktree riêng.
 
 | Lệnh CLI | Chức Năng Chi Tiết | Trường Hợp Sử Dụng (Use Cases) |
 | :--- | :--- | :--- |
@@ -120,10 +120,10 @@ Orca ADE tích hợp sâu với kiến trúc mở rộng hiện đại:
 
 Trong kiến trúc Harness, **Herdr** là cơ chế điều phối worker session của BALE. Khi kết hợp với Orca ADE, sự phối hợp đạt hiệu quả tối ưu:
 
-> **Quy tắc hiện hành (User quyết định 2026-10-03, #041):** worker Herdr luôn chạy
-> trên checkout hiện tại của coordinator, không tạo Orca worktree (#024). Orca
-> worktree chỉ dùng khi User chủ động chọn điều phối bằng Orca, qua skill
-> `orca-ade-coordinate-agents`.
+> **Quy tắc hiện hành (User quyết định 2026-10-05, #045):** dù điều phối bằng
+> Herdr hay bằng Orca (skill `orca-ade-coordinate-agents`, chỉ khi User chọn),
+> mọi worker chạy trên checkout và branch hiện tại của coordinator; không tạo
+> hay dùng git worktree.
 
 ```text
 +---------------------------------------------------------------------------------+
@@ -154,7 +154,7 @@ Trong kiến trúc Harness, **Herdr** là cơ chế điều phối worker sessio
 
 ### Lợi Ích Của Việc Kết Hợp Herdr + Orca ADE:
 1. **Checkout chung (Shared Checkout)**:
-   - Worker Herdr chạy trên checkout hiện tại của coordinator; worker có quyền ghi được chạy tuần tự, hoặc song song khi đầu ra tách biệt (`herdr-coordinate-agents`). Orca worktree chỉ dùng khi User chọn điều phối bằng Orca (`orca-ade-coordinate-agents`).
+   - Worker Herdr chạy trên checkout hiện tại của coordinator; worker có quyền ghi được chạy tuần tự, hoặc song song khi đầu ra tách biệt (`herdr-coordinate-agents`). Điều phối bằng Orca (`orca-ade-coordinate-agents`, khi User chọn) cũng chạy trên checkout hiện tại, không dùng worktree.
 2. **Theo dõi song song không nghẽn lệnh (Terminal Multiplexing)**:
    - Thay vì dùng lệnh nền hệ điều hành phức tạp, BALE có thể mở một pane terminal (`orca terminal create --command "herdr launch ..."`) và theo dõi tiến độ qua `orca terminal read`.
 3. **Kiểm toán chất lượng & Trực quan hóa Diff (Visual Review Gate)**:
@@ -167,4 +167,4 @@ Trong kiến trúc Harness, **Herdr** là cơ chế điều phối worker sessio
 
 - **Ưu tiên `--json`**: Luôn truyền cờ `--json` khi AI Agent thực thi lệnh Orca CLI để nhận kết quả có cấu trúc máy đọc được.
 - **Tái sử dụng Page ID**: Với tác vụ web, lấy `browserPageId` từ `orca tab list` hoặc `orca tab create` và truyền cờ `--page <id>` vào các lệnh `snapshot`, `click`, `eval` tiếp theo.
-- **Dọn dẹp tài nguyên**: Luôn chủ động đóng tab (`orca tab close`) và xóa worktree tạm (`orca worktree rm --worktree <selector>`) khi tác vụ hoàn thành để tránh lãng phí RAM và ổ cứng.
+- **Dọn dẹp tài nguyên**: Luôn chủ động đóng tab (`orca tab close`) và terminal (`orca terminal close`) khi tác vụ hoàn thành để tránh lãng phí RAM. Điều phối agent không tạo worktree nên không có worktree nào phải xóa.

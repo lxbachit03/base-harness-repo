@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Filesystem and INDEX synchronization check at session start
 CREATED: 2026-08-16
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -128,3 +128,5 @@ Raw receipt:
 
 Decision: rerun performed 2026-09-27 (two identical replays) and a behavior gap
 was recorded; status stays active. keep/revise/remove is pending User decision.
+
+2026-10-05: Completed by User decision ([#046](../../harness-improvements/1005-repo-and-record-decisions.md)) and moved from `plans/active/` to `plans/completed/`. The fresh rerun named above was not separately recorded. The session-start INDEX check was also revised as this record recommended (User decision P4): INDEX Session retrieval now compares file names with INDEX in both directions.

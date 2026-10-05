@@ -15,8 +15,8 @@ evidence and reread only on drift. Keep the primary model and the default
 maximum of two live workers until the User changes those limits. Herdr
 workspaces are terminal panes, not Git worktrees (step 2). When the User
 explicitly selects Orca coordination for a task, use
-`orca-ade-coordinate-agents` instead; that selection is what authorizes its
-worktrees. Worker model/effort/Fast selections are pass-through inputs; the
+`orca-ade-coordinate-agents` instead; it also runs every worker on the current
+checkout. Worker model/effort/Fast selections are pass-through inputs; the
 lean path below optimizes BALE's context and tool-call cost.
 
 ## 1. Identify the session and choose the work

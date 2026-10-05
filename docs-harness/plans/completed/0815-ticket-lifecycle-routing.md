@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Separate active and completed ticket context
 CREATED: 2026-08-15
-STATUS: active
+STATUS: completed
 REFERENCES:
 - .agents/skills/ticket-solving/SKILL.md
 - .agents/skills/writing-for-agents/SKILL.md
@@ -118,3 +118,5 @@ the User's authority visible. Proposal: preserve the decision log, record the
 normalization in the ticket, and report the active-to-completed move.
 
 Decision: pending fresh rerun.
+
+2026-10-05: Completed by User decision ([#046](../../harness-improvements/1005-repo-and-record-decisions.md)) and moved from `plans/active/` to `plans/completed/`. The fresh rerun named above was not separately recorded.

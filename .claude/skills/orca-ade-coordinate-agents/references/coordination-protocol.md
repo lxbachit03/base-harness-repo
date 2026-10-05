@@ -1,31 +1,17 @@
 # Orca ADE Coordination Protocol Reference
 
-Technical reference for multi-agent coordination via Orca ADE CLI (`orca.exe`), calibrated to v1.4.212 on Windows.
+Technical reference for multi-agent coordination via Orca ADE CLI (`orca.exe`), calibrated to v1.4.212 on Windows. All coordination runs on the coordinator's current checkout and branch; never create or select a Git worktree, detached checkout or clone for coordination.
 
-## 1. Worktree Sandbox Management
+## 1. Current Checkout Selector
 
-### Allocation
+### Inspection (read-only)
 ```bash
-orca worktree create --name <task-slug> --json
-```
-- Creates an isolated Git worktree under `%USERPROFILE%/orca/workspaces/<repo>/<task-slug>`.
-- Creates a dedicated branch `refs/heads/<task-slug>` branched from the repository's base ref.
-- Parse `result.worktree.path`, `result.worktree.id`, and `result.worktree.instanceId`.
-- Always pass `--json` for machine-readable output.
-
-### Inspection
-```bash
+orca worktree current --json
 orca worktree list --json
-orca worktree show --worktree <selector> --json
 ```
+- Orca addresses the checkout itself as a worktree; use the current one's selector for terminals.
 - `<selector>` can be `name:<displayName>`, `branch:<branch>`, `path:<path>`, or `id:<repo-id>::<path>`.
-
-### Teardown
-```bash
-orca worktree rm --worktree <selector> --force --json
-```
-- Always pass `--force` to remove experimental branches without blocking on merge state.
-- If repo-defined archive hooks fail, specify `--allow-failed-archive-hook` only when authorized.
+- Always pass `--json` for machine-readable output.
 
 ---
 
@@ -33,9 +19,9 @@ orca worktree rm --worktree <selector> --force --json
 
 ### Creation
 ```bash
-orca terminal create --worktree <selector> --title "<label>" --json
+orca terminal create --worktree <current-checkout-selector> --title "<label>" --json
 ```
-- Spawns a PTY terminal tab within the specified worktree context.
+- Spawns a PTY terminal tab on the current checkout.
 - On Windows, default shell is PowerShell (`powershell.exe`). Use `--shell cmd.exe` or `--shell pwsh.exe` when needed.
 - Capture `result.terminal.handle` (e.g. `term_xxx`).
 
@@ -46,7 +32,7 @@ orca terminal send --terminal <handle> --text "<command>" --enter --json
 - `--enter` automatically appends carriage return.
 - **PTY Formatting Warning**: Avoid streaming large multiline blocks with nested double quotes directly into PowerShell PTY prompts. Instead:
   1. Use single-quoted one-liners with escaped quotes; or
-  2. Write commands to a temporary script file inside the worktree and execute the script.
+  2. Write commands to a temporary script file in the worker's owned paths and execute the script.
 - Send `--interrupt` to cancel long-running foreground commands.
 
 ### Observation & Buffer Reading
@@ -87,8 +73,8 @@ Workers do not have inter-process communication channels or shared memory. All c
                  /                           \
                 v                             v
 +-------------------------------+   +-------------------------------+
-|     Worker 1 Sandbox          |   |     Worker 2 Sandbox          |
-| Worktree: orca-worker-1       |   | Worktree: orca-worker-2       |
+|     Worker 1 (shared checkout)|   |     Worker 2 (shared checkout)|
+| Owned path: out/worker-1/     |   | Owned path: out/worker-2/     |
 | Terminal: term_1              |   | Terminal: term_2              |
 | Artifact: producer-data.json  |   | Artifact: consumer-report.md  |
 +-------------------------------+   +-------------------------------+
@@ -96,11 +82,13 @@ Workers do not have inter-process communication channels or shared memory. All c
 
 ### Protocol Steps:
 1. **Task Dispatch**: Coordinator issues task packet to Worker 1 in `term_1`.
-2. **Artifact Generation**: Worker 1 finishes and writes a verifiable JSON artifact (e.g., `<worktree-1>/docs/evaluations/output.json`).
-3. **Artifact Ingestion**: Coordinator reads the artifact from Worker 1's worktree filesystem.
+2. **Artifact Generation**: Worker 1 finishes and writes a verifiable JSON artifact inside its owned path.
+3. **Artifact Ingestion**: Coordinator reads the artifact from that path.
 4. **Context Transformation**: Coordinator parses, validates, and incorporates Worker 1's data into Worker 2's prompt/script.
 5. **Downstream Delivery**: Coordinator sends the transformed task packet to Worker 2 in `term_2`.
-6. **Downstream Verification**: Worker 2 reads the input and produces the final deliverable.
+6. **Downstream Verification**: Worker 2 reads the input and produces the final deliverable in its owned path.
+
+Writers that share files run one after another; parallel workers need read-only work or disjoint owned paths.
 
 ---
 
@@ -108,10 +96,10 @@ Workers do not have inter-process communication channels or shared memory. All c
 
 ### Monaco Diff Review
 ```bash
-orca file open-changed --worktree <selector> --mode diff --json
+orca file open-changed --mode diff --json
 ```
 - Opens modified files in Orca's integrated Monaco editor in `diff` mode.
-- Inspect `result.opened` to verify modified files match the authorized scope.
+- Inspect `result.opened` to verify modified files match the workers' owned paths.
 
 ### Embedded Chromium Browser Verification
 ```bash
@@ -139,6 +127,6 @@ orca tab create --url "<url>" --json
 | :--- | :--- | :--- |
 | `invalid_argument: Unknown command` | Space/quote splitting in CLI shell arguments | Wrap `--text` in outer double quotes and use simple single-quoted strings inside. |
 | Terminal buffer output truncated | Output exceeded default buffer limit | Use `orca terminal read --limit 200` or pipe long output to a file. |
-| `worktree_archive_hook_failed` | Repo-defined archive hook failed on worktree removal | Pass `--allow-failed-archive-hook` with `--force` if the hook failure is non-blocking. |
 | Browser `eval` timeout on `file://` | Local file URL security boundary in Chromium host | Serve via local HTTP server (e.g. `npx serve`) or evaluate DOM on served URLs. |
-| Orphaned terminal processes | Workspace deleted before closing terminals | Always call `orca terminal close --tab` prior to `orca worktree rm`. |
+| Change outside a worker's owned paths | Worker wrote beyond its assignment | Stop dispatching to that worker, report the change, and leave it for the User or a correction; do not discard it silently. |
+| Orphaned terminal processes | Session ended before closing terminals | Always call `orca terminal close --tab` before ending the coordination. |

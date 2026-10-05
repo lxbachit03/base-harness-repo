@@ -40,8 +40,9 @@ questions. Tag the resource [CONFIRMED] for the scope the User explicitly
 confirmed, and list anything the User did not confirm as open questions. If
 the User has not confirmed the scope, ask before persisting; unconfirmed
 discovery belongs to onboarding as [UNCERTAIN] context. If an [UNCERTAIN]
-resource for this scope already exists, promote its tags in place and keep its
-ID and creation date. Keep detailed source artifacts with their owner.
+resource for this scope already exists, promote its tags in place, keep its
+ID and creation date, and move its claims the User did not confirm into open
+questions. Keep detailed source artifacts with their owner.
 
 Add applicable supporting schema/flow evidence, then update INDEX tree and
 classification routes. Perform a targeted manual review of the tree, route

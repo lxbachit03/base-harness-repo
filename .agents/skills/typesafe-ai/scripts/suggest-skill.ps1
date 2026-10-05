@@ -67,12 +67,13 @@ if (-not $ForceJev) {
         "ticket-solving", "herdr-coordinate-agents", "orca-ade-coordinate-agents",
         "sequence-execution-plan", "prompt-leverage", "onboarding", "domain-audit",
         "xia", "utilizing-tools-agy", "utilizing-tools-claude", "utilizing-tools-codex",
-        "utilizing-tools-opencode", "utilizing-tools-orca-ade"
+        "utilizing-tools-opencode", "utilizing-tools-orca-ade", "init-harness-repo"
     )
 
+    # Only an explicit "$skill-name" mention bypasses routing; a bare word does not.
     $matchedSkills = [System.Collections.Generic.List[string]]::new()
     foreach ($skillName in $explicitSkills) {
-        if ($promptLower -match "(\`$$skillName\b|\b$skillName\b)") {
+        if ($promptLower -match "\`$$([regex]::Escape($skillName))\b") {
             if (-not $matchedSkills.Contains($skillName)) {
                 $matchedSkills.Add($skillName)
             }
@@ -111,7 +112,7 @@ $skillsCriteria = @{
     "improve-harness"            = "Applying scoped improvements to harness repo guidance, routing, skills, tools, or validation"
     "ticket-solving"             = "Investigating, organizing, and solving user tickets and bug reports"
     "herdr-coordinate-agents"    = "Coordinating multi-agent worker sessions via Herdr"
-    "orca-ade-coordinate-agents" = "Multi-agent coordination through Orca ADE worktrees, only when the User explicitly selects Orca coordination"
+    "orca-ade-coordinate-agents" = "Multi-agent coordination through Orca ADE panes on the current checkout, only when the User explicitly selects Orca coordination"
     "sequence-execution-plan"    = "Building dependency-aware execution plans, sequencing backlogs or prerequisites"
     "prompt-leverage"            = "Upgrading raw prompts into execution-ready instructions, rules, or templates"
     "onboarding"                 = "Mapping brownfield business or data flows into domain context"

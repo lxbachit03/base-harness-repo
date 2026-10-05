@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Require User authority for mutations and side-effecting validation
 CREATED: 2026-08-22
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -137,3 +137,5 @@ Decision: pending fresh rerun.
 The intervention is implemented and static validation passes. Do not claim the
 Harness improved or move this record to `plans/completed/` until a fresh
 equivalent session exercises both the blocked and explicitly authorized paths.
+
+2026-10-05: Completed by User decision ([#046](../../harness-improvements/1005-repo-and-record-decisions.md)) and moved from `plans/active/` to `plans/completed/`. The fresh rerun named above was not separately recorded.

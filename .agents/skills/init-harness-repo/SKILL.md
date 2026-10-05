@@ -33,9 +33,10 @@ named another). List the root.
 If root `AGENTS.md` or `CLAUDE.md` exists, list which ones and ask now,
 before the interview:
 
-- **Keep them** (recommended): create the rest of the scaffold and, in the
-  report, hand the User the generated text of each kept file to merge by
-  hand.
+- **Keep <the existing file names>** (recommended; name the files in the
+  label, for example "Keep AGENTS.md"): create the rest of the scaffold and,
+  in the report, hand the User the generated text of each kept file to merge
+  by hand.
 - **Cancel**: create nothing; go to step 5.
 
 Done when you know whether root `AGENTS.md` and `CLAUDE.md` exist and, if
@@ -56,7 +57,8 @@ either does, the User has chosen.
 
 Check for conflicts right after the answer that creates them: after
 question 1, whether the harness folder exists; after question 4, whether any
-scaffold path inside it exists. On a conflict, list the existing paths and
+scaffold path inside it exists (the paths are listed in
+[scaffold.md](scaffold.md)). On a conflict, list the existing paths and
 ask:
 
 - **Pick another name** (recommended): ask that question again.
@@ -91,10 +93,13 @@ resolving each target from the directory of the file that contains it:
   rule.
 
 Fix a broken link in a file you created, then check again. Also run
-`git check-ignore` on each created path and note any path git ignores.
+`git check-ignore -v` on each created path. If any path is ignored, ask the
+User: add re-include rules (for example `!AGENTS.md`, `!<harness-folder>/`)
+to the repository `.gitignore` (recommended), leave them ignored, or a
+free-text answer.
 
-Done when every link resolves, every back-link above is present, and the
-ignore check has run.
+Done when every link resolves, every back-link above is present, and every
+ignored path has a User decision.
 
 ## 5. Report
 

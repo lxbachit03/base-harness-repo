@@ -349,16 +349,18 @@ disable-model-invocation: true   # tùy chọn
 | **Model-invoked** | Bỏ `disable-model-invocation` | Agent tự gọi được; skill khác gọi được; `description` luôn chiếm context. |
 | **User-invoked** | `disable-model-invocation: true` | Chỉ User gõ `/<tên>` mới gọi; **không** xuất hiện trong danh sách available-skills; context load bằng 0. |
 
-Trong repo này `domain-audit` và `ticket-solving` là user-invoked, nên **không**
+Trong repo này `domain-audit`, `init-harness-repo` và `ticket-solving` là user-invoked, nên **không**
 hiện trong danh sách skill tự động — đó là thiết kế, không phải lỗi.
 
 ### 7.3 Skill có sẵn theo nhóm (phiên tham chiếu)
 
-**Skill của repo Harness** (`.claude/skills/` + `.agents/skills/`):
-`goal-griller`, `herdr-coordinate-agents`, `improve-harness`, `onboarding`,
-`prompt-leverage`, `sequence-execution-plan`, `utilizing-tools-agy`,
+**Skill của repo Harness** (`.claude/skills/` + `.agents/skills/`, cập nhật 2026-10-05):
+`enhance-jev`, `goal-griller`, `herdr-coordinate-agents`, `improve-harness`,
+`onboarding`, `orca-ade-coordinate-agents`, `prompt-leverage`,
+`sequence-execution-plan`, `typesafe-ai`, `utilizing-tools-agy`,
 `utilizing-tools-claude`, `utilizing-tools-codex`, `utilizing-tools-opencode`,
-`writing-for-agents`, `xia`; user-invoked: `domain-audit`, `ticket-solving`.
+`utilizing-tools-orca-ade`, `writing-for-agents`, `xia`; user-invoked:
+`domain-audit`, `init-harness-repo`, `ticket-solving`.
 
 **Plugin `productivity`**: `productivity:memory-management`,
 `productivity:start`, `productivity:task-management`, `productivity:update`.
@@ -401,7 +403,10 @@ lại phần quan trọng.
 > [!IMPORTANT]
 > **Ràng buộc của repo này**: `AGENTS.md` quy định phiên chính là Bale, xử lý
 > việc nhỏ trực tiếp. Ủy thác đi qua
-> `.agents/skills/herdr-coordinate-agents/SKILL.md`, không gọi thẳng `Agent`.
+> `.agents/skills/herdr-coordinate-agents/SKILL.md`, hoặc
+> `.agents/skills/orca-ade-coordinate-agents/SKILL.md` khi User chọn điều phối
+> bằng Orca; không gọi thẳng `Agent`. Mọi điều phối chạy trên checkout và
+> branch hiện tại, không dùng git worktree (kể cả `isolation: "worktree"`).
 > Tool `Agent`/`Workflow` chỉ dùng khi User, `CLAUDE.md` hoặc một skill yêu cầu.
 > Phiên worker đã được giao việc **không** được spawn tiếp agent.
 
@@ -581,7 +586,7 @@ Máy tham chiếu: repo `.claude/` **chỉ có `skills/`**, chưa có settings p
 | Quy trình chuyên biệt | `Skill` |
 | Trang chia sẻ cho người khác | `Artifact` (+ `artifact-design`) |
 | Dịch vụ ngoài | `mcp__<server>__<tool>` đã kết nối và xác thực |
-| Khảo sát độc lập, bounded | `Agent` — qua `herdr-coordinate-agents` trong repo này |
+| Khảo sát độc lập, bounded | `Agent` — qua `herdr-coordinate-agents` (hoặc `orca-ade-coordinate-agents` khi User chọn Orca) trong repo này |
 
 ### Phase 2 — Mandatory declaration
 
@@ -623,7 +628,8 @@ Không liệt kê toàn bộ catalog nếu task chỉ cần một subset nhỏ.
 - **Ưu tiên tool chuyên dụng hơn shell** khi không ở bypass mode: `Grep`/`Glob`/
   `Read`/`Edit` tích hợp permission UI và file link.
 - **Không spawn subagent thừa**: việc phiên hiện tại làm được thì làm trực tiếp;
-  ủy thác trong repo này đi qua `herdr-coordinate-agents`.
+  ủy thác trong repo này đi qua `herdr-coordinate-agents`, hoặc
+  `orca-ade-coordinate-agents` khi User chọn Orca.
 - **Không claim completion sớm**: một tool call thành công chưa phải proof; phải
   đọc result và kiểm tra điều kiện hoàn thành.
 

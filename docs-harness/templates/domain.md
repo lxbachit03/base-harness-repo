@@ -2,6 +2,10 @@
 
 Use the capture, confirmation, tracing, and freshness contract in
 docs-harness/domain/README.md. This is a template, not a domain fact.
+New observed knowledge keeps `TAG: [UNCERTAIN]` with creation kind
+`DOMAIN_UNCERTAIN`; a resource recorded by domain-audit for scope the User
+explicitly confirmed uses `TAG: [CONFIRMED]` with creation kind
+`DOMAIN_CONFIRMED`.
 
 ID: #<next-sequence>_<creation-kind>_<MMDD>
 TAG: [DOMAIN]

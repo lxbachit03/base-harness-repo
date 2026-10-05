@@ -30,7 +30,8 @@ A file directly under `agents/` loads only when its basename (without
 extension) exactly equals the session's resolved model+effort identifier — the
 model ID plus the effective Effort value in kebab-case, as HERDR-AGENTS.md's
 "Resolved worker evidence" records it (for example `gemini-3.8-flash-high`).
-This exact match is the only filter; supporting files such as
+When the runtime exposes no effort value, the identifier is the model ID alone
+(for example `claude-opus-5-5`). This exact match is the only filter; supporting files such as
 `reasons-and-purposes.md` never match a model identifier and never load.
 
 There is no family-wide tier that loads for every model of one provider
@@ -60,11 +61,9 @@ and again after a workspace switch or a compaction that loses routing context.
 ## Adding a model-specific add-on prompt
 
 1. Determine the identifier the runtime actually resolves for the target model
-   (model ID plus effective Effort, kebab-case); confirm it natively rather than
-   guessing a suffix.
+   (model ID plus effective Effort, kebab-case, or the model ID alone when no
+   effort is exposed); confirm it natively rather than guessing a suffix.
 2. Create `docs-harness/layers/<layer>/agents/<identifier>.md` directly under
    that `agents/` folder.
-3. Add the matching `!docs-harness/layers/...` allow line(s) to the root
-   `.gitignore`, following the layer's existing chain.
-4. Optionally record the reason in the layer's `agents/reasons-and-purposes.md`.
+3. Optionally record the reason in the layer's `agents/reasons-and-purposes.md`.
    Never name a supporting file after a resolvable model identifier.

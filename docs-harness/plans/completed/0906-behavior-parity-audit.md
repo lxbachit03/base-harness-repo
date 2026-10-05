@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Audit behavior parity and restore unintended validator regressions
 CREATED: 2026-09-06
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -238,14 +238,14 @@ R = rules above; P = pending policy choice; V = validator checks above.
 | `docs-harness/harness-improvements/README.md` | G10; P12 (review baseline and replay) |
 | `docs-harness/onboarding/README.md` | G08; P06/P09 (isolated flow/proportional workspace/synthesis) |
 | `docs-harness/plans/README.md` | G03; P01/P11/P12 (canonical plan and lifecycle) |
-| `docs-harness/plans/active/0815-ticket-lifecycle-routing.md` | G13; current-policy notice added; original body/evidence unchanged |
-| `docs-harness/plans/active/0815-writing-for-agents-routing.md` | G13; current-policy notice added; original body/evidence unchanged |
-| `docs-harness/plans/active/0816-filesystem-index-sync-rule.md` | G13; current-policy notice added; original body/evidence unchanged |
-| `docs-harness/plans/active/0816-onboarding-skill-folder-routing.md` | G13; current-policy notice added; original body/evidence unchanged |
-| `docs-harness/plans/active/0816-persona-response-style-routing.md` | G13; current-policy notice added; original body/evidence unchanged |
-| `docs-harness/plans/active/0822-domain-e2e-flow-template.md` | G13; current-policy notice added; original body/evidence unchanged |
-| `docs-harness/plans/active/0822-ticket-evidence-workspace.md` | G13; current-policy notice added; original body/evidence unchanged |
-| `docs-harness/plans/active/0822-user-authority-operation-gate.md` | G13; current-policy notice added; original body/evidence unchanged |
+| `docs-harness/plans/completed/0815-ticket-lifecycle-routing.md` | G13; current-policy notice added; original body/evidence unchanged |
+| `docs-harness/plans/completed/0815-writing-for-agents-routing.md` | G13; current-policy notice added; original body/evidence unchanged |
+| `docs-harness/plans/completed/0816-filesystem-index-sync-rule.md` | G13; current-policy notice added; original body/evidence unchanged |
+| `docs-harness/plans/completed/0816-onboarding-skill-folder-routing.md` | G13; current-policy notice added; original body/evidence unchanged |
+| `docs-harness/plans/completed/0816-persona-response-style-routing.md` | G13; current-policy notice added; original body/evidence unchanged |
+| `docs-harness/plans/completed/0822-domain-e2e-flow-template.md` | G13; current-policy notice added; original body/evidence unchanged |
+| `docs-harness/plans/completed/0822-ticket-evidence-workspace.md` | G13; current-policy notice added; original body/evidence unchanged |
+| `docs-harness/plans/completed/0822-user-authority-operation-gate.md` | G13; current-policy notice added; original body/evidence unchanged |
 | `docs-harness/plans/completed/0906-task-authority-and-policy-consistency.md` | G13; new intervention evidence, not retroactive proof of old plans |
 | `docs-harness/templates/README.md` | G06/G08/G09; P07/P09/P10/P11 (catalog/identity/owners) |
 | `docs-harness/templates/activity-diagram.md` | G08; P09 (relative citations, symbols/revisions, external actors) |
@@ -363,3 +363,5 @@ without evidence. The fresh agent must not create or invoke a validator script
 without explicit User authority. Keep external actions simulated. Review the
 observed result before moving this record to completed/; preserve the User's
 unresolved policy choices and unrelated old experiments.
+
+2026-10-05: Completed by User decision ([#046](../../harness-improvements/1005-repo-and-record-decisions.md)) and moved from `plans/active/` to `plans/completed/`. The fresh rerun named above was not separately recorded.

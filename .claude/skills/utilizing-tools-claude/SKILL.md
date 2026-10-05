@@ -58,7 +58,7 @@ and a bounded target.
 | Current web facts | `WebFetch` for a known URL, `WebSearch` for discovery (both deferred) |
 | A decision only the User can make | `AskUserQuestion` |
 | Plan before acting | `EnterPlanMode` / `ExitPlanMode` (deferred) |
-| Isolated branch work | `EnterWorktree` / `ExitWorktree` (deferred) |
+| Isolated branch work (only on an explicit User request; never for agent coordination) | `EnterWorktree` / `ExitWorktree` (deferred) |
 | Watch a long-running condition | `Monitor` (deferred); background `Bash` for detached commands |
 | Recurring or scheduled work | `CronCreate` / `CronList` / `CronDelete` (deferred) |
 | Load a repository procedure | `Skill` |
@@ -154,7 +154,11 @@ work directly; an explicitly delegated session is a worker that executes its own
 bounded assignment and returns evidence.
 
 Route delegation through `.agents/skills/herdr-coordinate-agents/SKILL.md` when
-independent work, specialized context, or a separate review justifies it. Reach
+independent work, specialized context, or a separate review justifies it, or
+through `.agents/skills/orca-ade-coordinate-agents/SKILL.md` when the User
+selects Orca coordination. Every coordinated worker runs on the current
+checkout and branch; never use a worktree for it, including
+`isolation: "worktree"`. Reach
 for the native `Agent` or `Workflow` tool only when the User, a `CLAUDE.md`, or a
 skill asks for it, and read the workflow authoring reference before writing a
 workflow script.

@@ -24,6 +24,11 @@ when the User explicitly selects it
 ([#041](1003-group-d-policy-decisions.md)). This record retains its original
 scope, evidence and decision as history.
 
+Update (2026-10-05): by User decision
+([#045](1005-coordination-without-worktrees.md)) no agent coordination uses a
+Git worktree, including Orca coordination; both Herdr and Orca run workers on
+the current checkout and branch.
+
 ## Objective
 
 Author comprehensive team-facing documentation for Orca ADE under `docs/tools/orca-ade/README.md`, create an agent capability routing skill `.agents/skills/utilizing-tools-orca-ade/SKILL.md` following the repository's `writing-for-agents` and `utilizing-tools-*` pattern (supporting both standalone Orca ADE power and Herdr worker coordination via Orca worktrees/terminals), update `docs-harness/HERDR-AGENTS.md` with Orca environment integration guidance, and synchronize repository index and routing.

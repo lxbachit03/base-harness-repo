@@ -17,6 +17,13 @@ REFERENCES:
 - .agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1
 - .agents/skills/typesafe-ai/scripts/precheck-authority.ps1
 
+## Current policy notice (2026-10-05)
+
+The shell gate no longer has a regex fast path ([#044](1005-gate-and-jev-decisions.md)):
+every shell consult calls Jev and prints its request and response. The hook's
+groups, exemptions and toggle location were also refined in #042 and #044.
+This record retains its original scope, evidence and decision as history.
+
 ## Objective
 
 Establish a hook mechanism at `docs-harness/layers/layer-2/hooks/`: user-toggled,

@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Persona response style configuration and session start routing
 CREATED: 2026-08-16
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -72,3 +72,5 @@ Ambiguous checklist state (multiple checked boxes or none checked).
 - Proposal: Implement strict fallback to `Default` persona whenever checklist state is ambiguous.
 
 Decision: pending fresh rerun.
+
+2026-10-05: Completed by User decision ([#046](../../harness-improvements/1005-repo-and-record-decisions.md)) and moved from `plans/active/` to `plans/completed/`. The fresh rerun named above was not separately recorded.

@@ -19,6 +19,13 @@ REFERENCES:
 - .agents/skills/typesafe-ai/scripts/triage-ticket.ps1
 - .agents/skills/typesafe-ai/scripts/check-domain-freshness.ps1
 
+## Current policy notice (2026-10-05)
+
+The precheck's regex fast path described here was removed by User decision
+([#044](1005-gate-and-jev-decisions.md)): Jev now classifies every shell
+command, with the regex hard boundary kept as an override. This record
+retains its original scope, evidence and decision as history.
+
 ## Objective
 
 Implement the 4 quantitative best practices discovered through live TypeSafe Jev System One evaluation: (1) Hybrid Preflight Hook for the 0822 Task Authority Gate, (2) Selective on-demand skill routing, (3) Probabilistic ticket intake triage and complexity scoring, and (4) Domain contract freshness and staleness verification.

@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Onboarding skill and flow-based workspace routing
 CREATED: 2026-08-16
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -69,3 +69,5 @@ Context sprawl if an agent scans all subfolders in `docs-harness/onboarding/` si
 - Proposal: Mandate Top-Down routing to specific flow subfolders (`docs-harness/onboarding/<target-flow>/`) in both `INDEX.md` and `SKILL.md`, prohibiting bulk directory scans.
 
 Decision: pending fresh rerun.
+
+2026-10-05: Completed by User decision ([#046](../../harness-improvements/1005-repo-and-record-decisions.md)) and moved from `plans/active/` to `plans/completed/`. The fresh rerun named above was not separately recorded.

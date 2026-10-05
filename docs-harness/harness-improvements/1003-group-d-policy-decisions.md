@@ -20,6 +20,12 @@ REFERENCES:
 - docs-harness/domain/README.md
 - docs/tools/orca-ade/README.md
 
+## Current policy notice (2026-10-05)
+
+The D1 clause that let User-selected Orca coordination use worktrees is
+superseded by User decision ([#045](1005-coordination-without-worktrees.md)):
+no agent coordination uses a Git worktree. D2–D5 stand.
+
 ## Objective
 
 The five User decisions on group D are reflected at their owners: Herdr

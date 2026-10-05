@@ -6,8 +6,11 @@ Start here after `AGENTS.md` and before reading other repository documentation.
 
 ## Session retrieval
 
-At session start, inspect the folder names and INDEX alignment without changing
-files. Read PERSONA.md and use the single selected style, or Default when the
+At session start, without changing files, list the folder and file names under
+docs-harness/ (templates/ excluded) and compare them with INDEX in both
+directions: report every resource file with an ID that INDEX does not route,
+every INDEX link whose target is missing, and every folder missing from the
+Folder Tree. Read PERSONA.md and use the single selected style, or Default when the
 selection is empty or ambiguous. Apply persona to conversation only.
 
 Then follow [layers/README.md](layers/README.md) to load any add-on prompt
@@ -123,8 +126,8 @@ Resources:
 
 - [Harness improvement guide](harness-improvements/README.md)
 
-Legacy improvement plans (`#002`–`#014`) are routed in the `plans/active/` and
-`plans/completed/` sections below.
+Legacy improvement plans (`#002`–`#014`) are routed in the `plans/completed/`
+section below.
 
 - [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Bale orchestration through independent Herdr agents](harness-improvements/0907-bale-herdr-orchestration.md) — `#016_IMPROVE_HARNESS_0907`, `PRIORITY: [MEDIUM]`
@@ -155,6 +158,9 @@ Legacy improvement plans (`#002`–`#014`) are routed in the `plans/active/` and
 - [Apply the User's group D policy decisions from the 2026-10-03 optimization review](harness-improvements/1003-group-d-policy-decisions.md) — `#041_IMPROVE_HARNESS_1003`, `PRIORITY: [MEDIUM]`
 - [Apply the User's group B decisions to reduce always-loaded Harness context](harness-improvements/1005-group-b-context-load-reduction.md) — `#042_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
 - [Apply the User's group C decisions to remove duplicated on-demand guidance](harness-improvements/1005-group-c-deduplication.md) — `#043_IMPROVE_HARNESS_1005`, `PRIORITY: [NORMAL]`
+- [Make the shell gate always consult Jev and apply the User's Jev guidance decisions](harness-improvements/1005-gate-and-jev-decisions.md) — `#044_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
+- [Coordinate agents on the current branch without Git worktrees, for Herdr and Orca](harness-improvements/1005-coordination-without-worktrees.md) — `#045_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
+- [Apply the User's repository, record and template decisions from the optimization review](harness-improvements/1005-repo-and-record-decisions.md) — `#046_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
 
 ## TAG: [CONSTRAINTS]
 
@@ -281,15 +287,9 @@ Skip when: no active plan is related to the current intent.
 
 Resources:
 
-- [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
-- [Service E2E domain-flow template improvement](plans/active/0822-domain-e2e-flow-template.md) — `#011_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
-- [Ticket evidence workspace templates](plans/active/0822-ticket-evidence-workspace.md) — `#010_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
-- [User authority operation gate](plans/active/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
-- [Onboarding skill and flow-based workspace routing](plans/active/0816-onboarding-skill-folder-routing.md) — `#007_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
-- [Persona response style configuration and session start routing](plans/active/0816-persona-response-style-routing.md) — `#006_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
-- [Filesystem and INDEX synchronization check at session start](plans/active/0816-filesystem-index-sync-rule.md) — `#005_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
-- [Ticket lifecycle improvement](plans/active/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
-- [Writing-for-agents routing improvement](plans/active/0815-writing-for-agents-routing.md) — `#003_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
+- [Active plans folder guide](plans/active/README.md)
+
+No active plans are indexed.
 
 ### plans/completed/
 
@@ -303,8 +303,17 @@ Skip when: the task has no dependency on completed work.
 
 Resources:
 
-- [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Goal-griller specialist routing improvement](plans/completed/0812-harness-improvement-goal-routing.md) — `#002_IMPROVE_HARNESS_0812`, `PRIORITY: [MEDIUM]`
+- [Writing-for-agents routing improvement](plans/completed/0815-writing-for-agents-routing.md) — `#003_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
+- [Ticket lifecycle improvement](plans/completed/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
+- [Filesystem and INDEX synchronization check at session start](plans/completed/0816-filesystem-index-sync-rule.md) — `#005_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
+- [Persona response style configuration and session start routing](plans/completed/0816-persona-response-style-routing.md) — `#006_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
+- [Onboarding skill and flow-based workspace routing](plans/completed/0816-onboarding-skill-folder-routing.md) — `#007_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
+- [User authority operation gate](plans/completed/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
+- [Ticket evidence workspace templates](plans/completed/0822-ticket-evidence-workspace.md) — `#010_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
+- [Service E2E domain-flow template improvement](plans/completed/0822-domain-e2e-flow-template.md) — `#011_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
+- [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
+- [Behavior parity audit and regression repair](plans/completed/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 
 ### tickets/
 

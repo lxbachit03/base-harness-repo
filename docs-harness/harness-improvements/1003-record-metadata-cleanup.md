@@ -48,7 +48,7 @@ reviewer); the User accepted group E on 2026-10-03.
 ## Proposed Improvement
 
 Add a dated "Current policy notice" under the metadata of `#016` and `#018`,
-following the pattern of `plans/active/0815-writing-for-agents-routing.md`.
+following the pattern of `plans/completed/0815-writing-for-agents-routing.md`.
 Use `STATUS: completed` in `#036` and move its revision note into Progress.
 Point `#037` REFERENCES at the `#026` path; mark `GOAL.md` as not retained in
 `#038`. Add the allow lines.

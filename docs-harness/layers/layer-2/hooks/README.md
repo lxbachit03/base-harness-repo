@@ -27,8 +27,7 @@ from the hook's gate, so a hook cannot deadlock on itself.
    block, its gate rule, script/tool selection, verdict handling, and an
    explicit default for when the invoked tooling cannot answer.
 2. Exempt the hook's own tool invocations explicitly.
-3. Add the hook path to the repository `.gitignore` allow-list chain.
-4. Include the hook's verdicts and bypasses in session outcome summaries.
+3. Include the hook's verdicts and bypasses in session outcome summaries.
 
 Hooks carry no global resource ID and no TAG; they are routed only through
 this folder.

@@ -29,10 +29,12 @@ Synchronize the executable scripts in `.agents/skills/typesafe-ai/scripts/` to m
 - **Infrastructure Reuse**: Call [`invoke-typesafe.ps1`](../typesafe-ai/scripts/invoke-typesafe.ps1) for all API transport. Do not duplicate HTTP logic, credential discovery, or UTF-8 serialization.
 - **Observability Contract**: Include real-time console notification (`Write-Host`) for evaluated state and decision results.
 - **Graceful Fallback**: Implement non-terminating fallback when offline or when credentials are unavailable.
+- **Mirror**: Copy each added or changed script to `.claude/skills/typesafe-ai/scripts/` with the same content.
 
 ### Phase 3: Local Routine Verification
 
-Verify each added or modified script locally before claiming completion:
+Verify each added or modified script locally before claiming completion. A live
+TypeSafe test call is routine local verification (User decision 2026-10-05):
 1. Run a test invocation with the shell tool (PowerShell).
 2. Inspect latency (target: sub-second execution ~450ms - 550ms for live API calls).
 3. Validate output schema and verify that decisions match the defined criteria.
@@ -40,6 +42,6 @@ Verify each added or modified script locally before claiming completion:
 ## Completion Criteria
 
 - [ ] [`docs-harness/JEV-AI.md`](../../../docs-harness/JEV-AI.md) reflects the updated project context, script catalog, and questions.
-- [ ] All new/modified scripts in `.agents/skills/typesafe-ai/scripts/` have been created or updated.
+- [ ] All new/modified scripts in `.agents/skills/typesafe-ai/scripts/` have been created or updated and mirrored to `.claude/skills/typesafe-ai/scripts/`.
 - [ ] Local verification commands executed with observable proof.
 - [ ] Working tree remains unstaged and uncommitted (strictly honoring User Authority).

@@ -15,6 +15,14 @@ REFERENCES:
 - .agents/skills/writing-for-agents/SKILL.md
 - .agents/skills/improve-harness/SKILL.md
 
+## Current policy notice (2026-10-05)
+
+By User decision ([#045](1005-coordination-without-worktrees.md)),
+`orca-ade-coordinate-agents` no longer creates worktrees: it runs only when
+the User selects Orca coordination, and every worker uses the current
+checkout and branch with owned paths and serialized writers. This record's
+worktree sandbox and `--force` teardown are history, not current policy.
+
 ## Objective
 
 Author a specialized multi-agent coordination skill `orca-ade-coordinate-agents` under `.agents/skills/orca-ade-coordinate-agents/` following `writing-for-agents` principles (progressive disclosure via `references/coordination-protocol.md`), synchronize the skill to `.claude/skills/`, and update the Harness repository index and allowlist rules.

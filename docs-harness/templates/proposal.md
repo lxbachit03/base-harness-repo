@@ -5,14 +5,14 @@ TAG: [RISK]
 PRIORITY: [<CRITIAL|MEDIUM|NORMAL>]
 TITLE: <title>
 CREATED: <YYYY-MM-DD>
-STATUS: <status>
+STATUS: <proposed|accepted|rejected|superseded>
 REFERENCES:
 - [#<risk-resource-id> <risk-title>](../risks/<MMDD>-<risk-slug>.md)
 
 <!-- Paired with a risk: creation kind RISK, keep TAG: [RISK] and the risk
 link. Not paired with a risk: creation kind PROPOSAL, delete the TAG line, the
-risk link and the Related Risks section (templates/README.md). Remove this
-comment. -->
+risk link and the Related Risks section (templates/README.md); REFERENCES then
+lists related resources, or `- none`. Remove this comment. -->
 
 ## Problem
 

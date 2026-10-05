@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Route writing-for-agents through goal-griller
 CREATED: 2026-08-15
-STATUS: active
+STATUS: completed
 REFERENCES:
 - .agents/skills/goal-griller/SKILL.md
 - .agents/skills/writing-for-agents/SKILL.md
@@ -124,3 +124,5 @@ Decision: pending fresh rerun.
 The intervention is implemented and native validation passes. Do not move this
 record to `plans/completed/` or claim that the Harness improved until a fresh
 equivalent agent session exercises the route and records the comparison.
+
+2026-10-05: Completed by User decision ([#046](../../harness-improvements/1005-repo-and-record-decisions.md)) and moved from `plans/active/` to `plans/completed/`. The fresh rerun named above was not separately recorded.
