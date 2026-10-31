@@ -19,17 +19,19 @@ Done when the scope is concrete and any policy ambiguity is explicit.
 
 ## 2. Trace and record evidence
 
-Create or reuse docs-harness/onboarding/<flow-name>/README.md within the requested task.
-Use a compact trace for a small flow; add the standard five evidence artifacts
-when a multi-step E2E investigation benefits from them. Read the diagram
-template when needed. Cover data transformation, models, integrations, and
-edge cases with sources or explicit unknowns.
+Create or reuse the named workspace and its ordered `flows/` step files under
+docs-harness/onboarding/<flow-name>/. Follow the workspace guide for the E2E
+overview, beginner-readable step explanations, diagrams, expected API
+responses, and expected database records. Add the five supporting evidence
+artifacts when they help. Read the diagram template and cover data transformation,
+models, integrations, and edge cases with sources or explicit unknowns.
 
 Distinguish observed behavior from authoritative requirements. Cite implementation
 steps with file/line ranges or symbol/revision; mark external actors explicitly.
 Record configuration names and ownership, never secret values.
 
-Done when each material flow claim has evidence and uncovered branches are named.
+Done when every material step is linked in order, its expected outcomes and
+diagram follow the workspace guide, and uncovered branches are named.
 
 ## 3. Capture and hand off
 
