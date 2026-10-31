@@ -153,9 +153,7 @@ to executed work or a reported gap.
 work directly; an explicitly delegated session is a worker that executes its own
 bounded assignment and returns evidence.
 
-Route delegation through `.agents/skills/herdr-coordinate-agents/SKILL.md` when
-independent work, specialized context, or a separate review justifies it. Reach
-for the native `Agent` or `Workflow` tool only when the User, a `CLAUDE.md`, or a
+Reach for the native `Agent` or `Workflow` tool only when the User, a `CLAUDE.md`, or a
 skill asks for it, and read the workflow authoring reference before writing a
 workflow script.
 

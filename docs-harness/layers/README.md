@@ -37,9 +37,8 @@ docs-harness/layers/
 
 A file directly under `agents/` loads only when its basename (without
 extension) exactly equals the current session's own resolved exact
-model+effort identifier — the same value HERDR-AGENTS.md's "Resolved worker
-evidence" records as the model ID plus the effective Effort value, in
-kebab-case (for example `gemini-3.8-flash-high`).
+model+effort identifier: the model ID plus the effective effort reported by
+the running session, in kebab-case (for example `gemini-3.8-flash-high`).
 
 This exact-match rule is the only filter, and it is the single mechanism —
 there is no separate provider/family pre-selection step, and no exception
@@ -92,10 +91,9 @@ INDEX itself.
 ## Adding a model-specific add-on prompt
 
 1. Determine the exact model+effort identifier the runtime actually resolves
-   for the target model (the value HERDR-AGENTS.md's "Resolved worker
-   evidence" would record as the model ID plus effective Effort, in
-   kebab-case). Confirm it natively where possible; do not guess a suffix the
-   runtime does not expose.
+   for the target model: its model ID plus effective effort, in kebab-case.
+   Confirm it natively where possible; do not guess a suffix the runtime does
+   not expose.
 2. Create `docs-harness/layers/<layer>/agents/<identifier>.md` with the
    add-on instructions, directly under an existing or new layer's `agents/`
    folder — do not wrap it in a provider/family subfolder.

@@ -3,7 +3,7 @@
     Suggests optimal Harness skill(s) for a given user prompt using TypeSafe Jev (System One).
 
 .DESCRIPTION
-    Analyzes a user request or task description against the repository's 17 skills catalog
+    Analyzes a user request or task description against the repository's available skills catalog
     using Jev's Choice primitive. Supports both single-skill and Multi-Skill Chain routing (Top-N thresholding)
     for composite tasks, returning PrimarySkill, SupportingSkills, and SkillChain.
     Includes an explicit-mention bypass and automatic heuristic fallback for offline environments.
@@ -64,7 +64,7 @@ if (-not $ForceJev) {
     $promptLower = $Prompt.ToLowerInvariant()
     $explicitSkills = @(
         "typesafe-ai", "enhance-jev", "writing-for-agents", "goal-griller", "improve-harness",
-        "ticket-solving", "herdr-coordinate-agents", "orca-ade-coordinate-agents",
+        "ticket-solving",
         "sequence-execution-plan", "prompt-leverage", "onboarding", "domain-audit",
         "xia", "utilizing-tools-agy", "utilizing-tools-claude", "utilizing-tools-codex",
         "utilizing-tools-opencode", "utilizing-tools-orca-ade"
@@ -110,8 +110,6 @@ $skillsCriteria = @{
     "goal-griller"               = "Transforming fuzzy ideas into verifiable autonomous goals, interview before goal mode (/goal)"
     "improve-harness"            = "Applying scoped improvements to harness repo guidance, routing, skills, tools, or validation"
     "ticket-solving"             = "Investigating, organizing, and solving user tickets and bug reports"
-    "herdr-coordinate-agents"    = "Coordinating multi-agent worker sessions via Herdr"
-    "orca-ade-coordinate-agents" = "Multi-agent coordination using Orca ADE terminal multiplexing and worktrees"
     "sequence-execution-plan"    = "Building dependency-aware execution plans, sequencing backlogs or prerequisites"
     "prompt-leverage"            = "Upgrading raw prompts into execution-ready instructions, rules, or templates"
     "onboarding"                 = "Mapping brownfield business or data flows into domain context"
@@ -136,7 +134,6 @@ function Get-HeuristicFallbackSkill([string]$text) {
     if ($lower -match "orca|worktree|multiplex") { return "utilizing-tools-orca-ade" }
     if ($lower -match "plan|sequence|dependency|prerequisite|backlog") { return "sequence-execution-plan" }
     if ($lower -match "research|investigate|explore|xia") { return "xia" }
-    if ($lower -match "herdr|worker|dispatch|delegate") { return "herdr-coordinate-agents" }
     if ($lower -match "onboard|brownfield|data-flow") { return "onboarding" }
     if ($lower -match "domain|audit|freshness") { return "domain-audit" }
     if ($lower -match "prompt|template|leverage") { return "prompt-leverage" }

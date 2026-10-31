@@ -1,12 +1,10 @@
-# Herdr worker configuration catalog
+# Historical Herdr worker configuration catalog
 
-This file is BALE's user-editable model registry for Herdr workers. Read it
-after `AGENTS.md` and `docs-harness/INDEX.md` when selecting or changing a
-Herdr worker profile. For a reassignment that keeps the same resolved profile,
-reuse the recorded catalog hash and configuration evidence; reread on drift.
-A profile selection is launch input, not a separate full Herdr preflight gate.
-A checkbox is a user choice; it is not proof that the current Herdr installation
-can launch that profile.
+Retired as current runtime guidance on 2026-10-31 when the User removed both
+coordination skills. See [the removal record](harness-improvements/1031-remove-coordination-skills.md).
+The remaining selections, launch instructions and evidence are preserved as
+history, not as a current delegation workflow. Referenced skill files can be
+read with `git show 6b1bd92:<repository-relative-path>`.
 
 ## Selection contract
 

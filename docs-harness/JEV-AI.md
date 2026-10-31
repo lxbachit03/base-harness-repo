@@ -66,7 +66,8 @@ All active Jev scripts reside flatly in `.agents/skills/typesafe-ai/scripts/` an
   { "user_prompt": "<raw prompt>" }
   ```
 - **Questions**:
-  - `suggested_skill` (`choice`): Evaluates against 17 skills catalog.
+  - `suggested_skill` (`choice`): Evaluates against the available skills catalog
+    in `suggest-skill.ps1`.
 - **Decision Logic**:
   - Explicit-mention bypass: if prompt contains `$skill-name`, immediately return `ExplicitMention` (0ms API).
   - Ambiguous prompt: calls Jev; top skill is `PrimarySkill`; any skill with `probability >= 0.12` becomes `SupportingSkills`.

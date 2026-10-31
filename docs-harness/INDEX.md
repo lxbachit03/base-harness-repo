@@ -102,12 +102,9 @@ Resources:
 - [PERSONA.md](PERSONA.md)
 - [Manual self-validation policy](../AGENTS.md): inspect affected routes,
   metadata, links, and diff; disclose unattempted proof and script authority.
-- [Bale and Herdr coordination](../.agents/skills/herdr-coordinate-agents/SKILL.md): read for primary-session alias binding, delegation, or resumption; workers retain their assigned role.
-- [Herdr worker configuration catalog](HERDR-AGENTS.md): read before BALE launches
-  or changes a Herdr worker model; an unchanged reassignment may reuse its
-  recorded catalog hash/configuration evidence and reread on drift. Exactly one
-  model, its scoped effort/Fast selections when present, the process-scoped
-  permission/capability contract, and effective runtime proof are required.
+- [Historical Herdr worker catalog](HERDR-AGENTS.md): retained for past
+  coordination evidence after removal of the coordination skills; consult only
+  when investigating that history.
 - [Jev System One configuration manifest](JEV-AI.md): declarative manifest for
   project context, semantic scripts catalog, and dynamic criteria.
 
@@ -125,7 +122,8 @@ Skip when: the intent concerns only product behavior or unrelated domain work.
 Resources:
 
 - [Harness improvement guide](harness-improvements/README.md)
-- [Bale orchestration through independent Herdr agents](harness-improvements/0907-bale-herdr-orchestration.md) — `#016_IMPROVE_HARNESS_0907`, `PRIORITY: [MEDIUM]`
+- [Remove the Herdr and Orca ADE coordination skills](harness-improvements/1031-remove-coordination-skills.md) — `#048_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
+- [Bale orchestration through independent Herdr agents](harness-improvements/0907-bale-herdr-orchestration.md) — `#016_IMPROVE_HARNESS_0907`, `PRIORITY: [MEDIUM]` — historical skill-creation record
 - [Agent self-validation and validator retirement](harness-improvements/0912-agent-self-validation.md) — `#017_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [Receipt-first Herdr observation with bounded transcript fallback](harness-improvements/0912-herdr-bounded-observation.md) — `#019_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [Bale review gate for delegated code quality and resource efficiency](harness-improvements/0913-herdr-bale-code-review.md) — `#020_IMPROVE_HARNESS_0913`, `PRIORITY: [MEDIUM]`
@@ -141,7 +139,7 @@ Resources:
 - [User-selected Herdr worker model catalog](harness-improvements/0912-herdr-agent-catalog.md) — `#018_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [Model-specific add-on prompt layers](harness-improvements/0926-model-family-layer-prompts.md) — `#030_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
 - [Orca ADE documentation, capability routing skill, and Herdr coordination](harness-improvements/0926-utilizing-tools-orca-ade.md) — `#031_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
-- [Pure Orca ADE multi-agent coordination skill and Claude sync](harness-improvements/0926-orca-ade-coordinate-agents.md) — `#032_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
+- [Pure Orca ADE multi-agent coordination skill and Claude sync](harness-improvements/0926-orca-ade-coordinate-agents.md) — `#032_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]` — historical skill-creation record
 - [TypeSafe Jev semantic primitives and native PowerShell helper with graceful fallback](harness-improvements/0927-typesafe-ai-skill-integration.md) — `#033_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]`
 - [TypeSafe Jev best practices implementation for task authority, selective routing, ticket triage, and domain freshness](harness-improvements/0927-typesafe-best-practices-integration.md) — `#034_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]`
 - [Dynamic Jev manifest and enhance-jev skill for project-specific customization](harness-improvements/0927-dynamic-jev-manifest-and-enhance-skill.md) — `#035_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]`
@@ -159,6 +157,10 @@ Resources:
 - [Ticket lifecycle improvement](plans/active/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
 - [Writing-for-agents routing improvement](plans/active/0815-writing-for-agents-routing.md) — `#003_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
 - [Goal-griller specialist routing improvement](plans/completed/0812-harness-improvement-goal-routing.md) — `#002_IMPROVE_HARNESS_0812`, `PRIORITY: [MEDIUM]`
+
+Coordination-skill references in earlier records are historical, including
+records with a pending experiment status. Their deleted paths remain available
+at revision `6b1bd92`; they are not current skill entry points.
 
 ## TAG: [CONSTRAINTS]
 

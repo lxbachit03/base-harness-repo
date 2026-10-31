@@ -2,7 +2,7 @@
 
 > **Tài liệu tham khảo kỹ thuật cho nhóm phát triển (Team-Facing Documentation)**  
 > *Vị trí lưu trữ*: `docs/tools/orca-ade/README.md`  
-> *Mục đích*: Tổng hợp chi tiết toàn bộ các công cụ dòng lệnh (Built-in CLI Commands), hệ thống tự động hóa trình duyệt (Browser Automation), quản lý Git Worktrees, Terminal Multiplexing, cấu hình MCP/Plugins/Hooks và mô hình tích hợp điều phối tác tử với **Herdr** của nền tảng **Orca ADE (Agent Development Environment)**.
+> *Mục đích*: Tổng hợp các công cụ dòng lệnh, browser automation, Git worktrees, terminal multiplexing và cấu hình MCP/Plugins/Hooks của **Orca ADE**. Phần tích hợp **Herdr** được giữ làm tài liệu lịch sử sau khi hai skill điều phối được gỡ ngày 31/10/2026.
 
 ---
 
@@ -116,9 +116,12 @@ Orca ADE tích hợp sâu với kiến trúc mở rộng hiện đại:
 
 ---
 
-## 4. Tích Hợp Điều Phối Tác Tử Với Herdr (Herdr & Orca Integration)
+## 4. Lịch Sử Tích Hợp Herdr Và Orca
 
-Trong kiến trúc Harness, **Herdr** là cơ chế điều phối worker session của BALE. Khi kết hợp với Orca ADE, sự phối hợp đạt hiệu quả tối ưu:
+Phần này mô tả workflow trước khi gỡ hai skill điều phối, không phải hướng dẫn
+điều phối hiện hành. Xem [hồ sơ gỡ skill](../../../docs-harness/harness-improvements/1031-remove-coordination-skills.md).
+Trong workflow cũ, Herdr điều phối các worker của Bale qua terminal và worktree
+của Orca:
 
 ```text
 +---------------------------------------------------------------------------------+

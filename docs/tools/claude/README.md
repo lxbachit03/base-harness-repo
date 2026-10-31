@@ -355,7 +355,7 @@ hiện trong danh sách skill tự động — đó là thiết kế, không ph�
 ### 7.3 Skill có sẵn theo nhóm (phiên tham chiếu)
 
 **Skill của repo Harness** (`.claude/skills/` + `.agents/skills/`):
-`goal-griller`, `herdr-coordinate-agents`, `improve-harness`, `onboarding`,
+`goal-griller`, `improve-harness`, `onboarding`,
 `prompt-leverage`, `sequence-execution-plan`, `utilizing-tools-agy`,
 `utilizing-tools-claude`, `utilizing-tools-codex`, `utilizing-tools-opencode`,
 `writing-for-agents`, `xia`; user-invoked: `domain-audit`, `ticket-solving`.
@@ -400,8 +400,7 @@ lại phần quan trọng.
 
 > [!IMPORTANT]
 > **Ràng buộc của repo này**: `AGENTS.md` quy định phiên chính là Bale, xử lý
-> việc nhỏ trực tiếp. Ủy thác đi qua
-> `.agents/skills/herdr-coordinate-agents/SKILL.md`, không gọi thẳng `Agent`.
+> việc nhỏ trực tiếp.
 > Tool `Agent`/`Workflow` chỉ dùng khi User, `CLAUDE.md` hoặc một skill yêu cầu.
 > Phiên worker đã được giao việc **không** được spawn tiếp agent.
 
@@ -581,7 +580,7 @@ Máy tham chiếu: repo `.claude/` **chỉ có `skills/`**, chưa có settings p
 | Quy trình chuyên biệt | `Skill` |
 | Trang chia sẻ cho người khác | `Artifact` (+ `artifact-design`) |
 | Dịch vụ ngoài | `mcp__<server>__<tool>` đã kết nối và xác thực |
-| Khảo sát độc lập, bounded | `Agent` — qua `herdr-coordinate-agents` trong repo này |
+| Khảo sát độc lập, bounded | `Agent` — theo điều kiện ủy thác ở mục 8 |
 
 ### Phase 2 — Mandatory declaration
 
@@ -623,7 +622,7 @@ Không liệt kê toàn bộ catalog nếu task chỉ cần một subset nhỏ.
 - **Ưu tiên tool chuyên dụng hơn shell** khi không ở bypass mode: `Grep`/`Glob`/
   `Read`/`Edit` tích hợp permission UI và file link.
 - **Không spawn subagent thừa**: việc phiên hiện tại làm được thì làm trực tiếp;
-  ủy thác trong repo này đi qua `herdr-coordinate-agents`.
+  áp dụng điều kiện ủy thác ở mục 8.
 - **Không claim completion sớm**: một tool call thành công chưa phải proof; phải
   đọc result và kiểm tra điều kiện hoàn thành.
 
@@ -657,7 +656,7 @@ Phân loại độ tin cậy của các claim trong tài liệu này:
 | Danh sách lệnh dựng sẵn ở 9.5 | Quan sát trong phiên; **chưa chắc đầy đủ** | [SESSION] chưa liệt kê vét cạn |
 | `plugin:productivity:asana` lỗi `Incompatible auth server` | `claude mcp list` và thông báo của session | [LOCAL] nguyên nhân gốc chưa xác minh |
 | Gmail/Google Drive `✔ Connected` trong CLI nhưng session chỉ expose tool `authenticate` | Đối chiếu CLI với session | [UNKNOWN] lý do chưa xác minh |
-| Ràng buộc delegation qua Herdr, ranh giới authority | `AGENTS.md`, `docs-harness/INDEX.md` | [POLICY] của repo này |
+| Vai trò phiên và ranh giới authority | `AGENTS.md`, `docs-harness/INDEX.md` | [POLICY] của repo này |
 | Cách viết skill, chế độ invocation, context load | `.agents/skills/writing-for-agents/` | [POLICY] của repo này |
 
 Bề mặt capability của Claude Code thay đổi theo bản phát hành, account và bộ
