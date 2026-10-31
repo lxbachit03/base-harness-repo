@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Receipt-first Herdr observation with bounded transcript fallback
 CREATED: 2026-09-12
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -127,3 +127,11 @@ fallback rule. The fresh live success-path replay remains pending. Owner: the
 next fresh BALE session with a proven Herdr worker profile. Keep the record
 active until the receipt-only success path and ambiguity fallback have been
 exercised.
+
+2026-10-03: Completed by User decision
+([#041](1003-group-d-policy-decisions.md)). The receipt-only replay named above
+was not separately recorded. Related later evidence: live Herdr runs settled on
+worker receipts plus coordinator checks (`0922-agy-done-signal-reliability.md`,
+`0922-opencode-go-tight-handoff-wait-timeout.md:79-84`); one later run also
+read a transcript (`0926-model-family-layer-prompts.md`), so the receipt-only
+path is not proven word for word.

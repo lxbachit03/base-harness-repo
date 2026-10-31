@@ -13,9 +13,9 @@ that workflow is involved.
 - **Durable change:** use one evolving plan when work spans sessions, coordinates
   contributors, has meaningful dependencies, or needs recovery steps. Follow
   docs-harness/plans/README.md and docs-harness/templates/plan.md.
-- **Strict audit:** use the selected audit skill's evidence protocol only when
-  that audit is requested. Cryptographic evidence bundles and a fresh reviewer
-  are not prerequisites for ordinary inspection or implementation.
+- **Audit:** follow an explicitly invoked audit skill's protocol only when that
+  audit is requested. Audits are not prerequisites for ordinary inspection or
+  implementation.
 
 Keep task-local progress and decisions together. Add a separate accepted
 decision only when future work must inherit a consequential product,
@@ -40,26 +40,8 @@ If a new decision or external action is needed, finish independent preparation
 and present the concrete boundary for approval. An unavailable tool is an
 unattempted check, not a failing product test.
 
-When leveraging external semantic judgment primitives (such as TypeSafe Jev)
-for fast evaluation, triage, or guardrails, workflows adhere to four core best practices:
-1. **Hybrid Task Authority Precheck (`precheck-authority.ps1`)**: Fast regex allowlists (<5ms)
-   clear routine read-only commands immediately, while ambiguous mutations query Jev semantic
-   primitives (<500ms) to enforce the 0822 User Authority Gate and prevent unauthorized Git staging,
-   commits, or destructive operations.
-2. **Selective On-Demand Skill Routing (`suggest-skill.ps1`)**: Avoid prompt context bloat by
-   invoking the smart skill router only when user intent is ambiguous or lacks an explicit skill
-   name; requests with explicit skill mentions bypass routing entirely.
-3. **Probabilistic Ticket Intake Triage (`triage-ticket.ps1`)**: Inbound tickets are triaged
-   with typed Choice (category), Score (severity & implementation complexity), and Noul
-   (reproducibility clarity) to standardize priority without heavy LLM reasoning loops.
-4. **Domain Contract Freshness Verification (`check-domain-freshness.ps1`)**: Audit code diffs
-   against canonical specifications in `docs-harness/domain/` using Noul staleness judgments,
-   flagging documents as `[UNCERTAIN]` when code changes invalidate domain assertions.
-5. **Dynamic Manifest Synchronization (`$enhance-jev`)**: When adapting Jev primitives for target
-   project domains, agents consult and update [`docs-harness/JEV-AI.md`](JEV-AI.md) as the single
-   source of truth. If user requirements are ambiguous, the agent must pause and ask clarifying
-   questions before synchronizing (adding, modifying, or pruning) executable scripts in
-   `.agents/skills/typesafe-ai/scripts/`.
+When a workflow uses TypeSafe Jev for evaluation, triage or guardrails, follow
+the usage practices in [`docs-harness/JEV-AI.md`](JEV-AI.md) §2.
 
 Workflows must implement graceful fallback: in offline environments, unauthenticated CI runners,
 or when API credentials are absent, execution degrades gracefully to static heuristics, default
@@ -76,10 +58,8 @@ instruction scenarios; avoid tests that merely repeat the wording.
 
 For Harness routing, guidance, metadata, and link changes, the agent performs
 the proof by targeted inspection of the affected files, links, IDs, metadata,
-and final diff. Do not create or invoke a repository validation script unless
-the User explicitly authorizes script-based proof; report that proof as
-unattempted otherwise. Behavior-appropriate product tests remain valid when
-the task includes them.
+and final diff, and reports the evidence inspected. Behavior-appropriate
+product tests remain valid when the task includes them.
 
 Run repository-required checks that are within task authority. Broaden checks
 when failures, new changes, or unresolved concerns justify it. Never substitute

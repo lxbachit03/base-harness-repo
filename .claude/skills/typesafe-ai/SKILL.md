@@ -50,9 +50,10 @@ API contracts, SDK usage, models, limits, and worked examples.
 | Prepare inputs and questions | [State](https://docs.typesafe.ai/concepts/state.md), [primitives](https://docs.typesafe.ai/primitives.md), then the chosen primitive's page |
 | Decide how to handle uncertainty | [Confidence](https://docs.typesafe.ai/confidence.md) |
 | Write API code | [HTTP API](https://docs.typesafe.ai/api.md), [Python SDK](https://docs.typesafe.ai/sdk/python.md), or [JavaScript SDK](https://docs.typesafe.ai/sdk/javascript.md) |
+| Handle API limits and failures | [Request rules and errors](https://docs.typesafe.ai/api/errors.md), then the applicable SDK retry guidance |
 | Local zero-dependency invocation | [scripts/invoke-typesafe.ps1](scripts/invoke-typesafe.ps1) with dynamic key resolution and graceful fallback |
-| Hybrid Task Authority Precheck (0822) | [scripts/precheck-authority.ps1](scripts/precheck-authority.ps1) for sub-millisecond regex + Jev semantic mutation gating |
-| Selective Smart Skill Router | [scripts/suggest-skill.ps1](scripts/suggest-skill.ps1) with explicit-mention bypass and on-demand Jev Choice |
+| Task Authority Precheck (0822) | [scripts/precheck-authority.ps1](scripts/precheck-authority.ps1): Jev classifies every shell command, with a per-segment regex hard boundary as override |
+| Selective Smart Skill Router | [scripts/suggest-skill.ps1](scripts/suggest-skill.ps1) with explicit-mention bypass, Choice ranking, and independent Noul applicability |
 | Probabilistic Ticket Intake Triage | [scripts/triage-ticket.ps1](scripts/triage-ticket.ps1) for automated category, severity, and complexity scoring |
 | Domain Freshness & Drift Verification | [scripts/check-domain-freshness.ps1](scripts/check-domain-freshness.ps1) for validating code diffs against domain specs |
 | Update an older integration | [Migration guide](https://docs.typesafe.ai/migrating-to-v1.md) and the installed SDK's current reference |
@@ -106,6 +107,11 @@ Choose by what the answer means, then read the relevant primitive page:
 | One of a defined set | [Choice](https://docs.typesafe.ai/primitives/choice.md) | Picks one option; its distribution compares competing options |
 | Whether a condition holds | [Noul](https://docs.typesafe.ai/primitives/noul.md) | Probability of yes; no separate confidence; use one per label when several may apply |
 | Degree along a described dimension | [Score](https://docs.typesafe.ai/primitives/score.md) | Probability-weighted position on ordered levels; use comparable per-item Scores for graded ranking |
+| Location of an item in an image | [Box](https://docs.typesafe.ai/primitives/box.md) | Experimental; check image requirements and use a presence judgment when the item may be absent |
+
+Images and Box are experimental and require the opt-in header described in the
+live docs. The local PowerShell helper sends JSON without that header; use an
+appropriate current API or SDK integration when image support is needed.
 
 Give each question enough relevant **state** to answer: source text, identities,
 relationships, policies, and current facts. Prefer named JSON fields when context
@@ -141,6 +147,11 @@ concentration, not overall workflow correctness or permission to act. A Noul nea
 acceptable alternatives can also spread probability; low confidence need not
 invalidate a harmless preference choice. Ignore uncertainty on unused branches.
 
+Treat unavailable services, malformed answers, and missing evidence as distinct
+from valid negative judgments. Validate required answer fields and ranges before
+using them, and apply the consuming workflow's explicit fallback. Check that JSON
+serialization preserves the relevant state rather than silently truncating it.
+
 Keep policy explicit and raw judgments reusable. Weighted scores suit compensating
 preferences; an “any serious violation” rule needs separate conditions. Changing a
 weight or display filter need not rerun inference when evidence and question meanings
@@ -149,6 +160,8 @@ are trained for calibrated decisions; validate their performance in the target d
 
 Test representative cases and the resulting application behavior. For failures,
 inspect the exact state, questions, candidates, answers, composition, and observed
-outcome. Separate missing evidence, model errors, code errors, and service failures.
+outcome. Include the languages used by the application, including Vietnamese when
+relevant. Record the model returned by the API: aliases such as `jev-latest` can
+move. Separate missing evidence, model errors, code errors, and service failures.
 Treat cookbook thresholds and demo results as examples to evaluate, not universal
 rules or permanent model limitations. Keep API credentials server-side in web apps.

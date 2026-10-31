@@ -1,0 +1,41 @@
+{
+  "title": "Jev AI",
+  "text": "",
+  "children": [
+    {
+      "title": "Purpose",
+      "text": "Instruction cho Jev AI model của typesafe-ai để tương thích với harness repo hiện  tại",
+      "children": []
+    },
+    {
+      "title": "Yêu cầu 1",
+      "text": "tạo file \"JEV-AI.md\" trong docs-harness",
+      "children": []
+    },
+    {
+      "title": "Yêu cầu 2",
+      "text": "Jev AI sẽ sử dụng skill \"typesafe-ai\"",
+      "children": []
+    },
+    {
+      "title": "Yêu cầu 3",
+      "text": "Jev như trợ lý của harness repo, khi tôi gọi \"Jev\" thì AI agent sẽ cùng với Jev để đưa ra các quyết định.",
+      "children": []
+    },
+    {
+      "title": "Yêu cầu 4",
+      "text": "tạo thêm 1 layer (\"layer-2\" trong folder \"layers\" của docs-harness), tạo 1 folder \"hooks\" để auto trigger nếu user gọi \"Jev\", nếu user không gọi \"Jev\" thì không trigger. Đặt tên hook này là \"jev-hook.md\"",
+      "children": []
+    },
+    {
+      "title": "Yêu cầu 5",
+      "text": "tạo script \"invoke-typesafe.ps1\", AI agent sẽ tự tạo state, questions structure phù hợp để gọi API, sau đó hãy kiểm nghiệm thực tế",
+      "children": []
+    },
+    {
+      "title": "Yêu cầu 6",
+      "text": "mỗi khi gọi API của Jev thì phải logging trên màn hình response cho user",
+      "children": []
+    }
+  ]
+}

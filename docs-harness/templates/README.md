@@ -15,7 +15,8 @@ creating a resource. Templates contain placeholders and are not domain truth.
 - [domain.md](domain.md): canonical date-prefixed domain README.
 - [domain-entity.md](domain-entity.md): relevant schema/field evidence.
 - [activity-diagram.md](activity-diagram.md): cited flow diagrams.
-- [risk.md](risk.md) and [proposal.md](proposal.md): durable paired risk tracking.
+- [risk.md](risk.md) and [proposal.md](proposal.md): durable paired risk
+  tracking; proposal.md also covers standalone proposals.
 - [ticket.md](ticket.md): every ticket's source, result, and evidence.
 - [apis.md](apis.md), [entities.md](entities.md): applicable ticket inventories.
 - [ticket-docs-README.md](ticket-docs-README.md): manifest when artifacts exist.
@@ -24,8 +25,7 @@ creating a resource. Templates contain placeholders and are not domain truth.
   and [{sample-big-ticket}/README.md]({sample-big-ticket}/README.md): layout examples.
 
 Follow ../domain/README.md for capture, confirmation, tracing, and freshness;
-follow ../tickets/README.md for optional ticket artifacts. Existing evidence
-files are preserved when adopting the smaller layout.
+follow ../tickets/README.md for optional ticket artifacts.
 
 ## Common metadata
 
@@ -38,11 +38,13 @@ Use one TAG line per classification: [IMPROVE_HARNESS], [CONSTRAINTS], [RISK],
 or [DOMAIN]. A domain resource also needs exactly one [CONFIRMED]/[UNCERTAIN]
 line; an improvement record needs no domain confirmation state. Combined legacy
 domain tags remain readable. A supporting plan or decision with no applicable
-classification may omit TAG; its folder supplies its route. Do not invent a
+classification may omit TAG, and a proposal not paired with a risk omits it;
+the folder supplies the route. Do not invent a
 product domain or a new TAG solely to file a plan.
 
 A canonical file is stored once and linked from every applicable classification
-and lifecycle route. Templates, ordinary tickets, and child evidence artifacts
+and lifecycle route; a legacy improvement plan under plans/ is linked only from
+its lifecycle route. Templates, ordinary tickets, and child evidence artifacts
 do not receive independent resource IDs. A schema may remain supporting evidence
 linked from its canonical domain; give it an ID only when separately promoted.
 
@@ -53,7 +55,7 @@ excluding templates. Select the next global sequence, max + 1, padded to at
 least three digits. Use #<sequence>_<creation-kind>_<MMDD>.
 Creation kind is the applicable classification (DOMAIN_UNCERTAIN or
 DOMAIN_CONFIRMED for a domain); an unclassified supporting plan/decision may
-use PLAN/DECISION. Creation kind records origin, not current classification.
+use PLAN/DECISION, and a proposal not paired with a risk uses PROPOSAL. Creation kind records origin, not current classification.
 A confirmation changes TAG and routing without changing the ID.
 
 CREATED uses YYYY-MM-DD and MMDD uses the creation date in Asia/Bangkok.

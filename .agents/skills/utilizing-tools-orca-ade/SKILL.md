@@ -58,10 +58,10 @@ and a bounded target.
 | Interactive web automation | `orca snapshot`, `orca click --element @e#`, `orca fill` |
 | Visual UI evidence / screenshot | `orca screenshot --format png` |
 | Browser session / persistent login | `orca tab profile list/set/create` |
-| Isolated task sandbox | `orca worktree create --name <name> --json` |
-| Inspect active checkouts | `orca worktree list --json`, `orca worktree ps --json` |
-| Review visual diffs before merge | `orca file open-changed --mode diff`, `orca file diff <path>` |
-| Clean up task workspace | `orca worktree rm --worktree <selector> --json` |
+| Separate worktree (only on an explicit User request; never for agent coordination) | `orca worktree create --name <name> --json` |
+| Inspect active checkouts | `orca worktree current --json`, `orca worktree list --json`, `orca worktree ps --json` |
+| Review visual diffs | `orca file open-changed --mode diff`, `orca file diff <path>` |
+| Remove a User-requested worktree | `orca worktree rm --worktree <selector> --json` |
 | Non-blocking process execution | `orca terminal create --command <cmd> --json` |
 | Monitor long-running task | `orca terminal read --terminal <handle> --json` |
 | Deliver input to interactive CLI | `orca terminal send --terminal <handle> --text <text> --enter` |
@@ -85,7 +85,7 @@ a task-specific purpose, and a bounded target scope.
 1. Run pre-check: verify runtime connectivity (`orca status --json`) or tab state (`orca tab list --json`).
 2. Execute the authorized command sequence with `--json` for structured output.
 3. Verify with observable evidence: JSON status response, evaluated DOM value, snapshot diff, terminal buffer read, or file diff.
-4. Clean up disposable resources (close temporary browser tabs, terminate stopped terminals, remove completed task worktrees).
+4. Clean up disposable resources (close temporary browser tabs, terminate stopped terminals).
 5. Report executed commands, observed state, changed paths, and any limitations.
 
 **Completion criterion**: the outcome is verified by observable runtime output
@@ -97,7 +97,7 @@ and every declared capability is accounted for.
 | :--- | :--- | :--- | :--- |
 | Orca CLI Host | `orca.exe` process | Local CLI calling Orca local RPC socket | `orca status --json` returns `reachable: true` |
 | Browser Engine | Embedded Chromium host | `orca tab`, `snapshot`, `click`, `eval` | Active tab listed in `orca tab list --json` |
-| Worktree Sandbox | Isolated Git worktree | `orca worktree create/rm/set` | Worktree listed in `orca worktree list --json` |
+| Worktree Sandbox (User request only; never for agent coordination) | Isolated Git worktree | `orca worktree create/rm/set` | Worktree listed in `orca worktree list --json` |
 | Terminal Multiplexer | Headless PTY terminal pane | `orca terminal create/read/send/wait` | Active terminal handle in `orca terminal list` |
 
 ## Anti-Patterns
@@ -105,5 +105,5 @@ and every declared capability is accounted for.
 - Running `orca` sub-commands before declaring the `Selected Orca ADE Capabilities` table.
 - Assuming an element ref (`@e1`, `@e2`) remains stable after a click, navigation, or form submission without taking a fresh `orca snapshot`.
 - Failing to pass `--json` on Orca CLI calls, producing unstructured text that is difficult to parse reliably.
-- Leaving temporary browser tabs or unused worktrees open after task completion.
+- Leaving temporary browser tabs, terminals, or unused worktrees open after task completion.
 - Claiming web or browser automation success without inspecting the evaluated JS return value or snapshot output.

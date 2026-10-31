@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Standardize service E2E domain-flow template
 CREATED: 2026-08-22
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -204,3 +204,5 @@ Decision: pending fresh rerun.
 The bounded template intervention is implemented after User confirmation, but
 the Harness improvement must not be claimed complete until an equivalent fresh
 authoring rerun exercises the new template.
+
+2026-10-05: Completed by User decision ([#046](../../harness-improvements/1005-repo-and-record-decisions.md)) and moved from `plans/active/` to `plans/completed/`. The fresh rerun named above was not separately recorded.

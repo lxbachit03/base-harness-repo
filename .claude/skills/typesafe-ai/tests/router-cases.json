@@ -1,0 +1,206 @@
+{
+  "version": 1,
+  "description": "Synthetic draft labels derived from repository skill descriptions; exact matching is order-independent. Contains matching requires all listed skills but permits other justified skills. No user data.",
+  "cases": [
+    {
+      "id": "none-01",
+      "language": "en",
+      "kind": "none",
+      "prompt": "What is 7 multiplied by 8?",
+      "expected_skills": [],
+      "match": "exact"
+    },
+    {
+      "id": "none-02",
+      "language": "vi",
+      "kind": "none",
+      "prompt": "Giải thích ngắn gọn sự khác nhau giữa danh sách và tập hợp.",
+      "expected_skills": [],
+      "match": "exact"
+    },
+    {
+      "id": "none-03",
+      "language": "en",
+      "kind": "none",
+      "prompt": "Read the current Git branch and report its status.",
+      "expected_skills": [],
+      "match": "exact"
+    },
+    {
+      "id": "none-04",
+      "language": "vi",
+      "kind": "none",
+      "prompt": "Tóm tắt nội dung đoạn văn ngắn sau trong một câu: Trời mưa nên đường ướt.",
+      "expected_skills": [],
+      "match": "exact"
+    },
+    {
+      "id": "explicit-01",
+      "language": "en",
+      "kind": "single",
+      "prompt": "Use $goal-griller to turn my idea into a measurable goal.",
+      "expected_skills": [
+        "goal-griller"
+      ],
+      "match": "exact"
+    },
+    {
+      "id": "explicit-02",
+      "language": "vi",
+      "kind": "single",
+      "prompt": "Dùng $sequence-execution-plan để sắp xếp backlog theo phụ thuộc.",
+      "expected_skills": [
+        "sequence-execution-plan"
+      ],
+      "match": "exact"
+    },
+    {
+      "id": "explicit-03",
+      "language": "vi",
+      "kind": "single",
+      "prompt": "Dùng $onboarding để lập bản đồ luồng thanh toán của hệ thống cũ.",
+      "expected_skills": [
+        "onboarding"
+      ],
+      "match": "exact"
+    },
+    {
+      "id": "explicit-04",
+      "language": "en",
+      "kind": "single",
+      "prompt": "Use $typesafe-ai to design a typed Jev question for this feature.",
+      "expected_skills": [
+        "typesafe-ai"
+      ],
+      "match": "exact"
+    },
+    {
+      "id": "natural-01",
+      "language": "en",
+      "kind": "single",
+      "prompt": "Interview me and turn this rough idea into a verifiable Codex goal.",
+      "expected_skills": [
+        "goal-griller"
+      ],
+      "match": "contains"
+    },
+    {
+      "id": "natural-02",
+      "language": "vi",
+      "kind": "single",
+      "prompt": "Sắp xếp thứ tự thực hiện các mục backlog có phụ thuộc chéo, nêu rõ điều kiện tiên quyết.",
+      "expected_skills": [
+        "sequence-execution-plan"
+      ],
+      "match": "contains"
+    },
+    {
+      "id": "natural-03",
+      "language": "vi",
+      "kind": "single",
+      "prompt": "Khảo sát luồng nghiệp vụ hiện có từ API thanh toán tới bảng dữ liệu và ghi lại bằng chứng.",
+      "expected_skills": [
+        "onboarding"
+      ],
+      "match": "contains"
+    },
+    {
+      "id": "natural-04",
+      "language": "en",
+      "kind": "single",
+      "prompt": "Adapt the Jev semantic script criteria and synchronize the JEV-AI manifest for this project.",
+      "expected_skills": [
+        "enhance-jev"
+      ],
+      "match": "contains"
+    },
+    {
+      "id": "multi-explicit-01",
+      "language": "vi",
+      "kind": "multiple",
+      "prompt": "Dùng $goal-griller để định hình mục tiêu và $typesafe-ai để review tích hợp Jev.",
+      "expected_skills": [
+        "goal-griller",
+        "typesafe-ai"
+      ],
+      "match": "exact"
+    },
+    {
+      "id": "multi-explicit-02",
+      "language": "en",
+      "kind": "multiple",
+      "prompt": "Use $improve-harness and $writing-for-agents to improve this agent-facing skill.",
+      "expected_skills": [
+        "improve-harness",
+        "writing-for-agents"
+      ],
+      "match": "exact"
+    },
+    {
+      "id": "multi-explicit-03",
+      "language": "vi",
+      "kind": "multiple",
+      "prompt": "Dùng $enhance-jev và $typesafe-ai để điều chỉnh câu hỏi Jev cho repo.",
+      "expected_skills": [
+        "enhance-jev",
+        "typesafe-ai"
+      ],
+      "match": "exact"
+    },
+    {
+      "id": "multi-explicit-04",
+      "language": "en",
+      "kind": "multiple",
+      "prompt": "Use $onboarding to map this legacy flow and $sequence-execution-plan to order the follow-up work.",
+      "expected_skills": [
+        "onboarding",
+        "sequence-execution-plan"
+      ],
+      "match": "exact"
+    },
+    {
+      "id": "multi-natural-01",
+      "language": "en",
+      "kind": "multiple",
+      "prompt": "Interview me to shape a verifiable autonomous goal, and research the unfamiliar API before implementation.",
+      "expected_skills": [
+        "goal-griller",
+        "xia"
+      ],
+      "match": "contains"
+    },
+    {
+      "id": "multi-natural-02",
+      "language": "vi",
+      "kind": "multiple",
+      "prompt": "Cải thiện Harness theo review đã chấp nhận và chỉnh lại tài liệu hướng dẫn dành cho agent.",
+      "expected_skills": [
+        "improve-harness",
+        "writing-for-agents"
+      ],
+      "match": "contains"
+    },
+    {
+      "id": "multi-natural-03",
+      "language": "en",
+      "kind": "multiple",
+      "prompt": "Adapt the project's Jev question criteria and review how the TypeSafe judgments are composed.",
+      "expected_skills": [
+        "enhance-jev",
+        "typesafe-ai"
+      ],
+      "match": "contains"
+    },
+    {
+      "id": "multi-natural-04",
+      "language": "vi",
+      "kind": "multiple",
+      "prompt": "Khảo sát luồng nghiệp vụ của hệ thống cũ rồi lập thứ tự triển khai backlog theo các phụ thuộc phát hiện được.",
+      "expected_skills": [
+        "onboarding",
+        "sequence-execution-plan"
+      ],
+      "match": "contains"
+    }
+  ]
+}

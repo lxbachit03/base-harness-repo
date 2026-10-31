@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Layer-2 hooks mechanism with jev-hook pre-action Jev gate
 CREATED: 2026-09-30
-STATUS: completed (revised 2026-09-30: consult observability rule)
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -16,6 +16,13 @@ REFERENCES:
 - docs-harness/harness-constraints/0822-user-authority-operation-gate.md
 - .agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1
 - .agents/skills/typesafe-ai/scripts/precheck-authority.ps1
+
+## Current policy notice (2026-10-05)
+
+The shell gate no longer has a regex fast path ([#044](1005-gate-and-jev-decisions.md)):
+every shell consult calls Jev and prints its request and response. The hook's
+groups, exemptions and toggle location were also refined in #042 and #044.
+This record retains its original scope, evidence and decision as history.
 
 ## Objective
 
@@ -125,6 +132,9 @@ git staging/commits, Herdr coordination, and record #005
   follow-up proposal, not implemented: durable file logging would need a
   `-LogPath` parameter on invoke-typesafe.ps1 plus a JEV-AI.md manifest
   sync.
+- 2026-10-03: STATUS normalized from "completed (revised 2026-09-30: consult
+  observability rule)" to "completed" by #040; the revision is recorded in the
+  entry above.
 
 ## Validation
 

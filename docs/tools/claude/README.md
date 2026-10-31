@@ -349,16 +349,17 @@ disable-model-invocation: true   # tùy chọn
 | **Model-invoked** | Bỏ `disable-model-invocation` | Agent tự gọi được; skill khác gọi được; `description` luôn chiếm context. |
 | **User-invoked** | `disable-model-invocation: true` | Chỉ User gõ `/<tên>` mới gọi; **không** xuất hiện trong danh sách available-skills; context load bằng 0. |
 
-Trong repo này `domain-audit` và `ticket-solving` là user-invoked, nên **không**
+Trong repo này `domain-audit`, `init-harness-repo` và `ticket-solving` là user-invoked, nên **không**
 hiện trong danh sách skill tự động — đó là thiết kế, không phải lỗi.
 
 ### 7.3 Skill có sẵn theo nhóm (phiên tham chiếu)
 
 **Skill của repo Harness** (`.claude/skills/` + `.agents/skills/`):
-`goal-griller`, `improve-harness`, `onboarding`,
-`prompt-leverage`, `sequence-execution-plan`, `utilizing-tools-agy`,
+`enhance-jev`, `goal-griller`, `improve-harness`, `onboarding`, `prompt-leverage`,
+`sequence-execution-plan`, `typesafe-ai`, `utilizing-tools-agy`,
 `utilizing-tools-claude`, `utilizing-tools-codex`, `utilizing-tools-opencode`,
-`writing-for-agents`, `xia`; user-invoked: `domain-audit`, `ticket-solving`.
+`utilizing-tools-orca-ade`, `writing-for-agents`, `xia`; user-invoked:
+`domain-audit`, `init-harness-repo`, `ticket-solving`.
 
 **Plugin `productivity`**: `productivity:memory-management`,
 `productivity:start`, `productivity:task-management`, `productivity:update`.

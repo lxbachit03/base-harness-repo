@@ -13,6 +13,17 @@ REFERENCES:
 - .agents/skills/herdr-coordinate-agents/SKILL.md
 - .agents/skills/prompt-leverage/SKILL.md
 
+## Current policy notice (2026-10-03)
+
+Later accepted improvements replaced parts of this record's policy:
+[#018](0912-herdr-agent-catalog.md) replaced the mandatory GPT-5.6
+Luna/max/Fast worker profile with the User-selected catalog in
+`docs-harness/HERDR-AGENTS.md`, and [#024](0919-herdr-shared-checkout.md)
+keeps Herdr coordination in the current checkout instead of separate
+worktrees. This record retains its original scope, evidence and decision as
+history; current Herdr policy lives in AGENTS.md, `HERDR-AGENTS.md` and the
+`herdr-coordinate-agents` skill.
+
 ## Objective
 
 Make the primary session Bale by default, retaining its model and handling small

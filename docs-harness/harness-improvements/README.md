@@ -12,8 +12,9 @@ Use docs-harness/templates/harness-improvement.md and index the canonical record
 under TAG: [IMPROVE_HARNESS]. Continue the same improvement in its existing file;
 completed records remain here with their final status and evidence.
 
-Legacy experiments under plans/ retain their existing paths and lifecycle;
-they are not migrated or duplicated automatically. A consistency review
+Legacy experiments under plans/ retain their existing paths and lifecycle and
+are routed only from INDEX's plans/ sections; they are not migrated or
+duplicated automatically. A consistency review
 accepted by the User may authorize updates to the policy owner and consumers
 together. Read-only requests do not create records, and speculative cleanup is
 not automatic post-task work.

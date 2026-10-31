@@ -26,7 +26,7 @@
 |  - AI Vault & Local Credential Store            - Issue Tracker (GitHub/Linear)   |
 +-----------------------------------------------------------------------------------+
 |                 [Multi-Agent Coordination & Herdr Integration]                   |
-|  - Dispatch Herdr workers (Codex, OpenCode, AGY) into isolated Orca worktrees     |
+|  - Dispatch Herdr workers (Codex, OpenCode, AGY) into Orca panes, shared checkout|
 |  - Live terminal monitoring without terminal blocking                             |
 |  - In-browser visual verification of generated artifacts & web UIs                |
 +-----------------------------------------------------------------------------------+
@@ -40,7 +40,7 @@ Orca cung cấp công cụ dòng lệnh `orca.exe` (trên Windows đặt tại `
 
 ### 2.1 Quản Lý Git Worktree Cách Ly (`orca worktree`)
 
-Orca tự động quản lý các Git worktree giúp mỗi tác vụ của AI agent diễn ra trên một nhánh và thư mục riêng biệt, tránh xung đột branch và không làm bẩn working directory chính.
+Orca có thể quản lý các Git worktree, mỗi worktree là một nhánh và thư mục riêng. Trong repo này, việc điều phối agent (Herdr hay Orca) không dùng worktree mà chạy trên checkout hiện tại (#045); các lệnh dưới đây chỉ dùng khi User yêu cầu rõ ràng một worktree riêng.
 
 | Lệnh CLI | Chức Năng Chi Tiết | Trường Hợp Sử Dụng (Use Cases) |
 | :--- | :--- | :--- |
@@ -123,6 +123,11 @@ Phần này mô tả workflow trước khi gỡ hai skill điều phối, không
 Trong workflow cũ, Herdr điều phối các worker của Bale qua terminal và worktree
 của Orca:
 
+> **Quy tắc hiện hành (User quyết định 2026-10-05, #045):** dù điều phối bằng
+> Herdr hay bằng Orca (skill `orca-ade-coordinate-agents`, chỉ khi User chọn),
+> mọi worker chạy trên checkout và branch hiện tại của coordinator; không tạo
+> hay dùng git worktree.
+
 ```text
 +---------------------------------------------------------------------------------+
 |                       BALE (Herdr Coordinator Session)                         |
@@ -132,12 +137,12 @@ của Orca:
               | Dispatch Task                                 | Dispatch Task
               v                                               v
 +-------------------------------+             +-------------------------------+
-|  Orca Worktree: worker-1      |             |  Orca Worktree: worker-2      |
-|  (Branch: feature/auth-refactor) |             |  (Branch: feature/api-cache)  |
+|  Orca Pane: worker-1          |             |  Orca Pane: worker-2          |
+|  (Shared current checkout)    |             |  (Shared current checkout)    |
 |                               |             |                               |
 |  Terminal: OpenCode Go Worker |             |  Terminal: Codex YOLO Worker  |
-|  - Process-scoped sandbox     |             |  - Process-scoped sandbox     |
-|  - Independent Git commit log |             |  - Independent Git commit log |
+|  - Process-scoped permissions |             |  - Process-scoped permissions |
+|  - Disjoint outputs or serial |             |  - Disjoint outputs or serial |
 +-------------------------------+             +-------------------------------+
               |                                               |
               +-----------------------+-----------------------+
@@ -146,13 +151,13 @@ của Orca:
 |                     Visual Review & Validation via Orca                         |
 |  - orca file open-changed --mode diff : Review mã nguồn song song 2 worker     |
 |  - orca tab create --url http://localhost:3000 : Kiểm thử giao diện web live    |
-|  - orca worktree rm : Giải phóng workspace an toàn khi hoàn thành               |
+|  - orca terminal close : Đóng pane của worker khi hoàn thành                    |
 +---------------------------------------------------------------------------------+
 ```
 
 ### Lợi Ích Của Việc Kết Hợp Herdr + Orca ADE:
-1. **Cách ly hoàn toàn không gian làm việc (Worktree Isolation)**:
-   - Thay vì chạy thẳng trong working tree chính của coordinator, BALE có thể yêu cầu tạo một Orca worktree riêng (`orca worktree create --name herdr-worker-1`). Worker thoải mái thay đổi file mà không làm bẩn repo gốc.
+1. **Checkout chung (Shared Checkout)**:
+   - Worker Herdr chạy trên checkout hiện tại của coordinator; worker có quyền ghi được chạy tuần tự, hoặc song song khi đầu ra tách biệt (`herdr-coordinate-agents`). Điều phối bằng Orca (`orca-ade-coordinate-agents`, khi User chọn) cũng chạy trên checkout hiện tại, không dùng worktree.
 2. **Theo dõi song song không nghẽn lệnh (Terminal Multiplexing)**:
    - Thay vì dùng lệnh nền hệ điều hành phức tạp, BALE có thể mở một pane terminal (`orca terminal create --command "herdr launch ..."`) và theo dõi tiến độ qua `orca terminal read`.
 3. **Kiểm toán chất lượng & Trực quan hóa Diff (Visual Review Gate)**:
@@ -165,4 +170,4 @@ của Orca:
 
 - **Ưu tiên `--json`**: Luôn truyền cờ `--json` khi AI Agent thực thi lệnh Orca CLI để nhận kết quả có cấu trúc máy đọc được.
 - **Tái sử dụng Page ID**: Với tác vụ web, lấy `browserPageId` từ `orca tab list` hoặc `orca tab create` và truyền cờ `--page <id>` vào các lệnh `snapshot`, `click`, `eval` tiếp theo.
-- **Dọn dẹp tài nguyên**: Luôn chủ động đóng tab (`orca tab close`) và xóa worktree tạm (`orca worktree rm --worktree <selector>`) khi tác vụ hoàn thành để tránh lãng phí RAM và ổ cứng.
+- **Dọn dẹp tài nguyên**: Luôn chủ động đóng tab (`orca tab close`) và terminal (`orca terminal close`) khi tác vụ hoàn thành để tránh lãng phí RAM. Điều phối agent không tạo worktree nên không có worktree nào phải xóa.

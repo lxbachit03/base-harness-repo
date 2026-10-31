@@ -8,20 +8,18 @@ workers, when the activation checklist below is checked.
 - [x] Enable jev-hook: require a Jev verdict before each action group this
   session
 
-The checkbox state in this file is the hook's only switch. Only the User
-toggles it, anytime; agents read the current state and never edit it.
-Unchecked: the gate is dormant — skip this hook entirely and work normally.
-Checked: apply the gate for the rest of the session; re-read after
-compaction, a workspace switch, or when the User reports toggling it.
+Toggle rules live in [hooks/README.md](README.md) (Loading).
 
 ## Gate rule
 
 Before performing any action outside the exemptions, run the matching Jev
 consult and wait for its verdict; execute only after the verdict arrives.
-One consult covers one action group per turn:
+One consult covers one action group per turn (a turn is one User message and
+the agent's work on it; a delegated worker's whole assignment is one turn):
 
-- File ops: read, write, edit any repository file.
-- Shell and external: bash commands, websearch, webfetch.
+- File ops: read, write, edit or search (Grep, Glob) any repository file.
+- Shell: Bash and PowerShell commands.
+- Web: web search and web fetch.
 - Coordination: delegating, spawning, or coordinating other agents (Herdr,
   Orca, native subagents).
 - Other tools: any further tool invocation not covered above.
@@ -29,14 +27,18 @@ One consult covers one action group per turn:
 One verdict covers the same-intent actions of that group in the same turn; a
 new intent starts a new consult.
 
-Exempt: the Jev consult itself, and session-start retrieval (AGENTS.md,
-docs-harness/INDEX.md, PERSONA.md, layers walk, hook files) — they enable
+Exempt: the Jev consult itself (including locating and reading
+docs-harness/JEV-AI.md sections 3.1 and 3.5 to build it), and session-start retrieval (AGENTS.md,
+docs-harness/INDEX.md, PERSONA.md, layers walk, hook files, and listing
+folder and file names for INDEX's alignment check; reading file contents is
+gated) — they enable
 the gate and cannot gate themselves.
 
 ## Script selection
 
-- Bash commands → `.agents/skills/typesafe-ai/scripts/precheck-authority.ps1`
-  (`-Command`, `-ActionDescription`, `-TargetFiles`). Its returned
+- Shell commands (Bash or PowerShell) →
+  `.agents/skills/typesafe-ai/scripts/precheck-authority.ps1` (`-Command`,
+  `-ActionDescription`, `-TargetFiles`; see JEV-AI.md §3.1). Its returned
   Permitted/RequiresUserPermission result is the gate verdict.
 - All other groups → `.agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1`
   with state and questions built for the pending action (default when no
@@ -49,7 +51,7 @@ the gate and cannot gate themselves.
   - `risk_score` (score): 0 safe read-only / 1 local reversible /
     2 external or hard to undo.
 
-  Follow docs-harness/JEV-AI.md section 3 for state and question shapes.
+  Follow docs-harness/JEV-AI.md section 3.5 for state and question shapes.
 
 ## Consult observability
 
@@ -63,6 +65,9 @@ observable so a skipped or truncated consult is detectable.
 - `proceed` or `proceed_with_caution`: execute; surface the caution.
 - `pause_ask_user`: stop; report Jev's reason and one concrete question.
 - `veto`: do not execute; report the verdict and one alternative proposal.
+- Shell gate: `Permitted` means proceed; `RequiresUserPermission` means
+  pause_ask_user, unless the User has already given explicit authority for
+  that exact action and target.
 
 ## When Jev cannot answer
 

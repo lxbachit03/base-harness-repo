@@ -1,0 +1,100 @@
+{
+  "title": "init-harness-repo",
+  "text": "",
+  "children": [
+    {
+      "title": "Purpose",
+      "text": "Khởi tạo harness repo",
+      "children": []
+    },
+    {
+      "title": "Nhóm mindsets",
+      "text": "",
+      "children": [
+        {
+          "title": "Purpose",
+          "text": "Đây là những mindset bắt buộc harness repo phải tuân theo",
+          "children": []
+        },
+        {
+          "title": "Mindset 1",
+          "text": "ứng dụng phương pháp Top-Down Approach. \n\nPurpose: để tiết kiệm tokens, Khi AI agent chỉ đọc 1 file .md nơi chứa những nội dung có routing, AI agent sẽ chỉ đọc sâu/load nội dung routing đó vào context nếu cần thiết cho user intent.",
+          "children": []
+        },
+        {
+          "title": "Mindset 2",
+          "text": "ứng dụng phương pháp Bottom-Up Approach.\n\nPurpose: Cho phép AI agent truy xuất dữ liệu thêm phương pháp Bottom-Up bỏ qua yêu cầu tiết kiệm tokens để tối ưu truy xuất\n\nLưu ý: chỉ dòng cách này khi cần thiết (AI agent tự quyết định)",
+          "children": []
+        }
+      ]
+    },
+    {
+      "title": "Nhóm requirements",
+      "text": "",
+      "children": [
+        {
+          "title": "Nhóm yêu cầu 1",
+          "text": "Yêu cầu chung",
+          "children": [
+            {
+              "title": "Yêu cầu 1.1",
+              "text": "AI agent sẽ đặt câu hỏi cho user (Meta-Prompting / Inverted Prompting).\n\nPurpose: AI agent hiểu được intent của user để đưa ra kết quả tối ưu/hiệu quả.\n\nDanh sách câu hỏi:\n1. Folder cho harness repo là gì? (default option: `docs-harness`); Hãy gợi ý cho user default option. Lưu ý: mỗi khi user đề cập đến \"harness repo\" thì có nghĩa là tôi đang nói đến folder này.\n2. Tên Orchestrator/Người điều phối agent là gì? (default option: \"BALE\"); (Mục đích câu hỏi: là để để gọi tên khi muốn main agent trong session hiện tại điều phối/cordinate 1 main agent khác).\n3. Mục tiêu của harness repo là gì? (Mục đích câu hỏi: giúp AI agent hiểu được mục đích thật sự của harness repo là gì để từ đó có những ngữ cảnh/context phù hợp để đưa kết quả cho user theo ngữ cảnh/context mà họ muốn.",
+              "children": []
+            },
+            {
+              "title": "Yêu cầu 1.2",
+              "text": "Tạo ra 1 file AGENTS.md tại thư mục root. \n\nPurpose: Nội dung trong file này sẽ được AI agent đính kèm đầu mỗi prompt",
+              "children": []
+            },
+            {
+              "title": "Yêu cầu 1.3",
+              "text": "Nếu intent của user chưa rõ ràng hãy dùng kỹ thuật hỏi user những câu hỏi cần thiết để có 1 context phù hợp đưa ra kết quả cuối cùng dùng kỹ thuật Meta-Prompting / Inverted Prompting. \nLưu ý 1: hãy đưa ra đề xuất nếu có nhiều options và giải thích mỗi options cho user dùng chọn, thêm 1 input cho user nhập nếu không có options nào phù hợp với user.",
+              "children": []
+            },
+            {
+              "title": "Yêu cầu 1.4",
+              "text": "Tạo file .md tại folder harness repo. \n\nPurpose: Nơi routing cho AI agent áp dụng mindset 1: Top-Down Approach. \nLưu ý 1: Hãy hỏi user là tên file mong muốn là gì? (default option: `INDEX.md` và thêm 1 input cho user nhập nếu user muốn custom). \nLưu ý 2: trong file .md này phải có back-link để reference đến resources cụ thể (nhớ verify lại back-link).",
+              "children": []
+            },
+            {
+              "title": "Yêu cầu 1.5",
+              "text": "Mỗi khi user yêu cầu kiểm tra tình trạng hiện của harness repo thì AI agent sẽ tự động đọc states trong harness repo (ví dụ: `docs-harness` ở yêu cầu số 1)",
+              "children": []
+            },
+            {
+              "title": "Yêu cầu 1.6",
+              "text": "Mỗi folder trong folder \"docs-harness\" bắt buộc phải file \"README.md\"\n\nPurpose: Nơi overview về folder đó như ý nghĩa folder, định nghĩa rules, instructions cụ thể khi AI agent đọc cụ thể 1 folder thì sẽ đọc README.md để hiểu rõ hơn về folder đó\n\nYêu cầu 1: mỗi folder trong \"docs-harness\" phải có 1 file README.md.\n\nYêu câu 2: nếu trong mỗi folder trong \"docs-harness\" có folder con thì cũng tạo file README.md tương tự với purpose như trên.\n\nYêu cầu 3: file README.md trong mỗi folder là nơi tập trung rules, instructions chịu trách nhiệm thay đổi hành vi của folder đó.\n\nYêu cầu 2: Nếu là file riêng lẻ nằm ở root của folder \"docs-harness\" thì phải nêu định nghĩa file rõ ràng, như ý nghĩa, rules, instructions.",
+              "children": []
+            }
+          ]
+        },
+        {
+          "title": "Nhóm yêu cầu 2",
+          "text": "Khởi tạo structure",
+          "children": [
+            {
+              "title": "Yêu cầu 2.1",
+              "text": "Requirement: Tạo folder \"harness-improvements\" trong docs-harness\n\nPurpose: Những lần improve harness repo sẽ được audit trong folder này\nTrigger: Khi intent của user là yêu cầu cải thiện harness repo hoặc user gọi skill `improve-harness`",
+              "children": []
+            },
+            {
+              "title": "Yêu cầu 2.2",
+              "text": "Requirement: tạo folder \"layers\", và tạo sẵn folder \"layer-1\" trong folder layers trên\n\nPurpose: nơi chứa những instructions theo kiến trúc layers sẽ được AI agent tự load vào context giống như có nhiều layers instruction cho AI agent trước khi có AI agent nhận task từ user hoặc user yêu cầu kiểm tra harness repo. Những instructions trong folder \"layers\" sẽ do người dùng định nghĩa sau vì vậy hãy tạo file `README.md` overview, rules về folder \"layers\" này\n\nYêu cầu 2.2.1: Các instructions trong folder \"layers\" có 1 dòng checklist như là 1 công tắt bật/tắt cho user xài để xem user có quyết định dùng instruction này hay không?",
+              "children": []
+            },
+            {
+              "title": "Yêu cầu 2.3",
+              "text": "Requirement: tạo folder \"harness-constraints\" trong docs-harness\n\nPurpose: nơi chứa những ràng buộc cho harness repo, bắt buộc AI agent phải tuân theo xiêng suốt trong 1 session.\n\nYêu cầu 2.3.1:  Các instructions trong folder \"harness-constraints\" có 1 dòng checklist như là 1 công tắt bật/tắt cho user xài để xem user có quyết định dùng instruction này hay không?",
+              "children": []
+            },
+            {
+              "title": "Yêu cầu 2.4",
+              "text": "Requirement: tạo folder \"templates\" trong docs-harness\n\nPurpose: nơi chứa những templates cho harness repo trước khi tạo 1 file .md.\n\nYêu cầu 2.4.1: trước khi tạo file AI agent phải kiểm tra xem đã có template sẵn hay chưa? nếu chưa thì phải hỏi user xem có muốn AI agent tạo giúp không? Thêm 1 custom input khi hỏi để cho user nhập custom template mong muốn",
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

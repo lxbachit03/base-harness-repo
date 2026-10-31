@@ -14,9 +14,8 @@ risk, or needs a documented recommendation before a decision is made.
 - Use `docs-harness/templates/proposal.md`.
 - State the problem, options, recommendation, consequences, residual risk, and
   rollback or recovery considerations.
-- For a persisted risk response, create the corresponding risk resource when
-  authorized and maintain reciprocal `REFERENCES:` links plus matching related
-  sections on both resources.
+- A proposal paired with a risk follows
+  [#001_CONSTRAINTS_0812](../harness-constraints/0812-risk-proposal-suggestion-cross-link.md).
 - Index each real proposal; do not treat the empty-state README as a proposal.
 
 ## Skip When

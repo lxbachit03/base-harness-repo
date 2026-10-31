@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Standardize ticket evidence workspace and API/schema templates
 CREATED: 2026-08-22
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -209,3 +209,5 @@ Decision: pending fresh rerun.
 The workspace contract and templates are implemented, but the Harness must not
 be claimed improved or moved to `plans/completed/` until a fresh ticket-intake
 session exercises the required layout and evidence rules.
+
+2026-10-05: Completed by User decision ([#046](../../harness-improvements/1005-repo-and-record-decisions.md)) and moved from `plans/active/` to `plans/completed/`. The fresh rerun named above was not separately recorded.

@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: User-selected Herdr worker configuration catalog
 CREATED: 2026-09-12
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -15,6 +15,16 @@ REFERENCES:
 - .agents/skills/herdr-coordinate-agents/references/herdr-runtime.md
 - .agents/skills/herdr-coordinate-agents/references/task-contract.md
 - docs-harness/harness-improvements/0912-agent-self-validation.md
+
+## Current policy notice (2026-10-03)
+
+This record replaced the mandatory Luna worker rule of
+[#016](0907-bale-herdr-orchestration.md). Its mandatory pre-submission
+preflight was later replaced by one bounded post-launch check in
+[#022](0913-opencode-windows-launch-and-lean-herdr.md). This record retains
+its original scope, evidence and pending replay; current Herdr policy lives in
+AGENTS.md, `docs-harness/HERDR-AGENTS.md` and the `herdr-coordinate-agents`
+skill.
 
 ## Objective
 
@@ -239,3 +249,9 @@ files, and passed independent checks. The receipt-path contract is now revised;
 complete one bounded replay with the path included and finish the Antigravity
 settings proof before marking the improvement completed. Owner for that replay:
 the next fresh BALE session handling a Herdr coordination request.
+
+2026-10-03: Completed by User decision
+([#041](1003-group-d-policy-decisions.md)). The receipt-path replay and
+Antigravity settings proof named above were not separately recorded. Related
+later evidence: a live Antigravity Herdr run checked model, effort and cwd
+after launch (`0926-model-family-layer-prompts.md:319-326`).

@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Bale review gate for delegated code quality and resource efficiency
 CREATED: 2026-09-13
-STATUS: active
+STATUS: completed
 REFERENCES:
 - AGENTS.md
 - docs-harness/INDEX.md
@@ -158,3 +158,9 @@ replay exercised both the `changes_requested` correction path and a passing
 diff-scoped review without a transcript read. The provider-specific Herdr replay
 remains pending. Owner: the next fresh BALE session with a proven Herdr worker
 profile. Keep the record active until that replay is exercised.
+
+2026-10-03: Completed by User decision
+([#041](1003-group-d-policy-decisions.md)). Related later evidence: the Bale
+code-review gate recorded `passed` in live Herdr runs with Antigravity
+(`0922-agy-done-signal-reliability.md:100-101`) and OpenCode Go
+(`0922-opencode-go-tight-handoff-wait-timeout.md:83-84`).

@@ -15,10 +15,8 @@ evidence over assumptions.
 - Use `docs-harness/templates/risk.md`.
 - Record the risk, evidence, impact, indicators, mitigation status, and
   verification path.
-- When a risk is identified in a response, include at least one proposal or
-  solution inline.
-- When persistence is authorized, create a corresponding proposal resource and
-  keep reciprocal `REFERENCES:` and related-section links resolvable.
+- Risk/proposal pairing (inline proposal; persisted pair with reciprocal links)
+  follows [#001_CONSTRAINTS_0812](../harness-constraints/0812-risk-proposal-suggestion-cross-link.md).
 - Keep a risk open until its durable acceptance evidence passes; mitigation is
   not automatically resolution.
 

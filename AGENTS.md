@@ -34,10 +34,12 @@ skills refer here instead of defining competing general permission gates.
   Task-owned disposable fixture setup/cleanup is included in local verification.
   Dependency installation and operations touching shared services, real data,
   global settings, credentials, or unrelated paths need specific authority.
-  A test name alone does not make those effects routine.
+  A test name alone does not make those effects routine. The Jev helpers' own
+  API-key lookup and TypeSafe API calls are permitted by default.
 - Deployment, publishing, external messages, account/permission changes,
-  destructive data operations, commits, pushes, and deleting or overwriting
-  unrelated User work need explicit authority for that action and target.
+  destructive data operations, staging (`git add`), commits, pushes, and
+  deleting or overwriting unrelated User work need explicit authority for that
+  action and target.
 - Authority and constraints persist for the task across conversation turns
   until completed, revoked, or changed. A follow-up question does not cancel
   earlier permission. On resumption, use a recorded User authorization and
@@ -49,8 +51,9 @@ skills refer here instead of defining competing general permission gates.
   authorizes that scoped guidance/skill/tool intervention. Use improve-harness
   and writing-for-agents for it; ordinary tasks do not authorize self-improvement.
 - A skill invocation inherits this policy. Its narrower user-selected workflow
-  still matters: intake is not solving, an audit is read-only, and a draft goal
-  is not permission to start autonomous goal state.
+  still matters: intake is not solving, a review is read-only, domain-audit
+  records the domain knowledge the User confirmed, and a draft goal is not
+  permission to start autonomous goal state.
 - Preserve existing changes and use recoverable operations. Read-only tasks may
   report drift but must not normalize metadata or repair routing automatically.
 
@@ -89,9 +92,7 @@ contract lives in docs-harness/harness-constraints/0812-risk-proposal-suggestion
 Claim the outcome only with relevant executable or observable evidence. Report
 the changes, checks, unattempted proof, and unresolved limitations. For
 Harness routing, guidance, metadata, and link consistency, the AI agent
-performs a targeted self-review and reports the exact evidence inspected. Do
-not create or invoke a repository validation script for that proof unless the
-User explicitly authorizes script-based validation for the task. Product tests,
+performs a targeted self-review and reports the exact evidence inspected. Product tests,
 builds, and other behavior-appropriate commands remain available when they
 are in scope and authorized. Agent effectiveness still requires behavioral
 evidence. Optional SQLite/control-plane operations run only when requested or

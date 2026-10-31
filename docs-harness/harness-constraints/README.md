@@ -19,9 +19,8 @@ linked from `docs-harness/INDEX.md`.
 - Keep task-local implementation choices in the plan or change, not in a
   generic constraint record.
 
-For the risk-to-proposal constraint, a detected risk still needs an inline
-proposal or solution, while persisted risk and proposal resources require
-reciprocal references when the User authorizes persistence.
+Risk/proposal pairing follows
+[#001_CONSTRAINTS_0812](0812-risk-proposal-suggestion-cross-link.md).
 
 ## Skip When
 

@@ -58,7 +58,7 @@ and a bounded target.
 | Current web facts | `WebFetch` for a known URL, `WebSearch` for discovery (both deferred) |
 | A decision only the User can make | `AskUserQuestion` |
 | Plan before acting | `EnterPlanMode` / `ExitPlanMode` (deferred) |
-| Isolated branch work | `EnterWorktree` / `ExitWorktree` (deferred) |
+| Isolated branch work (only on an explicit User request; never for agent coordination) | `EnterWorktree` / `ExitWorktree` (deferred) |
 | Watch a long-running condition | `Monitor` (deferred); background `Bash` for detached commands |
 | Recurring or scheduled work | `CronCreate` / `CronList` / `CronDelete` (deferred) |
 | Load a repository procedure | `Skill` |

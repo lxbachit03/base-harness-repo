@@ -56,6 +56,84 @@ param(
     [switch]$Quiet
 )
 
+function Get-FieldValue([object]$Value, [string]$Name) {
+    if ($null -eq $Value) { return $null }
+    if ($Value -is [System.Collections.IDictionary]) {
+        if ($Value.Contains($Name)) { return $Value[$Name] }
+        return $null
+    }
+    $property = $Value.PSObject.Properties[$Name]
+    if ($null -ne $property) { return $property.Value }
+    return $null
+}
+
+function Assert-JsonDepth([object]$Value, [int]$Depth = 0) {
+    if ($null -eq $Value -or $Value -is [string] -or $Value -is [ValueType]) { return }
+    if ($Depth -ge 64) {
+        throw "JSON state, instructions, or criteria exceed the API's 64-level nesting limit."
+    }
+    if ($Value -is [System.Collections.IDictionary]) {
+        foreach ($child in $Value.Values) { Assert-JsonDepth -Value $child -Depth ($Depth + 1) }
+    } elseif ($Value -is [System.Collections.IEnumerable]) {
+        foreach ($child in $Value) { Assert-JsonDepth -Value $child -Depth ($Depth + 1) }
+    } else {
+        foreach ($property in $Value.PSObject.Properties) {
+            if ($property.IsGettable) {
+                Assert-JsonDepth -Value $property.Value -Depth ($Depth + 1)
+            }
+        }
+    }
+}
+
+function Test-FiniteNumber([object]$Value, [double]$Minimum, [double]$Maximum) {
+    if ($null -eq $Value -or $Value -is [bool] -or $Value -is [string]) { return $false }
+    try { $number = [double]$Value } catch { return $false }
+    return (-not [double]::IsNaN($number) -and -not [double]::IsInfinity($number) -and
+        $number -ge $Minimum -and $number -le $Maximum)
+}
+
+function Get-ResponseValidationError([object]$Response, [hashtable]$RequestedQuestions) {
+    $modelId = Get-FieldValue -Value $Response -Name 'model'
+    $answerSet = Get-FieldValue -Value $Response -Name 'answers'
+    if ($modelId -isnot [string] -or [string]::IsNullOrWhiteSpace($modelId) -or $null -eq $answerSet) {
+        return "Response is missing a model ID or answers."
+    }
+    foreach ($name in $RequestedQuestions.Keys) {
+        $question = $RequestedQuestions[$name]
+        $answer = Get-FieldValue -Value $answerSet -Name $name
+        if ($null -eq $answer) { return "Response is missing answer '$name'." }
+        $expectedType = Get-FieldValue -Value $question -Name 'type'
+        if ($expectedType -notin @('choice', 'score', 'noul')) { continue }
+        $actualType = Get-FieldValue -Value $answer -Name 'type'
+        if ($actualType -ne $expectedType) { return "Answer '$name' has an unexpected type." }
+        switch ($expectedType) {
+            'choice' {
+                $choice = Get-FieldValue -Value $answer -Name 'choice'
+                $criteria = Get-FieldValue -Value $question -Name 'criteria'
+                if ($choice -isnot [string] -or [string]::IsNullOrWhiteSpace($choice)) {
+                    return "Answer '$name' has no valid choice."
+                }
+                if ($criteria -is [System.Collections.IDictionary] -and -not $criteria.Contains($choice)) {
+                    return "Answer '$name' contains a choice outside the supplied criteria."
+                }
+            }
+            'noul' {
+                if (-not (Test-FiniteNumber -Value (Get-FieldValue -Value $answer -Name 'noul') -Minimum 0 -Maximum 1)) {
+                    return "Answer '$name' has an invalid Noul probability."
+                }
+            }
+            'score' {
+                $criteria = Get-FieldValue -Value $question -Name 'criteria'
+                $maximum = if ($criteria -is [array] -and $criteria.Count -gt 0) { $criteria.Count - 1 } else { [double]::MaxValue }
+                if (-not (Test-FiniteNumber -Value (Get-FieldValue -Value $answer -Name 'score') -Minimum 0 -Maximum $maximum)) {
+                    return "Answer '$name' has an invalid score."
+                }
+            }
+        }
+    }
+    return $null
+}
+
 # 1. Dynamic Credential Discovery
 $resolvedKey = $ApiKey
 if ([string]::IsNullOrWhiteSpace($resolvedKey)) {
@@ -88,12 +166,17 @@ if ([string]::IsNullOrWhiteSpace($resolvedKey)) {
 
 # 3. Payload Construction & UTF-8 Byte Encoding
 try {
+    Assert-JsonDepth -Value $State
+    foreach ($question in $Questions.Values) {
+        Assert-JsonDepth -Value (Get-FieldValue -Value $question -Name 'instructions')
+        Assert-JsonDepth -Value (Get-FieldValue -Value $question -Name 'criteria')
+    }
     $payloadObj = @{
         state     = $State
         model     = $Model
         questions = $Questions
     }
-    $jsonString = $payloadObj | ConvertTo-Json -Depth 10
+    $jsonString = $payloadObj | ConvertTo-Json -Depth 100 -WarningAction Stop -ErrorAction Stop
     $bodyBytes = [System.Text.Encoding]::UTF8.GetBytes($jsonString)
 } catch {
     $errMsg = "Failed to serialize payload to JSON: $($_.Exception.Message)"
@@ -136,24 +219,18 @@ try {
 
     if (-not $Quiet) {
         Write-Host "`n[TypeSafe] <-- Response received in ${elapsedMs} ms ($([math]::Round($elapsedMs / 1000, 2))s):" -ForegroundColor Green
-        Write-Host ($response | ConvertTo-Json -Depth 10) -ForegroundColor Gray
+        Write-Host ($response | ConvertTo-Json -Depth 100 -WarningAction Stop -ErrorAction Stop) -ForegroundColor Gray
         Write-Host "[TypeSafe] --------------------------------------------------`n" -ForegroundColor Green
     }
 
-    return [PSCustomObject]@{
-        Success   = $true
-        Fallback  = $false
-        Model     = $response.model
-        Answers   = $response.answers
-        Usage     = $response.usage
-        ElapsedMs = $elapsedMs
-        Error     = $null
-        Warning   = $null
-    }
 } catch {
     $stopwatch.Stop()
     $elapsedMs = $stopwatch.ElapsedMilliseconds
-    $apiErrorMsg = "Failed to reach TypeSafe API after ${elapsedMs} ms: $($_.Exception.Message)"
+    $httpStatus = $null
+    if ($null -ne $_.Exception.Response -and $null -ne $_.Exception.Response.StatusCode) {
+        try { $httpStatus = [int]$_.Exception.Response.StatusCode } catch { $httpStatus = $null }
+    }
+    $apiErrorMsg = "TypeSafe API request failed after ${elapsedMs} ms: $($_.Exception.Message)"
 
     if (-not $Quiet) {
         Write-Host "`n[TypeSafe] [!] API Call Failed after ${elapsedMs} ms: $($_.Exception.Message)" -ForegroundColor Red
@@ -171,7 +248,35 @@ try {
         Answers   = $null
         Usage     = $null
         ElapsedMs = $elapsedMs
-        Error     = "NetworkOrApiError"
+        Error     = if ($null -ne $httpStatus) { "Http$httpStatus" } else { "NetworkOrApiError" }
+        HttpStatus = $httpStatus
         Warning   = $apiErrorMsg
     }
+}
+
+$validationError = Get-ResponseValidationError -Response $response -RequestedQuestions $Questions
+if ($null -ne $validationError) {
+    if ($Strict) { throw $validationError }
+    Write-Warning $validationError
+    return [PSCustomObject]@{
+        Success   = $false
+        Fallback  = $true
+        Model     = Get-FieldValue -Value $response -Name 'model'
+        Answers   = $null
+        Usage     = Get-FieldValue -Value $response -Name 'usage'
+        ElapsedMs = $elapsedMs
+        Error     = "InvalidResponse"
+        Warning   = $validationError
+    }
+}
+
+return [PSCustomObject]@{
+    Success   = $true
+    Fallback  = $false
+    Model     = Get-FieldValue -Value $response -Name 'model'
+    Answers   = Get-FieldValue -Value $response -Name 'answers'
+    Usage     = Get-FieldValue -Value $response -Name 'usage'
+    ElapsedMs = $elapsedMs
+    Error     = $null
+    Warning   = $null
 }

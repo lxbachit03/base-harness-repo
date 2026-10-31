@@ -6,8 +6,9 @@
     Best Practice 4: Domain Spec Freshness Validation Cascade.
     Compares code diffs or implementation changes against canonical domain specifications
     (docs-harness/domain/README.md) using Noul and Score primitives.
-    Automatically flags when domain knowledge should transition from [CONFIRMED] to [UNCERTAIN]
-    due to code-level schema or business logic drift.
+    Flags domain knowledge for STATUS: needs-review and Freshness: STALE when code-level
+    schema or business logic drift contradicts it. Confirmation tags stay unchanged;
+    only the User changes them (docs-harness/domain/README.md).
 
 .PARAMETER DomainPath
     Path to the domain Markdown file (e.g. docs-harness/domain/0902-auth-service/README.md).
@@ -23,11 +24,11 @@
 
 .OUTPUTS
     [PSCustomObject] containing:
-      - IsStale (bool): True if domain specification is likely outdated or contradictory.
-      - StalenessProbability (double): Noul probability (0.0 to 1.0).
-      - SeverityScore (double): 0.0 to 2.0.
+      - IsStale (bool or null): Null when the judgment is unavailable.
+      - StalenessProbability (double or null): Noul probability (0.0 to 1.0).
+      - SeverityScore (double or null): 0.0 to 2.0.
       - SeverityLabel (string): Descriptive severity level.
-      - Recommendation (string): 'KeepConfirmed', 'MarkUncertainAndScheduleReview', or 'ImmediateDomainUpdateRequired'.
+      - Recommendation (string): 'KeepCurrent', 'MarkStaleAndScheduleReview', or 'ImmediateDomainUpdateRequired'.
       - LatencyMs (double): Execution latency in milliseconds.
 #>
 [CmdletBinding()]
@@ -43,6 +44,13 @@ param(
 )
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+
+function Test-NumberInRange([object]$Value, [double]$Minimum, [double]$Maximum) {
+    if ($null -eq $Value -or $Value -isnot [ValueType] -or $Value -is [bool]) { return $false }
+    try { $number = [double]$Value } catch { return $false }
+    return (-not [double]::IsNaN($number) -and -not [double]::IsInfinity($number) -and
+        $number -ge $Minimum -and $number -le $Maximum)
+}
 
 # 1. Resolve Domain Specification Text
 $domainSpec = $DomainText
@@ -96,21 +104,23 @@ $eval = & $invokeScript -State $stateObj -Questions $questionsObj -Quiet:$Quiet
 $stopwatch.Stop()
 $latency = [math]::Round($stopwatch.Elapsed.TotalMilliseconds, 2)
 
-if ($eval.Fallback -or (-not $eval.Success)) {
-    Write-Warning "Jev domain freshness evaluation unavailable. Using fallback default values."
+$staleProb = if ($null -ne $eval -and $null -ne $eval.Answers) { $eval.Answers.is_domain_stale.noul } else { $null }
+$sevScore = if ($null -ne $eval -and $null -ne $eval.Answers) { $eval.Answers.staleness_severity.score } else { $null }
+$invalidAnswers = (-not (Test-NumberInRange $staleProb 0 1) -or -not (Test-NumberInRange $sevScore 0 2))
+if ($null -eq $eval -or $eval.Fallback -or (-not $eval.Success) -or $invalidAnswers) {
+    Write-Warning "Jev domain freshness evaluation unavailable or invalid. Review is required."
     return [PSCustomObject]@{
-        IsStale              = $false
-        StalenessProbability = 0.5
-        SeverityScore        = 0.5
+        IsStale              = $null
+        StalenessProbability = $null
+        SeverityScore        = $null
         SeverityLabel        = "Indeterminate (Fallback)"
-        Recommendation       = "MarkUncertainAndScheduleReview"
+        Recommendation       = "MarkStaleAndScheduleReview"
         Mode                 = "GracefulFallback"
+        Fallback             = $true
         LatencyMs            = $latency
     }
 }
 
-$staleProb = $eval.Answers.is_domain_stale.noul
-$sevScore = $eval.Answers.staleness_severity.score
 $isStale = ($staleProb -ge 0.5)
 
 $sevLegend = $eval.Answers.staleness_severity.legend
@@ -118,19 +128,19 @@ $sevIndex = [math]::Min([int][math]::Round($sevScore), 2)
 $sevLabel = $sevLegend."$sevIndex"
 
 $recommendation = if ($staleProb -lt 0.4) {
-    "KeepConfirmed"
+    "KeepCurrent"
 } elseif ($sevScore -ge 1.4) {
     "ImmediateDomainUpdateRequired"
 } else {
-    "MarkUncertainAndScheduleReview"
+    "MarkStaleAndScheduleReview"
 }
 
 if (-not $Quiet) {
     Write-Host "`n[DomainFreshness] === DOMAIN FRESHNESS RESULT (${latency}ms) ===" -ForegroundColor $(if ($isStale) { "Yellow" } else { "Green" })
-    Write-Host "Is Stale / Outdated    : $(if ($isStale) { 'YES (Drift Detected)' } else { 'NO (Synchronized)' })" -ForegroundColor White
+    Write-Host "Is Stale / Outdated    : $(if ($isStale) { 'YES (Drift Detected)' } else { 'Below detection threshold; check recommendation' })" -ForegroundColor White
     Write-Host "Staleness Probability  : $([math]::Round($staleProb * 100, 1))%" -ForegroundColor White
     Write-Host "Drift Severity Score   : $([math]::Round($sevScore, 2)) ($sevLabel)" -ForegroundColor White
-    Write-Host "Recommendation         : $recommendation" -ForegroundColor $(if ($recommendation -eq 'KeepConfirmed') { "Green" } else { "Yellow" })
+    Write-Host "Recommendation         : $recommendation" -ForegroundColor $(if ($recommendation -eq 'KeepCurrent') { "Green" } else { "Yellow" })
     Write-Host "[DomainFreshness] =============================================`n" -ForegroundColor $(if ($isStale) { "Yellow" } else { "Green" })
 }
 
@@ -141,5 +151,7 @@ return [PSCustomObject]@{
     SeverityLabel        = $sevLabel
     Recommendation       = $recommendation
     Mode                 = "JevDecision"
+    Fallback             = $false
+    Model                = $eval.Model
     LatencyMs            = $latency
 }

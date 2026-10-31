@@ -37,13 +37,12 @@ có vai trò riêng từ lúc khởi chạy, thực hiện phạm vi được gi
 chứng cho coordinator theo `AGENTS.md`.
 
 Các skill nằm trong `.agents/skills/`. Chỉ dùng workflow phù hợp; goal shaping,
-ticket intake, strict onboarding audit và tool selection không phải bước bắt
+ticket intake và tool selection không phải bước bắt
 buộc của mọi task. Cải tiến Harness cần một yêu cầu có phạm vi và bằng chứng.
 
 Agent tự kiểm tra cấu trúc, route, metadata, link và diff theo `AGENTS.md` và
-`docs-harness/WORKFLOW.md`. Không tạo hoặc chạy script validator cho Harness
-nếu User chưa cấp authority rõ ràng; bằng chứng hành vi vẫn phải được báo cáo
-riêng khi có thể thực hiện.
+`docs-harness/WORKFLOW.md`; bằng chứng hành vi vẫn phải được báo cáo riêng khi
+có thể thực hiện.
 
 Global Git excludes có thể chứa `docs-harness/` để giữ context cá nhân khỏi
 consumer repo. Quy tắc ignore không untrack các file đã được quản lý trong base

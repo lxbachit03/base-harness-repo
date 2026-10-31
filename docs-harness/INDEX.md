@@ -6,13 +6,17 @@ Start here after `AGENTS.md` and before reading other repository documentation.
 
 ## Session retrieval
 
-At session start, inspect the folder names and INDEX alignment without changing
-files. Read PERSONA.md and use the single selected style, or Default when the
+At session start, without changing files, list the folder and file names under
+docs-harness/ (templates/ excluded) and compare them with INDEX in both
+directions: report every resource file with an ID that INDEX does not route,
+every INDEX link whose target is missing, and every folder missing from the
+Folder Tree. Read PERSONA.md and use the single selected style, or Default when the
 selection is empty or ambiguous. Apply persona to conversation only.
 
 Then follow [layers/README.md](layers/README.md) to load any add-on prompt
 layer matching the current session's exact resolved model, announcing each
-loaded file's path to the User before applying it.
+loaded file's path to the User before applying it, and to apply every hook
+whose activation checklist is checked.
 
 Discover current work by metadata, not by loading every body:
 
@@ -81,8 +85,20 @@ In read-only work report drift without repairing it.
 
 Before claiming routing consistency, the AI agent must inspect the relevant
 folder tree, route metadata, links, IDs, domain state, and final diff and report
-the evidence and any unattempted proof. Do not create or invoke a repository
-validator script for this review unless the User explicitly authorizes it.
+the evidence and any unattempted proof.
+
+## WARNING: User-owned raw requirements
+
+When the repository has `docs/raw-requirements/`, that folder is the User's
+single source of truth for what they want from the repository and its Harness.
+Read [its README](../docs/raw-requirements/README.md) when a task creates or
+changes something a requirement there describes, or when the User asks whether
+the repository meets their requirements. Do not create, edit, rename, move or
+delete files there, even when a task asks to fix, update or improve; propose
+the exact change in the reply and let the User edit the file. The only
+exception is a User request that spells out the exact result (the text to
+write, or the file to add, rename or delete). A mismatch found there does not
+by itself authorize changing code.
 
 ## Root Routing
 
@@ -100,8 +116,8 @@ Resources:
 - [INDEX.md](INDEX.md)
 - [WORKFLOW.md](WORKFLOW.md)
 - [PERSONA.md](PERSONA.md)
-- [Manual self-validation policy](../AGENTS.md): inspect affected routes,
-  metadata, links, and diff; disclose unattempted proof and script authority.
+- [Self-review policy](../AGENTS.md): inspect affected routes,
+  metadata, links, and diff; disclose unattempted proof.
 - [Historical Herdr worker catalog](HERDR-AGENTS.md): retained for past
   coordination evidence after removal of the coordination skills; consult only
   when investigating that history.
@@ -122,9 +138,14 @@ Skip when: the intent concerns only product behavior or unrelated domain work.
 Resources:
 
 - [Harness improvement guide](harness-improvements/README.md)
-- [Remove the Herdr and Orca ADE coordination skills](harness-improvements/1031-remove-coordination-skills.md) — `#048_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
+
+Legacy improvement plans (`#002`–`#014`) are routed in the `plans/completed/`
+section below.
+
+- [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 - [Bale orchestration through independent Herdr agents](harness-improvements/0907-bale-herdr-orchestration.md) — `#016_IMPROVE_HARNESS_0907`, `PRIORITY: [MEDIUM]` — historical skill-creation record
 - [Agent self-validation and validator retirement](harness-improvements/0912-agent-self-validation.md) — `#017_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
+- [User-selected Herdr worker model catalog](harness-improvements/0912-herdr-agent-catalog.md) — `#018_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [Receipt-first Herdr observation with bounded transcript fallback](harness-improvements/0912-herdr-bounded-observation.md) — `#019_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [Bale review gate for delegated code quality and resource efficiency](harness-improvements/0913-herdr-bale-code-review.md) — `#020_IMPROVE_HARNESS_0913`, `PRIORITY: [MEDIUM]`
 - [OpenCode Go worker model catalog](harness-improvements/0913-opencode-go-model-catalog.md) — `#021_IMPROVE_HARNESS_0913`, `PRIORITY: [MEDIUM]`
@@ -136,7 +157,6 @@ Resources:
 - [Converge the utilizing-tools skills on the routing pattern](harness-improvements/0921-utilizing-tools-skill-parity.md) — `#027_IMPROVE_HARNESS_0921`, `PRIORITY: [MEDIUM]`
 - [Tune tight-handoff wait/observation timeout guidance for OpenCode Go workers](harness-improvements/0922-opencode-go-tight-handoff-wait-timeout.md) — `#028_IMPROVE_HARNESS_0922`, `PRIORITY: [MEDIUM]`
 - [Document Herdr `--kind agy` (Antigravity) done-signal unreliability as expected, not exceptional](harness-improvements/0922-agy-done-signal-reliability.md) — `#029_IMPROVE_HARNESS_0922`, `PRIORITY: [MEDIUM]`
-- [User-selected Herdr worker model catalog](harness-improvements/0912-herdr-agent-catalog.md) — `#018_IMPROVE_HARNESS_0912`, `PRIORITY: [MEDIUM]`
 - [Model-specific add-on prompt layers](harness-improvements/0926-model-family-layer-prompts.md) — `#030_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
 - [Orca ADE documentation, capability routing skill, and Herdr coordination](harness-improvements/0926-utilizing-tools-orca-ade.md) — `#031_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
 - [Pure Orca ADE multi-agent coordination skill and Claude sync](harness-improvements/0926-orca-ade-coordinate-agents.md) — `#032_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]` — historical skill-creation record
@@ -144,19 +164,19 @@ Resources:
 - [TypeSafe Jev best practices implementation for task authority, selective routing, ticket triage, and domain freshness](harness-improvements/0927-typesafe-best-practices-integration.md) — `#034_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]`
 - [Dynamic Jev manifest and enhance-jev skill for project-specific customization](harness-improvements/0927-dynamic-jev-manifest-and-enhance-skill.md) — `#035_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]`
 - [Layer-2 hooks mechanism with jev-hook pre-action Jev gate](harness-improvements/0930-layer-2-hooks-and-jev-gate.md) — `#036_IMPROVE_HARNESS_0930`, `PRIORITY: [MEDIUM]`
-- [One record per improvement](harness-improvements/0906-per-improvement-records.md) — `#015_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
-- [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
-- [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
-- [Evidence-backed domain capture and freshness validation](plans/completed/0902-evidence-backed-domain-freshness.md) - `#012_IMPROVE_HARNESS_0902`, `PRIORITY: [MEDIUM]`
-- [Service E2E domain-flow template improvement](plans/active/0822-domain-e2e-flow-template.md) — `#011_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
-- [Ticket evidence workspace templates](plans/active/0822-ticket-evidence-workspace.md) — `#010_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
-- [User authority operation gate](plans/active/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
-- [Onboarding skill and flow-based workspace routing](plans/active/0816-onboarding-skill-folder-routing.md) — `#007_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
-- [Persona response style configuration and session start routing](plans/active/0816-persona-response-style-routing.md) — `#006_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
-- [Filesystem and INDEX synchronization check at session start](plans/active/0816-filesystem-index-sync-rule.md) — `#005_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
-- [Ticket lifecycle improvement](plans/active/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
-- [Writing-for-agents routing improvement](plans/active/0815-writing-for-agents-routing.md) — `#003_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
-- [Goal-griller specialist routing improvement](plans/completed/0812-harness-improvement-goal-routing.md) — `#002_IMPROVE_HARNESS_0812`, `PRIORITY: [MEDIUM]`
+- [Retire the missing #012 plan route from INDEX](harness-improvements/1003-retire-missing-012-plan-route.md) — `#037_IMPROVE_HARNESS_1003`, `PRIORITY: [NORMAL]`
+- [User-invoked init-harness-repo skill for scaffolding a minimal Harness](harness-improvements/1003-init-harness-repo-skill.md) — `#038_IMPROVE_HARNESS_1003`, `PRIORITY: [MEDIUM]`
+- [Correctness fixes from the 2026-10-03 optimization review (group A)](harness-improvements/1003-optimization-review-correctness-fixes.md) — `#039_IMPROVE_HARNESS_1003`, `PRIORITY: [MEDIUM]`
+- [Record metadata cleanup from the 2026-10-03 optimization review (group E)](harness-improvements/1003-record-metadata-cleanup.md) — `#040_IMPROVE_HARNESS_1003`, `PRIORITY: [NORMAL]`
+- [Apply the User's group D policy decisions from the 2026-10-03 optimization review](harness-improvements/1003-group-d-policy-decisions.md) — `#041_IMPROVE_HARNESS_1003`, `PRIORITY: [MEDIUM]`
+- [Apply the User's group B decisions to reduce always-loaded Harness context](harness-improvements/1005-group-b-context-load-reduction.md) — `#042_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
+- [Apply the User's group C decisions to remove duplicated on-demand guidance](harness-improvements/1005-group-c-deduplication.md) — `#043_IMPROVE_HARNESS_1005`, `PRIORITY: [NORMAL]`
+- [Make the shell gate always consult Jev and apply the User's Jev guidance decisions](harness-improvements/1005-gate-and-jev-decisions.md) — `#044_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
+- [Coordinate agents on the current branch without Git worktrees, for Herdr and Orca](harness-improvements/1005-coordination-without-worktrees.md) — `#045_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
+- [Apply the User's repository, record and template decisions from the optimization review](harness-improvements/1005-repo-and-record-decisions.md) — `#046_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
+- [User-owned raw requirements folder with an INDEX warning](harness-improvements/1005-raw-requirements-source.md) — `#047_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
+- [Remove the Herdr and Orca ADE coordination skills](harness-improvements/1031-remove-coordination-skills.md) — `#048_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
+- [Improve TypeSafe Jev integration reliability](harness-improvements/1031-jev-integration-reliability.md) — `#049_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
 
 Coordination-skill references in earlier records are historical, including
 records with a pending experiment status. Their deleted paths remain available
@@ -287,15 +307,9 @@ Skip when: no active plan is related to the current intent.
 
 Resources:
 
-- [Behavior parity audit and regression repair](plans/active/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
-- [Service E2E domain-flow template improvement](plans/active/0822-domain-e2e-flow-template.md) — `#011_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
-- [Ticket evidence workspace templates](plans/active/0822-ticket-evidence-workspace.md) — `#010_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
-- [User authority operation gate](plans/active/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
-- [Onboarding skill and flow-based workspace routing](plans/active/0816-onboarding-skill-folder-routing.md) — `#007_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
-- [Persona response style configuration and session start routing](plans/active/0816-persona-response-style-routing.md) — `#006_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
-- [Filesystem and INDEX synchronization check at session start](plans/active/0816-filesystem-index-sync-rule.md) — `#005_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
-- [Ticket lifecycle improvement](plans/active/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
-- [Writing-for-agents routing improvement](plans/active/0815-writing-for-agents-routing.md) — `#003_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
+- [Active plans folder guide](plans/active/README.md)
+
+No active plans are indexed.
 
 ### plans/completed/
 
@@ -309,10 +323,17 @@ Skip when: the task has no dependency on completed work.
 
 Resources:
 
-- [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
-
-- [Evidence-backed domain capture and freshness validation](plans/completed/0902-evidence-backed-domain-freshness.md) — `#012_IMPROVE_HARNESS_0902`, `PRIORITY: [MEDIUM]`
 - [Goal-griller specialist routing improvement](plans/completed/0812-harness-improvement-goal-routing.md) — `#002_IMPROVE_HARNESS_0812`, `PRIORITY: [MEDIUM]`
+- [Writing-for-agents routing improvement](plans/completed/0815-writing-for-agents-routing.md) — `#003_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
+- [Ticket lifecycle improvement](plans/completed/0815-ticket-lifecycle-routing.md) — `#004_IMPROVE_HARNESS_0815`, `PRIORITY: [MEDIUM]`
+- [Filesystem and INDEX synchronization check at session start](plans/completed/0816-filesystem-index-sync-rule.md) — `#005_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
+- [Persona response style configuration and session start routing](plans/completed/0816-persona-response-style-routing.md) — `#006_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
+- [Onboarding skill and flow-based workspace routing](plans/completed/0816-onboarding-skill-folder-routing.md) — `#007_IMPROVE_HARNESS_0816`, `PRIORITY: [MEDIUM]`
+- [User authority operation gate](plans/completed/0822-user-authority-operation-gate.md) — `#008_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
+- [Ticket evidence workspace templates](plans/completed/0822-ticket-evidence-workspace.md) — `#010_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
+- [Service E2E domain-flow template improvement](plans/completed/0822-domain-e2e-flow-template.md) — `#011_IMPROVE_HARNESS_0822`, `PRIORITY: [MEDIUM]`
+- [Task authority and policy consistency](plans/completed/0906-task-authority-and-policy-consistency.md) — `#013_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
+- [Behavior parity audit and regression repair](plans/completed/0906-behavior-parity-audit.md) — `#014_IMPROVE_HARNESS_0906`, `PRIORITY: [MEDIUM]`
 
 ### tickets/
 
@@ -333,9 +354,7 @@ Resources:
 - [Ticket layout and lifecycle contract](tickets/README.md)
 
 See the dedicated `tickets/active/` and `tickets/completed/` routing sections
-below. The template remains available at
-[templates/ticket.md](templates/ticket.md), with the ticket `docs/` manifest at
-[templates/ticket-docs-README.md](templates/ticket-docs-README.md).
+below; ticket templates are listed under `templates/`.
 
 ### tickets/active/
 
@@ -396,8 +415,9 @@ Read when: every session, at the same session-start point PERSONA.md is read,
 to load any add-on layer matching the current session's exact resolved
 model.
 
-Skip when: never skip the check itself; skip loading only when no file in a
-given layer's `agents/` folder matches the current session's identity.
+Skip when: never skip the check itself; skip loading a layer's `agents/`
+files only when none matches the current session's identity. Hooks are read
+in every session and apply per their own activation checklist.
 
 Resources:
 
@@ -436,7 +456,7 @@ Skip when: no new resource is being created.
 
 Resources:
 
-- [Service E2E domain-flow template catalog](templates/README.md)
+- [Template catalog, resource IDs and metadata](templates/README.md)
 - [Activity diagram template](templates/activity-diagram.md)
 - [Harness improvement template](templates/harness-improvement.md)
 - [Constraint template](templates/constraint.md)
@@ -458,6 +478,7 @@ Templates do not receive resource IDs or date-prefixed filenames.
 
 Resource metadata and IDs are owned by [the template catalog](templates/README.md).
 List each canonical resource once per applicable classification and lifecycle
-section. A link in two different routes is intentional; duplicate entries in the
-same route are not. Every resource entry carries its ID and current priority.
+section; legacy improvement plans under plans/ are listed only in their
+lifecycle section. A link in two different routes is intentional; duplicate
+entries in the same route are not. Every resource entry carries its ID and current priority.
 Ordinary tickets and supporting artifacts are reached through their owner.
