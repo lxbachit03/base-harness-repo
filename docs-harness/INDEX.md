@@ -180,6 +180,7 @@ section below.
 - [Retire three Jev helper scripts](harness-improvements/1031-retire-jev-helpers.md) — `#050_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]` — retained router subsequently retired in #051
 - [Retire the Jev skill router](harness-improvements/1031-retire-jev-skill-router.md) — `#051_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
 - [Remove the enhance-jev skill](harness-improvements/1031-remove-enhance-jev.md) — `#052_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
+- [Make Codex capability discovery work across sessions](harness-improvements/1031-codex-capability-discovery.md) — `#053_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
 
 Coordination-skill references in earlier records are historical, including
 records with a pending experiment status. Their deleted paths remain available
