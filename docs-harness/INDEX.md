@@ -161,8 +161,8 @@ section below.
 - [Orca ADE documentation, capability routing skill, and Herdr coordination](harness-improvements/0926-utilizing-tools-orca-ade.md) — `#031_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]`
 - [Pure Orca ADE multi-agent coordination skill and Claude sync](harness-improvements/0926-orca-ade-coordinate-agents.md) — `#032_IMPROVE_HARNESS_0926`, `PRIORITY: [MEDIUM]` — historical skill-creation record
 - [TypeSafe Jev semantic primitives and native PowerShell helper with graceful fallback](harness-improvements/0927-typesafe-ai-skill-integration.md) — `#033_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]`
-- [TypeSafe Jev best practices implementation for task authority, selective routing, ticket triage, and domain freshness](harness-improvements/0927-typesafe-best-practices-integration.md) — `#034_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]`
-- [Dynamic Jev manifest and enhance-jev skill for project-specific customization](harness-improvements/0927-dynamic-jev-manifest-and-enhance-skill.md) — `#035_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]`
+- [TypeSafe Jev best practices implementation for task authority, selective routing, ticket triage, and domain freshness](harness-improvements/0927-typesafe-best-practices-integration.md) — `#034_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]` — historical; helpers retired in #050 and #051
+- [Dynamic Jev manifest and enhance-jev skill for project-specific customization](harness-improvements/0927-dynamic-jev-manifest-and-enhance-skill.md) — `#035_IMPROVE_HARNESS_0927`, `PRIORITY: [MEDIUM]` — skill removal recorded in #052
 - [Layer-2 hooks mechanism with jev-hook pre-action Jev gate](harness-improvements/0930-layer-2-hooks-and-jev-gate.md) — `#036_IMPROVE_HARNESS_0930`, `PRIORITY: [MEDIUM]`
 - [Retire the missing #012 plan route from INDEX](harness-improvements/1003-retire-missing-012-plan-route.md) — `#037_IMPROVE_HARNESS_1003`, `PRIORITY: [NORMAL]`
 - [User-invoked init-harness-repo skill for scaffolding a minimal Harness](harness-improvements/1003-init-harness-repo-skill.md) — `#038_IMPROVE_HARNESS_1003`, `PRIORITY: [MEDIUM]`
@@ -171,12 +171,15 @@ section below.
 - [Apply the User's group D policy decisions from the 2026-10-03 optimization review](harness-improvements/1003-group-d-policy-decisions.md) — `#041_IMPROVE_HARNESS_1003`, `PRIORITY: [MEDIUM]`
 - [Apply the User's group B decisions to reduce always-loaded Harness context](harness-improvements/1005-group-b-context-load-reduction.md) — `#042_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
 - [Apply the User's group C decisions to remove duplicated on-demand guidance](harness-improvements/1005-group-c-deduplication.md) — `#043_IMPROVE_HARNESS_1005`, `PRIORITY: [NORMAL]`
-- [Make the shell gate always consult Jev and apply the User's Jev guidance decisions](harness-improvements/1005-gate-and-jev-decisions.md) — `#044_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
+- [Make the shell gate always consult Jev and apply the User's Jev guidance decisions](harness-improvements/1005-gate-and-jev-decisions.md) — `#044_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]` — historical gate behavior superseded in #050
 - [Coordinate agents on the current branch without Git worktrees, for Herdr and Orca](harness-improvements/1005-coordination-without-worktrees.md) — `#045_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
 - [Apply the User's repository, record and template decisions from the optimization review](harness-improvements/1005-repo-and-record-decisions.md) — `#046_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
 - [User-owned raw requirements folder with an INDEX warning](harness-improvements/1005-raw-requirements-source.md) — `#047_IMPROVE_HARNESS_1005`, `PRIORITY: [MEDIUM]`
 - [Remove the Herdr and Orca ADE coordination skills](harness-improvements/1031-remove-coordination-skills.md) — `#048_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
-- [Improve TypeSafe Jev integration reliability](harness-improvements/1031-jev-integration-reliability.md) — `#049_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
+- [Improve TypeSafe Jev integration reliability](harness-improvements/1031-jev-integration-reliability.md) — `#049_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]` — historical helper coverage superseded in part by #050 and #051
+- [Retire three Jev helper scripts](harness-improvements/1031-retire-jev-helpers.md) — `#050_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]` — retained router subsequently retired in #051
+- [Retire the Jev skill router](harness-improvements/1031-retire-jev-skill-router.md) — `#051_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
+- [Remove the enhance-jev skill](harness-improvements/1031-remove-enhance-jev.md) — `#052_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
 
 Coordination-skill references in earlier records are historical, including
 records with a pending experiment status. Their deleted paths remain available

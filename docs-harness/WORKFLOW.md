@@ -40,7 +40,7 @@ If a new decision or external action is needed, finish independent preparation
 and present the concrete boundary for approval. An unavailable tool is an
 unattempted check, not a failing product test.
 
-When a workflow uses TypeSafe Jev for evaluation, triage or guardrails, follow
+When a workflow uses TypeSafe Jev, follow
 the usage practices in [`docs-harness/JEV-AI.md`](JEV-AI.md) §2.
 
 Workflows must implement graceful fallback: in offline environments, unauthenticated CI runners,

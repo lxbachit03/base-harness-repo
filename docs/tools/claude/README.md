@@ -355,7 +355,7 @@ hiện trong danh sách skill tự động — đó là thiết kế, không ph�
 ### 7.3 Skill có sẵn theo nhóm (phiên tham chiếu)
 
 **Skill của repo Harness** (`.claude/skills/` + `.agents/skills/`):
-`enhance-jev`, `goal-griller`, `improve-harness`, `onboarding`, `prompt-leverage`,
+`goal-griller`, `improve-harness`, `onboarding`, `prompt-leverage`,
 `sequence-execution-plan`, `typesafe-ai`, `utilizing-tools-agy`,
 `utilizing-tools-claude`, `utilizing-tools-codex`, `utilizing-tools-opencode`,
 `utilizing-tools-orca-ade`, `writing-for-agents`, `xia`; user-invoked:
