@@ -1,7 +1,7 @@
 # Domain Knowledge
 
 This file owns domain capture, confirmation, layout, tracing, and freshness.
-AGENTS.md owns task authority; templates and skills apply this contract.
+docs-harness/SESSION.md owns task authority; templates and skills apply this contract.
 
 ## Capture and layout
 

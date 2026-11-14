@@ -10,7 +10,7 @@ execute it, and leave observable proof. The current session's exposed tool and
 skill definitions are the runtime authority; this skill routes to them and never
 promises that a documented capability is enabled here.
 
-AGENTS.md owns task authority, including routine local proof. The workflow name
+docs-harness/SESSION.md owns task authority, including routine local proof. The workflow name
 is not a grant for external writes.
 
 ## Mandatory Response Contract

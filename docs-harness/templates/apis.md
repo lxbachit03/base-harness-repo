@@ -54,7 +54,7 @@ Only APIs relevant to this ticket belong here. Use `TBD`, `Not found`, or
 - Existing seed or fixture sources: <paths>
 - Required User authority or command to run: <authority or `Not requested`>
 
-The template documents preparation; execution follows AGENTS.md task authority.
+The template documents preparation; execution follows docs-harness/SESSION.md task authority.
 Routine isolated local checks are included in implementation. Inspect API/seed
 side effects and require specific authority for shared services or real data.
 

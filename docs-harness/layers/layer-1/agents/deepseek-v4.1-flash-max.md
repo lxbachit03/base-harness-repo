@@ -2,7 +2,7 @@
 
 Applies only to a session resolved as `deepseek-v4.1-flash-max` (DeepSeek V4.1
 Flash, effort max, inside OpenCode Go). It does not change task authority,
-scope boundaries, or the Bale/worker role in AGENTS.md; it changes how much
+scope boundaries, or the Bale/worker role in docs-harness/SESSION.md; it changes how much
 time and rigor to spend before treating code as finished.
 
 ## Why

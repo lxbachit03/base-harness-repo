@@ -12,7 +12,7 @@ Keep this manifest aligned with changes to the local PowerShell scripts.
 - **Domain**: Agent Harness Infrastructure, Multi-Agent Orchestration, and Developer Tooling
 - **Primary Languages**: PowerShell (zero-dependency local scripts), Markdown (agent instructions)
 - **Host Platform**: Windows PowerShell 5.1+ / PowerShell Core (UTF-8 byte stream encoding)
-- **Core Security Invariant**: 0822 User Authority Gate — Read-only by default. Routine local test/edits authorized for fix/build tasks. Git index staging (`git add`), commits (`git commit`), pushes (`git push`), credential access, and destructive file operations strictly require explicit User authorization. The Jev helpers' own API-key lookup and TypeSafe API calls are permitted by default (User decision 2026-10-05).
+- **Core Security Invariant**: 0822 User Authority Gate — Read-only by default. Routine local edits and verification for fix/build tasks follow `docs-harness/SESSION.md` and the project constraints. Git index staging (`git add`), commits (`git commit`), pushes (`git push`), credential access, and destructive file operations strictly require explicit User authorization. The Jev helpers' own API-key lookup and TypeSafe API calls are permitted by default (User decision 2026-10-05).
 - **Model Resolution**: `jev-latest` is a moving alias. Record the model ID
   returned by each successful API response rather than assuming a fixed version.
 - **Credential Storage**: Dynamic resolution via `$env:TYPESAFE_API_KEY`, Windows User Registry, or Machine Registry.
@@ -29,7 +29,7 @@ The active Jev transport resides in `.agents/skills/typesafe-ai/scripts/`.
 
 The `jev-hook` checkbox controls automatic consultation. The User retired the
 dedicated authority, ticket-triage, domain-freshness, and skill-routing Jev
-helpers. Apply AGENTS.md authority, use native agent skill selection, and follow
+helpers. Apply SESSION.md authority, use native agent skill selection, and follow
 the relevant ticket/domain workflows directly. Jev remains available for
 explicitly requested or otherwise relevant semantic work.
 
@@ -61,7 +61,7 @@ explicitly requested or otherwise relevant semantic work.
     action_group      = "<file_ops_read (includes Grep/Glob) | file_ops_write | shell | web | coordination | other>"
     pending_action    = "<what will run, on which targets>"
     targets           = @("<paths or resources>")
-    authority_excerpt = "<the applicable AGENTS.md Task authority lines>"
+    authority_excerpt = "<the applicable SESSION.md authority and project constraints>"
   }
   ```
 - **Questions** (hashtable passed as `-Questions`; a `choice` takes a criteria hashtable, a `score` takes an ordered criteria array):

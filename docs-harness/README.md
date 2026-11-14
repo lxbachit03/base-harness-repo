@@ -28,7 +28,7 @@ and working-memory structure around that truth; it does not install upstream
 
 - `docs-harness/` is the canonical context for AI agents and the Harness repo.
 - `docs/` is team-facing documentation. Read task-relevant linked documents or
-  dependencies under AGENTS.md; the directory may be absent and is not bootstrapped
+  dependencies under SESSION.md; the directory may be absent and is not bootstrapped
   merely because a workflow mentions it.
 
 ## Global Git Ignore Convention
@@ -46,6 +46,7 @@ separate context types; do not place a resource in a different folder merely
 because its subject overlaps:
 
 - `harness-constraints/`: rules that constrain files, folders, or a specific task.
+- `project-constraints/`: project rules read at the start of every session.
 - `domain/`: confirmed or uncertain project/domain knowledge.
 - `harness-improvements/`: the routing category for improvements to agent
   guidance, tools, runbooks, or validation.
@@ -60,8 +61,8 @@ because its subject overlaps:
   route and `completed/` is historical context.
 - `templates/`: stable placeholders used to create supported resources.
 
-Start with `AGENTS.md`, then `INDEX.md`, and read only the routed README or
-resource needed for the current intent.
+Start with `AGENTS.md`, then `INDEX.md`. Read `SESSION.md` and project
+constraints at session start, then retrieve resources needed for the intent.
 
 ## Source-Repository Indexes
 

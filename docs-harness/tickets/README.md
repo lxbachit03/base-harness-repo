@@ -1,6 +1,6 @@
 # Ticket Workspace
 
-This file owns ticket layout and lifecycle. AGENTS.md owns operation authority.
+This file owns ticket layout and lifecycle. docs-harness/SESSION.md owns operation authority.
 Use the source's ticket ID and wording; do not invent requirements or business
 numbers. Missing IDs use TBD and a stable lowercase-kebab-case slug.
 
@@ -8,7 +8,7 @@ numbers. Missing IDs use TBD and a stable lowercase-kebab-case slug.
 
 Read the complete named source before creating records. A request to organize
 tickets authorizes intake; a request to solve them includes implementation and
-routine local proof under AGENTS.md. Review/status requests remain read-only.
+routine local proof under docs-harness/SESSION.md. Review/status requests remain read-only.
 Preserve existing files and clarify ambiguous identity or folder collisions.
 
 For one ticket use active/<ticket-number>-<slug>/ticket.md. For multiple tickets

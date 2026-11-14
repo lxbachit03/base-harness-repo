@@ -28,11 +28,11 @@ One verdict covers the same-intent actions of that group in the same turn; a
 new intent starts a new consult.
 
 Exempt: the Jev consult itself (including locating and reading
-docs-harness/JEV-AI.md section 3.1 to build it), and session-start retrieval (AGENTS.md,
-docs-harness/INDEX.md, PERSONA.md, layers walk, hook files, and listing
-folder and file names for INDEX's alignment check; reading file contents is
-gated) — they enable
-the gate and cannot gate themselves.
+docs-harness/JEV-AI.md section 3.1 to build it), and session-start retrieval:
+AGENTS.md, docs-harness/INDEX.md, docs-harness/SESSION.md, PERSONA.md, the
+layers walk, hook files, Markdown files under docs-harness/project-constraints/,
+and listing folder and file names for INDEX's alignment check. Other file
+contents are gated. These exemptions enable the gate and cannot gate themselves.
 
 ## Script selection
 
@@ -40,8 +40,8 @@ the gate and cannot gate themselves.
   `.agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1`
   with state and questions built for the pending action (default when no
   dedicated script fits). Build state from the current user intent, the
-  pending action summary and targets, and the applicable AGENTS.md authority
-  excerpt; include at least:
+  pending action summary and targets, and applicable SESSION.md authority and
+  project constraints; include at least:
 
   - `gate_decision` (choice): `proceed` | `proceed_with_caution` |
     `pause_ask_user` | `veto` — self-contained instructions and criteria.
@@ -64,14 +64,14 @@ observable so a skipped or truncated consult is detectable.
 - `pause_ask_user`: stop; report Jev's reason and one concrete question.
 - `veto`: do not execute; report the verdict and one alternative proposal.
 
-The verdict does not grant authority absent from AGENTS.md. Apply its explicit
+The verdict does not grant authority absent from SESSION.md. Apply its explicit
 permission requirements independently for every action and target.
 
 ## When Jev cannot answer
 
 Missing key, offline, or API error (helpers return Fallback = true):
 announce `JEV GATE BYPASS — Jev unavailable (<reason>)`, then execute. The
-bypass never lowers AGENTS.md authority; actions needing explicit User
+bypass never lowers SESSION.md authority; actions needing explicit User
 authority still pause for the User.
 
 ## Reporting

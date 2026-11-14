@@ -2,7 +2,7 @@
 
 This is the IMPROVE_HARNESS routing category for a requested guidance, skill,
 tool, runbook, or validation change after observed reusable friction.
-AGENTS.md owns task authority. The improve-harness skill owns the experiment
+docs-harness/SESSION.md owns task authority. The improve-harness skill owns the experiment
 steps and fresh-rerun protocol.
 
 Every new authorized improvement has one MMDD-description.md record directly

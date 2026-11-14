@@ -6,6 +6,13 @@ Start here after `AGENTS.md` and before reading other repository documentation.
 
 ## Session retrieval
 
+Immediately after this INDEX, before task work or other repository
+documentation, read and apply the entire [SESSION.md](SESSION.md) policy. This
+is mandatory for every session, including delegated workers. If the policy
+cannot be read, report the gap and pause work whose rules cannot be established.
+Reload it after a workspace switch, loss of its context, or a User-reported
+change to the policy.
+
 At session start, without changing files, list the folder and file names under
 docs-harness/ (templates/ excluded) and compare them with INDEX in both
 directions: report every resource file with an ID that INDEX does not route,
@@ -18,12 +25,18 @@ layer matching the current session's exact resolved model, announcing each
 loaded file's path to the User before applying it, and to apply every hook
 whose activation checklist is checked.
 
+Before task work, read [project-constraints/README.md](project-constraints/README.md)
+and every Markdown file recursively under `project-constraints/`, including unindexed
+files; apply active constraints as the guide directs. This applies to every
+session, including workers. Reload after a workspace switch, lost routing
+context, or a User-reported change to a project constraint.
+
 Discover current work by metadata, not by loading every body:
 
 - plans/active/: ID, title, status, priority, references;
 - tickets/active/: discover nested ticket.md files and read identity/status.
 
-Read only records relevant to the task and applicable critical constraints.
+Read only other records relevant to the task and applicable critical constraints.
 Retrieve completed history for a named request or dependency; read task-local
 proposals with their ticket or plan.
 Historical and pending experiment text does not override the current policy
@@ -48,6 +61,7 @@ docs-harness/
 ├── plans/
 │   ├── active/
 │   └── completed/
+├── project-constraints/
 ├── tickets/
 │   ├── active/
 │   └── completed/
@@ -110,9 +124,11 @@ Resources:
 
 - [README.md](README.md)
 - [INDEX.md](INDEX.md)
+- [SESSION.md](SESSION.md): mandatory session role, task authority, judgment,
+  documentation, and completion policy.
 - [WORKFLOW.md](WORKFLOW.md)
 - [PERSONA.md](PERSONA.md)
-- [Self-review policy](../AGENTS.md): inspect affected routes,
+- [Self-review policy](SESSION.md#completion): inspect affected routes,
   metadata, links, and diff; disclose unattempted proof.
 - [Historical Herdr worker catalog](HERDR-AGENTS.md): retained for past
   coordination evidence after removal of the coordination skills; consult only
@@ -180,12 +196,16 @@ section below.
 - [Explain onboarding E2E flows one step at a time](harness-improvements/1031-onboarding-step-flows.md) — `#054_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
 - [Keep decision history inside each ticket](harness-improvements/1114-ticket-decision-history.md) — `#055_IMPROVE_HARNESS_1114`, `PRIORITY: [MEDIUM]`
 - [Remove the product, risks and proposals folders](harness-improvements/1114-remove-product-risk-proposal-folders.md) — `#056_IMPROVE_HARNESS_1114`, `PRIORITY: [MEDIUM]`
+- [Load project constraints at every session start](harness-improvements/1115-project-constraints.md) — `#057_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
+- [Route session policy through the Harness index](harness-improvements/1115-session-policy-routing.md) — `#059_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
 
 Coordination-skill references in earlier records are historical, including
 records with a pending experiment status. Their deleted paths remain available
 at revision `6b1bd92`; they are not current skill entry points.
 
 ## TAG: [CONSTRAINTS]
+
+### harness-constraints/
 
 Folder: [harness-constraints/](harness-constraints/)
 
@@ -201,6 +221,21 @@ Resources:
 - [Constraint guide](harness-constraints/README.md)
 - [Risk and proposed response constraint](harness-constraints/0812-risk-proposal-suggestion-cross-link.md) — `#001_CONSTRAINTS_0812`, `PRIORITY: [MEDIUM]`
 - [Task authority for local work and explicit external boundaries](harness-constraints/0822-user-authority-operation-gate.md) — `#009_CONSTRAINTS_0822`, `PRIORITY: [CRITIAL]`
+
+### project-constraints/
+
+Folder: [project-constraints/](project-constraints/)
+
+Purpose: User-authorized constraints on work in the project using this Harness.
+
+Read when: every session, before task work, following the session retrieval rule.
+
+Skip when: never; read all Markdown files, then apply active constraints.
+
+Resources:
+
+- [Project constraint guide](project-constraints/README.md)
+- [User authority for writing unit tests](project-constraints/1115-unit-test-authority.md) — `#058_CONSTRAINTS_1115`, `PRIORITY: [MEDIUM]`
 
 ## TAG: [DOMAIN]
 

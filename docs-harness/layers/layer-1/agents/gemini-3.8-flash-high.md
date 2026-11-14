@@ -2,7 +2,7 @@
 
 Applies only to a session resolved as `gemini-3.8-flash-high` (Gemini Flash
 3.8, effort high, inside Antigravity). It does not change task authority,
-scope boundaries, or the Bale/worker role in AGENTS.md; it changes how much
+scope boundaries, or the Bale/worker role in docs-harness/SESSION.md; it changes how much
 time and rigor to spend before treating code as finished.
 
 ## Why

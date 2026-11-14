@@ -1,8 +1,8 @@
 # Resource Templates and Identity
 
-This file owns template selection and resource identity. AGENTS.md owns task
-authority; workflow guides own behavior. Read the matching template before
-creating a resource. Templates contain placeholders and are not domain truth.
+This file owns template selection and resource identity. docs-harness/SESSION.md
+owns task authority; workflow guides own behavior. Read the matching template
+before creating a resource. Templates contain placeholders and are not domain truth.
 
 ## Catalog
 

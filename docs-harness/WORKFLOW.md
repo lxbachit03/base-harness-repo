@@ -1,8 +1,8 @@
 # Repository Workflow
 
-AGENTS.md owns task authority. docs-harness/INDEX.md owns retrieval. This file owns work
-shape and proof; consult the specific domain, ticket, or plan guide only when
-that workflow is involved.
+docs-harness/SESSION.md owns task authority. docs-harness/INDEX.md owns
+retrieval. This file owns work shape and proof; consult the specific domain,
+ticket, or plan guide only when that workflow is involved.
 
 ## Choose the work shape
 
@@ -28,8 +28,9 @@ create separate decision records for non-ticket work.
 2. Read the affected implementation, contracts, neighboring patterns, and proof.
 3. Make the smallest coherent change. Do not expand product policy by choosing
    an undocumented default.
-4. Run focused local verification under AGENTS.md. Inspect effects before
-   unfamiliar commands and honor narrower User restrictions.
+4. Run focused local verification under docs-harness/SESSION.md and the project constraints
+   loaded at session start. Inspect effects before unfamiliar commands and
+   honor narrower User restrictions.
 5. Update affected product docs and, for runtime/contract changes, apply the
    domain freshness contract. A stale claim blocks only actions relying on it;
    continue independent work and report the unresolved dependency.

@@ -47,7 +47,7 @@ use `Not applicable` with the inspected scope when the step has no such outcome;
 use `Unverified` when the outcome or its values cannot be established. Do not
 invent missing endpoints, statuses, fields, records, or business policy. Record
 no credentials or sensitive data. Inspecting a flow does not authorize calls to
-live APIs or databases; follow AGENTS.md for the operation boundary.
+live APIs or databases; follow docs-harness/SESSION.md for the operation boundary.
 
 ## Supporting evidence
 

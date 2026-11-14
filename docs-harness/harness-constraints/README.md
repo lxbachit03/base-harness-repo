@@ -4,6 +4,9 @@ This folder contains rules that constrain files, folders, or a specific task.
 Constraints describe boundaries that future work must preserve; they are not
 implementation plans or accepted product decisions.
 
+Project-specific rules live in [project-constraints/](../project-constraints/README.md)
+and are read at every session start through INDEX.
+
 ## Read When
 
 Read this folder when a task creates, edits, moves, renames, deletes, or

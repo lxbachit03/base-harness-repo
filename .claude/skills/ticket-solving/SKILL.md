@@ -32,7 +32,7 @@ Stop here for intake-only work.
    completed history only for a named request or dependency.
 2. Establish acceptance proof, inherited task authority, and current state.
 3. Implement the scoped solution and run routine local verification under
-   AGENTS.md. Record each solution decision as it is made in the ticket's dated
+   docs-harness/SESSION.md. Record each solution decision as it is made in the ticket's dated
    decision/ files and maintain its index per the workspace guide. Keep
    implementation code in its normal repository paths.
 4. Record meaningful progress, evidence, and applicable artifacts.

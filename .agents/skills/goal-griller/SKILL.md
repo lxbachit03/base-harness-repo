@@ -47,14 +47,14 @@ the intervention and fresh-rerun boundary while `$writing-for-agents` supplies
 the document-quality review. If research is needed before sequencing, run
 `$xia` first and then pass its evidence to `$sequence-execution-plan`. Preserve
 the repository entry order:
-`AGENTS.md` → `docs-harness/INDEX.md` → routed resources.
+`AGENTS.md` → `docs-harness/INDEX.md` → mandatory session retrieval → routed resources.
 
 Every route inherits the repository's authority and safety rules. If a risk is
 identified, include at least one proposal or solution inline. A read-only task
 stays in the response; when authorized work uses a ticket or plan, keep its
 risk and proposed response together there under the repository's constraint.
 
-Route selection does not grant new authority. Carry the User's existing task scope into the goal and follow AGENTS.md for local verification and external boundaries.
+Route selection does not grant new authority. Carry the User's existing task scope into the goal and follow docs-harness/SESSION.md for local verification and external boundaries.
 
 When a goal is drafted, include the route in the handoff:
 
@@ -123,7 +123,7 @@ Route:
 
 Constraints:
 - [...]
-- Follow AGENTS.md task authority, including routine local proof and explicit external boundaries.
+- Follow docs-harness/SESSION.md task authority, including routine local proof and explicit external boundaries.
 
 Operating rules:
 - Keep a concise progress log in [file] when the task is long-running.

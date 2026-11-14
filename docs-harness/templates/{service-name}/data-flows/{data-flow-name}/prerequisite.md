@@ -7,7 +7,7 @@
 
 Record everything that must exist or run before the E2E flow can start. Prefer
 the least stateful preparation path and keep commands or API calls as proposed
-instructions whose execution follows the inherited task authority in AGENTS.md.
+instructions whose execution follows the task authority in docs-harness/SESSION.md.
 Inspect setup effects; shared services or real data need specific authority.
 
 ## E2E Gate

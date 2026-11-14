@@ -7,8 +7,9 @@ description: Apply a scoped Harness improvement after an explicit request or acc
 
 Use for an explicitly requested change to guidance, skills, tools, or validation
 after observed reusable friction. A request to report friction remains read-only.
-Read AGENTS.md, docs-harness/INDEX.md, docs-harness/WORKFLOW.md, and the routed policy owners first.
-Use writing-for-agents for instruction edits. AGENTS.md owns task authority,
+Read AGENTS.md, docs-harness/INDEX.md and its mandatory session retrieval,
+docs-harness/WORKFLOW.md, and the routed policy owners first.
+Use writing-for-agents for instruction edits. docs-harness/SESSION.md owns task authority,
 including routine local proof; the workflow name is not an external-write grant.
 
 ## 1. Preserve the baseline
