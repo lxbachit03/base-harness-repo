@@ -1,17 +1,12 @@
-# Risk Resource
+# Risk and Proposed Response
 
-ID: #<next-sequence>_RISK_<MMDD>
-TAG: [RISK]
-PRIORITY: [<CRITIAL|MEDIUM|NORMAL>]
-TITLE: <title>
-CREATED: <YYYY-MM-DD>
-STATUS: <status>
-REFERENCES:
-- [#<proposal-resource-id> <proposal-title>](../proposals/<MMDD>-<proposal-slug>.md)
+Use this as inline scaffolding in an authorized ticket or plan; adapt heading
+levels to the owner. A Harness improvement record may serve as the plan. This
+note has no independent resource ID and does not create a separate file.
 
 ## Risk
 
-<Describe the security, performance, or memory-leak risk.>
+<Describe the evidenced risk and affected behavior.>
 
 ## Evidence
 
@@ -26,16 +21,15 @@ behavior/data flow, risk category, impact, indicators, and the code/ref state.>
 
 <List observable indicators or triggers.>
 
-## Mitigation
+## Proposed Response
 
-<Describe mitigations and ownership.>
+<State a concrete mitigation or investigation and its owner. A proposal is not
+accepted or implemented until the relevant authority authorizes it.>
+
+## Status
+
+<Record whether the response is proposed, authorized, implemented, or unknown.>
 
 ## Verification
 
 <Describe how mitigation and residual risk will be verified.>
-
-## Related Proposals
-
-<List the same canonical proposal Markdown links as REFERENCES. Every
-relationship must be reciprocal and every proposal must be listed on both
-sides.>

@@ -1,18 +1,12 @@
-# Proposal Resource
+# Proposal
 
-ID: #<next-sequence>_<RISK|PROPOSAL>_<MMDD>
-TAG: [RISK]
-PRIORITY: [<CRITIAL|MEDIUM|NORMAL>]
-TITLE: <title>
-CREATED: <YYYY-MM-DD>
-STATUS: <proposed|accepted|rejected|superseded>
-REFERENCES:
-- [#<risk-resource-id> <risk-title>](../risks/<MMDD>-<risk-slug>.md)
+Use as inline scaffolding in an authorized ticket or plan; adapt heading levels
+to the owner. A Harness improvement record may serve as the plan. This note has
+no independent resource ID and does not create a separate file. When a proposal
+addresses a risk, keep both together in the same ticket or plan.
 
-<!-- Paired with a risk: creation kind RISK, keep TAG: [RISK] and the risk
-link. Not paired with a risk: creation kind PROPOSAL, delete the TAG line, the
-risk link and the Related Risks section (templates/README.md); REFERENCES then
-lists related resources, or `- none`. Remove this comment. -->
+- Status: <proposed | accepted | rejected | superseded | unknown>
+- Authority and evidence: <User, source, or unknown>
 
 ## Problem
 
@@ -22,11 +16,6 @@ lists related resources, or `- none`. Remove this comment. -->
 
 <Describe relevant repository and domain context.>
 
-## Related Risks
-
-<List the same canonical risk Markdown links as REFERENCES. Every relationship
-must be reciprocal and every risk must be listed on both sides.>
-
 ## Options
 
 <List viable options and tradeoffs.>
@@ -34,10 +23,6 @@ must be reciprocal and every risk must be listed on both sides.>
 ## Recommendation
 
 <State the recommended option and why.>
-
-## Decision
-
-<Record the decision or the User decision still required.>
 
 ## Consequences
 

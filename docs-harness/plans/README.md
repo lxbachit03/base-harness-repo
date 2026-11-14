@@ -10,10 +10,11 @@ dependencies, or needs recovery, maintain one plan under active/. Start from
 docs-harness/templates/plan.md and use the metadata/ID rules in
 docs-harness/templates/README.md.
 
-Record outcome, context, scope, task authority, approach, progress, decisions,
-risks/recovery, validation, and result. Keep task-local choices in this record.
-Promote an accepted lasting decision into decisions/ only when future work
-must inherit it.
+Record outcome, context, scope, task authority, approach, progress,
+risks/recovery, validation, and result. For ticket work, link the ticket's
+decision history; do not create a separate decision record outside a ticket.
+Record each risk and its proposed response together inline in the plan, keeping
+suggestions distinct from accepted actions per the risk/proposal constraint.
 
 Read current plans through docs-harness/INDEX.md; avoid maintaining a second active-plan list
 here. Completed plans are historical evidence, not active policy. An older

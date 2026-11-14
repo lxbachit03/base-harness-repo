@@ -11,5 +11,6 @@ Expected shape:
 └── {ticket-number}-{ticket-2}/
 ```
 
-Each child is an independent ticket workspace. Add `{sample-big-ticket}/docs/`
-only when the source or an artifact is shared by multiple child tickets.
+Each child is an independent ticket workspace with its own `decision/` index.
+Add `{sample-big-ticket}/docs/` only when the source or an artifact is shared
+by multiple child tickets.

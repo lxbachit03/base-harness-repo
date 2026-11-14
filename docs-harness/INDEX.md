@@ -21,11 +21,11 @@ whose activation checklist is checked.
 Discover current work by metadata, not by loading every body:
 
 - plans/active/: ID, title, status, priority, references;
-- tickets/active/: discover nested ticket.md files and read identity/status;
-- risks/: ID, title, status, priority, references.
+- tickets/active/: discover nested ticket.md files and read identity/status.
 
 Read only records relevant to the task and applicable critical constraints.
-Completed history and proposals are retrieved for a named request or dependency.
+Retrieve completed history for a named request or dependency; read task-local
+proposals with their ticket or plan.
 Historical and pending experiment text does not override the current policy
 owner. Read the recorded scope and decision before resuming an experiment.
 
@@ -37,7 +37,6 @@ after changes, a workspace switch, or a compaction that loses routing context.
 ```text
 docs-harness/
 ├── harness-constraints/
-├── decisions/
 ├── domain/
 ├── harness-improvements/
 ├── layers/
@@ -49,9 +48,6 @@ docs-harness/
 ├── plans/
 │   ├── active/
 │   └── completed/
-├── product/
-├── proposals/
-├── risks/
 ├── tickets/
 │   ├── active/
 │   └── completed/
@@ -182,6 +178,8 @@ section below.
 - [Remove the enhance-jev skill](harness-improvements/1031-remove-enhance-jev.md) — `#052_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
 - [Make Codex capability discovery work across sessions](harness-improvements/1031-codex-capability-discovery.md) — `#053_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
 - [Explain onboarding E2E flows one step at a time](harness-improvements/1031-onboarding-step-flows.md) — `#054_IMPROVE_HARNESS_1031`, `PRIORITY: [MEDIUM]`
+- [Keep decision history inside each ticket](harness-improvements/1114-ticket-decision-history.md) — `#055_IMPROVE_HARNESS_1114`, `PRIORITY: [MEDIUM]`
+- [Remove the product, risks and proposals folders](harness-improvements/1114-remove-product-risk-proposal-folders.md) — `#056_IMPROVE_HARNESS_1114`, `PRIORITY: [MEDIUM]`
 
 Coordination-skill references in earlier records are historical, including
 records with a pending experiment status. Their deleted paths remain available
@@ -201,7 +199,7 @@ Skip when: no repository or task constraint is relevant.
 Resources:
 
 - [Constraint guide](harness-constraints/README.md)
-- [Risk-to-proposal suggestion and cross-link constraint](harness-constraints/0812-risk-proposal-suggestion-cross-link.md) — `#001_CONSTRAINTS_0812`, `PRIORITY: [MEDIUM]`
+- [Risk and proposed response constraint](harness-constraints/0812-risk-proposal-suggestion-cross-link.md) — `#001_CONSTRAINTS_0812`, `PRIORITY: [MEDIUM]`
 - [Task authority for local work and explicit external boundaries](harness-constraints/0822-user-authority-operation-gate.md) — `#009_CONSTRAINTS_0822`, `PRIORITY: [CRITIAL]`
 
 ## TAG: [DOMAIN]
@@ -234,53 +232,7 @@ Resources:
 
 No uncertain domain resources are indexed yet.
 
-## TAG: [RISK]
-
-Folder: [risks/](risks/)
-
-Purpose: security, performance, and memory-leak risk records.
-
-Read when: the intent could introduce, assess, mitigate, or validate one of
-those risks.
-
-Skip when: no security, performance, or memory-leak concern is in scope.
-
-Resources:
-
-- [Risk guide](risks/README.md)
-
-No risk resources are indexed yet.
-
 ## Supporting Folders
-
-### decisions/
-
-Folder: [decisions/](decisions/)
-
-Purpose: lasting product, architecture, data, security, compatibility, and
-validation decisions that future work must inherit.
-
-Read when: a task makes or relies on a consequential decision.
-
-Skip when: the task has no lasting decision context.
-
-Resources:
-
-- [Decisions README](decisions/README.md)
-
-### product/
-
-Folder: [product/](product/)
-
-Purpose: consumer-product behavior derived from accepted intent.
-
-Read when: the task depends on current product behavior or product contracts.
-
-Skip when: the task is only Harness infrastructure or routing work.
-
-Resources:
-
-- [Product README](product/README.md)
 
 ### plans/
 
@@ -392,23 +344,6 @@ Resources:
 
 - [Completed ticket workspace guide](tickets/completed/README.md)
 
-### proposals/
-
-Folder: [proposals/](proposals/)
-
-Purpose: options, recommendations, and decisions awaiting or recording User
-authority.
-
-Read when: the intent evaluates alternatives or requires a documented decision.
-
-Skip when: no proposal or decision context is relevant.
-
-Resources:
-
-- [Proposal guide](proposals/README.md)
-
-No proposal resources are indexed yet.
-
 ### layers/
 
 Folder: [layers/](layers/)
@@ -450,7 +385,7 @@ Resources:
 
 Folder: [templates/](templates/)
 
-Purpose: stable system templates for creating canonical resources.
+Purpose: stable templates for canonical resources and task-local artifacts.
 
 The folder-layout examples under `templates/` are scaffolding only and are not
 active ticket records.
@@ -465,12 +400,12 @@ Resources:
 - [Activity diagram template](templates/activity-diagram.md)
 - [Harness improvement template](templates/harness-improvement.md)
 - [Constraint template](templates/constraint.md)
-- [Decision template](templates/decision.md)
+- [Ticket decision template](templates/decision.md)
 - [Domain template](templates/domain.md)
 - [Domain entity/schema template](templates/domain-entity.md)
 - [Legacy execution-plan pointer](templates/exec-plan.md)
-- [Risk template](templates/risk.md)
-- [Proposal template](templates/proposal.md)
+- [Inline risk template](templates/risk.md)
+- [Inline proposal template](templates/proposal.md)
 - [Canonical plan template](templates/plan.md)
 - [Ticket template](templates/ticket.md)
 - [API inventory template](templates/apis.md)

@@ -32,7 +32,7 @@ links when applicable; otherwise note why they are unnecessary.>
 
 ## Plan and Decisions
 
-<Smallest sequence; dated task-local decisions and their authority.>
+<Smallest sequence. Link this ticket's decision/README.md as its decision history.>
 
 ## Implementation or Resolution
 

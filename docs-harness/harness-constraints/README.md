@@ -19,7 +19,7 @@ linked from `docs-harness/INDEX.md`.
 - Keep task-local implementation choices in the plan or change, not in a
   generic constraint record.
 
-Risk/proposal pairing follows
+Risk reporting and task-local proposed responses follow
 [#001_CONSTRAINTS_0812](0812-risk-proposal-suggestion-cross-link.md).
 
 ## Skip When

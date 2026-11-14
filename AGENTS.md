@@ -67,8 +67,8 @@ intent, authority, recovery, or proof is insufficient; continue independent
 authorized work.
 
 For every risk reported, include a concrete mitigation or investigation
-proposal. It remains a suggestion until authorized. The persisted risk/proposal
-contract lives in docs-harness/harness-constraints/0812-risk-proposal-suggestion-cross-link.md.
+proposal. It remains a suggestion until authorized. The risk/proposal contract
+lives in docs-harness/harness-constraints/0812-risk-proposal-suggestion-cross-link.md.
 
 ## Working memory and documentation
 

@@ -7,10 +7,8 @@ upstream-maintenance material only when the task explicitly needs it.
 
 - `docs-harness/WORKFLOW.md`: canonical request, planning, judgment, validation, and
   completion behavior.
-- `product/`: consumer-owned product behavior derived from accepted intent.
 - `plans/`: one evolving Git-native plan for work that needs durable memory.
-- `decisions/`: lasting product and architecture choices.
-- `templates/decision.md`: lasting-decision template.
+- `templates/decision.md`: template for a ticket-local decision.
 - `templates/plan.md`: canonical durable execution-plan template.
 
 These files are generic Harness structure. They do not select an application
@@ -48,8 +46,6 @@ separate context types; do not place a resource in a different folder merely
 because its subject overlaps:
 
 - `harness-constraints/`: rules that constrain files, folders, or a specific task.
-- `decisions/`: lasting product, architecture, data, security, compatibility,
-  or validation choices.
 - `domain/`: confirmed or uncertain project/domain knowledge.
 - `harness-improvements/`: the routing category for improvements to agent
   guidance, tools, runbooks, or validation.
@@ -62,9 +58,6 @@ because its subject overlaps:
 - `tickets/`: ticket intake, working records, attachments, and generated
   resolution artifacts managed by `$ticket-solving`; `active/` is the default
   route and `completed/` is historical context.
-- `product/`: consumer-product behavior derived from accepted intent.
-- `proposals/`: options and recommendations awaiting User authority.
-- `risks/`: security, performance, and memory-leak risk records.
 - `templates/`: stable placeholders used to create supported resources.
 
 Start with `AGENTS.md`, then `INDEX.md`, and read only the routed README or

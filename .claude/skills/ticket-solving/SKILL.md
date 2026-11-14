@@ -16,7 +16,8 @@ requested outcomes.
 1. Locate the supplied source and read it completely. Preserve its wording.
 2. Establish ticket count, source IDs or TBD, boundaries, and attachment owners.
    Clarify conflicting sources or identity collisions before creating records.
-3. Use the guide's direct or batch-child layout and docs-harness/templates/ticket.md.
+3. Use the guide's direct or batch-child layout and docs-harness/templates/ticket.md;
+   create or reuse each ticket's decision/ index as the guide specifies.
 4. Add API/schema inventories and an artifact manifest only when applicable,
    reading each selected template first. Preserve existing files.
 5. Record unknown acceptance criteria instead of inventing requirements.
@@ -26,12 +27,15 @@ Stop here for intake-only work.
 
 ## Solve
 
-1. Read the relevant active ticket and its applicable inventories/manifest.
-   Retrieve completed history only for a named request or dependency.
+1. Read the relevant active ticket and its applicable inventories/manifest;
+   create or reuse its decision/ index for authorized solving. Retrieve
+   completed history only for a named request or dependency.
 2. Establish acceptance proof, inherited task authority, and current state.
 3. Implement the scoped solution and run routine local verification under
-   AGENTS.md. Keep implementation code in its normal repository paths.
-4. Record meaningful progress, decisions, evidence, and applicable artifacts.
+   AGENTS.md. Record each solution decision as it is made in the ticket's dated
+   decision/ files and maintain its index per the workspace guide. Keep
+   implementation code in its normal repository paths.
+4. Record meaningful progress, evidence, and applicable artifacts.
 5. For domain discovery or runtime changes apply docs-harness/domain/README.md;
    pair every reported risk with an inline mitigation or investigation proposal.
 6. Mark resolved only with acceptance evidence. Apply completed moves and
@@ -42,7 +46,7 @@ Do not expand from source organization to implementation or external actions.
 
 ## Validate and report
 
-Verify ticket count and identity, required ticket.md records, applicable
+Verify ticket count and identity, ticket.md and decision/ records, applicable
 inventories/manifests, their evidence and links, acceptance proof, lifecycle,
 and final diff. Inspect only relevant records; an inspection never normalizes
 metadata. Update stable INDEX routes and folder tree when their structure

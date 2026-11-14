@@ -29,11 +29,6 @@ REFERENCES:
 
 - [ ] <Verifiable step.>
 
-## Decisions
-
-<Task-local decisions and their authority. Promote accepted lasting choices only
-when future work must inherit them.>
-
 ## Validation
 
 <Focused checks, required checks, observed results, and unattempted proof.>

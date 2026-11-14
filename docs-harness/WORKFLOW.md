@@ -17,9 +17,9 @@ that workflow is involved.
   audit is requested. Audits are not prerequisites for ordinary inspection or
   implementation.
 
-Keep task-local progress and decisions together. Add a separate accepted
-decision only when future work must inherit a consequential product,
-architecture, ownership, security, compatibility, or validation choice.
+Keep task-local progress together. For ticket work, record solution decisions
+in the ticket's `decision/` folder under docs-harness/tickets/README.md. Do not
+create separate decision records for non-ticket work.
 
 ## Execute a change
 

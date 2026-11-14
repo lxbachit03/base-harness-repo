@@ -11,12 +11,12 @@ creating a resource. Templates contain placeholders and are not domain truth.
 - [harness-improvement.md](harness-improvement.md): experiment-specific sections
   for each improvement record; follow ../harness-improvements/README.md for its lifecycle.
 - [constraint.md](constraint.md): file/folder/task boundaries.
-- [decision.md](decision.md): accepted lasting choices.
+- [decision.md](decision.md): one dated, ticket-local solution decision.
 - [domain.md](domain.md): canonical date-prefixed domain README.
 - [domain-entity.md](domain-entity.md): relevant schema/field evidence.
 - [activity-diagram.md](activity-diagram.md): cited flow diagrams.
-- [risk.md](risk.md) and [proposal.md](proposal.md): durable paired risk
-  tracking; proposal.md also covers standalone proposals.
+- [risk.md](risk.md) and [proposal.md](proposal.md): inline risk and proposal
+  scaffolding for an authorized ticket or plan.
 - [ticket.md](ticket.md): every ticket's source, result, and evidence.
 - [apis.md](apis.md), [entities.md](entities.md): applicable ticket inventories.
 - [ticket-docs-README.md](ticket-docs-README.md): manifest when artifacts exist.
@@ -34,19 +34,20 @@ and REFERENCES before their first level-two heading. Use exactly one priority:
 [CRITIAL], [MEDIUM], or [NORMAL]. The existing CRITIAL spelling is retained for
 compatibility. Choose it from evidenced impact; do not fill an empty index.
 
-Use one TAG line per classification: [IMPROVE_HARNESS], [CONSTRAINTS], [RISK],
-or [DOMAIN]. A domain resource also needs exactly one [CONFIRMED]/[UNCERTAIN]
+Use one TAG line per classification: [IMPROVE_HARNESS], [CONSTRAINTS], or
+[DOMAIN]. A domain resource also needs exactly one [CONFIRMED]/[UNCERTAIN]
 line; an improvement record needs no domain confirmation state. Combined legacy
-domain tags remain readable. A supporting plan or decision with no applicable
-classification may omit TAG, and a proposal not paired with a risk omits it;
-the folder supplies the route. Do not invent a
-product domain or a new TAG solely to file a plan.
+domain tags remain readable. A supporting plan with no applicable classification
+may omit TAG; the folder supplies the route. Do not invent a product domain or
+a new TAG solely to file a plan.
 
 A canonical file is stored once and linked from every applicable classification
 and lifecycle route; a legacy improvement plan under plans/ is linked only from
 its lifecycle route. Templates, ordinary tickets, and child evidence artifacts
-do not receive independent resource IDs. A schema may remain supporting evidence
-linked from its canonical domain; give it an ID only when separately promoted.
+do not receive independent resource IDs. Ticket-local decision filenames follow
+../tickets/README.md rather than the canonical resource naming rule below. A
+schema may remain supporting evidence linked from its canonical domain; give it
+an ID only when separately promoted.
 
 ## Immutable identity
 
@@ -54,8 +55,8 @@ Before creating a resource, discover real ID metadata across docs-harness/,
 excluding templates. Select the next global sequence, max + 1, padded to at
 least three digits. Use #<sequence>_<creation-kind>_<MMDD>.
 Creation kind is the applicable classification (DOMAIN_UNCERTAIN or
-DOMAIN_CONFIRMED for a domain); an unclassified supporting plan/decision may
-use PLAN/DECISION, and a proposal not paired with a risk uses PROPOSAL. Creation kind records origin, not current classification.
+DOMAIN_CONFIRMED for a domain); an unclassified supporting plan may use PLAN.
+Creation kind records origin, not current classification.
 A confirmation changes TAG and routing without changing the ID.
 
 CREATED uses YYYY-MM-DD and MMDD uses the creation date in Asia/Bangkok.
@@ -77,6 +78,7 @@ links in the same task. Content-only changes need no INDEX rewrite unless
 routing metadata changed. Resolve relative links and duplicate IDs before
 completion. Static checks do not confirm business facts.
 
-Persisted risk/proposal pairs follow the canonical constraint; inline risks in
-a task can stay inline with a proposal. Keep accepted decisions separate from
-unaccepted recommendations. Templates keep stable names and no real IDs.
+Risk and proposed-response notes follow the canonical constraint and stay
+together inline in the authorized ticket or plan. Keep accepted decisions
+separate from unaccepted recommendations. Templates keep stable names and no
+real IDs.

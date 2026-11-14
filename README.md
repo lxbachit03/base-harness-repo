@@ -23,7 +23,7 @@ yêu cầu triển khai bao gồm sửa cục bộ và kiểm tra phù hợp. Re
 Deploy, thao tác dữ liệu thật, external writes và commit/push có ranh giới riêng
 theo AGENTS.md.
 
-Một ticket nhỏ chỉ cần ticket.md; inventory và manifest có khi cần. Onboarding
+Mỗi ticket có ticket.md và thư mục decision/; inventory và manifest có khi cần. Onboarding
 tạo bằng chứng theo từng flow và có thể tổng hợp domain UNCERTAIN. Việc xác nhận
 thành CONFIRMED vẫn thuộc User.
 

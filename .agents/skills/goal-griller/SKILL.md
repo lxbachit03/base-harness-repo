@@ -51,8 +51,8 @@ the repository entry order:
 
 Every route inherits the repository's authority and safety rules. If a risk is
 identified, include at least one proposal or solution inline. A read-only task
-must not create or modify a risk, proposal, or plan resource; persistence needs
-explicit User authority and reciprocal risk/proposal links.
+stays in the response; when authorized work uses a ticket or plan, keep its
+risk and proposed response together there under the repository's constraint.
 
 Route selection does not grant new authority. Carry the User's existing task scope into the goal and follow AGENTS.md for local verification and external boundaries.
 

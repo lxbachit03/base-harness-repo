@@ -1,43 +1,34 @@
-# Decision Resource
+# Ticket Decision: <short title>
 
-ID: #<next-sequence>_DECISION_<MMDD>
-PRIORITY: [<CRITIAL|MEDIUM|NORMAL>]
-TITLE: <title>
-CREATED: <YYYY-MM-DD>
-STATUS: accepted
-REFERENCES:
-- <authority-or-source>
+Use as `<ticket>/decision/MM-DD-<lowercase-kebab-case-name>.md` and link it
+from that ticket's `decision/README.md`. The date in the filename is the
+decision date in Asia/Bangkok; preserve the full date below. This is a ticket
+artifact and does not receive a global Harness resource ID.
 
-Use docs-harness/templates/README.md for applicable TAG lines and immutable identity.
-Create only after the relevant choice is accepted.
-
-## Status
-
-<Current accepted or superseded state, decision date, and authority.>
+- Date: <YYYY-MM-DD>
+- Status: <proposed | accepted | rejected | superseded>
+- Decision-maker or authority: <User, agent within task authority, or unknown>
+- Source and evidence: <link to the specific ticket section, code, test, or
+  discussion supporting the choice; identify unavailable sources explicitly>
 
 ## Context
 
-What problem, constraint, or ambiguity forced this decision?
+<The ticket problem or uncertainty that required this choice.>
 
 ## Decision
 
-What did we decide?
+<The proposed or selected approach; distinguish a proposal from an accepted
+choice and an agent's implementation judgment from User-approved policy.>
 
-## Alternatives Considered
+## Rationale and Alternatives
 
-1. Alternative.
+<Why this approach was chosen and the alternatives considered, when relevant.>
 
-## Consequences
+## Consequences and Follow-Up
 
-Positive:
+<Expected effects, tradeoffs, verification, and any unresolved questions.>
 
-- Item.
+## History
 
-Tradeoffs:
-
-- Item.
-
-## Follow-Up
-
-- Item.
+<Status changes, superseding record, and evidence; preserve prior history.>
 
