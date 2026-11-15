@@ -64,6 +64,9 @@ docs-harness/
 ├── project-constraints/
 ├── tickets/
 │   ├── active/
+│   │   └── 01-sample-ticket/
+│   │       └── docs/
+│   │           └── prd-research/
 │   └── completed/
 └── templates/
     ├── {sample-big-ticket}/
