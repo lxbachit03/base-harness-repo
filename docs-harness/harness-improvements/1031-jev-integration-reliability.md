@@ -21,6 +21,15 @@ REFERENCES:
 - .agents/skills/typesafe-ai/tests/reliability-check.ps1
 - .claude/skills/typesafe-ai/
 
+## Current state notice (2026-11-15)
+
+By User decision ([#065](1115-jev-trigger-and-fixture-cleanup.md)), the three
+`router-*.json` fixtures listed above left the working tree after `#051`
+retired the router they calibrated, and `reliability-check.ps1` followed at
+the User's request. Read any of them with
+`git show 67a453d:.agents/skills/typesafe-ai/tests/<file>`. This record keeps
+its original scope and evidence.
+
 ## Objective
 
 Improve the reliability and verifiability of the TypeSafe skill and its

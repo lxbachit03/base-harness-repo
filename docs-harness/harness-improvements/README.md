@@ -81,3 +81,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Research ticket PRDs into traceable Markdown and HTML](1115-prd-research-skill.md) — `#062_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
 - [Repeatable read-only Harness status check](1115-harness-check-skill.md) — `#063_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
 - [Cut the session-start context load without losing routes](1115-session-start-context-cut.md) — `#064_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
+- [Consult Jev only on request and retire unused Jev test assets](1115-jev-trigger-and-fixture-cleanup.md) — `#065_IMPROVE_HARNESS_1115`, `PRIORITY: [NORMAL]`

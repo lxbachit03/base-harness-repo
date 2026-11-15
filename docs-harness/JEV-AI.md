@@ -30,8 +30,8 @@ The active Jev transport resides in `.agents/skills/typesafe-ai/scripts/`.
 The `jev-hook` checkbox controls automatic consultation. The User retired the
 dedicated authority, ticket-triage, domain-freshness, and skill-routing Jev
 helpers. Apply SESSION.md authority, use native agent skill selection, and follow
-the relevant ticket/domain workflows directly. Jev remains available for
-explicitly requested or otherwise relevant semantic work.
+the relevant ticket/domain workflows directly. Beyond the jev-hook, consult
+Jev only when the User asks for it, for example by naming Jev.
 
 ---
 
