@@ -200,6 +200,7 @@ section below.
 - [Route session policy through the Harness index](harness-improvements/1115-session-policy-routing.md) — `#059_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
 - [Name onboarding E2E and activity step files](harness-improvements/1115-onboarding-e2e-activity-files.md) — `#060_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
 - [Document prerequisite data in onboarding E2E overviews](harness-improvements/1115-onboarding-e2e-prerequisites.md) — `#061_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
+- [Research ticket PRDs into traceable Markdown and HTML](harness-improvements/1115-prd-research-skill.md) — `#062_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
 
 Coordination-skill references in earlier records are historical, including
 records with a pending experiment status. Their deleted paths remain available
