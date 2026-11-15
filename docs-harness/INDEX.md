@@ -347,6 +347,9 @@ reads each hook's Activation section; a hook applies per its own checklist.
 Resources:
 
 - [Layer loading contract and model matching rule](layers/README.md)
+- [Layer 1 folder](layers/layer-1/README.md) and its
+  [model add-on folder](layers/layer-1/agents/README.md)
+- [Layer 2 folder](layers/layer-2/README.md)
 - [Hook mechanism and activation contract](layers/layer-2/hooks/README.md)
 
 ### onboarding/
@@ -396,6 +399,7 @@ Resources:
 - [API inventory template](templates/apis.md)
 - [Schema inventory template](templates/entities.md)
 - [Ticket docs manifest template](templates/ticket-docs-README.md)
+- [Folder README template](templates/folder-readme.md)
 
 Templates do not receive resource IDs or date-prefixed filenames.
 

@@ -20,6 +20,8 @@ before creating a resource. Templates contain placeholders and are not domain tr
 - [ticket.md](ticket.md): every ticket's source, result, and evidence.
 - [apis.md](apis.md), [entities.md](entities.md): applicable ticket inventories.
 - [ticket-docs-README.md](ticket-docs-README.md): manifest when artifacts exist.
+- [folder-readme.md](folder-readme.md): short README for a folder whose rules,
+  record or manifest live in another file.
 - [{service-name}/README.md]({service-name}/README.md): E2E service-flow scaffold.
 - [{ticket-number}-{single-ticket}/README.md]({ticket-number}-{single-ticket}/README.md)
   and [{sample-big-ticket}/README.md]({sample-big-ticket}/README.md): layout examples.

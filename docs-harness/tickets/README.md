@@ -24,6 +24,13 @@ the `decision/` folder and its README for each ticket, including each child of
 a batch. The batch container is not a ticket. A read-only review reports missing
 artifacts without creating them.
 
+Each ticket folder, batch container and artifact folder under a ticket's
+`docs/` also gets a short README.md from templates/folder-readme.md: a ticket
+folder's README points to its ticket.md, a batch container's to its child
+tickets, and an artifact folder's to the `docs/README.md` manifest. Create
+them during authorized intake or artifact creation; they repeat nothing the
+record or manifest already holds.
+
 Record the ticket source, owner when known, outcome, acceptance criteria,
 scope, validation, risks/proposals, and status in ticket.md. Link its decision
 history from ticket.md. Initialize `decision/README.md` as an index of the
@@ -97,7 +104,8 @@ follow harness-constraints/0812-risk-proposal-suggestion-cross-link.md. A
 proposal remains a suggestion until accepted by the relevant authority.
 
 Before handoff verify requested ticket count/identity, each decision folder,
-index, dated decision files and links, applicable artifacts, acceptance
+index, dated decision files and links, folder READMEs, applicable artifacts,
+acceptance
 evidence, lifecycle, and the final diff. Report outcomes, checks, unresolved
 decisions, and any unattempted proof. INDEX routes to stable ticket lifecycle
 folders; ordinary ticket records do not receive Harness IDs.

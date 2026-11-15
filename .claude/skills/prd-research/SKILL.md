@@ -28,7 +28,8 @@ unrelated existing files. Reuse an existing report only when its source and
 requested update are clear; resolve collisions without silently overwriting.
 
 Follow the ticket guide and docs-harness/templates/ticket-docs-README.md for
-the docs manifest and links. If a ticket record is missing, use TBD where
+the docs manifest and links, and give `prd-research/` its folder README from
+docs-harness/templates/folder-readme.md. If a ticket record is missing, use TBD where
 appropriate rather than adding a broken link or inventing a record. Update
 INDEX's folder tree when required by its routing contract; ticket artifacts do
 not receive global Harness IDs.

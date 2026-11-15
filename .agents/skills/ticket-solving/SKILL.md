@@ -17,7 +17,8 @@ requested outcomes.
 2. Establish ticket count, source IDs or TBD, boundaries, and attachment owners.
    Clarify conflicting sources or identity collisions before creating records.
 3. Use the guide's direct or batch-child layout and docs-harness/templates/ticket.md;
-   create or reuse each ticket's decision/ index as the guide specifies.
+   create or reuse each ticket's decision/ index and folder READMEs as the
+   guide specifies.
 4. Add API/schema inventories and an artifact manifest only when applicable,
    reading each selected template first. Preserve existing files.
 5. Record unknown acceptance criteria instead of inventing requirements.
@@ -46,8 +47,8 @@ Do not expand from source organization to implementation or external actions.
 
 ## Validate and report
 
-Verify ticket count and identity, ticket.md and decision/ records, applicable
-inventories/manifests, their evidence and links, acceptance proof, lifecycle,
+Verify ticket count and identity, ticket.md and decision/ records, folder
+READMEs, applicable inventories/manifests, their evidence and links, acceptance proof, lifecycle,
 and final diff. Inspect only relevant records; an inspection never normalizes
 metadata. Update stable INDEX routes and folder tree when their structure
 changes; ordinary tickets are not classified Harness resources.
