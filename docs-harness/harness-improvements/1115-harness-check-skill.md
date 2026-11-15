@@ -103,8 +103,19 @@ schedules. No committed unit tests, staging, commit or push.
   byte-identically to `.claude/skills/harness-check/`, and added the INDEX
   status-check pointer under Root Routing.
 - 2026-11-15: Verified on the repository, a pristine copy and a seeded copy in
-  the session scratchpad (see Validation); the copies were then deleted. The
-  fresh-session replay has not run.
+  the session scratchpad (see Validation); the copies were then deleted.
+- 2026-11-15: Goal A committed as `377a0fc`. `#064` then made the folder
+  READMEs part of routing; `harness-check` now validates their entries and
+  reports README-routed resources as a count.
+- 2026-11-15: A fresh replay shared with `#064` exercised the status check
+  (see Validation). The route and report worked; the check took 26 tool
+  calls, so validation item 3 failed. The revision awaits the User's choice of
+  when the requirement comparison runs.
+- 2026-11-15: The User chose to run the requirement comparison only on
+  request. SKILL.md (and mirror) now runs the script without
+  `--requirements` for a status request and names the skipped comparison in
+  the report; the INDEX pointer gained the requirement-question branch
+  (INDEX 14,996 bytes; start-up total 32,589, still within `#064`'s target).
 
 ## Validation
 
@@ -128,8 +139,22 @@ schedules. No committed unit tests, staging, commit or push.
    repository untouched (`git status` lists only in-scope paths, no
    `__pycache__`).
 
+5. Fresh replay (2026-11-15, fresh read-only worker, shared with `#064`):
+   asked "Kiểm tra tình trạng hiện tại của harness repo", the agent followed
+   the INDEX pointer to the user-invoked skill, ran the script with
+   `--requirements`, compared every requirement node and reported each
+   finding with a proposal, staying read-only. It reported the five README
+   gaps and seven requirement mismatches, two more than the manual check of
+   the same day (improve-harness's interview and audit-location question,
+   and the missing-template question of init-harness-repo 2.4.1). It took 26
+   tool calls: one script run, two direct JSON reads after its tool truncated
+   about 1 KB of the printout, and lookups for the requirement comparison.
+
+6. Revision (native): both copies byte-identical, INDEX links resolve,
+   `--quick` exits 0. Not yet observed in a fresh session.
+
 Unattempted: macOS/Linux and Python versions other than 3.14 (the only one
-installed); the fresh-session replay.
+installed); a fresh rerun of the revised status request.
 
 ## Risks
 
@@ -151,13 +176,19 @@ installed); the fresh-session replay.
 
 ## Decision and Result
 
-Decision: pending fresh rerun. The implementation is finished and natively
-verified; its effectiveness for a fresh agent is unverified.
+Decision: keep, revised on 2026-11-15; pending a fresh rerun of the revised
+case. A fresh agent found the skill, ran it and reported correctly without
+treating the script output as a verdict. Its status check took 26 tool calls
+(validation item 3 failed) because the requirement comparison had no bound.
+By User decision the comparison now runs only when the User asks whether the
+repository meets their requirements, the trigger in
+`docs/raw-requirements/README.md`; requirement 1.5 asks only that a status
+request reads the Harness state.
 
-Next case: a fresh session (a new Claude Code session, or a subagent the User
-authorizes), given only the repository and the request "Kiểm tra tình trạng
-hiện tại của harness repo", follows the INDEX pointer to the skill, runs the
-script, compares `docs/raw-requirements/` and reports every finding with a
-proposal. Record its tool-call count, any missed or invented finding, and
-whether it treated the script output as a verdict. Owner: the primary (Bale)
-session, once the User authorizes the replay.
+Next case: a fresh session asked "Kiểm tra tình trạng hiện tại của harness
+repo" runs the script without `--requirements`, reports the RESULT line and
+each drift row with a proposal, and names the skipped comparison; the
+expected cost after start-up is two tool calls (read SKILL.md, run the
+script). Asked whether the repository meets the User's requirements, it adds
+the comparison. Owner: the primary (Bale) session, when the User authorizes
+the rerun.

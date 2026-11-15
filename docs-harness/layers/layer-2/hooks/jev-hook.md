@@ -31,7 +31,8 @@ Exempt: the Jev consult itself (including locating and reading
 docs-harness/JEV-AI.md section 3.1 to build it), and session-start retrieval:
 AGENTS.md, docs-harness/INDEX.md, docs-harness/SESSION.md, PERSONA.md, the
 layers walk, hook files, Markdown files under docs-harness/project-constraints/,
-and listing folder and file names for INDEX's alignment check. Other file
+and INDEX's alignment check (the `harness-check --quick` run or its manual
+name comparison). Other file
 contents are gated. These exemptions enable the gate and cannot gate themselves.
 
 ## Script selection

@@ -51,8 +51,8 @@ and again after a workspace switch or a compaction that loses routing context.
       docs-harness/layers/layer-1/agents/<identifier>.md`), then read and apply
       it for the rest of the session. Otherwise skip silently; no match is the
       normal outcome.
-   2. If the layer has `hooks/`, read each hook file and apply the checked
-      ones per `hooks/README.md`.
+   2. If the layer has `hooks/`, read each hook's Activation section and apply
+      the checked hooks per `hooks/README.md`.
 3. If the identifier cannot be determined, skip add-on matching and continue;
    note the gap only when the task depends on a specific model's add-on.
 4. Layers apply cumulatively; a later layer may refine an earlier one, and any

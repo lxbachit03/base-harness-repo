@@ -9,11 +9,13 @@ load through the same session-start layers walk that ../README.md describes.
 
 At the session-start layers walk (ascending `layer-<N>` order):
 
-1. In every layer that contains `hooks/`, read each `*.md` hook file there.
-2. Apply only hooks whose activation checklist is checked; an unchecked hook
-   is dormant, so skip it and work normally. The hook file's current checkbox
-   state is the only authority; User prose or conversation does not override
-   it.
+1. In every layer that contains `hooks/`, read each `*.md` hook file's
+   Activation section (the `## Activation` heading and its checklist); a
+   search for its checklist line is enough.
+2. Read the rest of a hook only when its activation checklist is checked; an
+   unchecked hook is dormant, so skip it and work normally. The hook file's
+   current checkbox state is the only authority; User prose or conversation
+   does not override it.
 3. Agents never toggle a checklist. Only the User toggles, anytime; the
    change applies at the next load point — session start, post-compaction
    reload, a workspace switch, or when the User reports a toggle mid-session.
@@ -23,9 +25,10 @@ from the hook's gate, so a hook cannot deadlock on itself.
 
 ## Adding a hook
 
-1. Create `layers/<layer>/hooks/<hook-name>.md` with an activation checklist
-   block, its gate rule, script/tool selection, verdict handling, and an
-   explicit default for when the invoked tooling cannot answer.
+1. Create `layers/<layer>/hooks/<hook-name>.md` with its `## Activation`
+   checklist section first after the title, then its gate rule, script/tool
+   selection, verdict handling, and an explicit default for when the invoked
+   tooling cannot answer.
 2. Exempt the hook's own tool invocations explicitly.
 3. Include the hook's verdicts and bypasses in session outcome summaries.
 

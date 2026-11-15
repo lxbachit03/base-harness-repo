@@ -25,7 +25,8 @@ restore that policy.
 
 Update progress as evidence changes. After the outcome and relevant proof are
 recorded, move the plan from active/ to completed/ within the authorized task,
-and update INDEX and current links. Preserve ID, creation date, and evidence.
+replace its INDEX entry with an entry in completed/README.md, and update
+current links. Preserve ID, creation date, and evidence.
 
 New Harness improvement records live in docs-harness/harness-improvements/ and serve as their
 working memory under docs-harness/harness-improvements/README.md, rather than

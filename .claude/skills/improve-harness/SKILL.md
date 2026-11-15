@@ -25,7 +25,9 @@ Create it before intervention edits from docs-harness/templates/harness-improvem
 Name it MMDD-lowercase-kebab-case-description.md, using the creation date in
 Asia/Bangkok with zero-padded month/day, for example 0906-update-index-routing.md.
 Follow docs-harness/templates/README.md for the global ID, metadata and collision
-checks; use TAG: [IMPROVE_HARNESS] and index the record in that classification.
+checks; use TAG: [IMPROVE_HARNESS] and list the record in
+docs-harness/harness-improvements/README.md, the route INDEX keeps for that
+classification.
 
 Every new or continued improvement record must include a `## Purposes` section
 directly after `## Objective`. `Objective` states the observable change;
@@ -51,7 +53,7 @@ A question about the skill or an explicitly read-only review does not start a
 new improvement and creates no record. If the requested change lacks evidence,
 record the gap and proposed investigation before pausing the intervention.
 
-Done when the record exists, is indexed, and the accepted outcome and evidenced
+Done when the record exists, is listed, and the accepted outcome and evidenced
 gap are concrete. If no gap is established, propose an investigation before
 intervention edits; keep the record's status and missing evidence explicit.
 

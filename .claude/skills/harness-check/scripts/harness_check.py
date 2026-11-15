@@ -278,20 +278,29 @@ class Checker:
                         found.append((path, fields))
         return found
 
-    def routes(self):
-        """Files INDEX links directly, and files a docs-harness README it links links."""
-        direct, via_readme, readmes = set(), set(), []
+    def index_readmes(self):
+        """docs-harness README.md files that INDEX links: the lists it routes."""
+        readmes, seen = [], set()
         inside = key(self.harness) + os.sep
         for target in self.links(self.index):
             resolved = self.resolve(self.index, target)
             if resolved is None:
                 continue
             dest = resolved[0]
-            direct.add(key(dest))
             if (os.path.basename(dest) == "README.md" and os.path.isfile(dest)
-                    and key(dest).startswith(inside)):
+                    and key(dest).startswith(inside) and key(dest) not in seen):
+                seen.add(key(dest))
                 readmes.append(dest)
-        for readme in readmes:
+        return readmes
+
+    def routes(self):
+        """Files INDEX links directly, and files a folder README it links links."""
+        direct, via_readme = set(), set()
+        for target in self.links(self.index):
+            resolved = self.resolve(self.index, target)
+            if resolved is not None:
+                direct.add(key(resolved[0]))
+        for readme in self.index_readmes():
             for target in self.links(readme):
                 resolved = self.resolve(readme, target)
                 if resolved is not None:
@@ -317,8 +326,8 @@ class Checker:
                        "all %d resources with an ID are routed" % len(resources))
         if readme_only:
             report.add("info", "routing", INDEX_RULE,
-                       "%d resource(s) routed only through a folder README "
-                       "that INDEX links" % len(readme_only), readme_only)
+                       "%d resource(s) routed through a folder README that INDEX links"
+                       % len(readme_only))
 
     def check_index_links(self, report):
         checked, problems = 0, []
@@ -429,36 +438,41 @@ class Checker:
 
     def check_index_entries(self, report, resources):
         by_key = dict((key(path), fields) for path, fields in resources)
-        problems, seen, section, count = [], set(), "(top)", 0
-        for line in strip_code(self.text(self.index), inline=False).split("\n"):
-            if line.startswith("#"):
-                section = line.lstrip("#").strip()
-                continue
-            match = INDEX_ENTRY_RE.match(line)
-            if not match:
-                continue
-            count += 1
-            target, entry_id, priority = match.groups()
-            dest = os.path.normpath(os.path.join(self.harness, urllib.parse.unquote(target)))
-            fields = by_key.get(key(dest))
-            if fields is None:
-                problems.append("[%s] %s: target has no ID metadata" % (section, target))
-                continue
-            if fields["ID"] != entry_id:
-                problems.append("[%s] %s: entry says %s, file says %s"
-                                % (section, target, entry_id, fields["ID"]))
-            if fields.get("PRIORITY") != priority:
-                problems.append("[%s] %s: entry says %s, file says %s"
-                                % (section, target, priority, fields.get("PRIORITY")))
-            if (section, key(dest)) in seen:
-                problems.append("[%s] %s: listed twice in one route" % (section, target))
-            seen.add((section, key(dest)))
+        problems, seen, count = [], set(), 0
+        for source in [self.index] + self.index_readmes():
+            section = self.hrel(source)
+            for line in strip_code(self.text(source), inline=False).split("\n"):
+                if line.startswith("#"):
+                    section = "%s > %s" % (self.hrel(source), line.lstrip("#").strip())
+                    continue
+                match = INDEX_ENTRY_RE.match(line)
+                if not match:
+                    continue
+                count += 1
+                target, entry_id, priority = match.groups()
+                dest = os.path.normpath(os.path.join(os.path.dirname(source),
+                                                     urllib.parse.unquote(target)))
+                fields = by_key.get(key(dest))
+                if fields is None:
+                    problems.append("[%s] %s: target has no ID metadata" % (section, target))
+                    continue
+                if fields["ID"] != entry_id:
+                    problems.append("[%s] %s: entry says %s, file says %s"
+                                    % (section, target, entry_id, fields["ID"]))
+                if fields.get("PRIORITY") != priority:
+                    problems.append("[%s] %s: entry says %s, file says %s"
+                                    % (section, target, priority, fields.get("PRIORITY")))
+                if (section, key(dest)) in seen:
+                    problems.append("[%s] %s: listed twice in one route" % (section, target))
+                seen.add((section, key(dest)))
+        where = "INDEX and its folder READMEs"
         if problems:
             report.add("drift", "index-entries", ENTRY_RULE,
-                       "%d problem(s) in %d ID entries" % (len(problems), count), problems)
+                       "%d problem(s) in %d ID entries in %s" % (len(problems), count, where),
+                       problems)
         else:
             report.add("ok", "index-entries", ENTRY_RULE,
-                       "%d ID entries match their files' ID and PRIORITY" % count)
+                       "%d ID entries in %s match their files' ID and PRIORITY" % (count, where))
 
     def check_links(self, report):
         skipped = set(key(os.path.join(self.root, p)) for p in SKIPPED_DIRS)

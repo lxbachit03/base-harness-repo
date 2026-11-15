@@ -42,8 +42,9 @@ may omit TAG; the folder supplies the route. Do not invent a product domain or
 a new TAG solely to file a plan.
 
 A canonical file is stored once and linked from every applicable classification
-and lifecycle route; a legacy improvement plan under plans/ is linked only from
-its lifecycle route. Templates, ordinary tickets, and child evidence artifacts
+and lifecycle route. Improvement records are listed in
+../harness-improvements/README.md and completed plans, legacy improvement plans
+included, in ../plans/completed/README.md; INDEX routes both lists. Templates, ordinary tickets, and child evidence artifacts
 do not receive independent resource IDs. Ticket-local decision filenames follow
 ../tickets/README.md rather than the canonical resource naming rule below. A
 schema may remain supporting evidence linked from its canonical domain; give it
@@ -73,8 +74,9 @@ the User. This is collision detection, not a concurrent allocation lock.
 
 ## Routing and proof
 
-After creating a resource, update INDEX tree, classification, and lifecycle
-links in the same task. Content-only changes need no INDEX rewrite unless
+After creating a resource, update the INDEX tree and its classification and
+lifecycle routes in the same task; an improvement record or completed plan
+goes in its folder list instead of an INDEX entry. Content-only changes need no INDEX rewrite unless
 routing metadata changed. Resolve relative links and duplicate IDs before
 completion. Static checks do not confirm business facts.
 

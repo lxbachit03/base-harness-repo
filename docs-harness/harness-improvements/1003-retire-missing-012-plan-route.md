@@ -11,6 +11,14 @@ REFERENCES:
 - docs-harness/harness-improvements/0921-utilizing-tools-claude-capability-catalog.md
 - .gitignore
 
+## Current state notice (2026-11-15)
+
+Commit `ba9fcc8` (2026-10-31) restored
+`plans/completed/0902-evidence-backed-domain-freshness.md`. By User decision
+on 2026-11-15 ([#064](1115-session-start-context-cut.md)), it is routed again
+as history from `plans/completed/README.md`; its content was not checked
+against the lost original. This record keeps its original scope and evidence.
+
 ## Objective
 
 `docs-harness/INDEX.md` routes only to existing files: the two entries for
