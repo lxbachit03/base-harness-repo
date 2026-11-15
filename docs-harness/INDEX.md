@@ -133,6 +133,8 @@ Resources:
 - [PERSONA.md](PERSONA.md)
 - [Self-review policy](SESSION.md#completion): inspect affected routes,
   metadata, links, and diff; disclose unattempted proof.
+- [Harness status check](../.agents/skills/harness-check/SKILL.md): follow it
+  for every User request to check the Harness status.
 - [Historical Herdr worker catalog](HERDR-AGENTS.md): retained for past
   coordination evidence after removal of the coordination skills; consult only
   when investigating that history.
@@ -204,6 +206,7 @@ section below.
 - [Name onboarding E2E and activity step files](harness-improvements/1115-onboarding-e2e-activity-files.md) — `#060_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
 - [Document prerequisite data in onboarding E2E overviews](harness-improvements/1115-onboarding-e2e-prerequisites.md) — `#061_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
 - [Research ticket PRDs into traceable Markdown and HTML](harness-improvements/1115-prd-research-skill.md) — `#062_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
+- [Repeatable read-only Harness status check](harness-improvements/1115-harness-check-skill.md) — `#063_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
 
 Coordination-skill references in earlier records are historical, including
 records with a pending experiment status. Their deleted paths remain available
