@@ -412,13 +412,13 @@ Trong repo này `domain-audit`, `harness-check`, `init-harness-repo` và
 
 ### 7.3 Skill có sẵn theo nhóm (phiên tham chiếu)
 
-**Skill của repo Harness** (18; `.claude/skills/` + `.agents/skills/`),
-model-invoked: `goal-griller`, `improve-harness`, `onboarding`, `prd-research`,
-`prompt-leverage`, `sequence-execution-plan`, `typesafe-ai`,
-`utilizing-tools-agy`, `utilizing-tools-claude`, `utilizing-tools-codex`,
-`utilizing-tools-opencode`, `utilizing-tools-orca-ade`, `writing-for-agents`,
-`xia`; user-invoked: `domain-audit`, `harness-check`, `init-harness-repo`,
-`ticket-solving`.
+**Skill của repo Harness** (19; `.claude/skills/` + `.agents/skills/`),
+model-invoked: `asset-design-style`, `goal-griller`, `improve-harness`,
+`onboarding`, `prd-research`, `prompt-leverage`, `sequence-execution-plan`,
+`typesafe-ai`, `utilizing-tools-agy`, `utilizing-tools-claude`,
+`utilizing-tools-codex`, `utilizing-tools-opencode`, `utilizing-tools-orca-ade`,
+`writing-for-agents`, `xia`; user-invoked: `domain-audit`, `harness-check`,
+`init-harness-repo`, `ticket-solving`.
 
 **Skill cấp user** (`~/.claude/skills/`, trùng với `~/.agents/skills/`):
 `computer-use`, `find-skills`, `orca-cli`, `orchestration`.
