@@ -3,10 +3,13 @@
 > **Tài liệu tham khảo kỹ thuật cho nhóm phát triển (Team-Facing Documentation)**
 > *Vị trí lưu trữ*: `docs/tools/claude/README.md`
 > *Phạm vi*: capability surface của Claude Code, đối chiếu runtime cục bộ
-> `2.1.278` với bằng chứng session ngày 2026-09-21.
+> `2.1.325` (bản app Claude Desktop) và `2.1.268` (CLI ở PATH) với bằng chứng
+> ngày 2026-11-15; mục 14 phân loại độ tin cậy của từng nhóm claim.
+> *Bản thiết kế*: [Cẩm nang Claude Code trên claude.ai](https://claude.ai/artifact/UKqfEULkmr5YGwfQuAKg5x) (mở được khi chủ sở hữu đã chia sẻ artifact).
 
 Tài liệu này là bản tương ứng cho Claude Code của [cẩm nang OpenCode](../opencode/README.md),
-[cẩm nang Codex](../codex/README.md) và [cẩm nang Antigravity](../antigravity/README.md).
+[cẩm nang Codex](../codex/README.md), [cẩm nang Antigravity](../antigravity/README.md)
+và [cẩm nang Orca ADE](../orca-ade/README.md).
 Nó giúp team chọn đúng built-in tool, deferred tool, MCP connector, plugin,
 skill và subagent cho từng loại công việc.
 
@@ -16,6 +19,16 @@ skill và subagent cho từng loại công việc.
 > theo account và theo bộ plugin đã cài. Một capability được tài liệu mô tả
 > hoặc có mặt trong marketplace **không** chứng minh rằng nó đã được cài, kết
 > nối, xác thực hoặc được phép dùng trong phiên của bạn.
+
+> [!NOTE]
+> Máy tham chiếu có **hai binary `claude`** cho kết quả khác nhau: bản app
+> (`%LOCALAPPDATA%\Claude-Data\claude_*\claude-code\<version>\*\claude.exe`,
+> `2.1.325`, chạy phiên Claude Desktop) và bản ở PATH (`~/.local/bin/claude.exe`,
+> `2.1.268`). `claude --version` trả về bản ở PATH, có thể khác bản host đang chạy
+> phiên của bạn; chạy `Get-Process claude | Select-Object Path` (PowerShell) và
+> tìm dòng có `claude-code\<version>` để biết bản host. Mỗi bằng chứng bên dưới
+> ghi rõ binary hoặc host đã đo. Ngày 2026-11-15, npm `latest` là `2.1.325` và
+> `stable` là `2.1.311`.
 
 ---
 
@@ -63,7 +76,15 @@ Claude Code phân tầng capability thành sáu lớp:
 
 ## 2. Built-in Tools (nạp sẵn)
 
-Phiên tham chiếu `2.1.278` expose sẵn 18 tool sau.
+Danh sách tool nạp sẵn **phụ thuộc host** (CLI hay Claude Desktop) và bản phát
+hành. Hai phiên tham chiếu: CLI `2.1.278` (2026-09-21) nạp sẵn 18 tool; Claude
+Desktop tab Code (host `2.1.325`, 2026-11-15) nạp sẵn 19 tool. Hai phiên chung
+15 tool lõi; `Workflow`, `SendFeedback` và `ShareOnboardingGuide` chỉ thấy ở phiên
+CLI (tài liệu chính thức `2.1.325` vẫn liệt kê), còn `SendUserFile`,
+`SearchPlugins`, `SuggestPluginInstall` và `SuggestSkills` chỉ thấy ở phiên
+Desktop (mục 2.4 và 2.5). Tài liệu chính thức liệt kê 45 tool đang dùng ở
+`2.1.325`; `TaskOutput` đã bị gỡ từ `2.1.277`, nên output file của task nền được
+đọc bằng `Read`.
 
 ### 2.1 Filesystem và code
 
@@ -77,7 +98,9 @@ Phiên tham chiếu `2.1.278` expose sẵn 18 tool sau.
 
 Ghi chú: `Grep` là ripgrep chứ không phải grep — phải escape literal brace
 (`interface\{\}`). Ưu tiên `Grep`/`Glob` hơn `grep`/`find` qua shell để kết quả
-tích hợp với permission UI và file link.
+tích hợp với permission UI và file link. Theo tài liệu chính thức `2.1.325`,
+`Glob` và `Grep` mặc định **không có** trên macOS, Linux và WSL (máy tham chiếu
+là Windows nên có sẵn); khi vắng, tìm bằng `Bash`.
 
 ### 2.2 Shell và thực thi
 
@@ -107,8 +130,8 @@ Cả hai hỗ trợ `run_in_background` (chạy detached, tự thông báo khi x
 | **`Skill`** | Nạp nội dung `SKILL.md` vào lượt hiện tại. | Kích hoạt quy trình chuyên biệt của repo hoặc built-in. |
 | **`ToolSearch`** | Nạp schema của deferred tool. | Bắt buộc trước khi gọi bất kỳ deferred tool nào. |
 | **`Agent`** | Khởi chạy subagent cô lập. | Ủy thác khảo sát độc lập; `subagent_type: "fork"` kế thừa context. |
-| **`ListAgents`** | Liệt kê agent/phiên có thể gửi message. | Tìm địa chỉ trước khi dùng `SendMessage`. |
-| **`Workflow`** | Chạy script điều phối nhiều subagent. | Chỉ khi User opt-in rõ ràng vào multi-agent orchestration. |
+| **`ListAgents`** | Liệt kê agent/phiên có thể gửi message (chỉ khi bật cross-session messaging); là nguồn của `/list-agents`. | Tìm địa chỉ trước khi dùng `SendMessage`. |
+| **`Workflow`** | Chạy script điều phối nhiều subagent (chỉ thấy ở phiên CLI). | Chỉ khi User opt-in rõ ràng vào multi-agent orchestration. |
 | **`AskUserQuestion`** | Hỏi User bằng lựa chọn có cấu trúc, hỗ trợ `preview`. | Quyết định thuộc về User, không suy ra được từ code. |
 | **`ScheduleWakeup`** | Hẹn lượt tiếp theo trong `/loop` dynamic mode. | Tự điều nhịp vòng lặp; `delaySeconds` bị kẹp `[60, 3600]`. |
 
@@ -118,8 +141,24 @@ Cả hai hỗ trợ `run_in_background` (chạy detached, tự thông báo khi x
 | :--- | :--- | :--- |
 | **`Artifact`** | Publish/read/list/delete trang HTML host trên claude.ai. | Dashboard, deck, tài liệu chia sẻ; xem mục 6. |
 | **`ReportFindings`** | Trả kết quả code review dạng danh sách có kiểu. | Chỉ khi hướng dẫn review đang chạy yêu cầu. |
-| **`SendFeedback`** | Soạn feedback về Claude Code (queue cục bộ). | Lỗi tái lập được hoặc sai hành vi model; không tự gửi. |
-| **`ShareOnboardingGuide`** | Upload `ONBOARDING.md` và trả link chia sẻ. | Sau khi User duyệt nội dung cuối. |
+| **`SendUserFile`** | Gửi file từ phiên tới thiết bị của User (`display`: `render` hoặc `attach`); chỉ thấy ở phiên Desktop. | Báo cáo, ảnh chụp, artifact mà User cần mở ngay. |
+| **`SendFeedback`** | Soạn feedback về Claude Code (queue cục bộ); chỉ thấy ở phiên CLI. | Lỗi tái lập được hoặc sai hành vi model; không tự gửi. |
+| **`ShareOnboardingGuide`** | Upload `ONBOARDING.md` và trả link chia sẻ; chỉ thấy ở phiên CLI. | Sau khi User duyệt nội dung cuối. |
+
+### 2.5 Tool có điều kiện hoặc riêng host
+
+Các tool dưới đây nằm trong tài liệu chính thức `2.1.325` hoặc trong phiên
+Desktop tham chiếu, nhưng không thuộc bộ nạp sẵn của cả hai phiên:
+
+| Tool | Điều kiện | Chức năng |
+| :--- | :--- | :--- |
+| `TaskCreate`, `TaskGet`, `TaskList`, `TaskUpdate` | [DOCS] Mặc định chỉ trên một số model; model khác phải opt-in | Quản lý task list của phiên; thay `TodoWrite`. |
+| `TodoWrite` | [DOCS] Tắt mặc định khi có bộ `Task*`; `CLAUDE_CODE_ENABLE_TASKS=0` bật lại | Checklist task kiểu cũ. |
+| `LSP` | [DOCS] Cần language server | Nhảy tới định nghĩa, tìm reference, báo lỗi type và cảnh báo. |
+| `WaitForMcpServers` | [DOCS] Chỉ khi tool search tắt | Chờ MCP server còn đang kết nối. |
+| `SubagentHandback` | [DOCS] Chỉ ở auto mode, cho subagent chạy local không phải fork (`2.1.271` trở lên) | Trả báo cáo cuối của subagent cho phiên nhận kết quả. |
+| `SearchPlugins`, `SuggestPluginInstall`, `SuggestSkills` | [SESSION] Quan sát ở phiên Desktop; không có trong tài liệu công khai | Tìm plugin trong catalog claude.ai của User; hiện thẻ gợi ý cài plugin hoặc skill. |
+| `ReadNotifications` | [SESSION] Quan sát ở phiên Desktop, khi có thông báo xếp hàng | Đọc thông báo đã xếp hàng: hoạt động PR đang theo dõi, trigger lịch, tin từ phiên khác. |
 
 ---
 
@@ -137,21 +176,25 @@ ToolSearch(query: "+slack send", max_results: 5)                 # bắt buộc 
 ```
 
 Schema trả về nằm trong khối `<functions>`; sau đó tool gọi được như tool
-thường. Danh sách deferred trong phiên tham chiếu:
+thường. Danh sách deferred trong phiên Desktop tham chiếu (2026-11-15):
 
 | Nhóm | Tool | Chức năng |
 | :--- | :--- | :--- |
 | Web | `WebFetch`, `WebSearch` | Lấy nội dung URL đã biết; tìm kiếm web real-time. |
 | Kế hoạch | `EnterPlanMode`, `ExitPlanMode` | Vào chế độ lập kế hoạch; trình plan xin duyệt. |
-| Git isolation | `EnterWorktree`, `ExitWorktree` | Làm việc trên worktree tách biệt. |
+| Git isolation | `EnterWorktree`, `ExitWorktree` | Làm việc trên worktree tách biệt; chỉ khi User yêu cầu rõ, không dùng để điều phối agent. |
 | Theo dõi | `Monitor`, `TaskStop` | Chờ điều kiện; dừng task nền. |
 | Lịch | `CronCreate`, `CronList`, `CronDelete` | Agent chạy theo cron. |
 | Liên lạc | `SendMessage`, `PushNotification`, `RemoteTrigger` | Gửi tin cho agent/phiên khác; thông báo đẩy. |
 | Artifact | `ArtifactComments`, `ArtifactData` | Comment thread; database chia sẻ của artifact. |
-| Khác | `NotebookEdit`, `DesignSync`, `EndConversation` | Sửa cell notebook; đồng bộ design; kết thúc hội thoại. |
+| MCP resource | `ListMcpResourcesTool`, `ReadMcpResourceTool`, `ReadMcpResourceDirTool` | Liệt kê, đọc resource và liệt kê thư mục resource do MCP server expose. |
+| Tài khoản claude.ai | `ListPlugins`, `ListSkills`, `SearchSkills` | Liệt kê plugin, skill đang bật trên tài khoản; tìm skill theo từ khóa. |
+| Phiên và project | `FetchInboxMessage`, `SendToProject`, `SendToProjectContext` | Đọc tin từ inbox của phiên (Remote Control); gửi tin tới Claude Project, chỉ trong lượt User chạy `/send-to-project`. |
+| Khác | `NotebookEdit`, `DesignSync` | Sửa cell notebook; đồng bộ design. |
 
 > [!NOTE]
-> `EndConversation` chỉ dùng khi User lạm dụng kéo dài hoặc yêu cầu demo trực
+> Phiên CLI `2.1.278` (2026-09-21) còn liệt kê `EndConversation`; phiên Desktop
+> không có. Tool này chỉ dùng khi User lạm dụng kéo dài hoặc yêu cầu demo trực
 > tiếp; phải nạp hướng dẫn đầy đủ qua `ToolSearch("select:EndConversation")`.
 
 ---
@@ -166,59 +209,43 @@ thường. Danh sách deferred trong phiên tham chiếu:
 | Plugin | `.mcp.json` bên trong plugin | Cài plugin là kéo theo cả bộ server. |
 | Account connector | Kết nối trên claude.ai | Dùng chung giữa các phiên của account. |
 
-Tool MCP mang tên đầy đủ `mcp__<server>__<tool>`, ví dụ
-`mcp__claude_ai_Claude_Docs__batch`. Phần lớn tool MCP cũng là **deferred** —
-vẫn phải `ToolSearch` trước khi gọi.
+Tool MCP mang tên đầy đủ `mcp__<server>__<tool>`. Phần `<server>` phụ thuộc host:
+phiên CLI 2026-09-21 dùng tên đọc được (`mcp__claude_ai_Claude_Docs__batch`),
+phiên Desktop 2026-11-15 dùng mã định danh của connector (`mcp__<uuid>__batch`).
+Phần lớn tool MCP cũng là **deferred** — vẫn phải `ToolSearch` trước khi gọi.
 
-### 4.2 Trạng thái cục bộ (`claude mcp list`, 2026-09-21)
+### 4.2 Trạng thái cục bộ (`claude mcp list`, 2026-11-15)
 
 Lệnh `claude mcp list` health-check từng server và là **nguồn xác thực** về
-trạng thái kết nối. Máy tham chiếu có **25 server** thuộc hai nguồn.
+trạng thái kết nối của các server mà *CLI* quản lý (project, user, plugin,
+connector claude.ai). Kết quả phụ thuộc binary:
 
-**Connector claude.ai — 16 server** (3 kết nối, 13 chưa xác thực):
+| Binary | Kết quả `claude mcp list` |
+| :--- | :--- |
+| `claude` ở PATH, `2.1.268` | 1 server: `plugin:postman:postman` (`mcp.postman.com/mcp`, HTTP) — `! Needs authentication` |
+| Bản app, `2.1.325` | `No MCP servers configured` (plugin `postman` đang `× disabled` ở bản này) |
 
-| Server | Endpoint | Trạng thái |
-| :--- | :--- | :--- |
-| Claude Docs | `api.anthropic.com/v1/pages/mcp` | ✔ Connected |
-| Google Drive | `drivemcp.googleapis.com/mcp/v1` | ✔ Connected |
-| Gmail | `gmailmcp.googleapis.com/mcp/v1` | ✔ Connected |
-| Tactiq | `mcp.tactiq.io` | ! Needs authentication |
-| Vercel | `mcp.vercel.com` | ! Needs authentication |
-| AI Signal | `api.tradingcentral.com/mcp/v1` | ! Needs authentication |
-| Adobe for creativity | `adobe-creativity.adobe.io/mcp` | ! Needs authentication |
-| Ahrefs | `api.ahrefs.com/mcp/mcp` | ! Needs authentication |
-| Figma | `mcp.figma.com/mcp` | ! Needs authentication |
-| Eraser | `app.eraser.io/api/mcp` | ! Needs authentication |
-| Postman | `mcp.postman.com/minimal` | ! Needs authentication |
-| Supermetrics Marketing Analytics | `mcp.supermetrics.com/mcp` | ! Needs authentication |
-| Notion | `mcp.notion.com/mcp` | ! Needs authentication |
-| Canva | `mcp.canva.com/mcp` | ! Needs authentication |
-| HubSpot | `mcp.hubspot.com/anthropic` | ! Needs authentication |
-| Microsoft 365 | `microsoft365.mcp.claude.com/mcp` | ! Needs authentication |
+Ảnh chụp 2026-09-21 (CLI `2.1.278`) liệt kê 25 server: 16 connector claude.ai
+(Claude Docs, Google Drive và Gmail đã kết nối, 13 chưa xác thực) và 9 server của
+plugin `productivity` (6 chưa xác thực, `asana` lỗi `Incompatible auth server`,
+2 chưa cấu hình). Không server nào trong số đó còn xuất hiện ở hai kết quả trên;
+nguyên nhân chưa được xác minh.
 
-**Server do plugin `productivity` cung cấp — 9 server** (6 chưa xác thực,
-1 lỗi, 2 chưa cấu hình):
-
-| Server | Endpoint | Trạng thái |
-| :--- | :--- | :--- |
-| `plugin:productivity:slack` | `mcp.slack.com/mcp` | ! Needs authentication |
-| `plugin:productivity:notion` | `mcp.notion.com/mcp` | ! Needs authentication |
-| `plugin:productivity:linear` | `mcp.linear.app/mcp` | ! Needs authentication |
-| `plugin:productivity:atlassian` | `mcp.atlassian.com/v1/mcp` | ! Needs authentication |
-| `plugin:productivity:monday` | `mcp.monday.com/mcp` | ! Needs authentication |
-| `plugin:productivity:clickup` | `mcp.clickup.com/mcp` | ! Needs authentication |
-| `plugin:productivity:asana` | `mcp.asana.com/v2/mcp` | ✘ **Failed to connect** — `Incompatible auth server: does not support dynamic client registration` |
-| `plugin:productivity:google calendar` | — | - Not configured |
-| `plugin:productivity:gmail` | — | - Not configured |
-
-Riêng `Claude Docs` có tool nạp sẵn trong phiên (`batch`, `guide`, `update`);
-`create`, `delete`, `export`, `query`, `read` là deferred.
+Phiên Desktop tham chiếu (2026-11-15) vẫn nạp MCP server của host mà
+`claude mcp list` không liệt kê: `Claude Docs` (connector; `batch`, `guide`,
+`update` nạp sẵn, còn `create`, `delete`, `export`, `query`, `read` là deferred),
+`claude-in-chrome`, `Claude_Browser` (browser pane), `terminal`, `visualize`,
+`scheduled-tasks`, `mcp-registry`, nhóm `ccd_*` (điều khiển phiên, sidebar, cửa
+sổ, PR và cài đặt của app Desktop), cùng server của các plugin `desktop-commander`,
+`pdf-viewer` và `postman` (chưa xác thực).
 
 > [!WARNING]
-> **Bề mặt tool của phiên ≠ trạng thái kết nối của CLI.** Trong phiên tham chiếu,
-> Gmail và Google Drive chỉ expose cặp `authenticate`/`complete_authentication`
-> dù `claude mcp list` báo `✔ Connected`. Khi cần biết server có kết nối thật
-> hay không, hãy chạy `claude mcp list` chứ đừng suy ra từ danh sách tool.
+> **Bề mặt tool của phiên ≠ trạng thái kết nối của CLI.** Phiên Desktop nạp nhiều
+> server trong khi `claude mcp list` báo 0–1 server; ngược lại, ở phiên CLI
+> 2026-09-21 Gmail và Google Drive chỉ expose cặp `authenticate`/
+> `complete_authentication` dù `claude mcp list` báo `✔ Connected`. Với server do
+> CLI quản lý, hãy chạy `claude mcp list` chứ đừng suy ra từ danh sách tool; với
+> server của host, bằng chứng là tool gọi được trong phiên.
 
 ### 4.3 Connection ladder
 
@@ -256,41 +283,56 @@ xác thực" — chưa phải capability dùng được.
 | :--- | :--- |
 | Marketplace đã đăng ký | `~/.claude/plugins/known_marketplaces.json` |
 | Bản sao marketplace | `~/.claude/plugins/marketplaces/<tên>/` |
-| Plugin đã cài | `~/.claude/plugins/synced/<id>/<tên-plugin>/` |
-| Manifest plugin đã cài | `~/.claude/plugins/synced/<id>/manifest.json` |
+| Plugin đã cài | `~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/` |
+| Bản ghi cài đặt (scope, `installPath`, version) | `~/.claude/plugins/installed_plugins.json` |
+| Dữ liệu bền của plugin | `~/.claude/plugins/data/<plugin-id>/` |
+| Plugin đồng bộ từ tài khoản claude.ai (`<tên>@synced`) | `~/.claude/plugins/synced/` — máy tham chiếu hiện không có thư mục này |
 
-Một plugin đóng gói: `.claude-plugin/plugin.json`, `skills/`, `.mcp.json`,
-`README.md`, `CONNECTORS.md`.
+Bố cục chuẩn của một plugin: `.claude-plugin/plugin.json` (manifest, tùy chọn),
+`skills/`, `commands/`, `agents/`, `hooks/hooks.json`, `.mcp.json`, `.lsp.json`
+và vài thư mục khác (`output-styles/`, `workflows/`, `themes/`, `monitors/`,
+`bin/`). Plugin bật trong `enabledPlugins` được nạp từ `installed_plugins.json` và
+`cache/` lúc khởi động phiên; thay đổi chỉ có hiệu lực sau `/reload-plugins` hoặc
+khi mở phiên mới.
 
-### 5.2 Trạng thái cục bộ (2026-09-21)
+### 5.2 Trạng thái cục bộ (2026-11-15)
 
-`claude plugin marketplace list` → marketplace duy nhất: **`claude-plugins-official`**
-(GitHub `anthropics/claude-plugins-official`), **310 plugin trong catalog**.
+`claude plugin marketplace list`:
 
-`claude plugin list` → plugin duy nhất đã cài: **`productivity@synced` v1.3.1**,
-trạng thái `✔ loaded`. (`manifest.json` ghi `version: "0039"` — đó là số build
-nội bộ, không phải version hiển thị.)
+- Bản `2.1.268` (PATH): một marketplace, **`claude-plugins-official`** (GitHub
+  `anthropics/claude-plugins-official`).
+- Bản `2.1.325` (app): thêm marketplace built-in **`anthropic-plugin-directory`**
+  (Anthropic Directory).
+- Bản sao cục bộ của `claude-plugins-official` liệt kê **317 plugin** trong catalog.
 
-`claude plugin details productivity` → component inventory và chi phí token:
+`claude plugin list` → plugin duy nhất đã cài: **`postman@claude-plugins-official`
+v2.3.0** (scope `user`). Trạng thái là `√ enabled` ở bản `2.1.268` nhưng
+`× disabled` ở bản `2.1.325`; `enabledPlugins` trong `~/.claude/settings.json`
+đặt `false` cho plugin này. Ảnh chụp 2026-09-21 là `productivity@synced` v1.3.1;
+plugin đó không còn được cài.
+
+`claude plugin details postman` → component inventory và chi phí token (cả hai
+binary cho cùng số liệu, trừ cách đếm MCP server):
 
 | Thành phần | Số lượng | Chi tiết |
 | :--- | :--- | :--- |
-| Skills | 4 | `memory-management`, `start`, `task-management`, `update` |
-| MCP servers | 9 | slack, notion, asana, linear, atlassian, monday, clickup, google calendar, gmail |
+| Skills | 19 | `ai-readiness`, `api-discovery`, `api-documentation`, `api-engineer`, `api-mocking`, `api-monitoring`, `api-simulation`, `api-testing`, `application-testing`, `ci-integration`, `cli-install`, `collection-schema-v3`, `datasets`, `flows`, `performance-testing`, `postman-mcp-server`, `variables`, `webhook-testing`, `workspaces` |
+| MCP servers | 0 ở `2.1.268`; 1 ở `2.1.325` | `postman` (schema tool resolve lúc chạy, không tính vào chi phí) |
 | Agents | 0 | — |
-| Hooks | 0 | — |
+| Hooks | 1 | `SessionStart` (harness-only, không tốn context model) |
 | LSP servers | 0 | — |
 
-Chi phí token (ước lượng): **always-on ~352 tok** cộng vào mọi phiên; on-invoke
-`memory-management` ~3.4k, `start` ~1.9k, `update` ~1.9k, `task-management` ~950.
+Chi phí token (ước lượng): **always-on ~2.1k tok** cộng vào mọi phiên khi plugin
+bật; on-invoke từ ~200 tok (`cli-install`) đến ~3k tok (`api-simulation`),
+`application-testing` ~2.7k tok.
 
 > [!TIP]
 > `claude plugin details <name>` là cách rẻ nhất để biết một plugin **thực sự**
 > đóng góp gì và tốn bao nhiêu context trước khi quyết định bật/tắt.
 
 > [!IMPORTANT]
-> 310 plugin trong catalog là **chưa cài**. Có trong marketplace ≠ đã cài;
-> đã cài ≠ đã xác thực. Đừng khai báo plugin chưa cài trong bảng capability.
+> 317 plugin trong catalog là **chưa cài**, trừ `postman`. Có trong marketplace ≠
+> đã cài; đã cài ≠ đã xác thực. Đừng khai báo plugin chưa cài trong bảng capability.
 
 ---
 
@@ -298,7 +340,9 @@ Chi phí token (ước lượng): **always-on ~352 tok** cộng vào mọi phiê
 
 `Artifact` publish một trang HTML lên claude.ai, mặc định private, và trả về
 link chia sẻ được. Đây là **hành động ra ngoài session**, không phải ghi file
-thường — chịu ranh giới authority của `AGENTS.md`.
+thường — chịu ranh giới authority của `docs-harness/SESSION.md`. Tool cần gói
+Pro, Max, Ultra, Team hoặc Enterprise và đăng nhập `/login` (tài liệu chính thức
+`2.1.325`).
 
 | Action | Tác dụng |
 | :--- | :--- |
@@ -321,17 +365,25 @@ thập credential. Luôn đọc hết file trước khi publish file không do m
 
 ### 7.1 Vị trí nạp
 
+Theo tài liệu chính thức `2.1.325` (trang Skills), Claude Code nạp skill từ:
+
 | Phạm vi | Đường dẫn |
 | :--- | :--- |
-| Project (Claude-native) | `.claude/skills/<name>/SKILL.md` |
-| Project (agent-compatible) | `.agents/skills/<name>/SKILL.md` |
-| User-level | `~/.claude/skills/` |
+| Project | `.claude/skills/<name>/SKILL.md` |
+| Project lồng nhau | `<subdir>/.claude/skills/<name>/SKILL.md`, nạp khi phiên ở trong `<subdir>` |
+| Thư mục thêm (`--add-dir`) | `.claude/skills/` trong thư mục đó |
+| User-level | `~/.claude/skills/<name>/SKILL.md` |
+| Tài khoản claude.ai (đồng bộ) | `~/.claude/skills/synced/` |
+| Enterprise | `.claude/skills/` trong thư mục managed settings |
 | Plugin | `<plugin>/skills/<name>/SKILL.md`, gọi là `<plugin>:<skill>` |
 | Built-in | Đi kèm bản phát hành Claude Code |
 
-Repo Harness này giữ bản gốc ở `.agents/skills/` và **mirror sang
-`.claude/skills/`**. Khi sửa skill phải đồng bộ cả hai; hai cây hiện chỉ khác
-line-ending ở một số file, nên khi so sánh hãy bỏ CR trước:
+`.agents/skills/` **không** nằm trong danh sách đó. Repo Harness này giữ bản gốc
+ở `.agents/skills/` (nguồn dùng chung với các agent khác) và **mirror sang
+`.claude/skills/`**, nơi Claude Code thực sự nạp. Khi sửa skill phải đồng bộ cả
+hai; hai cây hiện giống hệt từng byte (19 skill, 50 file, 2026-11-16).
+`harness-check` (mục `skill-mirror`) báo drift khi nội dung khác nhau và chỉ báo
+`info` khi chỉ khác line-ending; khi tự so sánh, hãy bỏ CR trước:
 `diff <(tr -d '\r' < a) <(tr -d '\r' < b)`.
 
 ### 7.2 Frontmatter và chế độ gọi
@@ -344,25 +396,32 @@ disable-model-invocation: true   # tùy chọn
 ---
 ```
 
+Theo tài liệu chính thức `2.1.325`, mọi field đều tùy chọn và `name` mặc định là
+tên thư mục; việc đặt `name` trùng tên thư mục là quy ước của repo. Tài liệu còn
+liệt kê field khác (`when_to_use`, `user-invocable`, `allowed-tools`, `paths`,
+`hooks`, ...); skill của repo chủ yếu dùng ba field trên.
+
 | Chế độ | Cách đặt | Hệ quả |
 | :--- | :--- | :--- |
 | **Model-invoked** | Bỏ `disable-model-invocation` | Agent tự gọi được; skill khác gọi được; `description` luôn chiếm context. |
-| **User-invoked** | `disable-model-invocation: true` | Chỉ User gõ `/<tên>` mới gọi; **không** xuất hiện trong danh sách available-skills; context load bằng 0. |
+| **User-invoked** | `disable-model-invocation: true` | Chỉ User gõ `/<tên>` mới gọi; **không** xuất hiện trong danh sách available-skills; context load bằng 0; không preload được vào subagent và không chạy được từ scheduled task theo phiên. |
 
-Trong repo này `domain-audit`, `init-harness-repo` và `ticket-solving` là user-invoked, nên **không**
-hiện trong danh sách skill tự động — đó là thiết kế, không phải lỗi.
+Trong repo này `domain-audit`, `harness-check`, `init-harness-repo` và
+`ticket-solving` là user-invoked, nên **không** hiện trong danh sách skill tự
+động — đó là thiết kế, không phải lỗi.
 
 ### 7.3 Skill có sẵn theo nhóm (phiên tham chiếu)
 
-**Skill của repo Harness** (`.claude/skills/` + `.agents/skills/`):
-`goal-griller`, `improve-harness`, `onboarding`, `prompt-leverage`,
-`sequence-execution-plan`, `typesafe-ai`, `utilizing-tools-agy`,
-`utilizing-tools-claude`, `utilizing-tools-codex`, `utilizing-tools-opencode`,
-`utilizing-tools-orca-ade`, `writing-for-agents`, `xia`; user-invoked:
-`domain-audit`, `init-harness-repo`, `ticket-solving`.
+**Skill của repo Harness** (18; `.claude/skills/` + `.agents/skills/`),
+model-invoked: `goal-griller`, `improve-harness`, `onboarding`, `prd-research`,
+`prompt-leverage`, `sequence-execution-plan`, `typesafe-ai`,
+`utilizing-tools-agy`, `utilizing-tools-claude`, `utilizing-tools-codex`,
+`utilizing-tools-opencode`, `utilizing-tools-orca-ade`, `writing-for-agents`,
+`xia`; user-invoked: `domain-audit`, `harness-check`, `init-harness-repo`,
+`ticket-solving`.
 
-**Plugin `productivity`**: `productivity:memory-management`,
-`productivity:start`, `productivity:task-management`, `productivity:update`.
+**Skill cấp user** (`~/.claude/skills/`, trùng với `~/.agents/skills/`):
+`computer-use`, `find-skills`, `orca-cli`, `orchestration`.
 
 **Built-in của Claude Code**:
 
@@ -370,12 +429,25 @@ hiện trong danh sách skill tự động — đó là thiết kế, không ph�
 | :--- | :--- |
 | Artifact & visual | `artifact-design`, `artifact-capabilities`, `artifact-diagramming`, `dataviz` |
 | Code quality | `code-review`, `simplify`, `security-review` |
-| Cấu hình harness | `update-config`, `keybindings-help`, `fewer-permission-prompts`, `init` |
-| Tự động hóa | `loop`, `schedule`, `workflow-authoring` |
+| Cấu hình harness | `update-config`, `keybindings-help`, `fewer-permission-prompts`, `init`, `plugin-authoring` |
+| Tự động hóa | `loop`, `schedule`; `workflow-authoring` (chỉ thấy ở phiên CLI `2.1.278`) |
 | Tham chiếu | `claude-api`, `run` |
 
-**Plugin `anthropic-skills`**: `docs`, `docx`, `pdf`, `pptx`, `xlsx`,
-`skill-creator`, `import-memory`, `morning`.
+**Plugin trong phiên Desktop tham chiếu** (2026-11-15). Chỉ `postman` nằm trong
+`claude plugin list`; nguồn nạp của các plugin còn lại chưa được xác minh:
+
+| Plugin | Skill |
+| :--- | :--- |
+| `postman` | 19 skill, liệt kê ở mục 5.2 |
+| `anthropic-skills` | `built-in-browser`, `chrome-browser`, `computer-use`, `consolidate-memory`, `deep-research`, `docs`, `docx`, `explain-usage`, `google-workspace`, `import-memory`, `morning`, `pdf`, `pptx`, `setup-claude`, `skill-creator`, `xlsx` |
+| `desktop-commander` | `ai-tools-setup`, `computer-health-check`, `desktop-commander-overview`, `knowledge-base`, `obsidian-vault`, `terminal` |
+| `pdf-viewer` | `annotate`, `fill-form`, `open`, `sign`, `view-pdf` |
+| `cowork-plugin-management` | `cowork-plugin-customizer`, `create-cowork-plugin` |
+| `frontend-design`, `skill-creator` | `frontend-design:frontend-design`, `skill-creator:skill-creator` |
+
+Ảnh chụp 2026-09-21 liệt kê plugin `productivity` (`memory-management`, `start`,
+`task-management`, `update`) và 8 skill của `anthropic-skills`; chúng không còn
+khớp phiên hiện tại.
 
 > [!NOTE]
 > `claude-api` có trigger bắt buộc: phải đọc **trước** khi trả lời bất kỳ câu
@@ -391,36 +463,40 @@ hiện trong danh sách skill tự động — đó là thiết kế, không ph�
 | `general-purpose` | Nghiên cứu phức tạp, tìm kiếm nhiều bước. | `*` |
 | `Explore` | Read-only, fan-out search rộng; trả kết luận không dump file. | Trừ ghi/Agent |
 | `Plan` | Thiết kế kế hoạch triển khai, trade-off kiến trúc. | Trừ ghi/Agent |
-| `claude-code-guide` | Hỏi đáp về Claude Code, Agent SDK, Claude API, Claude Tag. | Glob, Grep, Read, WebFetch, WebSearch |
+| `claude-code-guide` | Hỏi đáp về Claude Code, Agent SDK, Claude API, Claude Tag, `claude plugin eval` và `/skill-doctor`. | Glob, Grep, Read, WebFetch, WebSearch |
 | `statusline-setup` | Cấu hình status line. | Read, Edit |
+| Agent do plugin cung cấp, ví dụ `claude-security:*` (8 agent trong phiên Desktop 2026-11-15) | Theo mô tả của plugin; nhiều agent chỉ do workflow của plugin điều phối, không gọi trực tiếp. | Theo từng agent |
 
 `subagent_type: "fork"` kế thừa toàn bộ context của phiên cha và luôn chạy trên
-model của cha. `isolation: "worktree"` cấp git worktree riêng. Subagent chạy nền
+model của cha. `isolation: "worktree"` cấp git worktree riêng; `isolation: "remote"`
+chạy agent trong môi trường cloud (luôn chạy nền, tùy tài khoản). Subagent chạy nền
 và báo kết quả sau; báo cáo cuối của nó **không** hiển thị cho User — phải thuật
 lại phần quan trọng.
 
 > [!IMPORTANT]
-> **Ràng buộc của repo này**: `AGENTS.md` quy định phiên chính là Bale, xử lý
-> việc nhỏ trực tiếp.
-> Tool `Agent`/`Workflow` chỉ dùng khi User, `CLAUDE.md` hoặc một skill yêu cầu.
-> Phiên worker đã được giao việc **không** được spawn tiếp agent.
+> **Ràng buộc của repo này**: `docs-harness/SESSION.md` (mục Session role) quy
+> định phiên chính là Bale, xử lý việc nhỏ trực tiếp; phiên worker đã được giao
+> việc **không** được spawn tiếp agent. Skill `utilizing-tools-claude` quy định
+> tool `Agent`/`Workflow` chỉ dùng khi User, `CLAUDE.md` hoặc một skill yêu cầu.
 
 ---
 
 ## 9. CLI Surface (`claude`)
 
-Phần này là bề mặt dòng lệnh, đã chạy thật trên máy tham chiếu `2.1.278`.
+Phần này là bề mặt dòng lệnh, đã chạy thật (`claude --help`, `claude mcp --help`,
+`claude plugin --help`) trên hai binary của máy tham chiếu: bản app `2.1.325`
+(các bảng dưới) và CLI ở PATH `2.1.268` (khác biệt được ghi chú).
 
 ### 9.1 Subcommands (18)
 
 | Nhóm | Lệnh | Chức năng |
 | :--- | :--- | :--- |
 | Phiên nền | `agents` | Quản lý background agents. |
-| | `attach <id>` | Mở một phiên nền trong terminal hiện tại. |
-| | `logs <id>` | In output gần đây của một phiên nền. |
+| | `attach <id>` | Mở một phiên nền trong terminal hiện tại; `2.1.325` nhận cả tên phiên. |
+| | `logs <id>` | In output gần đây của một phiên nền; `2.1.325` nhận cả tên phiên. |
 | | `stop\|kill <id>` | Dừng phiên nền; hội thoại vẫn giữ để `attach` lại. |
-| | `rm <id>` | Xóa phiên nền (và worktree của nó khi an toàn). |
-| | `respawn [id]` | Khởi động lại phiên nền theo bản Claude Code hiện tại. |
+| | `rm <id>` | Gỡ phiên nền khỏi danh sách và xóa worktree của nó khi an toàn; hội thoại vẫn giữ (`claude --resume` liệt kê). |
+| | `respawn [id]` | Khởi động lại phiên nền theo bản Claude Code hiện tại; `--all` cho mọi phiên. |
 | MCP & plugin | `mcp` | Cấu hình và quản lý MCP servers — xem 9.2. |
 | | `plugin\|plugins` | Quản lý plugin — xem 9.3. |
 | Cài đặt & tài khoản | `auth` | Quản lý xác thực. |
@@ -428,13 +504,14 @@ Phần này là bề mặt dòng lệnh, đã chạy thật trên máy tham chi�
 | | `install [target]` | Cài native build (`stable`, `latest`, hoặc version cụ thể). |
 | | `update\|upgrade` | Kiểm tra và cài bản cập nhật. |
 | Chẩn đoán & cấu hình | `doctor` | Kiểm tra sức khỏe cài đặt; `/doctor` trong phiên còn sửa được lỗi. |
-| | `project` | Quản lý project state. |
+| | `project` | Quản lý project state — chỉ có ở `2.1.268`, không còn ở `2.1.325`. |
+| | `purge [path]` | **Xóa dữ liệu project** (transcript, task, file history, entry trong `~/.claude.json`) khỏi máy này; có `--dry-run`. Chỉ có ở `2.1.325`. |
 | | `auto-mode` | Xem hoặc reset cấu hình auto mode classifier. |
 | | `import [source]` | Nhập cấu hình từ một AI coding agent khác. |
 | Khác | `ultrareview [target]` | Multi-agent code review chạy trên cloud cho branch/PR. |
 | | `gateway` | Chạy enterprise auth/telemetry gateway. |
 
-### 9.2 `claude mcp` (11 subcommand)
+### 9.2 `claude mcp` (11 subcommand gồm `help`; giống nhau ở cả hai bản)
 
 | Lệnh | Loại | Ghi chú |
 | :--- | :--- | :--- |
@@ -449,7 +526,7 @@ Phần này là bề mặt dòng lệnh, đã chạy thật trên máy tham chi�
 | `reset-project-choices` | Mutation | Reset toàn bộ lựa chọn duyệt/từ chối server `.mcp.json` của project. |
 | `serve` | Mở server | Chạy chính Claude Code như một MCP server. |
 
-### 9.3 `claude plugin` (14 subcommand)
+### 9.3 `claude plugin` (17 subcommand ở `2.1.325`, gồm `help`; 14 ở `2.1.268`)
 
 | Lệnh | Loại | Ghi chú |
 | :--- | :--- | :--- |
@@ -465,11 +542,15 @@ Phần này là bề mặt dòng lệnh, đã chạy thật trên máy tham chi�
 | `init\|new <name>` | Mutation | Scaffold plugin mới tại `~/.claude/skills/<name>/`. |
 | `tag [path]` | Mutation git | Tạo tag `{name}--v{version}`, kiểm tra `plugin.json` khớp marketplace. |
 | `eval [target]` | **Thực thi** | Chạy eval suite của plugin **trên máy bạn, với quyền của bạn**. |
+| `configure <plugin>` | Hỗn hợp | Hiện option của plugin và option chưa đặt; `--values-stdin` lưu giá trị từ stdin (mutation credential). Chỉ có ở `2.1.325`. |
+| `restore-set-aside <plugin>` | Mutation | Trả lại option và secret đã bị set aside khi marketplace do tổ chức khai báo thay thế nguồn khác. Chỉ có ở `2.1.325`. |
+| `test [dir]` | **Thực thi** | Chạy test của một mod. Chỉ có ở `2.1.325`. |
 
 > [!WARNING]
-> `claude plugin eval` nạp plugin và chạy eval suite của nó bằng quyền của bạn.
-> Sandbox giới hạn chứ không đảm bảo an toàn, và việc suite chạy pass **không**
-> phải là một cuộc thẩm định bảo mật. Chỉ eval plugin bạn tin tưởng.
+> `claude plugin eval` nạp plugin và chạy eval suite của nó bằng quyền của bạn;
+> `claude plugin test` cũng thực thi mã test của một mod trên máy bạn. Sandbox
+> giới hạn chứ không đảm bảo an toàn, và việc suite chạy pass **không** phải là
+> một cuộc thẩm định bảo mật. Chỉ chạy plugin bạn tin tưởng.
 
 ### 9.4 Flag đáng chú ý
 
@@ -489,6 +570,7 @@ Phần này là bề mặt dòng lệnh, đã chạy thật trên máy tham chi�
 | `--bare` | Minimal mode: bỏ hooks, LSP, plugin sync, auto-memory, auto-discovery `CLAUDE.md`. |
 | `--bg, --background` | Chạy nền và trả về id cho `attach`/`logs`/`stop`/`rm`. |
 | `-c, --continue` / `--resume` / `--fork-session` | Tiếp tục, resume, hoặc fork phiên. |
+| `--desktop` | Mở phiên trong app Claude Desktop thay vì terminal, kèm `--continue` hoặc `--resume <id>` (chỉ `2.1.325`). |
 | `--cloud` / `--environment <id>` | Tạo hoặc attach phiên cloud. |
 | `--fallback-model <model>` | Tự chuyển model khi model chính quá tải. |
 | `--max-budget-usd <amount>` | Trần chi phí API (chỉ với `--print`). |
@@ -497,15 +579,17 @@ Phần này là bề mặt dòng lệnh, đã chạy thật trên máy tham chi�
 
 ### 9.5 Slash commands
 
-Trong Claude Code, **slash command chính là skill** — flag
-`--disable-slash-commands` được mô tả đúng nguyên văn là *"Disable all skills"*.
-Vì vậy danh sách ở mục 7.3 cũng là danh sách slash command gọi được bằng
-`/<tên-skill>`.
+Trong Claude Code, **skill là slash command**: skill của repo, của user, của
+plugin và bundled skill đều gọi được bằng `/<tên-skill>`. Flag
+`--disable-slash-commands` được mô tả là *"Disable all skills"* ở `2.1.268` và
+*"Disable all skills and commands"* ở `2.1.325`. Danh sách ở mục 7.3 cũng là danh
+sách slash command gọi được bằng `/<tên-skill>`.
 
-Ngoài ra còn các lệnh dựng sẵn của CLI, không phải skill. Các lệnh đã quan sát
-trực tiếp trong phiên tham chiếu: `/help`, `/clear`, `/config`, `/doctor`,
+Ngoài ra còn các lệnh dựng sẵn của CLI, không phải skill; bảng chính thức đầy đủ
+được phân loại ở mục 9.7. Các lệnh đã quan sát trực tiếp trong phiên tham chiếu:
+`/help`, `/clear`, `/config`, `/doctor`,
 `/artifacts`, `/skills`, `/resume`, `/remember`, `/fast`, `/loop`, `/workflows`,
-`/skill-doctor`.
+`/skill-doctor` (2026-09-21); `/list-agents`, `/model`, `/compact` (2026-11-15).
 
 > [!NOTE]
 > Danh sách lệnh dựng sẵn thay đổi theo bản phát hành. Nguồn xác thực là gõ `/`
@@ -523,31 +607,206 @@ trực tiếp trong phiên tham chiếu: `/help`, `/clear`, `/config`, `/doctor`
 | Sức khỏe cài đặt | `claude doctor` |
 
 Mọi lệnh còn lại trong 9.2 và 9.3 (`add`, `login`, `install`, `enable`,
-`disable`, `update`, `remove`, `init`, `tag`, `eval`) đều có side effect lên
-cấu hình, credential hoặc hệ thống — cần authority đúng target. **Không dùng
-lệnh cài đặt/xác thực làm phép dò capability.**
+`disable`, `update`, `remove`, `init`, `tag`, `eval`, `test`,
+`configure --values-stdin`, `restore-set-aside`) đều có side effect lên cấu hình,
+credential hoặc hệ thống; ở 9.1, `purge` (xóa dữ liệu project), `rm`, `stop`,
+`respawn`, `install` và `update` cũng thay đổi trạng thái — cần authority đúng
+target. **Không dùng lệnh cài đặt/xác thực làm phép dò capability.**
+
+### 9.7 Phân loại slash command (bảng chính thức, 2026-11-16)
+
+Tab Code của Claude Desktop chạy cùng engine với CLI và **không có danh sách lệnh
+riêng**. Bảng lệnh chính thức (`code.claude.com/docs/en/commands`) có 121 dòng: lệnh
+dựng sẵn (mã hóa trong CLI), 20 bundled skill *(skill)*, 1 bundled workflow
+*(workflow)*, 3 lệnh đã gỡ và vài alias. Lệnh nào hiện ra còn tùy nền tảng, gói và
+môi trường; danh sách thật của một phiên là menu `/` (ở Desktop: nút **+** rồi
+**Slash commands**), gồm cả skill của repo, của user và của plugin (mục 7.3). Cột
+Công dụng là bản rút gọn từ phần đầu mô tả của từng lệnh.
+
+Khác biệt ở Code tab Desktop (tài liệu Desktop và phiên tham chiếu 2026-11-16):
+
+- Lệnh mở hộp thoại terminal hoạt động khác: theo tài liệu, `/permissions` không
+  tham số trả lời `isn't available in this environment`; trong phiên tham chiếu nó
+  chỉ mở bộ chọn permission mode. `/config` mở Settings > Code.
+- `/btw` mở side chat và không lưu ra đĩa; `/code-review` hiện thẻ có nút
+  **Walk through in diff** và **Apply fixes**; `/remote-control` hiện nút
+  **Turn off** khi phiên đã bật Remote Control.
+- `/resume` chỉ dùng ở phiên local (không dùng ở SSH, WSL, cloud). Desktop quản lý
+  plugin bằng plugin manager UI, CLI dùng `/plugin`.
+- `/desktop` là lệnh của CLI để chuyển phiên sang Desktop (macOS và Windows x64,
+  cần gói subscription).
+- Tab Code chạy bản Claude Code riêng, có thể khác `claude` ở terminal; `/status`
+  cho biết bản đang chạy (khớp ghi chú hai binary ở đầu tài liệu).
+- `/send-to-project` chỉ xuất hiện trong mô tả tool của phiên Desktop tham chiếu,
+  không có trong bảng tài liệu.
+
+**Phiên và hội thoại (18)**
+
+| Lệnh | Công dụng |
+| :--- | :--- |
+| `/clear [name]` | Hội thoại mới, context trống (alias `/new`) |
+| `/compact [instructions]` | Tóm tắt để giải phóng context |
+| `/autocompact [auto\|<tokens>]` | Đặt ngưỡng tự compact |
+| `/context [all]` | Xem mức dùng context |
+| `/resume [session]` | Mở lại hội thoại theo ID hoặc tên |
+| `/rename [name]` | Đổi tên phiên |
+| `/branch [name]` | Tạo nhánh hội thoại tại điểm này |
+| `/fork [prompt]` | Sao chép hội thoại hiện tại |
+| `/rewind` | Tua lại hội thoại hoặc code |
+| `/recap` | Tóm tắt một dòng về phiên |
+| `/export [filename]` | Xuất hội thoại ra văn bản |
+| `/copy [N]` | Chép phản hồi gần nhất |
+| `/btw [question]` | Hỏi câu phụ (side question) |
+| `/cd <path>` | Chuyển thư mục làm việc, giữ hội thoại |
+| `/add-dir <path>` | Thêm thư mục làm việc |
+| `/focus` | Bật/tắt focus view |
+| `/restart` | Khởi động lại và tiếp tục phiên |
+| `/exit` | Thoát CLI |
+
+**Model, chi phí, gói (12)**
+
+| Lệnh | Công dụng |
+| :--- | :--- |
+| `/model [model]` | Đổi model, lưu làm mặc định |
+| `/effort [level\|auto\|status\|ultracode [on\|off]]` | Đặt mức effort |
+| `/fast [on\|off]` | Bật/tắt fast mode |
+| `/advisor [model\|off]` | Bật/tắt advisor tool |
+| `/usage`, `/cost`, `/stats` | Chi phí và hạn mức (`/cost`, `/stats` là alias; `/stats` mở tab Stats) |
+| `/usage-credits` | Cấu hình hoặc xin usage credits |
+| `/rate-limit-options` | Cách làm tiếp khi chạm hạn mức |
+| `/upgrade` | Mở trang nâng gói (ẩn ở gói Enterprise) |
+| `/privacy-settings` | Cài đặt riêng tư (chỉ Pro, Max, Ultra) |
+| `/passes` | Tặng bạn bè một tuần dùng thử (nếu đủ điều kiện) |
+
+**Cấu hình và quyền (21)**
+
+| Lệnh | Công dụng |
+| :--- | :--- |
+| `/config [key=value]` | Mở Settings (Desktop: Settings > Code) |
+| `/permissions` | Quản lý allow/ask/deny |
+| `/hooks` | Xem cấu hình hook |
+| `/sandbox` | Bật/tắt sandbox |
+| `/auto-mode-setup` | Soạn mục `autoMode.environment` |
+| `/update-config [request]` *(skill)* | Sửa settings bằng mô tả |
+| `/fewer-permission-prompts` *(skill)* | Sinh allowlist từ transcript |
+| `/doctor [prompt-audit [path]]` *(skill)* | Kiểm tra cài đặt, settings, `CLAUDE.md` |
+| `/init` | Tạo `CLAUDE.md` |
+| `/memory` | Sửa `CLAUDE.md`, auto memory |
+| `/output-style [style]` | Đổi output style |
+| `/theme`, `/color [color\|default]` | Giao diện; màu thanh prompt |
+| `/statusline`, `/status` | Status line; tab Status |
+| `/keybindings`, `/terminal-setup` | Phím tắt; Shift+Enter |
+| `/tui [default\|fullscreen]`, `/scroll-speed` | Renderer; tốc độ cuộn |
+| `/voice [hold\|tap\|off]` | Đọc chính tả |
+| `/vim` | Đã gỡ (v2.1.92), dùng `/config` |
+
+**Mở rộng và tác vụ nền (16)**
+
+| Lệnh | Công dụng |
+| :--- | :--- |
+| `/mcp [...]` | Quản lý kết nối MCP và OAuth |
+| `/plugin [subcommand]` | Quản lý plugin |
+| `/plugin-authoring` | Nạp tài liệu viết mod |
+| `/reload-plugins [--force]`, `/reload-skills` | Nạp lại plugin; quét lại skill |
+| `/skills`, `/skill-doctor` | Liệt kê skill; chi phí context của skill |
+| `/agents`, `/list-agents` | Nhắc tạo subagent; liệt kê agent và phiên khác |
+| `/subtask <task>` | Tạo subagent fork |
+| `/background [prompt]`, `/stop` | Tách phiên chạy nền; dừng phiên nền |
+| `/tasks` | Xem việc nền |
+| `/workflows`, `/workflow-authoring` *(skill)* | Xem tiến độ workflow; tài liệu viết workflow |
+| `/import [codex\|gemini\|cursor]` | Nhập cấu hình từ công cụ khác |
+
+**Plan, goal, lặp, lịch (5)**
+
+| Lệnh | Công dụng |
+| :--- | :--- |
+| `/plan [description]` | Vào plan mode |
+| `/goal [condition\|clear]` | Làm tiếp qua nhiều lượt tới khi đạt |
+| `/loop [interval] [prompt]` *(skill)* | Lặp một prompt |
+| `/schedule [description]` | Cloud scheduled tasks |
+| `/ultraplan` | Đã gỡ, dùng plan mode |
+
+**Review, kiểm thử, repo (14)**
+
+| Lệnh | Công dụng |
+| :--- | :--- |
+| `/code-review [...]` *(skill)*, `/review` | Review diff, PR hoặc branch (`/review` là alias) |
+| `/security-review` | Quét lỗ hổng trên branch |
+| `/ultrareview [PR or branch]` | Review nhiều agent trên cloud |
+| `/simplify [target]` *(skill)* | Dọn code đã đổi và sửa luôn |
+| `/diff` | Xem thay đổi trong working tree |
+| `/autofix-pr [prompt]` | Phiên cloud tự sửa PR |
+| `/batch <instruction>` *(skill)* | Thay đổi lớn song song |
+| `/debug [description]` *(skill)* | Bật debug log, chẩn đoán |
+| `/verify`, `/run`, `/run-skill-generator` *(skill)* | Chạy app để xác nhận thay đổi |
+| `/deep-research <question>` *(workflow)* | Nghiên cứu web có trích dẫn |
+| `/pr-comments [PR]` | Đã gỡ (v2.1.91) |
+
+**Artifact và thiết kế (9 dòng)**
+
+| Lệnh | Công dụng |
+| :--- | :--- |
+| `/design [brief]` *(skill)* | Canvas thiết kế dạng artifact |
+| `/design consent`, `/design revoke` | Cấp hoặc thu hồi quyền cho Claude Design |
+| `/design-login` | Đăng nhập để dùng `/design-sync` |
+| `/design-sync [hint]` *(skill)* | Đồng bộ design system React |
+| `/slides [brief]` *(skill)* | Tạo bản trình chiếu |
+| `/artifacts` | Liệt kê artifact của bạn |
+| `/artifact-capabilities`, `/artifact-diagramming` *(skill)* | Nạp tài liệu tham chiếu |
+| `/dataviz [request]` *(skill)* | Hướng dẫn thiết kế biểu đồ |
+
+**Tích hợp và thiết bị (14)**
+
+| Lệnh | Công dụng |
+| :--- | :--- |
+| `/ide` | Quản lý tích hợp IDE |
+| `/chrome`, `/claude-in-chrome [task]` *(skill)* | Cấu hình Chrome; làm việc trong trình duyệt |
+| `/desktop` (alias `/app`) | Chuyển phiên sang app Desktop |
+| `/mobile` (alias `/ios`, `/android`) | Mã QR tải app di động |
+| `/remote-control`, `/remote-env` | Remote Control; môi trường cloud mặc định |
+| `/teleport`, `/web-setup` | Kéo phiên cloud về máy; nối GitHub cho cloud |
+| `/install-github-app`, `/install-slack-app` | Cài app GitHub, Slack |
+| `/setup-bedrock`, `/setup-vertex` | Cấu hình Bedrock, Vertex |
+| `/claude-api [...]` *(skill)* | Nạp tài liệu Claude API, Managed Agents |
+
+**Tài khoản, trợ giúp, khác (12)**
+
+| Lệnh | Công dụng |
+| :--- | :--- |
+| `/login`, `/logout` | Đăng nhập, đăng xuất |
+| `/help` | Trợ giúp |
+| `/bug [report]`, `/feedback [report]` | Báo lỗi, gửi phản hồi (cùng một hộp thoại) |
+| `/release-notes` | Xem changelog |
+| `/insights` | Báo cáo HTML về các phiên gần đây |
+| `/team-onboarding` | Tạo hướng dẫn onboarding cho team |
+| `/powerup` | Bài học tương tác về tính năng |
+| `/heapdump` | Chẩn đoán bộ nhớ (ẩn khỏi menu) |
+| `/radio`, `/stickers` | Phụ: radio lo-fi, sticker |
 
 ---
 
 ## 10. Cấu Hình & Permission
 
-### 9.1 Layout cấu hình
+### 10.1 Layout cấu hình
 
 | Phạm vi | Đường dẫn |
 | :--- | :--- |
 | Project settings | `.claude/settings.json`, `.claude/settings.local.json` |
 | Project skills | `.claude/skills/` |
 | User settings | `~/.claude/settings.json` |
+| User skills | `~/.claude/skills/` |
+| Plugin | `~/.claude/plugins/` (mục 5.1) |
 | Keybindings | `~/.claude/keybindings.json` |
 | Memory | `~/.claude/projects/<project-slug>/memory/` + `MEMORY.md` |
 | Session/scratch | `~/.claude/sessions/`, `~/.claude/projects/` |
 
-Máy tham chiếu: repo `.claude/` **chỉ có `skills/`**, chưa có settings project.
-`~/.claude/settings.json` có các key: `model`, `statusLine`, `effortLevel`,
-`modelSettings`, `autoUpdatesChannel`, `skipDangerousModePermissionPrompt`,
-`theme`.
+Máy tham chiếu (2026-11-15): repo `.claude/` **chỉ có `skills/`**, chưa có
+settings project. `~/.claude/settings.json` có các key: `hooks`, `statusLine`,
+`enabledPlugins`, `extraKnownMarketplaces`, `autoUpdatesChannel`, `theme`,
+`agentPushNotifEnabled`. Ảnh chụp 2026-09-21 ghi thêm `model`, `effortLevel`,
+`modelSettings` và `skipDangerousModePermissionPrompt`; các key này không còn.
 
-### 9.2 Permission và hooks
+### 10.2 Permission và hooks
 
 - Tool call chạy qua permission mode do User chọn. Một call bị **từ chối** nghĩa
   là User không đồng ý — đổi cách tiếp cận, không gọi lại y nguyên.
@@ -572,10 +831,12 @@ Máy tham chiếu: repo `.claude/` **chỉ có `skills/`**, chưa có settings p
 | Đọc file đã biết đường dẫn | `Read` (dùng `Glob` trước nếu chưa biết) |
 | Tìm nội dung trên toàn repo | `Grep`; `Glob` cho tên/layout |
 | Sửa/tạo file | `Edit` (thay chuỗi chính xác), `Write` (file mới/ghi đè) |
+| Cell notebook | `NotebookEdit` — deferred |
 | Build/test/git/shell | `Bash` hoặc `PowerShell`, trong phạm vi authority |
 | Fact/version/spec hiện tại | `WebFetch` (URL đã biết), `WebSearch` (discovery) — deferred |
 | Quyết định thuộc về User | `AskUserQuestion` |
 | Lập kế hoạch trước khi làm | `EnterPlanMode` / `ExitPlanMode` — deferred |
+| Nhánh git tách biệt (chỉ khi User yêu cầu rõ, không dùng để điều phối agent) | `EnterWorktree` / `ExitWorktree` — deferred |
 | Chờ điều kiện dài | `Monitor` — deferred; hoặc `Bash` `run_in_background` |
 | Việc lặp theo lịch | `CronCreate` / `CronList` / `CronDelete` — deferred |
 | Quy trình chuyên biệt | `Skill` |
@@ -611,7 +872,8 @@ Không liệt kê toàn bộ catalog nếu task chỉ cần một subset nhỏ.
 
 ## 12. Guardrails & Anti-Patterns
 
-- **User Authority**: theo `AGENTS.md`; read-only là mặc định cho điều tra.
+- **User Authority**: theo `docs-harness/SESSION.md` (Task authority); read-only
+  là mặc định cho điều tra.
   Mutation file, cài plugin, xác thực connector, publish artifact, commit/push
   cần authority đúng target.
 - **Không gọi deferred tool trước `ToolSearch`**: sẽ fail `InputValidationError`.
@@ -649,15 +911,18 @@ Phân loại độ tin cậy của các claim trong tài liệu này:
 
 | Hạng mục | Nguồn | Trạng thái |
 | :--- | :--- | :--- |
-| `claude --version` = `2.1.278`; layout `~/.claude/`; key của `settings.json` | Output lệnh cục bộ 2026-09-21 | [LOCAL] đã kiểm chứng |
-| Toàn bộ mục 9 (18 subcommand, 11 `mcp`, 14 `plugin`, flag) | `claude --help`, `claude mcp --help`, `claude plugin --help` | [LOCAL] đã kiểm chứng |
-| Trạng thái 25 MCP server ở mục 4.2 | `claude mcp list` | [LOCAL] đã kiểm chứng |
-| Marketplace, `productivity` v1.3.1, component inventory, chi phí token | `claude plugin marketplace list`, `claude plugin list`, `claude plugin details productivity` | [LOCAL] đã kiểm chứng |
-| Danh sách built-in tool, deferred tool, agent type, skill | Khai báo của session tham chiếu 2026-09-21 | [SESSION] quan sát trực tiếp |
+| Bản app `2.1.325`, CLI ở PATH `2.1.268`; npm `latest` `2.1.325`, `stable` `2.1.311`; layout `~/.claude/`; key của `settings.json` | `claude --version` của từng binary, đường dẫn tiến trình `claude.exe`, `registry.npmjs.org/-/package/@anthropic-ai/claude-code/dist-tags`, 2026-11-15 | [LOCAL] đã kiểm chứng |
+| Toàn bộ mục 9 (18 subcommand, 11 `mcp`, 17 `plugin` ở `2.1.325` / 14 ở `2.1.268`, flag) | `claude --help`, `claude mcp --help`, `claude plugin --help` của cả hai binary, 2026-11-15 | [LOCAL] đã kiểm chứng |
+| Trạng thái MCP ở mục 4.2 | `claude mcp list` của cả hai binary, 2026-11-15 | [LOCAL] đã kiểm chứng |
+| Marketplace, `postman` v2.3.0, component inventory, chi phí token, 317 plugin trong catalog | `claude plugin marketplace list`, `claude plugin list`, `claude plugin details postman`, `marketplace.json` cục bộ, 2026-11-15 | [LOCAL] đã kiểm chứng |
+| Danh sách tool chính thức, nơi nạp skill, field frontmatter, vị trí plugin trên đĩa | Tài liệu `code.claude.com/docs` (tools-reference, skills, plugins/loading), 2026-11-15 | [DOCS] đã đối chiếu |
+| Bộ tool nạp sẵn, deferred tool, agent type, skill, MCP server của phiên | Khai báo của phiên Desktop tham chiếu 2026-11-15 và phiên CLI 2026-09-21 | [SESSION] quan sát trực tiếp |
+| Bộ tool nạp sẵn của một phiên CLI `2.1.325` | Chưa có phiên CLI thuần để đếm lại | [UNKNOWN] chưa kiểm chứng |
+| Thay đổi giữa `2.1.279` và `2.1.318` | Trang changelog chỉ đọc được `2.1.319`–`2.1.325` | [UNKNOWN] chưa đọc |
 | Danh sách lệnh dựng sẵn ở 9.5 | Quan sát trong phiên; **chưa chắc đầy đủ** | [SESSION] chưa liệt kê vét cạn |
-| `plugin:productivity:asana` lỗi `Incompatible auth server` | `claude mcp list` và thông báo của session | [LOCAL] nguyên nhân gốc chưa xác minh |
-| Gmail/Google Drive `✔ Connected` trong CLI nhưng session chỉ expose tool `authenticate` | Đối chiếu CLI với session | [UNKNOWN] lý do chưa xác minh |
-| Vai trò phiên và ranh giới authority | `AGENTS.md`, `docs-harness/INDEX.md` | [POLICY] của repo này |
+| Bảng slash command ở 9.7 (121 dòng) | Tài liệu `code.claude.com/docs` (commands, desktop), 2026-11-16; cột Công dụng rút gọn từ phần đầu mô tả | [DOCS] đã đối chiếu |
+| 25 server và `productivity@synced` của 2026-09-21 không còn xuất hiện | `claude mcp list`, `claude plugin list` | [UNKNOWN] nguyên nhân chưa xác minh |
+| Vai trò phiên và ranh giới authority | `docs-harness/SESSION.md`, `docs-harness/INDEX.md` (`AGENTS.md` là cổng vào) | [POLICY] của repo này |
 | Cách viết skill, chế độ invocation, context load | `.agents/skills/writing-for-agents/` | [POLICY] của repo này |
 
 Bề mặt capability của Claude Code thay đổi theo bản phát hành, account và bộ

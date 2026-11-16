@@ -10,8 +10,9 @@ it, execute it, and leave observable proof. The current session's exposed tool,
 skill, agent, and MCP declarations are the runtime authority; this skill routes
 to them and never promises that a documented capability is enabled here.
 
-Version boundary: calibrated to Claude Code `2.1.278` local runtime evidence.
-Capability surfaces move with the release, the account, the marketplace, and the
+Version boundary: calibrated to Claude Code `2.1.325` (the Claude Desktop host;
+the `claude` on PATH was `2.1.268`), local evidence of 2026-11-15. Capability
+surfaces move with the release, the host, the account, the marketplace, and the
 plugin set. When this skill and the session disagree, the session wins; report
 the gap instead of following either silently.
 
@@ -62,7 +63,7 @@ and a bounded target.
 | Watch a long-running condition | `Monitor` (deferred); background `Bash` for detached commands |
 | Recurring or scheduled work | `CronCreate` / `CronList` / `CronDelete` (deferred) |
 | Load a repository procedure | `Skill` |
-| Semantic judgment, fast classification, Jev primitives | `typesafe-ai` (`.agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1`) |
+| Jev primitives, only when the User asks for Jev or the `jev-hook` applies (`docs-harness/JEV-AI.md`) | `typesafe-ai` (`.agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1`) |
 | Publish a page the User or team will use | `Artifact` |
 | External service data | `mcp__<server>__<tool>` from a connected, authenticated server |
 | Bounded independent investigation | `Agent`, only under the delegation rule below |
@@ -74,10 +75,16 @@ Capability discovery rules:
 - **Deferred tools**: a `<system-reminder>` names them without schemas, so they
   are not callable yet. Load with `ToolSearch` (`select:Name1,Name2` for exact
   names, keywords to search) and call only after the schema arrives.
-- **MCP**: `claude mcp list` health-checks every server and is the authority on
-  connection state; `claude mcp get <name>` details one. The session's tool
-  surface is not that authority — a server can report `Connected` while the
-  session exposes only its `authenticate` tools.
+- **MCP**: `claude mcp list` health-checks every server the CLI manages and is
+  the authority on their connection state; `claude mcp get <name>` details one.
+  The session's tool surface is not that authority — a server can report
+  `Connected` while the session exposes only its `authenticate` tools. A Claude
+  Desktop host also exposes servers of its own that `claude mcp list` does not
+  show; for those, a callable tool in the session is the evidence.
+- **CLI binary**: the `claude` on PATH can be a different release than the
+  session host, so `claude mcp list` and `claude plugin list` can disagree with
+  the session; name the binary and its `claude --version` when reporting their
+  output.
 - **Plugins**: a plugin contributes skills (`<plugin>:<skill>`), MCP servers, and
   commands under its own namespace. `claude plugin list` shows what is installed
   and loaded; `claude plugin details <name>` shows its component inventory and
@@ -118,9 +125,9 @@ to executed work or a reported gap.
 | :--- | :--- | :--- | :--- |
 | Built-in tool | Native function (`Read`, `Bash`, `Edit`, ...) | Exposed at session start | Tool schema present in session |
 | Deferred tool | Native function held back to save context | Named in a `<system-reminder>`; schema fetched by `ToolSearch` | Schema returned inside a `<functions>` block |
-| MCP server | Local or remote process exposing `mcp__<server>__*` tools | Project `.mcp.json`, plugin `.mcp.json`, or account connector | Callable tool plus a connected, authenticated account |
+| MCP server | Local or remote process exposing `mcp__<server>__*` tools | Project `.mcp.json`, plugin `.mcp.json`, account connector, or the host application | Callable tool plus a connected, authenticated account |
 | Plugin | Bundle of skills, MCP servers, and commands | Installed from a marketplace into the user plugin directory | Its namespaced skills or tools appear in the session |
-| Skill | On-demand `SKILL.md` procedure | `.claude/skills/`, `.agents/skills/`, plugin skills, built-ins | Entry in the available-skills listing, or User invocation by name |
+| Skill | On-demand `SKILL.md` procedure | `.claude/skills/` (this repository mirrors `.agents/skills/` there), `~/.claude/skills/`, plugin skills, built-ins | Entry in the available-skills listing, or User invocation by name |
 | Subagent | Isolated agent run with its own context | `Agent` tool with a `subagent_type` | Agent type listed in the session |
 
 ## Permission & Connection Boundaries

@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cẩm Nang Tools, MCP, Plugins, Skills &amp; Agents Của Claude Code</title>
+<meta name="description" content="Cẩm nang Tools, MCP, Plugins, Skills và Agents của Claude Code — bản HTML của README.md">
+<meta name="source-file" content="docs/tools/claude/README.md">
+<meta name="source-sha256" content="3f86024ed1c89b3d8c1cfedc8d5b37a459ed8fe9033c03ec4c29106d2b971eb5">
+<script>
+(function () { try { var m = window.localStorage.getItem('claude-catalog-theme'); if (m === 'light' || m === 'dark') { document.documentElement.setAttribute('data-theme', m); } } catch (e) { /* storage unavailable */ } })();
+</script>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#ffffff;--surface:#f6f8fa;--zebra:#fafbfc;--text:#1f2328;--muted:#59636e;--border:#d1d9e0;
+  --accent:#0969da;--accent-weak:#ddf4ff;--code-bg:#eff1f3;--mark:#fff0a0;--mark-cur:#ffc94d;
+  --note:#0550ae;--note-bg:#ddf4ff;--tip:#116329;--tip-bg:#dafbe1;--imp:#6639ba;--imp-bg:#fbefff;--warn:#7d4e00;--warn-bg:#fff8c5;
+  --shadow:0 1px 2px rgba(31,35,40,.06),0 8px 24px rgba(31,35,40,.10);
+  --radius:10px;--topbar-h:56px;--toc-w:300px;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"Cascadia Code",Consolas,"Liberation Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0d1117;--surface:#151b23;--zebra:#11161d;--text:#e6edf3;--muted:#9198a1;--border:#3d444d;
+    --accent:#58a6ff;--accent-weak:#12263f;--code-bg:#1b222c;--mark:#5c4b00;--mark-cur:#7a5600;
+    --note:#58a6ff;--note-bg:#10243f;--tip:#3fb950;--tip-bg:#0f2a1a;--imp:#a371f7;--imp-bg:#231a3b;--warn:#d29922;--warn-bg:#2d2205;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0d1117;--surface:#151b23;--zebra:#11161d;--text:#e6edf3;--muted:#9198a1;--border:#3d444d;
+  --accent:#58a6ff;--accent-weak:#12263f;--code-bg:#1b222c;--mark:#5c4b00;--mark-cur:#7a5600;
+  --note:#58a6ff;--note-bg:#10243f;--tip:#3fb950;--tip-bg:#0f2a1a;--imp:#a371f7;--imp-bg:#231a3b;--warn:#d29922;--warn-bg:#2d2205;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.4);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 var(--sans);overflow-wrap:break-word}
+[hidden]{display:none!important}
+a{color:var(--accent)}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;left:-9999px;top:0;z-index:100;background:var(--accent);color:#fff;padding:.5rem 1rem}
+.skip:focus{left:0}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:.6rem;min-height:var(--topbar-h);padding:.5rem 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.brand{font-weight:700;white-space:nowrap}
+.search{flex:1;display:flex;align-items:center;gap:.4rem;min-width:0;max-width:560px;margin-left:auto}
+.search input{flex:1;min-width:0;height:36px;padding:0 .75rem;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;font-size:.92rem}
+.btn{height:36px;padding:0 .75rem;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;font-size:.88rem;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--accent-weak)}
+#q-count{min-width:4.8rem;text-align:center;font-size:.82rem;color:var(--muted)}
+
+/* ---------- layout and table of contents ---------- */
+.layout{display:block}
+#toc{padding:16px 12px 40px 16px;font-size:.9rem;background:var(--bg)}
+.toc-title{margin:0 0 .5rem;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.toc,.toc ul{list-style:none;margin:0;padding:0}
+.toc ul{margin:.15rem 0 .4rem .75rem;border-left:1px solid var(--border)}
+.toc a{display:block;padding:.25rem .5rem;border-radius:6px;color:var(--text);text-decoration:none;line-height:1.35}
+.toc a:hover{background:var(--surface)}
+.toc a.active{background:var(--accent-weak);color:var(--accent);font-weight:600}
+.toc code{padding:0;background:none;font-size:.85em}
+.js .toc li.h2:not(.open)>ul{display:none}
+#scrim{position:fixed;top:var(--topbar-h);right:0;bottom:0;left:0;z-index:30;background:rgba(0,0,0,.42)}
+@media (min-width:1000px){
+  .layout{display:grid;grid-template-columns:var(--toc-w) minmax(0,1fr)}
+  #toc{position:sticky;top:var(--topbar-h);align-self:start;height:calc(100vh - var(--topbar-h));overflow:auto;border-right:1px solid var(--border)}
+  #toc-btn{display:none}
+  #scrim{display:none!important}
+}
+@media (max-width:999.98px){
+  .js #toc{position:fixed;top:var(--topbar-h);bottom:0;left:0;z-index:35;width:min(86vw,340px);overflow:auto;border-right:1px solid var(--border);box-shadow:var(--shadow);transform:translateX(-102%);transition:transform .18s ease}
+  .js body.toc-open #toc{transform:none}
+  html:not(.js) #toc-btn{display:none}
+  html:not(.js) #toc{border-bottom:1px solid var(--border)}
+}
+#search-btn{display:none}
+@media (max-width:640px){
+  .brand{display:none}
+  #search-btn{display:inline-block}
+  .topbar{flex-wrap:wrap}
+  .search{display:none;order:5;flex:1 0 100%;max-width:none;margin-left:0}
+  body.search-open .search{display:flex}
+  #theme-btn{margin-left:auto}
+}
+@media (prefers-reduced-motion:reduce){.js #toc{transition:none}}
+
+/* ---------- document ---------- */
+.doc{min-width:0;padding:24px 16px 80px}
+.doc-inner{max-width:920px;margin:0 auto}
+h1,h2,h3{scroll-margin-top:calc(var(--topbar-h) + 16px);line-height:1.3}
+h1{margin:.2em 0 .6em;font-size:clamp(1.6rem,3.6vw,2.2rem);line-height:1.2}
+h2{margin:1.5rem 0 1rem;font-size:1.55rem}
+h3{margin:1.9rem 0 .6rem;font-size:1.15rem}
+.anchor{margin-left:.45rem;color:var(--muted);font-weight:400;text-decoration:none;opacity:0}
+h2:hover .anchor,h3:hover .anchor,.anchor:focus{opacity:1}
+hr{margin:2.4rem 0 0;border:0;border-top:1px solid var(--border)}
+p,li{max-width:82ch}
+ul,ol{padding-left:1.4rem}
+li+li{margin-top:.35rem}
+strong{font-weight:650}
+code{padding:.12em .35em;border-radius:6px;background:var(--code-bg);font:.88em/1.4 var(--mono);overflow-wrap:anywhere}
+.doc-meta{margin:0 0 1.25rem;padding:.8rem 1rem;border-left:4px solid var(--border);border-radius:0 8px 8px 0;background:var(--surface);color:var(--muted);font-size:.95rem}
+.doc-meta strong{color:var(--text)}
+.doc-meta p{max-width:none;margin:0}
+
+/* ---------- tables ---------- */
+.table-wrap{margin:1rem 0;overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius)}
+table{width:100%;min-width:30rem;border-collapse:collapse;font-size:.92rem;line-height:1.55}
+th,td{padding:.55rem .8rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:0}
+thead th{background:var(--surface);font-weight:650;white-space:nowrap}
+tbody tr:nth-child(even){background:var(--zebra)}
+td code,th code{font-size:.84em;overflow-wrap:normal}
+
+/* ---------- callouts ---------- */
+.alert{--c:var(--note);--c-bg:var(--note-bg);margin:1.1rem 0;padding:.75rem 1rem;border-left:4px solid var(--c);border-radius:0 8px 8px 0;background:var(--c-bg)}
+.alert-tip{--c:var(--tip);--c-bg:var(--tip-bg)}
+.alert-important{--c:var(--imp);--c-bg:var(--imp-bg)}
+.alert-warning,.alert-caution{--c:var(--warn);--c-bg:var(--warn-bg)}
+.alert-title{display:flex;align-items:center;gap:.45rem;margin:0 0 .3rem;color:var(--c);font-weight:700;font-size:.92rem;letter-spacing:.01em}
+.alert .ico{flex:none}
+.alert p{max-width:none;margin:.35rem 0 0}
+.alert p:first-of-type{margin-top:0}
+
+/* ---------- evidence tags ---------- */
+.tag{display:inline-block;padding:.16rem .42rem;border:1px solid currentColor;border-radius:999px;color:var(--muted);font:700 .7rem/1 var(--mono);letter-spacing:.03em;vertical-align:.08em}
+.tag-local{color:var(--tip)}
+.tag-docs{color:var(--note)}
+.tag-session{color:var(--imp)}
+.tag-unknown{color:var(--warn)}
+
+/* ---------- code blocks ---------- */
+.code{margin:1rem 0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--code-bg)}
+.code-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.3rem .5rem .3rem .8rem;border-bottom:1px solid var(--border);background:var(--surface);font-size:.78rem;color:var(--muted)}
+.copy{display:none;height:28px;padding:0 .6rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font:inherit;font-size:.78rem;cursor:pointer}
+.js .copy{display:inline-block}
+.copy:hover{background:var(--accent-weak)}
+pre{margin:0;padding:.9rem 1rem;overflow:auto;font:.85rem/1.5 var(--mono);tab-size:4}
+pre code{padding:0;background:none;font:inherit;overflow-wrap:normal}
+
+/* ---------- search highlight ---------- */
+mark.hit{padding:0;border-radius:3px;background:var(--mark);color:inherit}
+mark.hit.current{background:var(--mark-cur);outline:2px solid var(--accent);outline-offset:1px}
+
+/* ---------- misc ---------- */
+.doc-foot{margin-top:3.5rem;padding-top:1rem;border-top:1px solid var(--border);color:var(--muted);font-size:.85rem}
+.doc-foot p{max-width:none;margin:.3rem 0}
+#top-btn{position:fixed;right:16px;bottom:16px;z-index:20;box-shadow:var(--shadow)}
+
+@media print{
+  .topbar,#toc,#scrim,#top-btn,.copy,.anchor,.skip{display:none!important}
+  .layout{display:block}
+  body{font-size:11pt;color:#000;background:#fff}
+  .doc{padding:0}
+  .table-wrap{overflow:visible;border:0}
+  pre{white-space:pre-wrap}
+  a{color:inherit}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Bỏ qua tới nội dung</a>
+<header class="topbar">
+  <button type="button" class="btn" id="toc-btn" aria-expanded="false" aria-controls="toc">☰ Mục lục</button>
+  <span class="brand">Claude Code · Cẩm nang</span>
+  <button type="button" class="btn" id="search-btn" aria-expanded="false" aria-controls="q" aria-label="Tìm trong tài liệu">Tìm</button>
+  <div class="search" role="search">
+    <input id="q" type="search" placeholder="Tìm trong tài liệu (phím /)" aria-label="Tìm trong tài liệu" autocomplete="off">
+    <span id="q-count" aria-live="polite"></span>
+    <button type="button" class="btn" id="q-prev" aria-label="Kết quả trước" title="Kết quả trước (Shift+Enter)">↑</button>
+    <button type="button" class="btn" id="q-next" aria-label="Kết quả sau" title="Kết quả sau (Enter)">↓</button>
+  </div>
+  <button type="button" class="btn" id="theme-btn" aria-label="Đổi giao diện: tự động, sáng, tối">Giao diện: tự động</button>
+</header>
+<div class="layout">
+  <nav id="toc" aria-label="Mục lục">
+    <p class="toc-title">Mục lục</p>
+<ul class="toc">
+<li class="h2"><a href="#sec-1">1. Tổng Quan Kiến Trúc Claude Code</a>
+<ul><li class="h3"><a href="#sec-1-1">1.1 Quy tắc phân biệt các lớp</a></li></ul>
+</li>
+<li class="h2"><a href="#sec-2">2. Built-in Tools (nạp sẵn)</a>
+<ul><li class="h3"><a href="#sec-2-1">2.1 Filesystem và code</a></li><li class="h3"><a href="#sec-2-2">2.2 Shell và thực thi</a></li><li class="h3"><a href="#sec-2-3">2.3 Điều phối, quy trình và tương tác</a></li><li class="h3"><a href="#sec-2-4">2.4 Xuất bản và phản hồi</a></li><li class="h3"><a href="#sec-2-5">2.5 Tool có điều kiện hoặc riêng host</a></li></ul>
+</li>
+<li class="h2"><a href="#sec-3">3. Deferred Tools &amp; <code>ToolSearch</code></a>
+</li>
+<li class="h2"><a href="#sec-4">4. MCP Servers &amp; Connectors</a>
+<ul><li class="h3"><a href="#sec-4-1">4.1 Ba nguồn MCP</a></li><li class="h3"><a href="#sec-4-2">4.2 Trạng thái cục bộ (<code>claude mcp list</code>, 2026-11-15)</a></li><li class="h3"><a href="#sec-4-3">4.3 Connection ladder</a></li></ul>
+</li>
+<li class="h2"><a href="#sec-5">5. Plugins &amp; Marketplaces</a>
+<ul><li class="h3"><a href="#sec-5-1">5.1 Cách plugin được nạp</a></li><li class="h3"><a href="#sec-5-2">5.2 Trạng thái cục bộ (2026-11-15)</a></li></ul>
+</li>
+<li class="h2"><a href="#sec-6">6. Artifacts</a>
+</li>
+<li class="h2"><a href="#sec-7">7. Skills</a>
+<ul><li class="h3"><a href="#sec-7-1">7.1 Vị trí nạp</a></li><li class="h3"><a href="#sec-7-2">7.2 Frontmatter và chế độ gọi</a></li><li class="h3"><a href="#sec-7-3">7.3 Skill có sẵn theo nhóm (phiên tham chiếu)</a></li></ul>
+</li>
+<li class="h2"><a href="#sec-8">8. Subagents &amp; Delegation</a>
+</li>
+<li class="h2"><a href="#sec-9">9. CLI Surface (<code>claude</code>)</a>
+<ul><li class="h3"><a href="#sec-9-1">9.1 Subcommands (18)</a></li><li class="h3"><a href="#sec-9-2">9.2 <code>claude mcp</code> (11 subcommand gồm <code>help</code>; giống nhau ở cả hai bản)</a></li><li class="h3"><a href="#sec-9-3">9.3 <code>claude plugin</code> (17 subcommand ở <code>2.1.325</code>, gồm <code>help</code>; 14 ở <code>2.1.268</code>)</a></li><li class="h3"><a href="#sec-9-4">9.4 Flag đáng chú ý</a></li><li class="h3"><a href="#sec-9-5">9.5 Slash commands</a></li><li class="h3"><a href="#sec-9-6">9.6 Discovery an toàn vs mutation</a></li><li class="h3"><a href="#sec-9-7">9.7 Phân loại slash command (bảng chính thức, 2026-11-16)</a></li></ul>
+</li>
+<li class="h2"><a href="#sec-10">10. Cấu Hình &amp; Permission</a>
+<ul><li class="h3"><a href="#sec-10-1">10.1 Layout cấu hình</a></li><li class="h3"><a href="#sec-10-2">10.2 Permission và hooks</a></li></ul>
+</li>
+<li class="h2"><a href="#sec-11">11. Workflow Chọn Capability Chuẩn</a>
+<ul><li class="h3"><a href="#phase-1-phan-loai-task">Phase 1 — Phân loại task</a></li><li class="h3"><a href="#phase-2-mandatory-declaration">Phase 2 — Mandatory declaration</a></li><li class="h3"><a href="#phase-3-execute-va-verify">Phase 3 — Execute và verify</a></li></ul>
+</li>
+<li class="h2"><a href="#sec-12">12. Guardrails &amp; Anti-Patterns</a>
+</li>
+<li class="h2"><a href="#sec-13">13. Completion Contract</a>
+</li>
+<li class="h2"><a href="#sec-14">14. Nguồn &amp; Ranh Giới Phiên Bản</a>
+</li>
+</ul>
+  </nav>
+  <main id="main" class="doc">
+    <article id="content" class="doc-inner">
+<h1 id="top">Cẩm Nang Tools, MCP, Plugins, Skills &amp; Agents Của Claude Code</h1>
+<blockquote class="doc-meta"><p><strong>Tài liệu tham khảo kỹ thuật cho nhóm phát triển (Team-Facing Documentation)</strong><br><em>Vị trí lưu trữ</em>: <code>docs/tools/claude/README.md</code><br><em>Phạm vi</em>: capability surface của Claude Code, đối chiếu runtime cục bộ <code>2.1.325</code> (bản app Claude Desktop) và <code>2.1.268</code> (CLI ở PATH) với bằng chứng ngày 2026-11-15; mục <a class="xref" href="#sec-14">14</a> phân loại độ tin cậy của từng nhóm claim.<br><em>Bản thiết kế</em>: <a href="https://claude.ai/artifact/UKqfEULkmr5YGwfQuAKg5x" target="_blank" rel="noopener noreferrer">Cẩm nang Claude Code trên claude.ai</a> (mở được khi chủ sở hữu đã chia sẻ artifact).</p></blockquote>
+<p>Tài liệu này là bản tương ứng cho Claude Code của <a href="../opencode/README.md">cẩm nang OpenCode</a>, <a href="../codex/README.md">cẩm nang Codex</a>, <a href="../antigravity/README.md">cẩm nang Antigravity</a> và <a href="../orca-ade/README.md">cẩm nang Orca ADE</a>. Nó giúp team chọn đúng built-in tool, deferred tool, MCP connector, plugin, skill và subagent cho từng loại công việc.</p>
+<div class="alert alert-important" role="note"><p class="alert-title"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M2.5 2.5h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H9l-3 2.5V11.5H2.5a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" /><rect x="7.3" y="4.5" width="1.4" height="3.4" rx=".5" fill="currentColor" /><circle cx="8" cy="9.6" r=".8" fill="currentColor" /></svg><span>Quan trọng</span></p><p>Runtime/session hiện tại là source of truth. Danh sách tool, MCP, plugin, skill, agent và trạng thái kết nối thay đổi theo phiên, theo bản phát hành, theo account và theo bộ plugin đã cài. Một capability được tài liệu mô tả hoặc có mặt trong marketplace <strong>không</strong> chứng minh rằng nó đã được cài, kết nối, xác thực hoặc được phép dùng trong phiên của bạn.</p></div>
+<div class="alert alert-note" role="note"><p class="alert-title"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" /><rect x="7.25" y="7" width="1.5" height="4.5" rx=".5" fill="currentColor" /><circle cx="8" cy="4.9" r=".9" fill="currentColor" /></svg><span>Ghi chú</span></p><p>Máy tham chiếu có <strong>hai binary <code>claude</code></strong> cho kết quả khác nhau: bản app (<code>%LOCALAPPDATA%\Claude-Data\claude_*\claude-code\&lt;version&gt;\*\claude.exe</code>, <code>2.1.325</code>, chạy phiên Claude Desktop) và bản ở PATH (<code>~/.local/bin/claude.exe</code>, <code>2.1.268</code>). <code>claude --version</code> trả về bản ở PATH, có thể khác bản host đang chạy phiên của bạn; chạy <code>Get-Process claude | Select-Object Path</code> (PowerShell) và tìm dòng có <code>claude-code\&lt;version&gt;</code> để biết bản host. Mỗi bằng chứng bên dưới ghi rõ binary hoặc host đã đo. Ngày 2026-11-15, npm <code>latest</code> là <code>2.1.325</code> và <code>stable</code> là <code>2.1.311</code>.</p></div>
+<hr>
+<h2 id="sec-1">1. Tổng Quan Kiến Trúc Claude Code<a class="anchor" href="#sec-1" aria-label="Liên kết tới mục này">#</a></h2>
+<p>Claude Code phân tầng capability thành sáu lớp:</p>
+<ul><li><strong>Built-in tools</strong>: hàm native nạp sẵn ngay đầu session.</li><li><strong>Deferred tools</strong>: hàm native bị giữ lại để tiết kiệm context; chỉ có tên, phải nạp schema qua <code>ToolSearch</code> mới gọi được.</li><li><strong>MCP servers/connectors</strong>: dịch vụ ngoài expose tool dưới tiền tố <code>mcp__&lt;server&gt;__&lt;tool&gt;</code>.</li><li><strong>Plugins</strong>: gói phân phối qua marketplace, đóng gói skills + MCP servers + commands dưới namespace riêng.</li><li><strong>Skills</strong>: quy trình <code>SKILL.md</code> nạp theo nhu cầu qua tool <code>Skill</code>.</li><li><strong>Subagents</strong>: phiên agent cô lập, gọi qua tool <code>Agent</code>.</li></ul>
+<div class="code"><div class="code-head"><span>Văn bản</span><button type="button" class="copy" aria-label="Sao chép nội dung khối mã">Sao chép</button></div><pre><code>+-----------------------------------------------------------------------------------+
+|                              Claude Code Runtime                                  |
++-----------------------------------------------------------------------------------+
+| Built-in tools     | Deferred tools     | MCP / Connectors  | Plugins &amp; Skills    |
+| - Read/Write/Edit  | - WebFetch/Search  | - mcp__srv__tool  | - marketplace       |
+| - Bash/PowerShell  | - Monitor/Cron*    | - .mcp.json       | - &lt;plugin&gt;:&lt;skill&gt;  |
+| - Grep/Glob        | - Plan/Worktree    | - account OAuth   | - .claude/skills/   |
+| - Skill/ToolSearch | - NotebookEdit     | - plugin .mcp.json| - .agents/skills/   |
+| - Agent/Workflow   | - SendMessage      |                   |                     |
+| - Artifact         | - TaskStop         | Subagents: claude / Explore / Plan / ...  |
++-----------------------------------------------------------------------------------+</code></pre></div>
+<h3 id="sec-1-1">1.1 Quy tắc phân biệt các lớp<a class="anchor" href="#sec-1-1" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Khái niệm</th><th scope="col">Vai trò</th><th scope="col">Cách xác nhận</th></tr></thead><tbody><tr><td><strong>Built-in tool</strong></td><td>Hàm native có schema ngay từ đầu phiên.</td><td>Schema xuất hiện trong danh sách tool đầu session.</td></tr><tr><td><strong>Deferred tool</strong></td><td>Hàm native chỉ được nêu tên trong <code>&lt;system-reminder&gt;</code>.</td><td>Sau <code>ToolSearch</code>, schema trả về trong khối <code>&lt;functions&gt;</code>.</td></tr><tr><td><strong>MCP server</strong></td><td>Tiến trình/dịch vụ cung cấp nhóm tool <code>mcp__&lt;server&gt;__*</code>.</td><td>Tool gọi được <strong>và</strong> account đã xác thực.</td></tr><tr><td><strong>Plugin</strong></td><td>Bundle skills + MCP + commands cài từ marketplace.</td><td>Skill/tool mang namespace của plugin xuất hiện trong phiên.</td></tr><tr><td><strong>Skill</strong></td><td>Quy trình <code>SKILL.md</code> nạp theo trigger hoặc do User gọi tên.</td><td>Có trong danh sách available-skills, hoặc User gõ <code>/&lt;tên&gt;</code>.</td></tr><tr><td><strong>Subagent</strong></td><td>Phiên agent cô lập với context riêng.</td><td><code>subagent_type</code> nằm trong danh sách agent của phiên.</td></tr><tr><td><strong>Rule/instruction</strong></td><td><code>AGENTS.md</code>, <code>CLAUDE.md</code>, memory, system-reminder.</td><td>Nội dung xuất hiện trong context của phiên.</td></tr></tbody></table></div>
+<hr>
+<h2 id="sec-2">2. Built-in Tools (nạp sẵn)<a class="anchor" href="#sec-2" aria-label="Liên kết tới mục này">#</a></h2>
+<p>Danh sách tool nạp sẵn <strong>phụ thuộc host</strong> (CLI hay Claude Desktop) và bản phát hành. Hai phiên tham chiếu: CLI <code>2.1.278</code> (2026-09-21) nạp sẵn 18 tool; Claude Desktop tab Code (host <code>2.1.325</code>, 2026-11-15) nạp sẵn 19 tool. Hai phiên chung 15 tool lõi; <code>Workflow</code>, <code>SendFeedback</code> và <code>ShareOnboardingGuide</code> chỉ thấy ở phiên CLI (tài liệu chính thức <code>2.1.325</code> vẫn liệt kê), còn <code>SendUserFile</code>, <code>SearchPlugins</code>, <code>SuggestPluginInstall</code> và <code>SuggestSkills</code> chỉ thấy ở phiên Desktop (mục <a class="xref" href="#sec-2-4">2.4</a> và <a class="xref" href="#sec-2-5">2.5</a>). Tài liệu chính thức liệt kê 45 tool đang dùng ở <code>2.1.325</code>; <code>TaskOutput</code> đã bị gỡ từ <code>2.1.277</code>, nên output file của task nền được đọc bằng <code>Read</code>.</p>
+<h3 id="sec-2-1">2.1 Filesystem và code<a class="anchor" href="#sec-2-1" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Tên tool</th><th scope="col">Chức năng</th><th scope="col">Use cases</th></tr></thead><tbody><tr><td><strong><code>Read</code></strong></td><td>Đọc file theo <code>offset</code>/<code>limit</code>; đọc được ảnh, PDF (<code>pages</code>), notebook.</td><td>Khảo sát file đã biết đường dẫn; chỉ đọc phần cần thiết với file lớn.</td></tr><tr><td><strong><code>Write</code></strong></td><td>Tạo file mới hoặc ghi đè toàn bộ.</td><td>File mới; ghi đè yêu cầu đã <code>Read</code> trước đó.</td></tr><tr><td><strong><code>Edit</code></strong></td><td>Thay thế chuỗi chính xác, có <code>replace_all</code>.</td><td>Cách sửa file chính; bắt buộc <code>Read</code> file trong phiên trước khi sửa.</td></tr><tr><td><strong><code>Glob</code></strong></td><td>Tìm file theo glob pattern, sort theo thời gian sửa.</td><td>Khám phá layout, tìm file theo tên/đuôi trước khi đọc sâu.</td></tr><tr><td><strong><code>Grep</code></strong></td><td>Tìm nội dung bằng ripgrep; <code>output_mode</code>, <code>-A/-B/-C</code>, <code>multiline</code>, <code>type</code>.</td><td>Tìm định nghĩa, import, chuỗi cấu hình toàn repo.</td></tr></tbody></table></div>
+<p>Ghi chú: <code>Grep</code> là ripgrep chứ không phải grep — phải escape literal brace (<code>interface\{\}</code>). Ưu tiên <code>Grep</code>/<code>Glob</code> hơn <code>grep</code>/<code>find</code> qua shell để kết quả tích hợp với permission UI và file link. Theo tài liệu chính thức <code>2.1.325</code>, <code>Glob</code> và <code>Grep</code> mặc định <strong>không có</strong> trên macOS, Linux và WSL (máy tham chiếu là Windows nên có sẵn); khi vắng, tìm bằng <code>Bash</code>.</p>
+<h3 id="sec-2-2">2.2 Shell và thực thi<a class="anchor" href="#sec-2-2" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Tên tool</th><th scope="col">Chức năng</th><th scope="col">Use cases</th></tr></thead><tbody><tr><td><strong><code>Bash</code></strong></td><td>Chạy Git Bash (POSIX sh) trên Windows.</td><td>Script POSIX, git, pipeline <code>grep</code>/<code>sed</code>/heredoc.</td></tr><tr><td><strong><code>PowerShell</code></strong></td><td>Chạy Windows PowerShell 5.1.</td><td>Cmdlet Windows, registry, <code>icacls</code>, tác vụ native Windows.</td></tr></tbody></table></div>
+<p>Hai tool là <strong>hai runtime khác nhau</strong>, cú pháp không dùng lẫn được:</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Nhu cầu</th><th scope="col"><code>Bash</code></th><th scope="col"><code>PowerShell</code> 5.1</th></tr></thead><tbody><tr><td>Chuỗi lệnh có điều kiện</td><td><code>A &amp;&amp; B</code></td><td><code>A; if ($?) { B }</code> — <code>&amp;&amp;</code>/<code>||</code> gây parser error</td></tr><tr><td>Biến môi trường</td><td><code>$VAR</code>, <code>VAR=x cmd</code></td><td><code>$env:VAR</code>, <code>$env:VAR='x'; cmd</code></td></tr><tr><td>Null device</td><td><code>/dev/null</code></td><td><code>2&gt;$null</code></td></tr><tr><td>Ternary / null-coalescing</td><td>n/a</td><td><strong>không có</strong> trong <a class="xref" href="#sec-5-1">5.1</a></td></tr><tr><td>Chuỗi nhiều dòng</td><td>heredoc</td><td>here-string <code>@'...'@</code>, <code>'@</code> phải ở cột 0</td></tr></tbody></table></div>
+<p>Cả hai hỗ trợ <code>run_in_background</code> (chạy detached, tự thông báo khi xong) và <code>timeout</code> tối đa 600000 ms. Lệnh interactive (<code>git rebase -i</code>, <code>Read-Host</code>, <code>Get-Credential</code>) không dùng được: stdin nối null device.</p>
+<h3 id="sec-2-3">2.3 Điều phối, quy trình và tương tác<a class="anchor" href="#sec-2-3" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Tên tool</th><th scope="col">Chức năng</th><th scope="col">Use cases</th></tr></thead><tbody><tr><td><strong><code>Skill</code></strong></td><td>Nạp nội dung <code>SKILL.md</code> vào lượt hiện tại.</td><td>Kích hoạt quy trình chuyên biệt của repo hoặc built-in.</td></tr><tr><td><strong><code>ToolSearch</code></strong></td><td>Nạp schema của deferred tool.</td><td>Bắt buộc trước khi gọi bất kỳ deferred tool nào.</td></tr><tr><td><strong><code>Agent</code></strong></td><td>Khởi chạy subagent cô lập.</td><td>Ủy thác khảo sát độc lập; <code>subagent_type: "fork"</code> kế thừa context.</td></tr><tr><td><strong><code>ListAgents</code></strong></td><td>Liệt kê agent/phiên có thể gửi message (chỉ khi bật cross-session messaging); là nguồn của <code>/list-agents</code>.</td><td>Tìm địa chỉ trước khi dùng <code>SendMessage</code>.</td></tr><tr><td><strong><code>Workflow</code></strong></td><td>Chạy script điều phối nhiều subagent (chỉ thấy ở phiên CLI).</td><td>Chỉ khi User opt-in rõ ràng vào multi-agent orchestration.</td></tr><tr><td><strong><code>AskUserQuestion</code></strong></td><td>Hỏi User bằng lựa chọn có cấu trúc, hỗ trợ <code>preview</code>.</td><td>Quyết định thuộc về User, không suy ra được từ code.</td></tr><tr><td><strong><code>ScheduleWakeup</code></strong></td><td>Hẹn lượt tiếp theo trong <code>/loop</code> dynamic mode.</td><td>Tự điều nhịp vòng lặp; <code>delaySeconds</code> bị kẹp <code>[60, 3600]</code>.</td></tr></tbody></table></div>
+<h3 id="sec-2-4">2.4 Xuất bản và phản hồi<a class="anchor" href="#sec-2-4" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Tên tool</th><th scope="col">Chức năng</th><th scope="col">Use cases</th></tr></thead><tbody><tr><td><strong><code>Artifact</code></strong></td><td>Publish/read/list/delete trang HTML host trên claude.ai.</td><td>Dashboard, deck, tài liệu chia sẻ; xem mục <a class="xref" href="#sec-6">6</a>.</td></tr><tr><td><strong><code>ReportFindings</code></strong></td><td>Trả kết quả code review dạng danh sách có kiểu.</td><td>Chỉ khi hướng dẫn review đang chạy yêu cầu.</td></tr><tr><td><strong><code>SendUserFile</code></strong></td><td>Gửi file từ phiên tới thiết bị của User (<code>display</code>: <code>render</code> hoặc <code>attach</code>); chỉ thấy ở phiên Desktop.</td><td>Báo cáo, ảnh chụp, artifact mà User cần mở ngay.</td></tr><tr><td><strong><code>SendFeedback</code></strong></td><td>Soạn feedback về Claude Code (queue cục bộ); chỉ thấy ở phiên CLI.</td><td>Lỗi tái lập được hoặc sai hành vi model; không tự gửi.</td></tr><tr><td><strong><code>ShareOnboardingGuide</code></strong></td><td>Upload <code>ONBOARDING.md</code> và trả link chia sẻ; chỉ thấy ở phiên CLI.</td><td>Sau khi User duyệt nội dung cuối.</td></tr></tbody></table></div>
+<h3 id="sec-2-5">2.5 Tool có điều kiện hoặc riêng host<a class="anchor" href="#sec-2-5" aria-label="Liên kết tới mục này">#</a></h3>
+<p>Các tool dưới đây nằm trong tài liệu chính thức <code>2.1.325</code> hoặc trong phiên Desktop tham chiếu, nhưng không thuộc bộ nạp sẵn của cả hai phiên:</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Tool</th><th scope="col">Điều kiện</th><th scope="col">Chức năng</th></tr></thead><tbody><tr><td><code>TaskCreate</code>, <code>TaskGet</code>, <code>TaskList</code>, <code>TaskUpdate</code></td><td><span class="tag tag-docs">DOCS</span> Mặc định chỉ trên một số model; model khác phải opt-in</td><td>Quản lý task list của phiên; thay <code>TodoWrite</code>.</td></tr><tr><td><code>TodoWrite</code></td><td><span class="tag tag-docs">DOCS</span> Tắt mặc định khi có bộ <code>Task*</code>; <code>CLAUDE_CODE_ENABLE_TASKS=0</code> bật lại</td><td>Checklist task kiểu cũ.</td></tr><tr><td><code>LSP</code></td><td><span class="tag tag-docs">DOCS</span> Cần language server</td><td>Nhảy tới định nghĩa, tìm reference, báo lỗi type và cảnh báo.</td></tr><tr><td><code>WaitForMcpServers</code></td><td><span class="tag tag-docs">DOCS</span> Chỉ khi tool search tắt</td><td>Chờ MCP server còn đang kết nối.</td></tr><tr><td><code>SubagentHandback</code></td><td><span class="tag tag-docs">DOCS</span> Chỉ ở auto mode, cho subagent chạy local không phải fork (<code>2.1.271</code> trở lên)</td><td>Trả báo cáo cuối của subagent cho phiên nhận kết quả.</td></tr><tr><td><code>SearchPlugins</code>, <code>SuggestPluginInstall</code>, <code>SuggestSkills</code></td><td><span class="tag tag-session">SESSION</span> Quan sát ở phiên Desktop; không có trong tài liệu công khai</td><td>Tìm plugin trong catalog claude.ai của User; hiện thẻ gợi ý cài plugin hoặc skill.</td></tr><tr><td><code>ReadNotifications</code></td><td><span class="tag tag-session">SESSION</span> Quan sát ở phiên Desktop, khi có thông báo xếp hàng</td><td>Đọc thông báo đã xếp hàng: hoạt động PR đang theo dõi, trigger lịch, tin từ phiên khác.</td></tr></tbody></table></div>
+<hr>
+<h2 id="sec-3">3. Deferred Tools &amp; <code>ToolSearch</code><a class="anchor" href="#sec-3" aria-label="Liên kết tới mục này">#</a></h2>
+<p>Đây là cơ chế <strong>đặc thù của Claude Code</strong> và là nguồn lỗi phổ biến nhất.</p>
+<p>Deferred tool chỉ được nêu <strong>tên</strong> trong <code>&lt;system-reminder&gt;</code>; schema chưa nạp nên gọi thẳng sẽ fail với <code>InputValidationError</code>. Phải nạp trước:</p>
+<div class="code"><div class="code-head"><span>Văn bản</span><button type="button" class="copy" aria-label="Sao chép nội dung khối mã">Sao chép</button></div><pre><code>ToolSearch(query: "select:WebFetch,WebSearch", max_results: 5)   # chọn đích danh
+ToolSearch(query: "notebook jupyter", max_results: 5)            # tìm theo keyword
+ToolSearch(query: "+slack send", max_results: 5)                 # bắt buộc chứa "slack"</code></pre></div>
+<p>Schema trả về nằm trong khối <code>&lt;functions&gt;</code>; sau đó tool gọi được như tool thường. Danh sách deferred trong phiên Desktop tham chiếu (2026-11-15):</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Nhóm</th><th scope="col">Tool</th><th scope="col">Chức năng</th></tr></thead><tbody><tr><td>Web</td><td><code>WebFetch</code>, <code>WebSearch</code></td><td>Lấy nội dung URL đã biết; tìm kiếm web real-time.</td></tr><tr><td>Kế hoạch</td><td><code>EnterPlanMode</code>, <code>ExitPlanMode</code></td><td>Vào chế độ lập kế hoạch; trình plan xin duyệt.</td></tr><tr><td>Git isolation</td><td><code>EnterWorktree</code>, <code>ExitWorktree</code></td><td>Làm việc trên worktree tách biệt; chỉ khi User yêu cầu rõ, không dùng để điều phối agent.</td></tr><tr><td>Theo dõi</td><td><code>Monitor</code>, <code>TaskStop</code></td><td>Chờ điều kiện; dừng task nền.</td></tr><tr><td>Lịch</td><td><code>CronCreate</code>, <code>CronList</code>, <code>CronDelete</code></td><td>Agent chạy theo cron.</td></tr><tr><td>Liên lạc</td><td><code>SendMessage</code>, <code>PushNotification</code>, <code>RemoteTrigger</code></td><td>Gửi tin cho agent/phiên khác; thông báo đẩy.</td></tr><tr><td>Artifact</td><td><code>ArtifactComments</code>, <code>ArtifactData</code></td><td>Comment thread; database chia sẻ của artifact.</td></tr><tr><td>MCP resource</td><td><code>ListMcpResourcesTool</code>, <code>ReadMcpResourceTool</code>, <code>ReadMcpResourceDirTool</code></td><td>Liệt kê, đọc resource và liệt kê thư mục resource do MCP server expose.</td></tr><tr><td>Tài khoản claude.ai</td><td><code>ListPlugins</code>, <code>ListSkills</code>, <code>SearchSkills</code></td><td>Liệt kê plugin, skill đang bật trên tài khoản; tìm skill theo từ khóa.</td></tr><tr><td>Phiên và project</td><td><code>FetchInboxMessage</code>, <code>SendToProject</code>, <code>SendToProjectContext</code></td><td>Đọc tin từ inbox của phiên (Remote Control); gửi tin tới Claude Project, chỉ trong lượt User chạy <code>/send-to-project</code>.</td></tr><tr><td>Khác</td><td><code>NotebookEdit</code>, <code>DesignSync</code></td><td>Sửa cell notebook; đồng bộ design.</td></tr></tbody></table></div>
+<div class="alert alert-note" role="note"><p class="alert-title"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" /><rect x="7.25" y="7" width="1.5" height="4.5" rx=".5" fill="currentColor" /><circle cx="8" cy="4.9" r=".9" fill="currentColor" /></svg><span>Ghi chú</span></p><p>Phiên CLI <code>2.1.278</code> (2026-09-21) còn liệt kê <code>EndConversation</code>; phiên Desktop không có. Tool này chỉ dùng khi User lạm dụng kéo dài hoặc yêu cầu demo trực tiếp; phải nạp hướng dẫn đầy đủ qua <code>ToolSearch("select:EndConversation")</code>.</p></div>
+<hr>
+<h2 id="sec-4">4. MCP Servers &amp; Connectors<a class="anchor" href="#sec-4" aria-label="Liên kết tới mục này">#</a></h2>
+<h3 id="sec-4-1">4.1 Ba nguồn MCP<a class="anchor" href="#sec-4-1" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Nguồn</th><th scope="col">Khai báo tại</th><th scope="col">Ghi chú</th></tr></thead><tbody><tr><td>Project</td><td><code>.mcp.json</code> trong repo</td><td>Theo dự án, commit được.</td></tr><tr><td>Plugin</td><td><code>.mcp.json</code> bên trong plugin</td><td>Cài plugin là kéo theo cả bộ server.</td></tr><tr><td>Account connector</td><td>Kết nối trên claude.ai</td><td>Dùng chung giữa các phiên của account.</td></tr></tbody></table></div>
+<p>Tool MCP mang tên đầy đủ <code>mcp__&lt;server&gt;__&lt;tool&gt;</code>. Phần <code>&lt;server&gt;</code> phụ thuộc host: phiên CLI 2026-09-21 dùng tên đọc được (<code>mcp__claude_ai_Claude_Docs__batch</code>), phiên Desktop 2026-11-15 dùng mã định danh của connector (<code>mcp__&lt;uuid&gt;__batch</code>). Phần lớn tool MCP cũng là <strong>deferred</strong> — vẫn phải <code>ToolSearch</code> trước khi gọi.</p>
+<h3 id="sec-4-2">4.2 Trạng thái cục bộ (<code>claude mcp list</code>, 2026-11-15)<a class="anchor" href="#sec-4-2" aria-label="Liên kết tới mục này">#</a></h3>
+<p>Lệnh <code>claude mcp list</code> health-check từng server và là <strong>nguồn xác thực</strong> về trạng thái kết nối của các server mà <em>CLI</em> quản lý (project, user, plugin, connector claude.ai). Kết quả phụ thuộc binary:</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Binary</th><th scope="col">Kết quả <code>claude mcp list</code></th></tr></thead><tbody><tr><td><code>claude</code> ở PATH, <code>2.1.268</code></td><td>1 server: <code>plugin:postman:postman</code> (<code>mcp.postman.com/mcp</code>, HTTP) — <code>! Needs authentication</code></td></tr><tr><td>Bản app, <code>2.1.325</code></td><td><code>No MCP servers configured</code> (plugin <code>postman</code> đang <code>× disabled</code> ở bản này)</td></tr></tbody></table></div>
+<p>Ảnh chụp 2026-09-21 (CLI <code>2.1.278</code>) liệt kê 25 server: 16 connector claude.ai (Claude Docs, Google Drive và Gmail đã kết nối, 13 chưa xác thực) và 9 server của plugin <code>productivity</code> (6 chưa xác thực, <code>asana</code> lỗi <code>Incompatible auth server</code>, 2 chưa cấu hình). Không server nào trong số đó còn xuất hiện ở hai kết quả trên; nguyên nhân chưa được xác minh.</p>
+<p>Phiên Desktop tham chiếu (2026-11-15) vẫn nạp MCP server của host mà <code>claude mcp list</code> không liệt kê: <code>Claude Docs</code> (connector; <code>batch</code>, <code>guide</code>, <code>update</code> nạp sẵn, còn <code>create</code>, <code>delete</code>, <code>export</code>, <code>query</code>, <code>read</code> là deferred), <code>claude-in-chrome</code>, <code>Claude_Browser</code> (browser pane), <code>terminal</code>, <code>visualize</code>, <code>scheduled-tasks</code>, <code>mcp-registry</code>, nhóm <code>ccd_*</code> (điều khiển phiên, sidebar, cửa sổ, PR và cài đặt của app Desktop), cùng server của các plugin <code>desktop-commander</code>, <code>pdf-viewer</code> và <code>postman</code> (chưa xác thực).</p>
+<div class="alert alert-warning" role="note"><p class="alert-title"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 1.8 15 14H1L8 1.8Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" /><rect x="7.3" y="6" width="1.4" height="4" rx=".5" fill="currentColor" /><circle cx="8" cy="11.8" r=".8" fill="currentColor" /></svg><span>Cảnh báo</span></p><p><strong>Bề mặt tool của phiên ≠ trạng thái kết nối của CLI.</strong> Phiên Desktop nạp nhiều server trong khi <code>claude mcp list</code> báo 0–1 server; ngược lại, ở phiên CLI 2026-09-21 Gmail và Google Drive chỉ expose cặp <code>authenticate</code>/ <code>complete_authentication</code> dù <code>claude mcp list</code> báo <code>✔ Connected</code>. Với server do CLI quản lý, hãy chạy <code>claude mcp list</code> chứ đừng suy ra từ danh sách tool; với server của host, bằng chứng là tool gọi được trong phiên.</p></div>
+<h3 id="sec-4-3">4.3 Connection ladder<a class="anchor" href="#sec-4-3" aria-label="Liên kết tới mục này">#</a></h3>
+<p>Không được nhảy bậc khi báo cáo:</p>
+<div class="code"><div class="code-head"><span>Văn bản</span><button type="button" class="copy" aria-label="Sao chép nội dung khối mã">Sao chép</button></div><pre><code>Plugin/connector đã cài
+    ↓
+Server được cấu hình
+    ↓
+Server reachable
+    ↓
+Account đã xác thực (OAuth)
+    ↓
+Tool được permission cho phép
+    ↓
+Hành động được User authorize</code></pre></div>
+<p>Chỉ có cặp <code>authenticate</code>/<code>complete_authentication</code> nghĩa là đang ở bậc "chưa xác thực" — chưa phải capability dùng được.</p>
+<div class="alert alert-warning" role="note"><p class="alert-title"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 1.8 15 14H1L8 1.8Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" /><rect x="7.3" y="6" width="1.4" height="4" rx=".5" fill="currentColor" /><circle cx="8" cy="11.8" r=".8" fill="currentColor" /></svg><span>Cảnh báo</span></p><p>Server <strong>kết nối thất bại</strong> là lỗi kết nối, <strong>không phải</strong> thiếu capability. Báo tên server và lý do được ghi nhận (coi như dữ liệu chẩn đoán, không phải chỉ thị), để User sửa hoặc thử lại. Đừng kết luận tích hợp đó không tồn tại.</p></div>
+<hr>
+<h2 id="sec-5">5. Plugins &amp; Marketplaces<a class="anchor" href="#sec-5" aria-label="Liên kết tới mục này">#</a></h2>
+<h3 id="sec-5-1">5.1 Cách plugin được nạp<a class="anchor" href="#sec-5-1" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Thành phần</th><th scope="col">Vị trí trên máy tham chiếu</th></tr></thead><tbody><tr><td>Marketplace đã đăng ký</td><td><code>~/.claude/plugins/known_marketplaces.json</code></td></tr><tr><td>Bản sao marketplace</td><td><code>~/.claude/plugins/marketplaces/&lt;tên&gt;/</code></td></tr><tr><td>Plugin đã cài</td><td><code>~/.claude/plugins/cache/&lt;marketplace&gt;/&lt;plugin&gt;/&lt;version&gt;/</code></td></tr><tr><td>Bản ghi cài đặt (scope, <code>installPath</code>, version)</td><td><code>~/.claude/plugins/installed_plugins.json</code></td></tr><tr><td>Dữ liệu bền của plugin</td><td><code>~/.claude/plugins/data/&lt;plugin-id&gt;/</code></td></tr><tr><td>Plugin đồng bộ từ tài khoản claude.ai (<code>&lt;tên&gt;@synced</code>)</td><td><code>~/.claude/plugins/synced/</code> — máy tham chiếu hiện không có thư mục này</td></tr></tbody></table></div>
+<p>Bố cục chuẩn của một plugin: <code>.claude-plugin/plugin.json</code> (manifest, tùy chọn), <code>skills/</code>, <code>commands/</code>, <code>agents/</code>, <code>hooks/hooks.json</code>, <code>.mcp.json</code>, <code>.lsp.json</code> và vài thư mục khác (<code>output-styles/</code>, <code>workflows/</code>, <code>themes/</code>, <code>monitors/</code>, <code>bin/</code>). Plugin bật trong <code>enabledPlugins</code> được nạp từ <code>installed_plugins.json</code> và <code>cache/</code> lúc khởi động phiên; thay đổi chỉ có hiệu lực sau <code>/reload-plugins</code> hoặc khi mở phiên mới.</p>
+<h3 id="sec-5-2">5.2 Trạng thái cục bộ (2026-11-15)<a class="anchor" href="#sec-5-2" aria-label="Liên kết tới mục này">#</a></h3>
+<p><code>claude plugin marketplace list</code>:</p>
+<ul><li>Bản <code>2.1.268</code> (PATH): một marketplace, <strong><code>claude-plugins-official</code></strong> (GitHub <code>anthropics/claude-plugins-official</code>).</li><li>Bản <code>2.1.325</code> (app): thêm marketplace built-in <strong><code>anthropic-plugin-directory</code></strong> (Anthropic Directory).</li><li>Bản sao cục bộ của <code>claude-plugins-official</code> liệt kê <strong>317 plugin</strong> trong catalog.</li></ul>
+<p><code>claude plugin list</code> → plugin duy nhất đã cài: <strong><code>postman@claude-plugins-official</code> v2.3.0</strong> (scope <code>user</code>). Trạng thái là <code>√ enabled</code> ở bản <code>2.1.268</code> nhưng <code>× disabled</code> ở bản <code>2.1.325</code>; <code>enabledPlugins</code> trong <code>~/.claude/settings.json</code> đặt <code>false</code> cho plugin này. Ảnh chụp 2026-09-21 là <code>productivity@synced</code> v1.3.1; plugin đó không còn được cài.</p>
+<p><code>claude plugin details postman</code> → component inventory và chi phí token (cả hai binary cho cùng số liệu, trừ cách đếm MCP server):</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Thành phần</th><th scope="col">Số lượng</th><th scope="col">Chi tiết</th></tr></thead><tbody><tr><td>Skills</td><td>19</td><td><code>ai-readiness</code>, <code>api-discovery</code>, <code>api-documentation</code>, <code>api-engineer</code>, <code>api-mocking</code>, <code>api-monitoring</code>, <code>api-simulation</code>, <code>api-testing</code>, <code>application-testing</code>, <code>ci-integration</code>, <code>cli-install</code>, <code>collection-schema-v3</code>, <code>datasets</code>, <code>flows</code>, <code>performance-testing</code>, <code>postman-mcp-server</code>, <code>variables</code>, <code>webhook-testing</code>, <code>workspaces</code></td></tr><tr><td>MCP servers</td><td>0 ở <code>2.1.268</code>; 1 ở <code>2.1.325</code></td><td><code>postman</code> (schema tool resolve lúc chạy, không tính vào chi phí)</td></tr><tr><td>Agents</td><td>0</td><td>—</td></tr><tr><td>Hooks</td><td>1</td><td><code>SessionStart</code> (harness-only, không tốn context model)</td></tr><tr><td>LSP servers</td><td>0</td><td>—</td></tr></tbody></table></div>
+<p>Chi phí token (ước lượng): <strong>always-on ~2.1k tok</strong> cộng vào mọi phiên khi plugin bật; on-invoke từ ~200 tok (<code>cli-install</code>) đến ~3k tok (<code>api-simulation</code>), <code>application-testing</code> ~2.7k tok.</p>
+<div class="alert alert-tip" role="note"><p class="alert-title"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 1.5a4.5 4.5 0 0 0-2.6 8.2c.4.3.6.7.6 1.2V11h4v-.1c0-.5.2-.9.6-1.2A4.5 4.5 0 0 0 8 1.5Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" /><path d="M6.2 13h3.6M6.8 14.7h2.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" /></svg><span>Mẹo</span></p><p><code>claude plugin details &lt;name&gt;</code> là cách rẻ nhất để biết một plugin <strong>thực sự</strong> đóng góp gì và tốn bao nhiêu context trước khi quyết định bật/tắt.</p></div>
+<div class="alert alert-important" role="note"><p class="alert-title"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M2.5 2.5h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H9l-3 2.5V11.5H2.5a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" /><rect x="7.3" y="4.5" width="1.4" height="3.4" rx=".5" fill="currentColor" /><circle cx="8" cy="9.6" r=".8" fill="currentColor" /></svg><span>Quan trọng</span></p><p>317 plugin trong catalog là <strong>chưa cài</strong>, trừ <code>postman</code>. Có trong marketplace ≠ đã cài; đã cài ≠ đã xác thực. Đừng khai báo plugin chưa cài trong bảng capability.</p></div>
+<hr>
+<h2 id="sec-6">6. Artifacts<a class="anchor" href="#sec-6" aria-label="Liên kết tới mục này">#</a></h2>
+<p><code>Artifact</code> publish một trang HTML lên claude.ai, mặc định private, và trả về link chia sẻ được. Đây là <strong>hành động ra ngoài session</strong>, không phải ghi file thường — chịu ranh giới authority của <code>docs-harness/SESSION.md</code>. Tool cần gói Pro, Max, Ultra, Team hoặc Enterprise và đăng nhập <code>/login</code> (tài liệu chính thức <code>2.1.325</code>).</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Action</th><th scope="col">Tác dụng</th></tr></thead><tbody><tr><td><code>publish</code> (mặc định)</td><td>Đăng trang; kèm <code>url</code> để cập nhật tại chỗ.</td></tr><tr><td><code>read</code></td><td>Đọc artifact đã publish (dùng cho link claude.ai, không dùng WebFetch).</td></tr><tr><td><code>list</code></td><td>Liệt kê artifact (<code>mine</code>, <code>shared</code>, <code>all</code>, <code>files</code>, <code>assets</code>, <code>types</code>).</td></tr><tr><td><code>open</code> / <code>pin</code> / <code>unpin</code></td><td>Hiển thị cho User; ghim vào sidebar.</td></tr><tr><td><code>delete</code></td><td>Xóa vĩnh viễn — chỉ khi User yêu cầu và xác nhận.</td></tr><tr><td><code>quickstart</code></td><td>Bước đầu tiên khi tạo deck/document/design mới.</td></tr></tbody></table></div>
+<p>Skill hỗ trợ: <code>artifact-design</code> (bắt buộc đọc trước khi viết trang), <code>artifact-capabilities</code> (runtime capability), <code>artifact-diagramming</code>, <code>dataviz</code>.</p>
+<p>Ranh giới: không publish trang mạo danh người/tổ chức thật, hồ sơ giả, form thu thập credential. Luôn đọc hết file trước khi publish file không do mình viết.</p>
+<hr>
+<h2 id="sec-7">7. Skills<a class="anchor" href="#sec-7" aria-label="Liên kết tới mục này">#</a></h2>
+<h3 id="sec-7-1">7.1 Vị trí nạp<a class="anchor" href="#sec-7-1" aria-label="Liên kết tới mục này">#</a></h3>
+<p>Theo tài liệu chính thức <code>2.1.325</code> (trang Skills), Claude Code nạp skill từ:</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Phạm vi</th><th scope="col">Đường dẫn</th></tr></thead><tbody><tr><td>Project</td><td><code>.claude/skills/&lt;name&gt;/SKILL.md</code></td></tr><tr><td>Project lồng nhau</td><td><code>&lt;subdir&gt;/.claude/skills/&lt;name&gt;/SKILL.md</code>, nạp khi phiên ở trong <code>&lt;subdir&gt;</code></td></tr><tr><td>Thư mục thêm (<code>--add-dir</code>)</td><td><code>.claude/skills/</code> trong thư mục đó</td></tr><tr><td>User-level</td><td><code>~/.claude/skills/&lt;name&gt;/SKILL.md</code></td></tr><tr><td>Tài khoản claude.ai (đồng bộ)</td><td><code>~/.claude/skills/synced/</code></td></tr><tr><td>Enterprise</td><td><code>.claude/skills/</code> trong thư mục managed settings</td></tr><tr><td>Plugin</td><td><code>&lt;plugin&gt;/skills/&lt;name&gt;/SKILL.md</code>, gọi là <code>&lt;plugin&gt;:&lt;skill&gt;</code></td></tr><tr><td>Built-in</td><td>Đi kèm bản phát hành Claude Code</td></tr></tbody></table></div>
+<p><code>.agents/skills/</code> <strong>không</strong> nằm trong danh sách đó. Repo Harness này giữ bản gốc ở <code>.agents/skills/</code> (nguồn dùng chung với các agent khác) và <strong>mirror sang <code>.claude/skills/</code></strong>, nơi Claude Code thực sự nạp. Khi sửa skill phải đồng bộ cả hai; hai cây hiện giống hệt từng byte (19 skill, 50 file, 2026-11-16). <code>harness-check</code> (mục <code>skill-mirror</code>) báo drift khi nội dung khác nhau và chỉ báo <code>info</code> khi chỉ khác line-ending; khi tự so sánh, hãy bỏ CR trước: <code>diff &lt;(tr -d '\r' &lt; a) &lt;(tr -d '\r' &lt; b)</code>.</p>
+<h3 id="sec-7-2">7.2 Frontmatter và chế độ gọi<a class="anchor" href="#sec-7-2" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="code"><div class="code-head"><span>YAML</span><button type="button" class="copy" aria-label="Sao chép nội dung khối mã">Sao chép</button></div><pre><code>---
+name: &lt;trùng tên thư mục, lowercase-kebab-case&gt;
+description: &lt;mô tả hướng model, chứa các nhánh trigger&gt;
+disable-model-invocation: true   # tùy chọn
+---</code></pre></div>
+<p>Theo tài liệu chính thức <code>2.1.325</code>, mọi field đều tùy chọn và <code>name</code> mặc định là tên thư mục; việc đặt <code>name</code> trùng tên thư mục là quy ước của repo. Tài liệu còn liệt kê field khác (<code>when_to_use</code>, <code>user-invocable</code>, <code>allowed-tools</code>, <code>paths</code>, <code>hooks</code>, ...); skill của repo chủ yếu dùng ba field trên.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Chế độ</th><th scope="col">Cách đặt</th><th scope="col">Hệ quả</th></tr></thead><tbody><tr><td><strong>Model-invoked</strong></td><td>Bỏ <code>disable-model-invocation</code></td><td>Agent tự gọi được; skill khác gọi được; <code>description</code> luôn chiếm context.</td></tr><tr><td><strong>User-invoked</strong></td><td><code>disable-model-invocation: true</code></td><td>Chỉ User gõ <code>/&lt;tên&gt;</code> mới gọi; <strong>không</strong> xuất hiện trong danh sách available-skills; context load bằng 0; không preload được vào subagent và không chạy được từ scheduled task theo phiên.</td></tr></tbody></table></div>
+<p>Trong repo này <code>domain-audit</code>, <code>harness-check</code>, <code>init-harness-repo</code> và <code>ticket-solving</code> là user-invoked, nên <strong>không</strong> hiện trong danh sách skill tự động — đó là thiết kế, không phải lỗi.</p>
+<h3 id="sec-7-3">7.3 Skill có sẵn theo nhóm (phiên tham chiếu)<a class="anchor" href="#sec-7-3" aria-label="Liên kết tới mục này">#</a></h3>
+<p><strong>Skill của repo Harness</strong> (18; <code>.claude/skills/</code> + <code>.agents/skills/</code>), model-invoked: <code>goal-griller</code>, <code>improve-harness</code>, <code>onboarding</code>, <code>prd-research</code>, <code>prompt-leverage</code>, <code>sequence-execution-plan</code>, <code>typesafe-ai</code>, <code>utilizing-tools-agy</code>, <code>utilizing-tools-claude</code>, <code>utilizing-tools-codex</code>, <code>utilizing-tools-opencode</code>, <code>utilizing-tools-orca-ade</code>, <code>writing-for-agents</code>, <code>xia</code>; user-invoked: <code>domain-audit</code>, <code>harness-check</code>, <code>init-harness-repo</code>, <code>ticket-solving</code>.</p>
+<p><strong>Skill cấp user</strong> (<code>~/.claude/skills/</code>, trùng với <code>~/.agents/skills/</code>): <code>computer-use</code>, <code>find-skills</code>, <code>orca-cli</code>, <code>orchestration</code>.</p>
+<p><strong>Built-in của Claude Code</strong>:</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Nhóm</th><th scope="col">Skill</th></tr></thead><tbody><tr><td>Artifact &amp; visual</td><td><code>artifact-design</code>, <code>artifact-capabilities</code>, <code>artifact-diagramming</code>, <code>dataviz</code></td></tr><tr><td>Code quality</td><td><code>code-review</code>, <code>simplify</code>, <code>security-review</code></td></tr><tr><td>Cấu hình harness</td><td><code>update-config</code>, <code>keybindings-help</code>, <code>fewer-permission-prompts</code>, <code>init</code>, <code>plugin-authoring</code></td></tr><tr><td>Tự động hóa</td><td><code>loop</code>, <code>schedule</code>; <code>workflow-authoring</code> (chỉ thấy ở phiên CLI <code>2.1.278</code>)</td></tr><tr><td>Tham chiếu</td><td><code>claude-api</code>, <code>run</code></td></tr></tbody></table></div>
+<p><strong>Plugin trong phiên Desktop tham chiếu</strong> (2026-11-15). Chỉ <code>postman</code> nằm trong <code>claude plugin list</code>; nguồn nạp của các plugin còn lại chưa được xác minh:</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Plugin</th><th scope="col">Skill</th></tr></thead><tbody><tr><td><code>postman</code></td><td>19 skill, liệt kê ở mục <a class="xref" href="#sec-5-2">5.2</a></td></tr><tr><td><code>anthropic-skills</code></td><td><code>built-in-browser</code>, <code>chrome-browser</code>, <code>computer-use</code>, <code>consolidate-memory</code>, <code>deep-research</code>, <code>docs</code>, <code>docx</code>, <code>explain-usage</code>, <code>google-workspace</code>, <code>import-memory</code>, <code>morning</code>, <code>pdf</code>, <code>pptx</code>, <code>setup-claude</code>, <code>skill-creator</code>, <code>xlsx</code></td></tr><tr><td><code>desktop-commander</code></td><td><code>ai-tools-setup</code>, <code>computer-health-check</code>, <code>desktop-commander-overview</code>, <code>knowledge-base</code>, <code>obsidian-vault</code>, <code>terminal</code></td></tr><tr><td><code>pdf-viewer</code></td><td><code>annotate</code>, <code>fill-form</code>, <code>open</code>, <code>sign</code>, <code>view-pdf</code></td></tr><tr><td><code>cowork-plugin-management</code></td><td><code>cowork-plugin-customizer</code>, <code>create-cowork-plugin</code></td></tr><tr><td><code>frontend-design</code>, <code>skill-creator</code></td><td><code>frontend-design:frontend-design</code>, <code>skill-creator:skill-creator</code></td></tr></tbody></table></div>
+<p>Ảnh chụp 2026-09-21 liệt kê plugin <code>productivity</code> (<code>memory-management</code>, <code>start</code>, <code>task-management</code>, <code>update</code>) và 8 skill của <code>anthropic-skills</code>; chúng không còn khớp phiên hiện tại.</p>
+<div class="alert alert-note" role="note"><p class="alert-title"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" /><rect x="7.25" y="7" width="1.5" height="4.5" rx=".5" fill="currentColor" /><circle cx="8" cy="4.9" r=".9" fill="currentColor" /></svg><span>Ghi chú</span></p><p><code>claude-api</code> có trigger bắt buộc: phải đọc <strong>trước</strong> khi trả lời bất kỳ câu hỏi nào về model/pricing/limit của Claude, thay vì trả lời từ trí nhớ.</p></div>
+<hr>
+<h2 id="sec-8">8. Subagents &amp; Delegation<a class="anchor" href="#sec-8" aria-label="Liên kết tới mục này">#</a></h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Agent type</th><th scope="col">Vai trò</th><th scope="col">Tool</th></tr></thead><tbody><tr><td><code>claude</code></td><td>Catch-all, mặc định khi không nêu tên agent.</td><td><code>*</code></td></tr><tr><td><code>general-purpose</code></td><td>Nghiên cứu phức tạp, tìm kiếm nhiều bước.</td><td><code>*</code></td></tr><tr><td><code>Explore</code></td><td>Read-only, fan-out search rộng; trả kết luận không dump file.</td><td>Trừ ghi/Agent</td></tr><tr><td><code>Plan</code></td><td>Thiết kế kế hoạch triển khai, trade-off kiến trúc.</td><td>Trừ ghi/Agent</td></tr><tr><td><code>claude-code-guide</code></td><td>Hỏi đáp về Claude Code, Agent SDK, Claude API, Claude Tag, <code>claude plugin eval</code> và <code>/skill-doctor</code>.</td><td>Glob, Grep, Read, WebFetch, WebSearch</td></tr><tr><td><code>statusline-setup</code></td><td>Cấu hình status line.</td><td>Read, Edit</td></tr><tr><td>Agent do plugin cung cấp, ví dụ <code>claude-security:*</code> (8 agent trong phiên Desktop 2026-11-15)</td><td>Theo mô tả của plugin; nhiều agent chỉ do workflow của plugin điều phối, không gọi trực tiếp.</td><td>Theo từng agent</td></tr></tbody></table></div>
+<p><code>subagent_type: "fork"</code> kế thừa toàn bộ context của phiên cha và luôn chạy trên model của cha. <code>isolation: "worktree"</code> cấp git worktree riêng; <code>isolation: "remote"</code> chạy agent trong môi trường cloud (luôn chạy nền, tùy tài khoản). Subagent chạy nền và báo kết quả sau; báo cáo cuối của nó <strong>không</strong> hiển thị cho User — phải thuật lại phần quan trọng.</p>
+<div class="alert alert-important" role="note"><p class="alert-title"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M2.5 2.5h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H9l-3 2.5V11.5H2.5a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" /><rect x="7.3" y="4.5" width="1.4" height="3.4" rx=".5" fill="currentColor" /><circle cx="8" cy="9.6" r=".8" fill="currentColor" /></svg><span>Quan trọng</span></p><p><strong>Ràng buộc của repo này</strong>: <code>docs-harness/SESSION.md</code> (mục Session role) quy định phiên chính là Bale, xử lý việc nhỏ trực tiếp; phiên worker đã được giao việc <strong>không</strong> được spawn tiếp agent. Skill <code>utilizing-tools-claude</code> quy định tool <code>Agent</code>/<code>Workflow</code> chỉ dùng khi User, <code>CLAUDE.md</code> hoặc một skill yêu cầu.</p></div>
+<hr>
+<h2 id="sec-9">9. CLI Surface (<code>claude</code>)<a class="anchor" href="#sec-9" aria-label="Liên kết tới mục này">#</a></h2>
+<p>Phần này là bề mặt dòng lệnh, đã chạy thật (<code>claude --help</code>, <code>claude mcp --help</code>, <code>claude plugin --help</code>) trên hai binary của máy tham chiếu: bản app <code>2.1.325</code> (các bảng dưới) và CLI ở PATH <code>2.1.268</code> (khác biệt được ghi chú).</p>
+<h3 id="sec-9-1">9.1 Subcommands (18)<a class="anchor" href="#sec-9-1" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Nhóm</th><th scope="col">Lệnh</th><th scope="col">Chức năng</th></tr></thead><tbody><tr><td>Phiên nền</td><td><code>agents</code></td><td>Quản lý background agents.</td></tr><tr><td></td><td><code>attach &lt;id&gt;</code></td><td>Mở một phiên nền trong terminal hiện tại; <code>2.1.325</code> nhận cả tên phiên.</td></tr><tr><td></td><td><code>logs &lt;id&gt;</code></td><td>In output gần đây của một phiên nền; <code>2.1.325</code> nhận cả tên phiên.</td></tr><tr><td></td><td><code>stop|kill &lt;id&gt;</code></td><td>Dừng phiên nền; hội thoại vẫn giữ để <code>attach</code> lại.</td></tr><tr><td></td><td><code>rm &lt;id&gt;</code></td><td>Gỡ phiên nền khỏi danh sách và xóa worktree của nó khi an toàn; hội thoại vẫn giữ (<code>claude --resume</code> liệt kê).</td></tr><tr><td></td><td><code>respawn [id]</code></td><td>Khởi động lại phiên nền theo bản Claude Code hiện tại; <code>--all</code> cho mọi phiên.</td></tr><tr><td>MCP &amp; plugin</td><td><code>mcp</code></td><td>Cấu hình và quản lý MCP servers — xem <a class="xref" href="#sec-9-2">9.2</a>.</td></tr><tr><td></td><td><code>plugin|plugins</code></td><td>Quản lý plugin — xem <a class="xref" href="#sec-9-3">9.3</a>.</td></tr><tr><td>Cài đặt &amp; tài khoản</td><td><code>auth</code></td><td>Quản lý xác thực.</td></tr><tr><td></td><td><code>setup-token</code></td><td>Tạo token dài hạn (cần Claude subscription).</td></tr><tr><td></td><td><code>install [target]</code></td><td>Cài native build (<code>stable</code>, <code>latest</code>, hoặc version cụ thể).</td></tr><tr><td></td><td><code>update|upgrade</code></td><td>Kiểm tra và cài bản cập nhật.</td></tr><tr><td>Chẩn đoán &amp; cấu hình</td><td><code>doctor</code></td><td>Kiểm tra sức khỏe cài đặt; <code>/doctor</code> trong phiên còn sửa được lỗi.</td></tr><tr><td></td><td><code>project</code></td><td>Quản lý project state — chỉ có ở <code>2.1.268</code>, không còn ở <code>2.1.325</code>.</td></tr><tr><td></td><td><code>purge [path]</code></td><td><strong>Xóa dữ liệu project</strong> (transcript, task, file history, entry trong <code>~/.claude.json</code>) khỏi máy này; có <code>--dry-run</code>. Chỉ có ở <code>2.1.325</code>.</td></tr><tr><td></td><td><code>auto-mode</code></td><td>Xem hoặc reset cấu hình auto mode classifier.</td></tr><tr><td></td><td><code>import [source]</code></td><td>Nhập cấu hình từ một AI coding agent khác.</td></tr><tr><td>Khác</td><td><code>ultrareview [target]</code></td><td>Multi-agent code review chạy trên cloud cho branch/PR.</td></tr><tr><td></td><td><code>gateway</code></td><td>Chạy enterprise auth/telemetry gateway.</td></tr></tbody></table></div>
+<h3 id="sec-9-2">9.2 <code>claude mcp</code> (11 subcommand gồm <code>help</code>; giống nhau ở cả hai bản)<a class="anchor" href="#sec-9-2" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Lệnh</th><th scope="col">Loại</th><th scope="col">Ghi chú</th></tr></thead><tbody><tr><td><code>list</code></td><td><strong>Read-only</strong></td><td>Health-check và in trạng thái từng server. Đây là nguồn xác thực về kết nối.</td></tr><tr><td><code>get &lt;name&gt;</code></td><td><strong>Read-only</strong></td><td>Chi tiết một server; server <code>.mcp.json</code> chưa duyệt hiện <code>⏸ Pending approval</code>.</td></tr><tr><td><code>add &lt;name&gt; &lt;commandOrUrl&gt;</code></td><td>Mutation</td><td>Thêm server; <code>--transport http</code>, <code>--header</code>, <code>-e KEY=val</code>.</td></tr><tr><td><code>add-json &lt;name&gt; &lt;json&gt;</code></td><td>Mutation</td><td>Thêm server bằng chuỗi JSON (stdio, SSE, HTTP, WebSocket).</td></tr><tr><td><code>add-from-claude-desktop</code></td><td>Mutation</td><td>Nhập server từ Claude Desktop (chỉ Mac và WSL).</td></tr><tr><td><code>login &lt;name&gt;</code></td><td>Mutation credential</td><td>Xác thực với server HTTP/SSE hoặc connector claude.ai.</td></tr><tr><td><code>logout &lt;name&gt;</code></td><td>Mutation credential</td><td>Xóa OAuth credential đã lưu.</td></tr><tr><td><code>remove &lt;name&gt;</code></td><td>Mutation</td><td>Gỡ server.</td></tr><tr><td><code>reset-project-choices</code></td><td>Mutation</td><td>Reset toàn bộ lựa chọn duyệt/từ chối server <code>.mcp.json</code> của project.</td></tr><tr><td><code>serve</code></td><td>Mở server</td><td>Chạy chính Claude Code như một MCP server.</td></tr></tbody></table></div>
+<h3 id="sec-9-3">9.3 <code>claude plugin</code> (17 subcommand ở <code>2.1.325</code>, gồm <code>help</code>; 14 ở <code>2.1.268</code>)<a class="anchor" href="#sec-9-3" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Lệnh</th><th scope="col">Loại</th><th scope="col">Ghi chú</th></tr></thead><tbody><tr><td><code>list</code></td><td><strong>Read-only</strong></td><td>Plugin đã cài, version, path, trạng thái load.</td></tr><tr><td><code>details &lt;name&gt;</code></td><td><strong>Read-only</strong></td><td>Component inventory + chi phí token dự kiến.</td></tr><tr><td><code>marketplace</code></td><td>Hỗn hợp</td><td>Quản lý marketplace; <code>marketplace list</code> là read-only.</td></tr><tr><td><code>validate &lt;path&gt;</code></td><td><strong>Read-only</strong></td><td>Kiểm tra manifest plugin/marketplace, hoặc skills/agents/commands trong một thư mục.</td></tr><tr><td><code>install|i &lt;plugin&gt;</code></td><td>Mutation</td><td>Cài từ marketplace; <code>plugin@marketplace</code> để chỉ định nguồn.</td></tr><tr><td><code>uninstall|remove &lt;plugin&gt;</code></td><td>Mutation</td><td>Gỡ plugin.</td></tr><tr><td><code>update &lt;plugin&gt;</code></td><td>Mutation</td><td>Cập nhật plugin (phải restart mới áp dụng).</td></tr><tr><td><code>enable</code> / <code>disable</code></td><td>Mutation</td><td>Bật/tắt plugin đã cài.</td></tr><tr><td><code>prune|autoremove</code></td><td>Mutation</td><td>Gỡ dependency tự cài không còn cần.</td></tr><tr><td><code>init|new &lt;name&gt;</code></td><td>Mutation</td><td>Scaffold plugin mới tại <code>~/.claude/skills/&lt;name&gt;/</code>.</td></tr><tr><td><code>tag [path]</code></td><td>Mutation git</td><td>Tạo tag <code>{name}--v{version}</code>, kiểm tra <code>plugin.json</code> khớp marketplace.</td></tr><tr><td><code>eval [target]</code></td><td><strong>Thực thi</strong></td><td>Chạy eval suite của plugin <strong>trên máy bạn, với quyền của bạn</strong>.</td></tr><tr><td><code>configure &lt;plugin&gt;</code></td><td>Hỗn hợp</td><td>Hiện option của plugin và option chưa đặt; <code>--values-stdin</code> lưu giá trị từ stdin (mutation credential). Chỉ có ở <code>2.1.325</code>.</td></tr><tr><td><code>restore-set-aside &lt;plugin&gt;</code></td><td>Mutation</td><td>Trả lại option và secret đã bị set aside khi marketplace do tổ chức khai báo thay thế nguồn khác. Chỉ có ở <code>2.1.325</code>.</td></tr><tr><td><code>test [dir]</code></td><td><strong>Thực thi</strong></td><td>Chạy test của một mod. Chỉ có ở <code>2.1.325</code>.</td></tr></tbody></table></div>
+<div class="alert alert-warning" role="note"><p class="alert-title"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 1.8 15 14H1L8 1.8Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" /><rect x="7.3" y="6" width="1.4" height="4" rx=".5" fill="currentColor" /><circle cx="8" cy="11.8" r=".8" fill="currentColor" /></svg><span>Cảnh báo</span></p><p><code>claude plugin eval</code> nạp plugin và chạy eval suite của nó bằng quyền của bạn; <code>claude plugin test</code> cũng thực thi mã test của một mod trên máy bạn. Sandbox giới hạn chứ không đảm bảo an toàn, và việc suite chạy pass <strong>không</strong> phải là một cuộc thẩm định bảo mật. Chỉ chạy plugin bạn tin tưởng.</p></div>
+<h3 id="sec-9-4">9.4 Flag đáng chú ý<a class="anchor" href="#sec-9-4" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Flag</th><th scope="col">Tác dụng</th></tr></thead><tbody><tr><td><code>-p, --print</code></td><td>Chạy không tương tác (dùng cho script/CI).</td></tr><tr><td><code>--model &lt;model&gt;</code></td><td>Alias (<code>opus</code>, <code>sonnet</code>, <code>fable</code>) hoặc tên đầy đủ.</td></tr><tr><td><code>--effort &lt;level&gt;</code></td><td><code>low</code>, <code>medium</code>, <code>high</code>, <code>xhigh</code>, <code>max</code>.</td></tr><tr><td><code>--agent &lt;agent&gt;</code> / <code>--agents &lt;json&gt;</code></td><td>Chọn agent, hoặc định nghĩa custom agent inline.</td></tr><tr><td><code>--allowedTools</code> / <code>--disallowedTools</code></td><td>Allowlist/denylist tool, ví dụ <code>"Bash(git *)" Edit</code>.</td></tr><tr><td><code>--dangerously-skip-permissions</code></td><td>Bỏ qua mọi permission check — chỉ dùng trong sandbox không có internet.</td></tr><tr><td><code>--permission-mode &lt;mode&gt;</code></td><td>Đặt permission mode cho phiên.</td></tr><tr><td><code>--add-dir &lt;dirs...&gt;</code></td><td>Cho phép tool truy cập thêm thư mục ngoài cwd.</td></tr><tr><td><code>--mcp-config &lt;configs...&gt;</code> / <code>--strict-mcp-config</code></td><td>Nạp MCP từ file/chuỗi JSON; chỉ dùng đúng bộ đó.</td></tr><tr><td><code>--plugin-dir &lt;path&gt;</code></td><td>Nạp plugin từ thư mục chỉ định.</td></tr><tr><td><code>--disable-slash-commands</code></td><td><strong>Tắt toàn bộ skill</strong> (xem <a class="xref" href="#sec-9-5">9.5</a>).</td></tr><tr><td><code>--bare</code></td><td>Minimal mode: bỏ hooks, LSP, plugin sync, auto-memory, auto-discovery <code>CLAUDE.md</code>.</td></tr><tr><td><code>--bg, --background</code></td><td>Chạy nền và trả về id cho <code>attach</code>/<code>logs</code>/<code>stop</code>/<code>rm</code>.</td></tr><tr><td><code>-c, --continue</code> / <code>--resume</code> / <code>--fork-session</code></td><td>Tiếp tục, resume, hoặc fork phiên.</td></tr><tr><td><code>--desktop</code></td><td>Mở phiên trong app Claude Desktop thay vì terminal, kèm <code>--continue</code> hoặc <code>--resume &lt;id&gt;</code> (chỉ <code>2.1.325</code>).</td></tr><tr><td><code>--cloud</code> / <code>--environment &lt;id&gt;</code></td><td>Tạo hoặc attach phiên cloud.</td></tr><tr><td><code>--fallback-model &lt;model&gt;</code></td><td>Tự chuyển model khi model chính quá tải.</td></tr><tr><td><code>--max-budget-usd &lt;amount&gt;</code></td><td>Trần chi phí API (chỉ với <code>--print</code>).</td></tr><tr><td><code>--output-format</code> / <code>--json-schema</code></td><td>Định dạng output; schema cho structured output.</td></tr><tr><td><code>--settings &lt;file-or-json&gt;</code> / <code>--setting-sources</code></td><td>Nạp settings từ file/JSON; chọn nguồn <code>user,project,local</code>.</td></tr></tbody></table></div>
+<h3 id="sec-9-5">9.5 Slash commands<a class="anchor" href="#sec-9-5" aria-label="Liên kết tới mục này">#</a></h3>
+<p>Trong Claude Code, <strong>skill là slash command</strong>: skill của repo, của user, của plugin và bundled skill đều gọi được bằng <code>/&lt;tên-skill&gt;</code>. Flag <code>--disable-slash-commands</code> được mô tả là <em>"Disable all skills"</em> ở <code>2.1.268</code> và <em>"Disable all skills and commands"</em> ở <code>2.1.325</code>. Danh sách ở mục <a class="xref" href="#sec-7-3">7.3</a> cũng là danh sách slash command gọi được bằng <code>/&lt;tên-skill&gt;</code>.</p>
+<p>Ngoài ra còn các lệnh dựng sẵn của CLI, không phải skill; bảng chính thức đầy đủ được phân loại ở mục <a class="xref" href="#sec-9-7">9.7</a>. Các lệnh đã quan sát trực tiếp trong phiên tham chiếu: <code>/help</code>, <code>/clear</code>, <code>/config</code>, <code>/doctor</code>, <code>/artifacts</code>, <code>/skills</code>, <code>/resume</code>, <code>/remember</code>, <code>/fast</code>, <code>/loop</code>, <code>/workflows</code>, <code>/skill-doctor</code> (2026-09-21); <code>/list-agents</code>, <code>/model</code>, <code>/compact</code> (2026-11-15).</p>
+<div class="alert alert-note" role="note"><p class="alert-title"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" /><rect x="7.25" y="7" width="1.5" height="4.5" rx=".5" fill="currentColor" /><circle cx="8" cy="4.9" r=".9" fill="currentColor" /></svg><span>Ghi chú</span></p><p>Danh sách lệnh dựng sẵn thay đổi theo bản phát hành. Nguồn xác thực là gõ <code>/</code> trong phiên hoặc chạy <code>/help</code>; đừng coi danh sách trên là đầy đủ.</p></div>
+<h3 id="sec-9-6">9.6 Discovery an toàn vs mutation<a class="anchor" href="#sec-9-6" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Mục đích</th><th scope="col">Lệnh read-only nên dùng</th></tr></thead><tbody><tr><td>Phiên bản runtime</td><td><code>claude --version</code></td></tr><tr><td>Trạng thái MCP thật</td><td><code>claude mcp list</code>, <code>claude mcp get &lt;name&gt;</code></td></tr><tr><td>Plugin đã cài</td><td><code>claude plugin list</code></td></tr><tr><td>Plugin đóng góp gì, tốn bao nhiêu context</td><td><code>claude plugin details &lt;name&gt;</code></td></tr><tr><td>Marketplace đã đăng ký</td><td><code>claude plugin marketplace list</code></td></tr><tr><td>Sức khỏe cài đặt</td><td><code>claude doctor</code></td></tr></tbody></table></div>
+<p>Mọi lệnh còn lại trong <a class="xref" href="#sec-9-2">9.2</a> và <a class="xref" href="#sec-9-3">9.3</a> (<code>add</code>, <code>login</code>, <code>install</code>, <code>enable</code>, <code>disable</code>, <code>update</code>, <code>remove</code>, <code>init</code>, <code>tag</code>, <code>eval</code>, <code>test</code>, <code>configure --values-stdin</code>, <code>restore-set-aside</code>) đều có side effect lên cấu hình, credential hoặc hệ thống; ở <a class="xref" href="#sec-9-1">9.1</a>, <code>purge</code> (xóa dữ liệu project), <code>rm</code>, <code>stop</code>, <code>respawn</code>, <code>install</code> và <code>update</code> cũng thay đổi trạng thái — cần authority đúng target. <strong>Không dùng lệnh cài đặt/xác thực làm phép dò capability.</strong></p>
+<h3 id="sec-9-7">9.7 Phân loại slash command (bảng chính thức, 2026-11-16)<a class="anchor" href="#sec-9-7" aria-label="Liên kết tới mục này">#</a></h3>
+<p>Tab Code của Claude Desktop chạy cùng engine với CLI và <strong>không có danh sách lệnh riêng</strong>. Bảng lệnh chính thức (<code>code.claude.com/docs/en/commands</code>) có 121 dòng: lệnh dựng sẵn (mã hóa trong CLI), 20 bundled skill <em>(skill)</em>, 1 bundled workflow <em>(workflow)</em>, 3 lệnh đã gỡ và vài alias. Lệnh nào hiện ra còn tùy nền tảng, gói và môi trường; danh sách thật của một phiên là menu <code>/</code> (ở Desktop: nút <strong>+</strong> rồi <strong>Slash commands</strong>), gồm cả skill của repo, của user và của plugin (mục <a class="xref" href="#sec-7-3">7.3</a>). Cột Công dụng là bản rút gọn từ phần đầu mô tả của từng lệnh.</p>
+<p>Khác biệt ở Code tab Desktop (tài liệu Desktop và phiên tham chiếu 2026-11-16):</p>
+<ul><li>Lệnh mở hộp thoại terminal hoạt động khác: theo tài liệu, <code>/permissions</code> không tham số trả lời <code>isn't available in this environment</code>; trong phiên tham chiếu nó chỉ mở bộ chọn permission mode. <code>/config</code> mở Settings &gt; Code.</li><li><code>/btw</code> mở side chat và không lưu ra đĩa; <code>/code-review</code> hiện thẻ có nút <strong>Walk through in diff</strong> và <strong>Apply fixes</strong>; <code>/remote-control</code> hiện nút <strong>Turn off</strong> khi phiên đã bật Remote Control.</li><li><code>/resume</code> chỉ dùng ở phiên local (không dùng ở SSH, WSL, cloud). Desktop quản lý plugin bằng plugin manager UI, CLI dùng <code>/plugin</code>.</li><li><code>/desktop</code> là lệnh của CLI để chuyển phiên sang Desktop (macOS và Windows x64, cần gói subscription).</li><li>Tab Code chạy bản Claude Code riêng, có thể khác <code>claude</code> ở terminal; <code>/status</code> cho biết bản đang chạy (khớp ghi chú hai binary ở đầu tài liệu).</li><li><code>/send-to-project</code> chỉ xuất hiện trong mô tả tool của phiên Desktop tham chiếu, không có trong bảng tài liệu.</li></ul>
+<p><strong>Phiên và hội thoại (18)</strong></p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Lệnh</th><th scope="col">Công dụng</th></tr></thead><tbody><tr><td><code>/clear [name]</code></td><td>Hội thoại mới, context trống (alias <code>/new</code>)</td></tr><tr><td><code>/compact [instructions]</code></td><td>Tóm tắt để giải phóng context</td></tr><tr><td><code>/autocompact [auto|&lt;tokens&gt;]</code></td><td>Đặt ngưỡng tự compact</td></tr><tr><td><code>/context [all]</code></td><td>Xem mức dùng context</td></tr><tr><td><code>/resume [session]</code></td><td>Mở lại hội thoại theo ID hoặc tên</td></tr><tr><td><code>/rename [name]</code></td><td>Đổi tên phiên</td></tr><tr><td><code>/branch [name]</code></td><td>Tạo nhánh hội thoại tại điểm này</td></tr><tr><td><code>/fork [prompt]</code></td><td>Sao chép hội thoại hiện tại</td></tr><tr><td><code>/rewind</code></td><td>Tua lại hội thoại hoặc code</td></tr><tr><td><code>/recap</code></td><td>Tóm tắt một dòng về phiên</td></tr><tr><td><code>/export [filename]</code></td><td>Xuất hội thoại ra văn bản</td></tr><tr><td><code>/copy [N]</code></td><td>Chép phản hồi gần nhất</td></tr><tr><td><code>/btw [question]</code></td><td>Hỏi câu phụ (side question)</td></tr><tr><td><code>/cd &lt;path&gt;</code></td><td>Chuyển thư mục làm việc, giữ hội thoại</td></tr><tr><td><code>/add-dir &lt;path&gt;</code></td><td>Thêm thư mục làm việc</td></tr><tr><td><code>/focus</code></td><td>Bật/tắt focus view</td></tr><tr><td><code>/restart</code></td><td>Khởi động lại và tiếp tục phiên</td></tr><tr><td><code>/exit</code></td><td>Thoát CLI</td></tr></tbody></table></div>
+<p><strong>Model, chi phí, gói (12)</strong></p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Lệnh</th><th scope="col">Công dụng</th></tr></thead><tbody><tr><td><code>/model [model]</code></td><td>Đổi model, lưu làm mặc định</td></tr><tr><td><code>/effort [level|auto|status|ultracode [on|off]]</code></td><td>Đặt mức effort</td></tr><tr><td><code>/fast [on|off]</code></td><td>Bật/tắt fast mode</td></tr><tr><td><code>/advisor [model|off]</code></td><td>Bật/tắt advisor tool</td></tr><tr><td><code>/usage</code>, <code>/cost</code>, <code>/stats</code></td><td>Chi phí và hạn mức (<code>/cost</code>, <code>/stats</code> là alias; <code>/stats</code> mở tab Stats)</td></tr><tr><td><code>/usage-credits</code></td><td>Cấu hình hoặc xin usage credits</td></tr><tr><td><code>/rate-limit-options</code></td><td>Cách làm tiếp khi chạm hạn mức</td></tr><tr><td><code>/upgrade</code></td><td>Mở trang nâng gói (ẩn ở gói Enterprise)</td></tr><tr><td><code>/privacy-settings</code></td><td>Cài đặt riêng tư (chỉ Pro, Max, Ultra)</td></tr><tr><td><code>/passes</code></td><td>Tặng bạn bè một tuần dùng thử (nếu đủ điều kiện)</td></tr></tbody></table></div>
+<p><strong>Cấu hình và quyền (21)</strong></p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Lệnh</th><th scope="col">Công dụng</th></tr></thead><tbody><tr><td><code>/config [key=value]</code></td><td>Mở Settings (Desktop: Settings &gt; Code)</td></tr><tr><td><code>/permissions</code></td><td>Quản lý allow/ask/deny</td></tr><tr><td><code>/hooks</code></td><td>Xem cấu hình hook</td></tr><tr><td><code>/sandbox</code></td><td>Bật/tắt sandbox</td></tr><tr><td><code>/auto-mode-setup</code></td><td>Soạn mục <code>autoMode.environment</code></td></tr><tr><td><code>/update-config [request]</code> <em>(skill)</em></td><td>Sửa settings bằng mô tả</td></tr><tr><td><code>/fewer-permission-prompts</code> <em>(skill)</em></td><td>Sinh allowlist từ transcript</td></tr><tr><td><code>/doctor [prompt-audit [path]]</code> <em>(skill)</em></td><td>Kiểm tra cài đặt, settings, <code>CLAUDE.md</code></td></tr><tr><td><code>/init</code></td><td>Tạo <code>CLAUDE.md</code></td></tr><tr><td><code>/memory</code></td><td>Sửa <code>CLAUDE.md</code>, auto memory</td></tr><tr><td><code>/output-style [style]</code></td><td>Đổi output style</td></tr><tr><td><code>/theme</code>, <code>/color [color|default]</code></td><td>Giao diện; màu thanh prompt</td></tr><tr><td><code>/statusline</code>, <code>/status</code></td><td>Status line; tab Status</td></tr><tr><td><code>/keybindings</code>, <code>/terminal-setup</code></td><td>Phím tắt; Shift+Enter</td></tr><tr><td><code>/tui [default|fullscreen]</code>, <code>/scroll-speed</code></td><td>Renderer; tốc độ cuộn</td></tr><tr><td><code>/voice [hold|tap|off]</code></td><td>Đọc chính tả</td></tr><tr><td><code>/vim</code></td><td>Đã gỡ (v2.1.92), dùng <code>/config</code></td></tr></tbody></table></div>
+<p><strong>Mở rộng và tác vụ nền (16)</strong></p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Lệnh</th><th scope="col">Công dụng</th></tr></thead><tbody><tr><td><code>/mcp [...]</code></td><td>Quản lý kết nối MCP và OAuth</td></tr><tr><td><code>/plugin [subcommand]</code></td><td>Quản lý plugin</td></tr><tr><td><code>/plugin-authoring</code></td><td>Nạp tài liệu viết mod</td></tr><tr><td><code>/reload-plugins [--force]</code>, <code>/reload-skills</code></td><td>Nạp lại plugin; quét lại skill</td></tr><tr><td><code>/skills</code>, <code>/skill-doctor</code></td><td>Liệt kê skill; chi phí context của skill</td></tr><tr><td><code>/agents</code>, <code>/list-agents</code></td><td>Nhắc tạo subagent; liệt kê agent và phiên khác</td></tr><tr><td><code>/subtask &lt;task&gt;</code></td><td>Tạo subagent fork</td></tr><tr><td><code>/background [prompt]</code>, <code>/stop</code></td><td>Tách phiên chạy nền; dừng phiên nền</td></tr><tr><td><code>/tasks</code></td><td>Xem việc nền</td></tr><tr><td><code>/workflows</code>, <code>/workflow-authoring</code> <em>(skill)</em></td><td>Xem tiến độ workflow; tài liệu viết workflow</td></tr><tr><td><code>/import [codex|gemini|cursor]</code></td><td>Nhập cấu hình từ công cụ khác</td></tr></tbody></table></div>
+<p><strong>Plan, goal, lặp, lịch (5)</strong></p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Lệnh</th><th scope="col">Công dụng</th></tr></thead><tbody><tr><td><code>/plan [description]</code></td><td>Vào plan mode</td></tr><tr><td><code>/goal [condition|clear]</code></td><td>Làm tiếp qua nhiều lượt tới khi đạt</td></tr><tr><td><code>/loop [interval] [prompt]</code> <em>(skill)</em></td><td>Lặp một prompt</td></tr><tr><td><code>/schedule [description]</code></td><td>Cloud scheduled tasks</td></tr><tr><td><code>/ultraplan</code></td><td>Đã gỡ, dùng plan mode</td></tr></tbody></table></div>
+<p><strong>Review, kiểm thử, repo (14)</strong></p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Lệnh</th><th scope="col">Công dụng</th></tr></thead><tbody><tr><td><code>/code-review [...]</code> <em>(skill)</em>, <code>/review</code></td><td>Review diff, PR hoặc branch (<code>/review</code> là alias)</td></tr><tr><td><code>/security-review</code></td><td>Quét lỗ hổng trên branch</td></tr><tr><td><code>/ultrareview [PR or branch]</code></td><td>Review nhiều agent trên cloud</td></tr><tr><td><code>/simplify [target]</code> <em>(skill)</em></td><td>Dọn code đã đổi và sửa luôn</td></tr><tr><td><code>/diff</code></td><td>Xem thay đổi trong working tree</td></tr><tr><td><code>/autofix-pr [prompt]</code></td><td>Phiên cloud tự sửa PR</td></tr><tr><td><code>/batch &lt;instruction&gt;</code> <em>(skill)</em></td><td>Thay đổi lớn song song</td></tr><tr><td><code>/debug [description]</code> <em>(skill)</em></td><td>Bật debug log, chẩn đoán</td></tr><tr><td><code>/verify</code>, <code>/run</code>, <code>/run-skill-generator</code> <em>(skill)</em></td><td>Chạy app để xác nhận thay đổi</td></tr><tr><td><code>/deep-research &lt;question&gt;</code> <em>(workflow)</em></td><td>Nghiên cứu web có trích dẫn</td></tr><tr><td><code>/pr-comments [PR]</code></td><td>Đã gỡ (v2.1.91)</td></tr></tbody></table></div>
+<p><strong>Artifact và thiết kế (9 dòng)</strong></p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Lệnh</th><th scope="col">Công dụng</th></tr></thead><tbody><tr><td><code>/design [brief]</code> <em>(skill)</em></td><td>Canvas thiết kế dạng artifact</td></tr><tr><td><code>/design consent</code>, <code>/design revoke</code></td><td>Cấp hoặc thu hồi quyền cho Claude Design</td></tr><tr><td><code>/design-login</code></td><td>Đăng nhập để dùng <code>/design-sync</code></td></tr><tr><td><code>/design-sync [hint]</code> <em>(skill)</em></td><td>Đồng bộ design system React</td></tr><tr><td><code>/slides [brief]</code> <em>(skill)</em></td><td>Tạo bản trình chiếu</td></tr><tr><td><code>/artifacts</code></td><td>Liệt kê artifact của bạn</td></tr><tr><td><code>/artifact-capabilities</code>, <code>/artifact-diagramming</code> <em>(skill)</em></td><td>Nạp tài liệu tham chiếu</td></tr><tr><td><code>/dataviz [request]</code> <em>(skill)</em></td><td>Hướng dẫn thiết kế biểu đồ</td></tr></tbody></table></div>
+<p><strong>Tích hợp và thiết bị (14)</strong></p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Lệnh</th><th scope="col">Công dụng</th></tr></thead><tbody><tr><td><code>/ide</code></td><td>Quản lý tích hợp IDE</td></tr><tr><td><code>/chrome</code>, <code>/claude-in-chrome [task]</code> <em>(skill)</em></td><td>Cấu hình Chrome; làm việc trong trình duyệt</td></tr><tr><td><code>/desktop</code> (alias <code>/app</code>)</td><td>Chuyển phiên sang app Desktop</td></tr><tr><td><code>/mobile</code> (alias <code>/ios</code>, <code>/android</code>)</td><td>Mã QR tải app di động</td></tr><tr><td><code>/remote-control</code>, <code>/remote-env</code></td><td>Remote Control; môi trường cloud mặc định</td></tr><tr><td><code>/teleport</code>, <code>/web-setup</code></td><td>Kéo phiên cloud về máy; nối GitHub cho cloud</td></tr><tr><td><code>/install-github-app</code>, <code>/install-slack-app</code></td><td>Cài app GitHub, Slack</td></tr><tr><td><code>/setup-bedrock</code>, <code>/setup-vertex</code></td><td>Cấu hình Bedrock, Vertex</td></tr><tr><td><code>/claude-api [...]</code> <em>(skill)</em></td><td>Nạp tài liệu Claude API, Managed Agents</td></tr></tbody></table></div>
+<p><strong>Tài khoản, trợ giúp, khác (12)</strong></p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Lệnh</th><th scope="col">Công dụng</th></tr></thead><tbody><tr><td><code>/login</code>, <code>/logout</code></td><td>Đăng nhập, đăng xuất</td></tr><tr><td><code>/help</code></td><td>Trợ giúp</td></tr><tr><td><code>/bug [report]</code>, <code>/feedback [report]</code></td><td>Báo lỗi, gửi phản hồi (cùng một hộp thoại)</td></tr><tr><td><code>/release-notes</code></td><td>Xem changelog</td></tr><tr><td><code>/insights</code></td><td>Báo cáo HTML về các phiên gần đây</td></tr><tr><td><code>/team-onboarding</code></td><td>Tạo hướng dẫn onboarding cho team</td></tr><tr><td><code>/powerup</code></td><td>Bài học tương tác về tính năng</td></tr><tr><td><code>/heapdump</code></td><td>Chẩn đoán bộ nhớ (ẩn khỏi menu)</td></tr><tr><td><code>/radio</code>, <code>/stickers</code></td><td>Phụ: radio lo-fi, sticker</td></tr></tbody></table></div>
+<hr>
+<h2 id="sec-10">10. Cấu Hình &amp; Permission<a class="anchor" href="#sec-10" aria-label="Liên kết tới mục này">#</a></h2>
+<h3 id="sec-10-1">10.1 Layout cấu hình<a class="anchor" href="#sec-10-1" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Phạm vi</th><th scope="col">Đường dẫn</th></tr></thead><tbody><tr><td>Project settings</td><td><code>.claude/settings.json</code>, <code>.claude/settings.local.json</code></td></tr><tr><td>Project skills</td><td><code>.claude/skills/</code></td></tr><tr><td>User settings</td><td><code>~/.claude/settings.json</code></td></tr><tr><td>User skills</td><td><code>~/.claude/skills/</code></td></tr><tr><td>Plugin</td><td><code>~/.claude/plugins/</code> (mục <a class="xref" href="#sec-5-1">5.1</a>)</td></tr><tr><td>Keybindings</td><td><code>~/.claude/keybindings.json</code></td></tr><tr><td>Memory</td><td><code>~/.claude/projects/&lt;project-slug&gt;/memory/</code> + <code>MEMORY.md</code></td></tr><tr><td>Session/scratch</td><td><code>~/.claude/sessions/</code>, <code>~/.claude/projects/</code></td></tr></tbody></table></div>
+<p>Máy tham chiếu (2026-11-15): repo <code>.claude/</code> <strong>chỉ có <code>skills/</code></strong>, chưa có settings project. <code>~/.claude/settings.json</code> có các key: <code>hooks</code>, <code>statusLine</code>, <code>enabledPlugins</code>, <code>extraKnownMarketplaces</code>, <code>autoUpdatesChannel</code>, <code>theme</code>, <code>agentPushNotifEnabled</code>. Ảnh chụp 2026-09-21 ghi thêm <code>model</code>, <code>effortLevel</code>, <code>modelSettings</code> và <code>skipDangerousModePermissionPrompt</code>; các key này không còn.</p>
+<h3 id="sec-10-2">10.2 Permission và hooks<a class="anchor" href="#sec-10-2" aria-label="Liên kết tới mục này">#</a></h3>
+<ul><li>Tool call chạy qua permission mode do User chọn. Một call bị <strong>từ chối</strong> nghĩa là User không đồng ý — đổi cách tiếp cận, không gọi lại y nguyên.</li><li><strong>Hooks</strong> cấu hình trong <code>settings.json</code> có thể chặn tool call và trả feedback; feedback đó được coi như lời của User. Mọi yêu cầu kiểu "từ giờ mỗi khi X thì Y" phải hiện thực bằng hook, không phải bằng memory/preference.</li><li>Skill hỗ trợ: <code>update-config</code> (sửa <code>settings.json</code>, permission, env, hooks), <code>fewer-permission-prompts</code> (quét transcript và sinh allowlist), <code>keybindings-help</code>.</li><li><strong>Bypass permissions mode</strong>: khi bật, ưu tiên làm việc qua <code>Bash</code> (đọc bằng <code>cat</code>/<code>sed</code>, sửa bằng <code>sed</code>/heredoc) thay vì <code>Read</code>/<code>Edit</code>/<code>Write</code>, chỉ quay lại tool chuyên dụng khi shell thực sự không làm được.</li></ul>
+<hr>
+<h2 id="sec-11">11. Workflow Chọn Capability Chuẩn<a class="anchor" href="#sec-11" aria-label="Liên kết tới mục này">#</a></h2>
+<h3 id="phase-1-phan-loai-task">Phase 1 — Phân loại task<a class="anchor" href="#phase-1-phan-loai-task" aria-label="Liên kết tới mục này">#</a></h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Loại task</th><th scope="col">Capability ưu tiên</th></tr></thead><tbody><tr><td>Đọc file đã biết đường dẫn</td><td><code>Read</code> (dùng <code>Glob</code> trước nếu chưa biết)</td></tr><tr><td>Tìm nội dung trên toàn repo</td><td><code>Grep</code>; <code>Glob</code> cho tên/layout</td></tr><tr><td>Sửa/tạo file</td><td><code>Edit</code> (thay chuỗi chính xác), <code>Write</code> (file mới/ghi đè)</td></tr><tr><td>Cell notebook</td><td><code>NotebookEdit</code> — deferred</td></tr><tr><td>Build/test/git/shell</td><td><code>Bash</code> hoặc <code>PowerShell</code>, trong phạm vi authority</td></tr><tr><td>Fact/version/spec hiện tại</td><td><code>WebFetch</code> (URL đã biết), <code>WebSearch</code> (discovery) — deferred</td></tr><tr><td>Quyết định thuộc về User</td><td><code>AskUserQuestion</code></td></tr><tr><td>Lập kế hoạch trước khi làm</td><td><code>EnterPlanMode</code> / <code>ExitPlanMode</code> — deferred</td></tr><tr><td>Nhánh git tách biệt (chỉ khi User yêu cầu rõ, không dùng để điều phối agent)</td><td><code>EnterWorktree</code> / <code>ExitWorktree</code> — deferred</td></tr><tr><td>Chờ điều kiện dài</td><td><code>Monitor</code> — deferred; hoặc <code>Bash</code> <code>run_in_background</code></td></tr><tr><td>Việc lặp theo lịch</td><td><code>CronCreate</code> / <code>CronList</code> / <code>CronDelete</code> — deferred</td></tr><tr><td>Quy trình chuyên biệt</td><td><code>Skill</code></td></tr><tr><td>Trang chia sẻ cho người khác</td><td><code>Artifact</code> (+ <code>artifact-design</code>)</td></tr><tr><td>Dịch vụ ngoài</td><td><code>mcp__&lt;server&gt;__&lt;tool&gt;</code> đã kết nối và xác thực</td></tr><tr><td>Khảo sát độc lập, bounded</td><td><code>Agent</code> — theo điều kiện ủy thác ở mục <a class="xref" href="#sec-8">8</a></td></tr></tbody></table></div>
+<h3 id="phase-2-mandatory-declaration">Phase 2 — Mandatory declaration<a class="anchor" href="#phase-2-mandatory-declaration" aria-label="Liên kết tới mục này">#</a></h3>
+<p>Khi <code>utilizing-tools-claude</code> được trigger, mở đầu response bằng bảng:</p>
+<div class="code"><div class="code-head"><span>Markdown</span><button type="button" class="copy" aria-label="Sao chép nội dung khối mã">Sao chép</button></div><pre><code>### Selected Claude Code Capabilities
+| Tool / MCP / Plugin / Skill / Agent | Purpose in this task | Target scope |
+| :--- | :--- | :--- |
+| `Grep` | Locate the existing skill pattern | `.agents/skills/` |
+| `Write` | Persist the authorized documentation | Named repository paths only |
+| `writing-for-agents` | Review skill structure and completion criteria | New `SKILL.md` |</code></pre></div>
+<p>Không liệt kê toàn bộ catalog nếu task chỉ cần một subset nhỏ.</p>
+<h3 id="phase-3-execute-va-verify">Phase 3 — Execute và verify<a class="anchor" href="#phase-3-execute-va-verify" aria-label="Liên kết tới mục này">#</a></h3>
+<ol><li>Kiểm tra target, connection, permission trước khi hành động.</li><li>Chỉ thực thi capability đã khai báo, trong phạm vi authority. Gọi các tool độc lập trong <strong>cùng một message</strong> để chạy song song.</li><li>Verify bằng proof quan sát được: tool response, diff, output lệnh, artifact.</li><li>Report changed paths, external side effect, kết quả validation và check chưa chạy.</li></ol>
+<hr>
+<h2 id="sec-12">12. Guardrails &amp; Anti-Patterns<a class="anchor" href="#sec-12" aria-label="Liên kết tới mục này">#</a></h2>
+<ul><li><strong>User Authority</strong>: theo <code>docs-harness/SESSION.md</code> (Task authority); read-only là mặc định cho điều tra. Mutation file, cài plugin, xác thực connector, publish artifact, commit/push cần authority đúng target.</li><li><strong>Không gọi deferred tool trước <code>ToolSearch</code></strong>: sẽ fail <code>InputValidationError</code>.</li><li><strong>Không đoán capability</strong>: không tự tạo tên tool, prefix MCP, trạng thái plugin/auth, opaque ID hay permission state.</li><li><strong>Marketplace ≠ đã cài ≠ đã kết nối ≠ đã xác thực</strong>: nêu đúng bậc còn thiếu.</li><li><strong>Kết nối thất bại ≠ không có capability</strong>: báo lỗi kết nối để User xử lý.</li><li><strong>Không trộn cú pháp shell</strong>: <code>Bash</code> là POSIX, <code>PowerShell</code> là 5.1; chọn một.</li><li><strong>Ưu tiên tool chuyên dụng hơn shell</strong> khi không ở bypass mode: <code>Grep</code>/<code>Glob</code>/ <code>Read</code>/<code>Edit</code> tích hợp permission UI và file link.</li><li><strong>Không spawn subagent thừa</strong>: việc phiên hiện tại làm được thì làm trực tiếp; áp dụng điều kiện ủy thác ở mục <a class="xref" href="#sec-8">8</a>.</li><li><strong>Không claim completion sớm</strong>: một tool call thành công chưa phải proof; phải đọc result và kiểm tra điều kiện hoàn thành.</li></ul>
+<hr>
+<h2 id="sec-13">13. Completion Contract<a class="anchor" href="#sec-13" aria-label="Liên kết tới mục này">#</a></h2>
+<p>Một task dùng capability Claude Code chỉ được báo hoàn tất khi:</p>
+<ul><li>capability được chọn phù hợp task và khai báo trước execution;</li><li>mọi mục trong bảng khai báo có lý do và target scope rõ ràng;</li><li>kết quả chính có proof quan sát được;</li><li>file/path hoặc external state đã thay đổi được liệt kê;</li><li>validation đã chạy được báo pass/fail, check chưa authorize báo <code>unattempted</code>;</li><li>khoảng trống connection/auth hoặc quyết định còn thiếu được nêu kèm bước xử lý nhỏ nhất.</li></ul>
+<hr>
+<h2 id="sec-14">14. Nguồn &amp; Ranh Giới Phiên Bản<a class="anchor" href="#sec-14" aria-label="Liên kết tới mục này">#</a></h2>
+<p>Phân loại độ tin cậy của các claim trong tài liệu này:</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Bảng (cuộn ngang được)"><table><thead><tr><th scope="col">Hạng mục</th><th scope="col">Nguồn</th><th scope="col">Trạng thái</th></tr></thead><tbody><tr><td>Bản app <code>2.1.325</code>, CLI ở PATH <code>2.1.268</code>; npm <code>latest</code> <code>2.1.325</code>, <code>stable</code> <code>2.1.311</code>; layout <code>~/.claude/</code>; key của <code>settings.json</code></td><td><code>claude --version</code> của từng binary, đường dẫn tiến trình <code>claude.exe</code>, <code>registry.npmjs.org/-/package/@anthropic-ai/claude-code/dist-tags</code>, 2026-11-15</td><td><span class="tag tag-local">LOCAL</span> đã kiểm chứng</td></tr><tr><td>Toàn bộ mục <a class="xref" href="#sec-9">9</a> (18 subcommand, 11 <code>mcp</code>, 17 <code>plugin</code> ở <code>2.1.325</code> / 14 ở <code>2.1.268</code>, flag)</td><td><code>claude --help</code>, <code>claude mcp --help</code>, <code>claude plugin --help</code> của cả hai binary, 2026-11-15</td><td><span class="tag tag-local">LOCAL</span> đã kiểm chứng</td></tr><tr><td>Trạng thái MCP ở mục <a class="xref" href="#sec-4-2">4.2</a></td><td><code>claude mcp list</code> của cả hai binary, 2026-11-15</td><td><span class="tag tag-local">LOCAL</span> đã kiểm chứng</td></tr><tr><td>Marketplace, <code>postman</code> v2.3.0, component inventory, chi phí token, 317 plugin trong catalog</td><td><code>claude plugin marketplace list</code>, <code>claude plugin list</code>, <code>claude plugin details postman</code>, <code>marketplace.json</code> cục bộ, 2026-11-15</td><td><span class="tag tag-local">LOCAL</span> đã kiểm chứng</td></tr><tr><td>Danh sách tool chính thức, nơi nạp skill, field frontmatter, vị trí plugin trên đĩa</td><td>Tài liệu <code>code.claude.com/docs</code> (tools-reference, skills, plugins/loading), 2026-11-15</td><td><span class="tag tag-docs">DOCS</span> đã đối chiếu</td></tr><tr><td>Bộ tool nạp sẵn, deferred tool, agent type, skill, MCP server của phiên</td><td>Khai báo của phiên Desktop tham chiếu 2026-11-15 và phiên CLI 2026-09-21</td><td><span class="tag tag-session">SESSION</span> quan sát trực tiếp</td></tr><tr><td>Bộ tool nạp sẵn của một phiên CLI <code>2.1.325</code></td><td>Chưa có phiên CLI thuần để đếm lại</td><td><span class="tag tag-unknown">UNKNOWN</span> chưa kiểm chứng</td></tr><tr><td>Thay đổi giữa <code>2.1.279</code> và <code>2.1.318</code></td><td>Trang changelog chỉ đọc được <code>2.1.319</code>–<code>2.1.325</code></td><td><span class="tag tag-unknown">UNKNOWN</span> chưa đọc</td></tr><tr><td>Danh sách lệnh dựng sẵn ở <a class="xref" href="#sec-9-5">9.5</a></td><td>Quan sát trong phiên; <strong>chưa chắc đầy đủ</strong></td><td><span class="tag tag-session">SESSION</span> chưa liệt kê vét cạn</td></tr><tr><td>Bảng slash command ở <a class="xref" href="#sec-9-7">9.7</a> (121 dòng)</td><td>Tài liệu <code>code.claude.com/docs</code> (commands, desktop), 2026-11-16; cột Công dụng rút gọn từ phần đầu mô tả</td><td><span class="tag tag-docs">DOCS</span> đã đối chiếu</td></tr><tr><td>25 server và <code>productivity@synced</code> của 2026-09-21 không còn xuất hiện</td><td><code>claude mcp list</code>, <code>claude plugin list</code></td><td><span class="tag tag-unknown">UNKNOWN</span> nguyên nhân chưa xác minh</td></tr><tr><td>Vai trò phiên và ranh giới authority</td><td><code>docs-harness/SESSION.md</code>, <code>docs-harness/INDEX.md</code> (<code>AGENTS.md</code> là cổng vào)</td><td><span class="tag tag-policy">POLICY</span> của repo này</td></tr><tr><td>Cách viết skill, chế độ invocation, context load</td><td><code>.agents/skills/writing-for-agents/</code></td><td><span class="tag tag-policy">POLICY</span> của repo này</td></tr></tbody></table></div>
+<p>Bề mặt capability của Claude Code thay đổi theo bản phát hành, account và bộ plugin. Khi tài liệu này và session mâu thuẫn ở mức làm thay đổi thiết kế task, dừng lại báo User thay vì tự chọn một phía. Đây là cẩm nang team-facing; quyền hạn thực tế, tool schema và trạng thái kết nối của từng phiên phải được kiểm tra tại runtime trước khi thực thi.</p>
+    </article>
+    <footer class="doc-foot">
+      <p>Bản HTML này là bản xem, sinh từ <code>docs/tools/claude/README.md</code> ngày 2026-11-16. Nguồn chính là README.md: nếu nghi ngờ bản HTML đã cũ, hãy đối chiếu mã băm bên dưới.</p>
+      <p>SHA-256 của nguồn (đã đổi CRLF thành LF): <code>3f86024ed1c89b3d8c1cfedc8d5b37a459ed8fe9033c03ec4c29106d2b971eb5</code></p>
+    </footer>
+  </main>
+</div>
+<div id="scrim" hidden></div>
+<button type="button" class="btn" id="top-btn" hidden>↑ Lên đầu trang</button>
+<script>
+(function () {
+  'use strict';
+  var doc = document;
+  var root = doc.documentElement;
+  root.classList.add('js');
+
+  function $(id) { return doc.getElementById(id); }
+  function load(key) { try { return window.localStorage.getItem(key); } catch (e) { return null; } }
+  function save(key, value) { try { window.localStorage.setItem(key, value); } catch (e) { /* storage unavailable */ } }
+  function each(list, fn) { Array.prototype.forEach.call(list, fn); }
+
+  /* ---------- theme: auto, light, dark ---------- */
+  var THEME_KEY = 'claude-catalog-theme';
+  var MODES = ['auto', 'light', 'dark'];
+  var LABELS = { auto: 'Giao diện: tự động', light: 'Giao diện: sáng', dark: 'Giao diện: tối' };
+  var themeBtn = $('theme-btn');
+  var mode = load(THEME_KEY);
+  if (MODES.indexOf(mode) < 0) { mode = 'auto'; }
+  function applyTheme() {
+    if (mode === 'auto') { root.removeAttribute('data-theme'); } else { root.setAttribute('data-theme', mode); }
+    themeBtn.textContent = LABELS[mode];
+  }
+  themeBtn.addEventListener('click', function () {
+    mode = MODES[(MODES.indexOf(mode) + 1) % MODES.length];
+    save(THEME_KEY, mode);
+    applyTheme();
+  });
+  applyTheme();
+
+  /* ---------- table of contents drawer (narrow screens) ---------- */
+  var toc = $('toc');
+  var tocBtn = $('toc-btn');
+  var scrim = $('scrim');
+  var searchBtn = $('search-btn');
+  function setToc(open) {
+    doc.body.classList.toggle('toc-open', open);
+    tocBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    scrim.hidden = !open;
+    if (open) {
+      doc.body.classList.remove('search-open');
+      searchBtn.setAttribute('aria-expanded', 'false');
+    }
+  }
+  tocBtn.addEventListener('click', function () { setToc(!doc.body.classList.contains('toc-open')); });
+  scrim.addEventListener('click', function () { setToc(false); });
+  toc.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('a')) { setToc(false); }
+  });
+
+  /* ---------- scroll spy: highlight the current section in the TOC ---------- */
+  var heads = Array.prototype.slice.call(doc.querySelectorAll('#content h2[id], #content h3[id]'));
+  var tocLinks = {};
+  each(toc.querySelectorAll('a[href^="#"]'), function (a) { tocLinks[a.getAttribute('href').slice(1)] = a; });
+  var current = null;
+  var ticking = false;
+  function updateSpy() {
+    ticking = false;
+    var found = heads[0] || null;
+    var i;
+    for (i = 0; i < heads.length; i++) {
+      if (heads[i].getBoundingClientRect().top <= 96) { found = heads[i]; } else { break; }
+    }
+    if (!found || found === current) { return; }
+    current = found;
+    each(toc.querySelectorAll('a.active'), function (a) { a.classList.remove('active'); a.removeAttribute('aria-current'); });
+    each(toc.querySelectorAll('li.open'), function (li) { li.classList.remove('open'); });
+    var link = tocLinks[found.id];
+    if (!link) { return; }
+    link.classList.add('active');
+    link.setAttribute('aria-current', 'location');
+    var li = link.closest('li.h2');
+    if (li) { li.classList.add('open'); }
+    if (toc.scrollHeight > toc.clientHeight) {
+      var top = link.getBoundingClientRect().top - toc.getBoundingClientRect().top;
+      if (top < 40 || top > toc.clientHeight - 60) { toc.scrollTop += top - toc.clientHeight / 3; }
+    }
+  }
+  function onScroll() {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(updateSpy); }
+    topBtn.hidden = window.pageYOffset < 600;
+  }
+
+  /* ---------- back to top ---------- */
+  var topBtn = $('top-btn');
+  topBtn.addEventListener('click', function () { window.scrollTo(0, 0); });
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  window.addEventListener('hashchange', onScroll);
+
+  /* ---------- in-page links: scroll directly instead of relying on fragment navigation ---------- */
+  doc.addEventListener('click', function (e) {
+    var link = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (!link || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return; }
+    var id = decodeURIComponent(link.getAttribute('href').slice(1));
+    var target = id ? doc.getElementById(id) : null;
+    if (!target) { return; }
+    e.preventDefault();
+    target.scrollIntoView(true);
+    try { window.history.replaceState(null, '', '#' + id); } catch (err) { /* data: or sandboxed document */ }
+    onScroll();
+  });
+  onScroll();
+
+  /* ---------- search with highlight (diacritics-insensitive) ---------- */
+  var content = $('content');
+  var input = $('q');
+  var countEl = $('q-count');
+  var hits = [];
+  var cur = -1;
+  var timer = 0;
+  var MAX_HITS = 400;
+
+  function fold(text) {
+    var out = '';
+    var map = [];
+    var i, j, f;
+    for (i = 0; i < text.length; i++) {
+      f = text.charAt(i).normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/đ/g, 'd').replace(/Đ/g, 'd').toLowerCase();
+      for (j = 0; j < f.length; j++) { out += f.charAt(j); map.push(i); }
+    }
+    return { text: out, map: map };
+  }
+  function clearMarks() {
+    var marks = content.querySelectorAll('mark.hit');
+    var i, mark, parent;
+    for (i = 0; i < marks.length; i++) {
+      mark = marks[i];
+      parent = mark.parentNode;
+      parent.replaceChild(doc.createTextNode(mark.textContent), mark);
+      parent.normalize();
+    }
+    hits = [];
+    cur = -1;
+  }
+  function textNodes() {
+    var list = [];
+    var walker = doc.createTreeWalker(content, NodeFilter.SHOW_TEXT, null);
+    var node, tag;
+    while ((node = walker.nextNode())) {
+      if (!node.nodeValue.trim()) { continue; }
+      tag = node.parentNode.nodeName;
+      if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'BUTTON') { continue; }
+      if (node.parentNode.closest && node.parentNode.closest('.code-head, .anchor')) { continue; }
+      list.push(node);
+    }
+    return list;
+  }
+  function runSearch(query) {
+    clearMarks();
+    var needle = fold(query.trim().replace(/\s+/g, ' ')).text;
+    if (needle.length < 2) { countEl.textContent = ''; return; }
+    var nodes = textNodes();
+    var k, r, node, folded, pos, found, created, range, mark;
+    for (k = 0; k < nodes.length && hits.length < MAX_HITS; k++) {
+      node = nodes[k];
+      folded = fold(node.nodeValue);
+      found = [];
+      pos = folded.text.indexOf(needle);
+      while (pos !== -1) {
+        found.push([folded.map[pos], folded.map[pos + needle.length - 1] + 1]);
+        pos = folded.text.indexOf(needle, pos + needle.length);
+      }
+      created = [];
+      for (r = found.length - 1; r >= 0; r--) {
+        range = doc.createRange();
+        range.setStart(node, found[r][0]);
+        range.setEnd(node, found[r][1]);
+        mark = doc.createElement('mark');
+        mark.className = 'hit';
+        range.surroundContents(mark);
+        created.unshift(mark);
+      }
+      hits = hits.concat(created);
+    }
+    if (hits.length) { show(0); } else { countEl.textContent = 'Không có kết quả'; }
+  }
+  function show(index) {
+    if (!hits.length) { return; }
+    if (cur >= 0 && hits[cur]) { hits[cur].classList.remove('current'); }
+    cur = (index + hits.length) % hits.length;
+    hits[cur].classList.add('current');
+    hits[cur].scrollIntoView({ block: 'center', inline: 'nearest' });
+    countEl.textContent = (cur + 1) + '/' + hits.length + (hits.length >= MAX_HITS ? '+' : '');
+  }
+  function clearSearch() {
+    window.clearTimeout(timer);
+    input.value = '';
+    clearMarks();
+    countEl.textContent = '';
+  }
+  function setSearch(open) {
+    doc.body.classList.toggle('search-open', open);
+    searchBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) { setToc(false); input.focus(); }
+  }
+  searchBtn.addEventListener('click', function () { setSearch(!doc.body.classList.contains('search-open')); });
+  input.addEventListener('input', function () {
+    window.clearTimeout(timer);
+    timer = window.setTimeout(function () { runSearch(input.value); }, 150);
+  });
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      window.clearTimeout(timer);
+      if (!hits.length) { runSearch(input.value); } else { show(cur + (e.shiftKey ? -1 : 1)); }
+    } else if (e.key === 'Escape') {
+      clearSearch();
+      input.blur();
+      setSearch(false);
+    }
+  });
+  $('q-next').addEventListener('click', function () { show(cur + 1); });
+  $('q-prev').addEventListener('click', function () { show(cur - 1); });
+  doc.addEventListener('keydown', function (e) {
+    var target = e.target;
+    var typing = target && (target.nodeName === 'INPUT' || target.nodeName === 'TEXTAREA' || target.isContentEditable);
+    if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      setSearch(true);
+      input.focus();
+      input.select();
+    } else if (e.key === 'Escape') {
+      setToc(false);
+    }
+  });
+
+  /* ---------- copy buttons for code blocks ---------- */
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) { return navigator.clipboard.writeText(text); }
+    return new Promise(function (resolve, reject) {
+      var area = doc.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      doc.body.appendChild(area);
+      area.select();
+      var ok = false;
+      try { ok = doc.execCommand('copy'); } catch (e) { ok = false; }
+      doc.body.removeChild(area);
+      if (ok) { resolve(); } else { reject(new Error('copy failed')); }
+    });
+  }
+  function flash(button, message) {
+    var label = button.getAttribute('data-label') || button.textContent;
+    button.setAttribute('data-label', label);
+    button.textContent = message;
+    window.setTimeout(function () { button.textContent = label; }, 1600);
+  }
+  each(doc.querySelectorAll('.code'), function (box) {
+    var button = box.querySelector('.copy');
+    var pre = box.querySelector('pre');
+    if (!button || !pre) { return; }
+    button.addEventListener('click', function () {
+      copyText(pre.textContent).then(
+        function () { flash(button, 'Đã chép'); },
+        function () { flash(button, 'Không chép được'); }
+      );
+    });
+  });
+})();
+</script>
+</body>
+</html>

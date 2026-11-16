@@ -83,3 +83,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Cut the session-start context load without losing routes](1115-session-start-context-cut.md) — `#064_IMPROVE_HARNESS_1115`, `PRIORITY: [MEDIUM]`
 - [Consult Jev only on request and retire unused Jev test assets](1115-jev-trigger-and-fixture-cleanup.md) — `#065_IMPROVE_HARNESS_1115`, `PRIORITY: [NORMAL]`
 - [Give every docs-harness folder a README](1115-folder-readmes.md) — `#066_IMPROVE_HARNESS_1115`, `PRIORITY: [NORMAL]`
+- [Refresh the Claude Code catalog and routing skill to the 2026-11-15 runtime](1115-claude-catalog-refresh.md) — `#067_IMPROVE_HARNESS_1115`, `PRIORITY: [NORMAL]`
