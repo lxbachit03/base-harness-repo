@@ -413,7 +413,7 @@ Trong repo này `domain-audit`, `harness-check`, `init-harness-repo` và
 ### 7.3 Skill có sẵn theo nhóm (phiên tham chiếu)
 
 **Skill của repo Harness** (20; `.claude/skills/` + `.agents/skills/`),
-model-invoked: `asset-design-style`, `asset-design-systems-hallmark`,
+model-invoked: `asset-design-systems`, `asset-design-systems-hallmark`,
 `goal-griller`, `improve-harness`, `onboarding`, `prd-research`,
 `prompt-leverage`, `sequence-execution-plan`, `typesafe-ai`,
 `utilizing-tools-agy`, `utilizing-tools-claude`, `utilizing-tools-codex`,

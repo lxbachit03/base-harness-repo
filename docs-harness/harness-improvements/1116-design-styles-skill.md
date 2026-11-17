@@ -7,13 +7,14 @@ TITLE: Add the asset-design-style skill with twelve researched UI style systems
 CREATED: 2026-11-16
 STATUS: completed
 REFERENCES:
-- .agents/skills/asset-design-style/SKILL.md
-- .claude/skills/asset-design-style/SKILL.md
+- .agents/skills/asset-design-systems/SKILL.md
+- .claude/skills/asset-design-systems/SKILL.md
 - .claude/skills/writing-for-agents/SKILL.md
 - .claude/skills/writing-for-agents/SKILL-MECHANICS.md
 - docs/tools/claude/README.md
 - docs-harness/SESSION.md
 - docs-harness/harness-improvements/1115-claude-catalog-refresh.md
+- docs-harness/harness-improvements/1117-rename-asset-design-systems-skill.md
 
 ## Objective
 

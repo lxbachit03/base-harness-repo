@@ -11,7 +11,7 @@ Fourteen themes taken from the fifty in Hallmark (github.com/Nutlope/hallmark, M
 
 1. The call or request names a theme (number or name from the table): use it and skip the menu.
 2. No theme named: print the menu below and end the turn; the reply starts the build. Keep any brief that came with the call or earlier in the conversation.
-3. A Hallmark theme outside the table, or a plain style name (Swiss, glass, brutalism...): say this skill covers the fourteen below, print the menu, and send a plain style to `asset-design-style`.
+3. A Hallmark theme outside the table, or a plain style name (Swiss, glass, brutalism...): say this skill covers the fourteen below, print the menu, and send a plain style to `asset-design-systems`.
 4. A project design system (CLAUDE.md, token or theme file, existing styles) outranks this skill; use the reference to fill its gaps. Precedence: the User's words, the project's system, this skill.
 
 Done when one theme is named. A build uses exactly one theme; a second theme is a separate build. With a brief in hand go to step 2; without one, ask once what to build and in which form: a local .html file (the default) or a claude.ai Artifact.

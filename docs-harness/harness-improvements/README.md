@@ -86,3 +86,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Refresh the Claude Code catalog and routing skill to the 2026-11-15 runtime](1115-claude-catalog-refresh.md) — `#067_IMPROVE_HARNESS_1115`, `PRIORITY: [NORMAL]`
 - [Add the asset-design-style skill with twelve researched UI style systems](1116-design-styles-skill.md) — `#068_IMPROVE_HARNESS_1116`, `PRIORITY: [NORMAL]`
 - [Add the asset-design-systems-hallmark skill with fourteen researched Hallmark design systems](1116-hallmark-design-systems-skill.md) — `#069_IMPROVE_HARNESS_1116`, `PRIORITY: [NORMAL]`
+- [Rename the asset-design-style skill to asset-design-systems](1117-rename-asset-design-systems-skill.md) — `#070_IMPROVE_HARNESS_1117`, `PRIORITY: [NORMAL]`

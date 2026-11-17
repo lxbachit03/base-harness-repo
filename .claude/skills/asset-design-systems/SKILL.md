@@ -1,9 +1,9 @@
 ---
-name: asset-design-style
+name: asset-design-systems
 description: "Design styles: apply, choose or compare a named UI style from researched tokens, CSS recipes and contrast guardrails. Use for any design, HTML page, artifact or UI that names a style: Swiss/International Typographic, Neumorphism/soft UI, Glassmorphism/frosted glass, Brutalism/neubrutalism, Claymorphism, Aurora/mesh gradient, Retro-futurism/Cyberpunk/neon, 3D/hyperrealism/skeuomorphism, Vibrant color-block/Maximalist, Dark/OLED luxury, Organic/Biomorphic, Anthropic/Claude look; or when the User asks which style fits a brief."
 ---
 
-# Asset Design Style
+# Asset Design Systems
 
 Twelve UI styles, each researched into a reference with tokens, CSS recipes,
 guardrails and dated sources. This file lists them, resolves the User's pick,

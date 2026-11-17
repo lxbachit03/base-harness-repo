@@ -9,12 +9,13 @@ STATUS: completed
 REFERENCES:
 - .agents/skills/asset-design-systems-hallmark/SKILL.md
 - .claude/skills/asset-design-systems-hallmark/SKILL.md
-- .agents/skills/asset-design-style/SKILL.md
+- .agents/skills/asset-design-systems/SKILL.md
 - .claude/skills/writing-for-agents/SKILL.md
 - .claude/skills/writing-for-agents/SKILL-MECHANICS.md
 - docs/tools/claude/README.md
 - docs-harness/SESSION.md
 - docs-harness/harness-improvements/1116-design-styles-skill.md
+- docs-harness/harness-improvements/1117-rename-asset-design-systems-skill.md
 
 ## Objective
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render a style preview page for the asset-design-style skill.
+"""Render a style preview page for the asset-design-systems skill.
 
 Usage:
   python -I preview.py STYLE [STYLE ...] [--out FILE]

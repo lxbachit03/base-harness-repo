@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""WCAG 2.x contrast checker for the asset-design-style skill.
+"""WCAG 2.x contrast checker for the asset-design-systems skill.
 
 Usage:
   python -I contrast.py [--min RATIO] FG:BG [FG:BG ...]
