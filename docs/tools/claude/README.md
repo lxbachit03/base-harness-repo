@@ -381,7 +381,7 @@ Theo tài liệu chính thức `2.1.325` (trang Skills), Claude Code nạp skill
 `.agents/skills/` **không** nằm trong danh sách đó. Repo Harness này giữ bản gốc
 ở `.agents/skills/` (nguồn dùng chung với các agent khác) và **mirror sang
 `.claude/skills/`**, nơi Claude Code thực sự nạp. Khi sửa skill phải đồng bộ cả
-hai; hai cây hiện giống hệt từng byte (19 skill, 50 file, 2026-11-16).
+hai; hai cây hiện giống hệt từng byte (20 skill, 70 file, 2026-11-16).
 `harness-check` (mục `skill-mirror`) báo drift khi nội dung khác nhau và chỉ báo
 `info` khi chỉ khác line-ending; khi tự so sánh, hãy bỏ CR trước:
 `diff <(tr -d '\r' < a) <(tr -d '\r' < b)`.
@@ -412,13 +412,14 @@ Trong repo này `domain-audit`, `harness-check`, `init-harness-repo` và
 
 ### 7.3 Skill có sẵn theo nhóm (phiên tham chiếu)
 
-**Skill của repo Harness** (19; `.claude/skills/` + `.agents/skills/`),
-model-invoked: `asset-design-style`, `goal-griller`, `improve-harness`,
-`onboarding`, `prd-research`, `prompt-leverage`, `sequence-execution-plan`,
-`typesafe-ai`, `utilizing-tools-agy`, `utilizing-tools-claude`,
-`utilizing-tools-codex`, `utilizing-tools-opencode`, `utilizing-tools-orca-ade`,
-`writing-for-agents`, `xia`; user-invoked: `domain-audit`, `harness-check`,
-`init-harness-repo`, `ticket-solving`.
+**Skill của repo Harness** (20; `.claude/skills/` + `.agents/skills/`),
+model-invoked: `asset-design-style`, `asset-design-systems-hallmark`,
+`goal-griller`, `improve-harness`, `onboarding`, `prd-research`,
+`prompt-leverage`, `sequence-execution-plan`, `typesafe-ai`,
+`utilizing-tools-agy`, `utilizing-tools-claude`, `utilizing-tools-codex`,
+`utilizing-tools-opencode`, `utilizing-tools-orca-ade`, `writing-for-agents`,
+`xia`; user-invoked: `domain-audit`, `harness-check`, `init-harness-repo`,
+`ticket-solving`.
 
 **Skill cấp user** (`~/.claude/skills/`, trùng với `~/.agents/skills/`):
 `computer-use`, `find-skills`, `orca-cli`, `orchestration`.

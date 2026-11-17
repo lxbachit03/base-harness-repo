@@ -85,3 +85,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Give every docs-harness folder a README](1115-folder-readmes.md) — `#066_IMPROVE_HARNESS_1115`, `PRIORITY: [NORMAL]`
 - [Refresh the Claude Code catalog and routing skill to the 2026-11-15 runtime](1115-claude-catalog-refresh.md) — `#067_IMPROVE_HARNESS_1115`, `PRIORITY: [NORMAL]`
 - [Add the asset-design-style skill with twelve researched UI style systems](1116-design-styles-skill.md) — `#068_IMPROVE_HARNESS_1116`, `PRIORITY: [NORMAL]`
+- [Add the asset-design-systems-hallmark skill with fourteen researched Hallmark design systems](1116-hallmark-design-systems-skill.md) — `#069_IMPROVE_HARNESS_1116`, `PRIORITY: [NORMAL]`
