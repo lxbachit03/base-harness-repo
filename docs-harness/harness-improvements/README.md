@@ -92,3 +92,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Move SESSION.md and WORKFLOW.md into trimmed harness-constraints and delete both files](1120-session-workflow-into-constraints.md) — `#073_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
 - [Add a claude-instructions folder that Claude sessions read at session start](1120-claude-instructions-folder.md) — `#076_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
 - [Run prd-research in a new Opus 5.5 high-effort sub-session when the User is on Claude](1120-prd-research-sub-session.md) — `#077_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
+- [Run coding tasks in a Sonnet 5.5 sub-session with a User-selectable effort](1120-coding-sub-session.md) — `#078_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`

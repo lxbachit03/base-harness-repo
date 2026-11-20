@@ -30,3 +30,5 @@ take no ID. An instruction for one exact model and effort belongs in
 
 - [prd-research-sub-session.md](prd-research-sub-session.md): run `prd-research` in a
   new Opus 5.5 high-effort session.
+- [coding-sub-session.md](coding-sub-session.md): run a coding task in a new Sonnet 5.5
+  session, with a checklist for its effort.
