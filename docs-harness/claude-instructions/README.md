@@ -31,7 +31,8 @@ take no ID. An instruction for one exact model and effort belongs in
 - [prd-research-sub-session.md](prd-research-sub-session.md): run `prd-research` in a
   new Opus 5.5 high-effort session.
 - [coding-sub-session.md](coding-sub-session.md): run a coding task in a new Sonnet 5.5
-  session, with a checklist for its effort.
+  session, with a checklist for its effort and an optional Opus 5.5 advisor (on/off
+  checkbox, effort checklist).
 - [research-subagents.md](research-subagents.md): run code research in Haiku 5.5
   subagents, with a checklist for their effort.
 - [compact-before-task.md](compact-before-task.md): above 50% context, ask the User about
