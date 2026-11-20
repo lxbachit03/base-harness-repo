@@ -35,7 +35,8 @@ When the runtime exposes no effort value, the identifier is the model ID alone
 `reasons-and-purposes.md` never match a model identifier and never load.
 
 There is no family-wide tier that loads for every model of one provider
-(User decision 2026-09-26); do not add one.
+(User decision 2026-09-26); do not add one. Provider-wide Claude instructions live
+in [claude-instructions/](../claude-instructions/README.md), outside `layers/`.
 
 ## Loading procedure
 

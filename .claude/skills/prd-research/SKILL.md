@@ -9,6 +9,8 @@ Use when the User requests research of a BA requirements document and its
 ticket context. This workflow analyzes and reports; it does not solve the
 ticket or authorize code changes, live-system access, or external publication.
 
+On Claude, follow docs-harness/claude-instructions/prd-research-sub-session.md first.
+
 ## 1. Locate the document and ticket
 
 Follow AGENTS.md, docs-harness/INDEX.md and mandatory session retrieval. Read

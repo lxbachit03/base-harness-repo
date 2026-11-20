@@ -50,6 +50,8 @@ because its subject overlaps:
 - `domain/`: confirmed or uncertain project/domain knowledge.
 - `harness-improvements/`: the routing category for improvements to agent
   guidance, tools, runbooks, or validation.
+- `claude-instructions/`: instructions for working with Claude, read at session
+  start by Claude models and platforms.
 - `layers/`: model-specific add-on prompt layers and hooks loaded at session
   start.
 - `onboarding/`: brownfield flow investigation workspaces managed by

@@ -90,3 +90,5 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Ask the User to record an action they request a second time as an AGENTS.md rule](1120-repeat-request-rule-prompt.md) — `#071_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
 - [Ask the User to move AGENTS.md rules into project-constraints when the file passes 50 lines](1120-agents-md-length-rule.md) — `#072_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
 - [Move SESSION.md and WORKFLOW.md into trimmed harness-constraints and delete both files](1120-session-workflow-into-constraints.md) — `#073_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
+- [Add a claude-instructions folder that Claude sessions read at session start](1120-claude-instructions-folder.md) — `#076_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
+- [Run prd-research in a new Opus 5.5 high-effort sub-session when the User is on Claude](1120-prd-research-sub-session.md) — `#077_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
