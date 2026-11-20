@@ -147,9 +147,6 @@ Resources:
 - [Harness status check](../.agents/skills/harness-check/SKILL.md): follow it
   for every User request to check the Harness status or whether the repository
   meets the User's requirements.
-- [Historical Herdr worker catalog](HERDR-AGENTS.md): retained for past
-  coordination evidence after removal of the coordination skills; consult only
-  when investigating that history.
 - [Jev System One configuration manifest](JEV-AI.md): declarative manifest for
   project context, semantic scripts catalog, and dynamic criteria.
 
