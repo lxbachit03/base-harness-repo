@@ -94,3 +94,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Run prd-research in a new Opus 5.5 high-effort sub-session when the User is on Claude](1120-prd-research-sub-session.md) — `#077_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
 - [Run coding tasks in a Sonnet 5.5 sub-session with a User-selectable effort](1120-coding-sub-session.md) — `#078_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
 - [Run code research in Haiku 5.5 subagents with a User-selectable effort](1120-research-subagents.md) — `#079_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
+- [Ask the User about /compact before a task when context is above 50%](1121-claude-compact-before-task.md) — `#080_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`

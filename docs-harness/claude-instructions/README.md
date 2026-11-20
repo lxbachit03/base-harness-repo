@@ -34,3 +34,5 @@ take no ID. An instruction for one exact model and effort belongs in
   session, with a checklist for its effort.
 - [research-subagents.md](research-subagents.md): run code research in Haiku 5.5
   subagents, with a checklist for their effort.
+- [compact-before-task.md](compact-before-task.md): above 50% context, ask the User about
+  `/compact` before a task and write the prompt for it.
