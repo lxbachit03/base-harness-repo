@@ -155,7 +155,7 @@ to executed work or a reported gap.
 
 ## Delegation In This Repository
 
-`docs-harness/SESSION.md` owns the session role. The primary session is Bale and handles small
+`docs-harness/harness-constraints/1120-session-role-and-judgment.md` owns the session role. The primary session is Bale and handles small
 work directly; an explicitly delegated session is a worker that executes its own
 bounded assignment and returns evidence.
 

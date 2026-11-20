@@ -10,7 +10,7 @@ it, execute it, and leave observable proof. The current session's exposed tool
 and skill definitions are the runtime authority; this skill routes to them and
 never promises that a documented capability is enabled here.
 
-docs-harness/SESSION.md owns task authority and persistent permissions. Inspect the effects of
+docs-harness/harness-constraints/0822-user-authority-operation-gate.md owns task authority and persistent permissions. Inspect the effects of
 an unfamiliar command before running it.
 
 ## Mandatory Response Contract

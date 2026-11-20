@@ -340,7 +340,7 @@ bật; on-invoke từ ~200 tok (`cli-install`) đến ~3k tok (`api-simulation`)
 
 `Artifact` publish một trang HTML lên claude.ai, mặc định private, và trả về
 link chia sẻ được. Đây là **hành động ra ngoài session**, không phải ghi file
-thường — chịu ranh giới authority của `docs-harness/SESSION.md`. Tool cần gói
+thường — chịu ranh giới authority của `docs-harness/harness-constraints/0822-user-authority-operation-gate.md`. Tool cần gói
 Pro, Max, Ultra, Team hoặc Enterprise và đăng nhập `/login` (tài liệu chính thức
 `2.1.325`).
 
@@ -475,7 +475,7 @@ và báo kết quả sau; báo cáo cuối của nó **không** hiển thị cho
 lại phần quan trọng.
 
 > [!IMPORTANT]
-> **Ràng buộc của repo này**: `docs-harness/SESSION.md` (mục Session role) quy
+> **Ràng buộc của repo này**: `docs-harness/harness-constraints/1120-session-role-and-judgment.md` (mục Role) quy
 > định phiên chính là Bale, xử lý việc nhỏ trực tiếp; phiên worker đã được giao
 > việc **không** được spawn tiếp agent. Skill `utilizing-tools-claude` quy định
 > tool `Agent`/`Workflow` chỉ dùng khi User, `CLAUDE.md` hoặc một skill yêu cầu.
@@ -873,7 +873,7 @@ Không liệt kê toàn bộ catalog nếu task chỉ cần một subset nhỏ.
 
 ## 12. Guardrails & Anti-Patterns
 
-- **User Authority**: theo `docs-harness/SESSION.md` (Task authority); read-only
+- **User Authority**: theo `docs-harness/harness-constraints/0822-user-authority-operation-gate.md` (Task authority); read-only
   là mặc định cho điều tra.
   Mutation file, cài plugin, xác thực connector, publish artifact, commit/push
   cần authority đúng target.
@@ -923,7 +923,7 @@ Phân loại độ tin cậy của các claim trong tài liệu này:
 | Danh sách lệnh dựng sẵn ở 9.5 | Quan sát trong phiên; **chưa chắc đầy đủ** | [SESSION] chưa liệt kê vét cạn |
 | Bảng slash command ở 9.7 (121 dòng) | Tài liệu `code.claude.com/docs` (commands, desktop), 2026-11-16; cột Công dụng rút gọn từ phần đầu mô tả | [DOCS] đã đối chiếu |
 | 25 server và `productivity@synced` của 2026-09-21 không còn xuất hiện | `claude mcp list`, `claude plugin list` | [UNKNOWN] nguyên nhân chưa xác minh |
-| Vai trò phiên và ranh giới authority | `docs-harness/SESSION.md`, `docs-harness/INDEX.md` (`AGENTS.md` là cổng vào) | [POLICY] của repo này |
+| Vai trò phiên và ranh giới authority | `docs-harness/harness-constraints/1120-session-role-and-judgment.md`, `docs-harness/harness-constraints/0822-user-authority-operation-gate.md`, `docs-harness/INDEX.md` (`AGENTS.md` là cổng vào) | [POLICY] của repo này |
 | Cách viết skill, chế độ invocation, context load | `.agents/skills/writing-for-agents/` | [POLICY] của repo này |
 
 Bề mặt capability của Claude Code thay đổi theo bản phát hành, account và bộ

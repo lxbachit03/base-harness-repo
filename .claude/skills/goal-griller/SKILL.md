@@ -54,7 +54,7 @@ identified, include at least one proposal or solution inline. A read-only task
 stays in the response; when authorized work uses a ticket or plan, keep its
 risk and proposed response together there under the repository's constraint.
 
-Route selection does not grant new authority. Carry the User's existing task scope into the goal and follow docs-harness/SESSION.md for local verification and external boundaries.
+Route selection does not grant new authority. Carry the User's existing task scope into the goal and follow docs-harness/harness-constraints/0822-user-authority-operation-gate.md for local verification and external boundaries.
 
 When a goal is drafted, include the route in the handoff:
 
@@ -123,7 +123,7 @@ Route:
 
 Constraints:
 - [...]
-- Follow docs-harness/SESSION.md task authority, including routine local proof and explicit external boundaries.
+- Follow docs-harness/harness-constraints/0822-user-authority-operation-gate.md task authority, including routine local proof and explicit external boundaries.
 
 Operating rules:
 - Keep a concise progress log in [file] when the task is long-running.

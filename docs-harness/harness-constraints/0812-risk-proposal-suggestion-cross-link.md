@@ -7,7 +7,7 @@ TITLE: Risk findings require proposed responses
 CREATED: 2026-08-12
 STATUS: active
 REFERENCES:
-- docs-harness/SESSION.md
+- docs-harness/harness-constraints/1120-session-role-and-judgment.md
 - docs-harness/INDEX.md
 - docs-harness/templates/risk.md
 - docs-harness/templates/proposal.md
@@ -32,7 +32,7 @@ routine tracking.
   reports that identify a risk.
 - Risk and proposal notes in a ticket or plan when the task authorizes writing
   that record.
-- The runtime guidance in `docs-harness/SESSION.md` and the routing entry in
+- The runtime guidance in `docs-harness/harness-constraints/1120-session-role-and-judgment.md` and the routing entry in
   `docs-harness/INDEX.md`.
 
 ## Rationale
@@ -62,6 +62,6 @@ ticket or plan instead of dedicated folders.
 - An authorized ticket or plan records each risk with its proposed response,
   evidence and status together, without implying the proposal was accepted.
 - The constraint is indexed from `docs-harness/INDEX.md`, and the runtime rule
-  is present in `docs-harness/SESSION.md`.
+  is present in `docs-harness/harness-constraints/1120-session-role-and-judgment.md`.
 - Completion checks include the tree, folder-section, link, and duplicate-
   resource consistency checks required by the Harness instructions.

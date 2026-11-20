@@ -87,3 +87,6 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Add the asset-design-style skill with twelve researched UI style systems](1116-design-styles-skill.md) — `#068_IMPROVE_HARNESS_1116`, `PRIORITY: [NORMAL]`
 - [Add the asset-design-systems-hallmark skill with fourteen researched Hallmark design systems](1116-hallmark-design-systems-skill.md) — `#069_IMPROVE_HARNESS_1116`, `PRIORITY: [NORMAL]`
 - [Rename the asset-design-style skill to asset-design-systems](1117-rename-asset-design-systems-skill.md) — `#070_IMPROVE_HARNESS_1117`, `PRIORITY: [NORMAL]`
+- [Ask the User to record an action they request a second time as an AGENTS.md rule](1120-repeat-request-rule-prompt.md) — `#071_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
+- [Ask the User to move AGENTS.md rules into project-constraints when the file passes 50 lines](1120-agents-md-length-rule.md) — `#072_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
+- [Move SESSION.md and WORKFLOW.md into trimmed harness-constraints and delete both files](1120-session-workflow-into-constraints.md) — `#073_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`

@@ -7,10 +7,23 @@ implementation plans or accepted product decisions.
 Project-specific rules live in [project-constraints/](../project-constraints/README.md)
 and are read at every session start through INDEX.
 
+## Session-start constraints
+
+At every session start, including delegated workers, read and apply these two
+before task work, as [INDEX](../INDEX.md) requires. Reload them after a workspace
+switch, lost routing context, or a User-reported change to one.
+
+- [#009_CONSTRAINTS_0822](0822-user-authority-operation-gate.md): task authority.
+- [#074_CONSTRAINTS_1120](1120-session-role-and-judgment.md): session role,
+  evidence and judgment, documentation ownership.
+
+Read [#075_CONSTRAINTS_1120](1120-work-shape-proof-completion.md) (work shape,
+proof, completion) before changing anything and before reporting a result.
+
 ## Read When
 
-Read this folder when a task creates, edits, moves, renames, deletes, or
-validates repository paths under a known constraint. Start with the resource
+Read the rest of this folder when a task creates, edits, moves, renames, deletes,
+or validates repository paths under a known constraint. Start with the resource
 linked from `docs-harness/INDEX.md`.
 
 ## Create And Maintain

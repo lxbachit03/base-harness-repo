@@ -14,7 +14,7 @@ Version boundary: calibrated to Orca `1.4.212` local runtime evidence on
 Windows. When local CLI behavior differs from newer docs, the local runtime wins
 for this machine; report the gap instead of silently assuming either.
 
-docs-harness/SESSION.md owns task authority and persistent permissions. Inspect the effects
+docs-harness/harness-constraints/0822-user-authority-operation-gate.md owns task authority and persistent permissions. Inspect the effects
 of an unfamiliar command before running it.
 
 ## Mandatory Response Contract

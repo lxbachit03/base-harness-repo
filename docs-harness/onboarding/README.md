@@ -51,7 +51,7 @@ what data must be ready before the flow starts, for each relevant scenario:
 
 Label sample values as illustrative and do not record secrets or sensitive data.
 Preparation instructions are not authority to run seeds, call live APIs,
-query databases, or change real data; follow `docs-harness/SESSION.md` before
+query databases, or change real data; follow `docs-harness/harness-constraints/0822-user-authority-operation-gate.md` before
 any such action.
 
 Put every material step in its own `s<N>-<step-name>-activity.md` file in the
@@ -98,7 +98,7 @@ unsupported write. For both the API response and database record, use
 `Not applicable` with the inspected scope when the step has no such outcome. Do not
 invent missing endpoints, statuses, fields, records, or business policy. Record
 no credentials or sensitive data. Inspecting a flow does not authorize calls to
-live APIs or databases; follow docs-harness/SESSION.md for the operation boundary.
+live APIs or databases; follow docs-harness/harness-constraints/0822-user-authority-operation-gate.md for the operation boundary.
 
 ## Supporting evidence
 

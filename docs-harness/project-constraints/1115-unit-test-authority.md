@@ -7,9 +7,9 @@ TITLE: User authority for writing unit tests
 CREATED: 2026-11-15
 STATUS: active
 REFERENCES:
-- docs-harness/SESSION.md
+- docs-harness/harness-constraints/0822-user-authority-operation-gate.md
 - docs-harness/INDEX.md
-- docs-harness/WORKFLOW.md
+- docs-harness/harness-constraints/1120-work-shape-proof-completion.md
 
 ## Constraint
 
@@ -21,7 +21,7 @@ or verify does not by itself authorize writing unit tests.
 
 All agent sessions working on this project, including delegated workers, and
 unit tests produced by hand or by tools. Existing authority persists within the
-task under `docs-harness/SESSION.md` until completed, revoked, or changed.
+task under `docs-harness/harness-constraints/0822-user-authority-operation-gate.md` until completed, revoked, or changed.
 
 ## Rationale
 
@@ -35,7 +35,7 @@ The User requested that agents not write unit tests without User authority.
    checks that do not write unit tests. If unit tests are needed, request
    authority before writing them; report any missing proof.
 3. Running existing tests is distinct from writing tests and remains subject to
-   `docs-harness/SESSION.md` authority and inspection of command effects. This rule does not
+   `docs-harness/harness-constraints/0822-user-authority-operation-gate.md` authority and inspection of command effects. This rule does not
    itself prohibit other forms of verification.
 
 ## Validation

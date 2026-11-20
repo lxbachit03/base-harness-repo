@@ -7,11 +7,13 @@ Start here after `AGENTS.md` and before reading other repository documentation.
 ## Session retrieval
 
 Immediately after this INDEX, before task work or other repository
-documentation, read and apply the entire [SESSION.md](SESSION.md) policy. This
-is mandatory for every session, including delegated workers. If the policy
-cannot be read, report the gap and pause work whose rules cannot be established.
-Reload it after a workspace switch, loss of its context, or a User-reported
-change to the policy.
+documentation, read and apply
+[task authority](harness-constraints/0822-user-authority-operation-gate.md) and
+[session role and judgment](harness-constraints/1120-session-role-and-judgment.md).
+This is mandatory for every session, including delegated workers. If one cannot
+be read, report the gap and pause work whose rules cannot be established.
+Reload them after a workspace switch, loss of their context, or a User-reported
+change to one.
 
 At session start, run the read-only alignment check
 `python -I .agents/skills/harness-check/scripts/harness_check.py --quick`
@@ -129,12 +131,14 @@ Resources:
 
 - [README.md](README.md)
 - [INDEX.md](INDEX.md)
-- [SESSION.md](SESSION.md): mandatory session role, task authority, judgment,
-  documentation, and completion policy.
-- [WORKFLOW.md](WORKFLOW.md)
+- [Task authority](harness-constraints/0822-user-authority-operation-gate.md) and
+  [session role and judgment](harness-constraints/1120-session-role-and-judgment.md):
+  mandatory at session start.
+- [Work shape, proof and completion](harness-constraints/1120-work-shape-proof-completion.md):
+  read before changing anything and before reporting a result.
 - [PERSONA.md](PERSONA.md)
-- [Self-review policy](SESSION.md#completion): inspect affected routes,
-  metadata, links, and diff; disclose unattempted proof.
+- [Self-review policy](harness-constraints/1120-work-shape-proof-completion.md): inspect
+  affected routes, metadata, links, and diff; disclose unattempted proof.
 - [Harness status check](../.agents/skills/harness-check/SKILL.md): follow it
   for every User request to check the Harness status or whether the repository
   meets the User's requirements.
@@ -170,16 +174,19 @@ Folder: [harness-constraints/](harness-constraints/)
 
 Purpose: rules that constrain files, folders, or a specific task.
 
-Read when: the intent creates, edits, moves, or validates files/folders under a
-known constraint.
+Read when: every session for task authority and session role, and when the intent
+creates, edits, moves, or validates files/folders under a known constraint.
 
-Skip when: no repository or task constraint is relevant.
+Skip when: never for those two; otherwise when no repository
+or task constraint is relevant.
 
 Resources:
 
 - [Constraint guide](harness-constraints/README.md)
 - [Risk and proposed response constraint](harness-constraints/0812-risk-proposal-suggestion-cross-link.md) — `#001_CONSTRAINTS_0812`, `PRIORITY: [MEDIUM]`
 - [Task authority for local work and explicit external boundaries](harness-constraints/0822-user-authority-operation-gate.md) — `#009_CONSTRAINTS_0822`, `PRIORITY: [CRITIAL]`
+- [Session role, evidence and judgment, and documentation ownership](harness-constraints/1120-session-role-and-judgment.md) — `#074_CONSTRAINTS_1120`, `PRIORITY: [MEDIUM]`
+- [Work shape, proof and completion](harness-constraints/1120-work-shape-proof-completion.md) — `#075_CONSTRAINTS_1120`, `PRIORITY: [MEDIUM]`
 
 ### project-constraints/
 

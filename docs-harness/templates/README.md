@@ -1,6 +1,6 @@
 # Resource Templates and Identity
 
-This file owns template selection and resource identity. docs-harness/SESSION.md
+This file owns template selection and resource identity. docs-harness/harness-constraints/0822-user-authority-operation-gate.md
 owns task authority; workflow guides own behavior. Read the matching template
 before creating a resource. Templates contain placeholders and are not domain truth.
 

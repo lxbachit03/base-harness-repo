@@ -1,0 +1,8 @@
+{
+  "skillOverrides": {
+    "utilizing-tools-agy": "off",
+    "utilizing-tools-codex": "off",
+    "utilizing-tools-opencode": "off",
+    "utilizing-tools-orca-ade": "off"
+  }
+}

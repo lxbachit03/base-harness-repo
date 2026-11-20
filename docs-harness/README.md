@@ -5,8 +5,8 @@ upstream-maintenance material only when the task explicitly needs it.
 
 ## Installed Core
 
-- `docs-harness/WORKFLOW.md`: canonical request, planning, judgment, validation, and
-  completion behavior.
+- `harness-constraints/`: session role, task authority, judgment, validation, and
+  completion behavior (task authority and session role load at session start).
 - `plans/`: one evolving Git-native plan for work that needs durable memory.
 - `templates/decision.md`: template for a ticket-local decision.
 - `templates/plan.md`: canonical durable execution-plan template.
@@ -28,7 +28,7 @@ and working-memory structure around that truth; it does not install upstream
 
 - `docs-harness/` is the canonical context for AI agents and the Harness repo.
 - `docs/` is team-facing documentation. Read task-relevant linked documents or
-  dependencies under SESSION.md; the directory may be absent and is not bootstrapped
+  dependencies under the session role constraint; the directory may be absent and is not bootstrapped
   merely because a workflow mentions it.
 
 ## Global Git Ignore Convention
@@ -61,7 +61,7 @@ because its subject overlaps:
   route and `completed/` is historical context.
 - `templates/`: stable placeholders used to create supported resources.
 
-Start with `AGENTS.md`, then `INDEX.md`. Read `SESSION.md` and project
+Start with `AGENTS.md`, then `INDEX.md`. Read task authority, session role and project
 constraints at session start, then retrieve resources needed for the intent.
 
 ## Source-Repository Indexes
