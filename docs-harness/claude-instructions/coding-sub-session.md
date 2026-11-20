@@ -10,16 +10,17 @@ If none or several are marked, use high.
 
 - [ ] Sonnet 5.5, effort: medium
 - [x] Sonnet 5.5, effort: high
+- [ ] Sonnet 5.5, effort: extra
 - [ ] Sonnet 5.5, effort: max
 
 ## Steps
 
-1. Ask the User before starting a session, in one question that offers the three efforts
+1. Ask the User before starting a session, in one question that offers the efforts
    with the marked one first and names the model. Start it only after an answer; if the
    User declines a session, do the task here.
 2. Start a new session with the host's session tool (`mcp__ccd_session__start_session` in
    the Claude desktop app):
-   - `model`: `claude-sonnet-5-5`, `effort`: the answer.
+   - `model`: `claude-sonnet-5-5`, `effort`: the answer (`xhigh` for "extra").
    - `context`: `fresh`; a fork ignores model and effort.
    - `use_worktree`: `false`, so the changes land in this checkout.
    - `wake_when_done`: `true`.

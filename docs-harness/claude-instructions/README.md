@@ -32,3 +32,5 @@ take no ID. An instruction for one exact model and effort belongs in
   new Opus 5.5 high-effort session.
 - [coding-sub-session.md](coding-sub-session.md): run a coding task in a new Sonnet 5.5
   session, with a checklist for its effort.
+- [research-subagents.md](research-subagents.md): run code research in Haiku 5.5
+  subagents, with a checklist for their effort.
