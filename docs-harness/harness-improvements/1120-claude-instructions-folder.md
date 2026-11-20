@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Add a claude-instructions folder that Claude sessions read at session start
 CREATED: 2026-11-20
-STATUS: active
+STATUS: completed
 REFERENCES:
 - docs-harness/claude-instructions/README.md
 - docs-harness/INDEX.md
@@ -77,8 +77,8 @@ Results, 2026-11-20:
 - `git diff --stat`: 4 tracked files changed (25 insertions, 1 deletion), plus the new
   README and this record.
 
-Unattempted: a fresh Claude session that reads the folder without being told, and a
-non-Claude session that skips it (see Decision).
+The fresh Claude session was run on 2026-11-20 (see Decision). Still unattempted: a
+non-Claude session that skips the folder.
 
 ## Risks
 
@@ -95,10 +95,8 @@ non-Claude session that skips it (see Decision).
 
 ## Decision and Result
 
-Decision: pending fresh rerun. The folder and its route are the implementation; that a
-Claude session reaches the README from INDEX is unverified, and the folder holds no
-instruction yet.
+Decision: keep. Retrieval was available, retrieved and exercised. Replay, 2026-11-20: one fresh read-only session (`local_5eb5553c-b71b-4f79-a65b-8c166acae4ab`, Sonnet 5.5, effort high, 22 turns, revision `7e20745`, working tree clean) answered five parts; it started no session and spawned no subagent, edited no file. Token cost was not measured. At session start it read `claude-instructions/README.md` and its three instruction files after the layers step, and treated itself as a Claude session because its model ID contains `claude`.
 
-Replay task: in a new Claude session, ask which docs-harness folders it read at start;
-expect `claude-instructions/README.md` among them. Owner: the next primary session or
-the User. Cost: about 100k tokens, no build; it leaves the non-Claude skip uncovered.
+Observed: the folder README and all three instruction files were read at session start, before
+task work. Not covered: a non-Claude session skipping the folder (no non-Claude model was
+available), and a session on a Claude platform with a non-Claude model.

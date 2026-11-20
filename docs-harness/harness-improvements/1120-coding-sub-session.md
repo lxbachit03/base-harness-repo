@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Run coding tasks in a Sonnet 5.5 sub-session with a User-selectable effort
 CREATED: 2026-11-20
-STATUS: active
+STATUS: completed
 REFERENCES:
 - docs-harness/claude-instructions/coding-sub-session.md
 - docs-harness/claude-instructions/README.md
@@ -90,7 +90,8 @@ Nothing is committed or pushed.
 Results, 2026-11-20: see the `harness-check` line below; the model and effort limits come
 from the session tool's description, not from a run.
 
-Unattempted: a fresh Claude session given a coding task (see Decision).
+The fresh replay was run on 2026-11-20 up to the gate (see Decision). Still unattempted: a
+real start and the finished changes.
 
 ## Risks
 
@@ -111,12 +112,14 @@ Unattempted: a fresh Claude session given a coding task (see Decision).
 
 ## Decision and Result
 
-Decision: pending fresh rerun. The instruction is the implementation; whether a Claude
-session follows it on a coding task is unverified.
+Decision: keep, with one open point for the User. The instruction was available, retrieved
+and exercised up to its gate. Replay, 2026-11-20: one fresh read-only session (`local_5eb5553c-b71b-4f79-a65b-8c166acae4ab`, Sonnet 5.5, effort high, 22 turns, revision `7e20745`, working tree clean) answered five parts; it started no session and spawned no subagent, edited no file. Token cost was not measured. At session start it read `claude-instructions/README.md` and its three instruction files after the layers step, and treated itself as a Claude session because its model ID contains `claude`.
 
-Replay task: in a new session, give a small isolated coding task in a disposable folder
-(for example "add a function to a sample file") and expect one question offering the three
-efforts, one session on `claude-sonnet-5-5` with the chosen effort, and a brief that names
-the files and the User's limits. A second case with a one-line fix expects no session.
-Owner: the next primary session or the User. Cost: about 100k tokens per case, no build; it
-leaves the `max`-effort and Haiku-main limits uncovered.
+Observed for a coding task: the session asked first, offered the efforts with high marked first
+and said it would work here if declined, then planned `claude-sonnet-5-5`, `high` (`xhigh` for
+"extra"), `fresh`, `use_worktree: false`, with a brief that forbade unit tests (`#058`) and git
+staging. For a one-line typo fix it asked nothing and started no session, as the instruction
+says small work stays. Open point: "small work" has no definition, and the replay called a new
+function with diacritic handling "not small" but borderline; the User may want a line between
+them. Not covered: whether the host caps an effort above the main session's, and the finished
+changes.

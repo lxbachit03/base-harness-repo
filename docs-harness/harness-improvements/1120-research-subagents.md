@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Run code research in Haiku 5.5 subagents with a User-selectable effort
 CREATED: 2026-11-20
-STATUS: active
+STATUS: completed
 REFERENCES:
 - docs-harness/claude-instructions/research-subagents.md
 - docs-harness/claude-instructions/README.md
@@ -93,7 +93,8 @@ instruction, `INDEX.md`, `#009`, `#075`. Nothing is committed or pushed.
 Results, 2026-11-20: see the `harness-check` line in the report; the model and effort
 facts come from the Agent tool's description, not from a run.
 
-Unattempted: a fresh Claude session given a code research task (see Decision).
+The fresh replay was run on 2026-11-20 up to the gate (see Decision). Still unattempted: a
+real spawn, a spawn from a started session, and the `xhigh` path.
 
 ## Risks
 
@@ -114,13 +115,34 @@ Unattempted: a fresh Claude session given a code research task (see Decision).
 
 ## Decision and Result
 
-Decision: pending fresh rerun. The instruction and the `#074` exception are the
-implementation; whether a Claude session asks, spawns Haiku subagents and gets results back
-is unverified.
+Decision: keep. The instruction was available, retrieved and exercised up to its gate. Replay, 2026-11-20: one fresh read-only session (`local_5eb5553c-b71b-4f79-a65b-8c166acae4ab`, Sonnet 5.5, effort high, 22 turns, revision `7e20745`, working tree clean) answered five parts; it started no session and spawned no subagent, edited no file. Token cost was not measured. At session start it read `claude-instructions/README.md` and its three instruction files after the layers step, and treated itself as a Claude session because its model ID contains `claude`.
 
-Replay task: in a new session, ask where a named function in a small sample repo is called;
-expect one question naming Haiku, the efforts and the subagent count, then `Explore`
-subagents on `haiku` and results with paths and lines in the main session. A second case
-from a session started by the coding instruction expects the same. Owner: the next primary
-session or the User. Cost: about 100k tokens per case, no build; it leaves the `xhigh`
-refusal path uncovered.
+Observed for a code research question: the session asked first, naming Haiku 5.5, the two
+efforts with high marked first and one planned subagent, then planned `Agent` with
+`subagent_type: Explore`, `model: haiku`, `effort: high` and a single prompt that carried the
+question, why it matters, the repository root, what is known, the limits, and what to return
+with paths and lines; it would read the cited lines itself afterwards. Not covered by that replay: a spawn
+from a session started by another instruction (covered by the second replay below), the
+`xhigh` path, whether the host resolves `haiku` to 5.5, and a subagent's real result (the second
+replay covers it). The
+replay noted that the Agent tool's own text says to spawn only on an explicit User request;
+it treated the User's yes, and this instruction, as that request.
+
+Second replay, 2026-11-20 (spawn from a started session, real subagent): a fresh session
+(`local_c1bb3530-8078-4259-9f67-35fabec1b423`, Sonnet 5.5, effort high, 24 and 5 turns,
+revision `7e20745`) was given a brief in the form the coding instruction writes ("a fresh
+session started by `coding-sub-session.md`") and a read-only code research task, with the
+User's approval for one Haiku subagent at high effort quoted in the brief ("Đồng ý, chạy
+thật", given on 2026-11-20 after a question that stated the cost). Observed: it read
+`research-subagents.md`, `#074` (with its research-subagent exception) and
+`coding-sub-session.md`; it did not refuse and did not ask again, because the approval was
+already in the brief; it called `Agent` once with `subagent_type: Explore`, `model: haiku`,
+`effort: high` and one prompt carrying the question, why, the repository root, what is known
+and not established, the limits (read-only, cannot ask anyone, state assumptions) and what
+to return; the host accepted `haiku` and `high`. The subagent ran 7 tool uses and returned
+`check_mirror` at `harness_check.py:500-529`; the session opened lines 130-142, 155-170,
+500-530 and 595-632 itself, found every cited line correct, and edited no file. The tree was
+unchanged afterwards (`git status` clean apart from record edits). Remaining limits: the
+result does not show which model or effort ran, so "Haiku 5.5" and the effort are requested,
+not observed; the `xhigh` path and the instruction's own ask-first step inside a started
+session were not exercised (the approval was supplied in the brief); one case only.

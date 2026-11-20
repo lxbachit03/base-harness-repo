@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Run prd-research in a new Opus 5.5 high-effort sub-session when the User is on Claude
 CREATED: 2026-11-20
-STATUS: active
+STATUS: completed
 REFERENCES:
 - docs-harness/claude-instructions/prd-research-sub-session.md
 - docs-harness/claude-instructions/README.md
@@ -98,8 +98,8 @@ Results, 2026-11-20:
   docs-harness/claude-instructions/prd-research-sub-session.md first.` after its intro, in
   both mirrors; `harness-check` skill-mirror stays identical.
 
-Unattempted: a fresh Claude session on Opus 5.5 that is asked for `prd-research` (see
-Decision).
+The fresh replay was run on 2026-11-20 from a Sonnet 5.5 session, up to the gate (see
+Decision). Still unattempted: a real start on Opus 5.5 and the finished reports.
 
 ## Risks
 
@@ -118,12 +118,14 @@ Decision).
 
 ## Decision and Result
 
-Decision: pending fresh rerun. The instruction is the implementation; whether a Claude
-session follows it when the skill is invoked is unverified.
+Decision: keep. The instruction was available, retrieved and exercised up to its gate. Replay, 2026-11-20: one fresh read-only session (`local_5eb5553c-b71b-4f79-a65b-8c166acae4ab`, Sonnet 5.5, effort high, 22 turns, revision `7e20745`, working tree clean) answered five parts; it started no session and spawned no subagent, edited no file. Token cost was not measured. At session start it read `claude-instructions/README.md` and its three instruction files after the layers step, and treated itself as a Claude session because its model ID contains `claude`.
 
-Replay task: in a new session on Opus 5.5, ask for `prd-research` on a small sample PRD;
-expect one question, then after a yes one session with `claude-opus-5-5` and effort high, a brief that
-names the document and ticket, and no second session. Run a second case from a Sonnet
-session and expect the "cannot get Opus 5.5" message with the question. Owner: the next
-primary session or the User. Cost: about 100k tokens per case, no build; both cases leave
-the finished reports unchecked.
+Observed for `/prd-research`: the session asked the User first, in one question that named
+Opus 5.5, effort high, the brief's contents and the warning that its own model is lower, then
+planned `mcp__ccd_session__start_session` with `claude-opus-5-5`, `high`, `fresh`,
+`use_worktree: false`, `wake_when_done: true`, and a self-contained brief that opens "run the
+skill yourself; start no other session". Not covered: whether the host accepts Opus 5.5 from
+a Sonnet main session (the question says it may not), the host's own offer card, and the
+finished reports. Open point: from a session the host started, with `HARNESS_ROLE` unset,
+the replay treated itself as Bale (`#074`), so the worker rule relies on the brief's own
+sentence to stop recursion.
