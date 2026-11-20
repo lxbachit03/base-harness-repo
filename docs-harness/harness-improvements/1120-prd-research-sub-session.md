@@ -17,8 +17,9 @@ REFERENCES:
 
 `docs-harness/claude-instructions/` holds one instruction file: when the User is on
 Claude and asks for the `prd-research` skill, the main session starts a new session on
-Opus 5.5 with effort high and gives it the context, instead of running the skill itself.
-The new session runs the skill and does not start another.
+Opus 5.5 with effort high and gives it the context, instead of running the skill itself,
+but only after the User says yes to a question that names the model and effort. The new
+session runs the skill and does not start another.
 
 ## Purposes
 
@@ -57,14 +58,16 @@ its ticket, the User's language, and the limits on authority.
 ## Proposed Improvement
 
 Add `docs-harness/claude-instructions/prd-research-sub-session.md`:
-1. Start a fresh session with `model: claude-opus-5-5`, `effort: high`,
+1. Ask the User first, in one question naming the model, effort and brief contents; start
+   only after a yes (User authority, `#009`); after a no, ask whether to run the skill here.
+2. Start a fresh session with `model: claude-opus-5-5`, `effort: high`,
    `use_worktree: false` (the reports belong in this checkout) and `wake_when_done: true`.
-2. The main session writes the brief from what it knows: the source document, the
+3. The main session writes the brief from what it knows: the source document, the
    ticket, the request in the User's words, decisions and limits so far, the output
    location, and what done looks like.
-3. If the host refuses or ignores the model or effort, say so and ask the User whether
-   to run the skill here; never run it silently on another model.
-4. A session started by this rule runs the skill itself.
+4. If the host refuses or ignores the model or effort, say so in that question and ask the
+   User whether to run the skill here; never run it silently on another model.
+5. A session started by this rule runs the skill itself.
 
 Update the folder README line "No instruction file has been added yet." List this record.
 
@@ -89,6 +92,8 @@ Results, 2026-11-20:
 - The model and effort limits come from the session tool's own description in this
   session, not from a run.
 
+- 2026-11-20, at the User's correction: the instruction asks the User before starting a
+  session (new step 1); the later steps are renumbered to five.
 - 2026-11-20 pointer: `SKILL.md` has the line `On Claude, follow
   docs-harness/claude-instructions/prd-research-sub-session.md first.` after its intro, in
   both mirrors; `harness-check` skill-mirror stays identical.
@@ -102,8 +107,9 @@ Decision).
   what the User asked. Mitigation: step 3 makes the agent say so and ask. Proposal for the
   User: start the main session on Opus 5.5, or use a saved session preset that sets the
   model (not verified here).
-- The host asks the User before starting, so the start is not fully automatic.
-  Mitigation: none in the Harness; the host owns that rule.
+- The User may be asked twice, by the instruction's question and by the host's own card.
+  Mitigation: step 2 says the host may ask again and to follow its flow; the host owns
+  that rule.
 - The instruction is read at session start and may be forgotten by the time the skill is
   invoked. Mitigation: a one-line pointer in `prd-research/SKILL.md` (both mirrors), added
   on 2026-11-20 at the User's yes.
@@ -116,7 +122,7 @@ Decision: pending fresh rerun. The instruction is the implementation; whether a 
 session follows it when the skill is invoked is unverified.
 
 Replay task: in a new session on Opus 5.5, ask for `prd-research` on a small sample PRD;
-expect one offer to start a session with `claude-opus-5-5` and effort high, a brief that
+expect one question, then after a yes one session with `claude-opus-5-5` and effort high, a brief that
 names the document and ticket, and no second session. Run a second case from a Sonnet
 session and expect the "cannot get Opus 5.5" message with the question. Owner: the next
 primary session or the User. Cost: about 100k tokens per case, no build; both cases leave
