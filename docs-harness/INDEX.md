@@ -142,6 +142,9 @@ Resources:
 - [Work shape, proof and completion](harness-constraints/1120-work-shape-proof-completion.md):
   read before changing anything and before reporting a result.
 - [PERSONA.md](PERSONA.md)
+- [Ubiquitous language](UBIQUITOUS-LANGUAGES.md): lookup of the shared terms and shorthand the User,
+  agents and the Harness use (for example HDA = Herdr desktop app); read when a User's word or
+  abbreviation is not defined in a loaded document.
 - [Self-review policy](harness-constraints/1120-work-shape-proof-completion.md): inspect
   affected routes, metadata, links, and diff; disclose unattempted proof.
 - [Harness status check](../.agents/skills/harness-check/SKILL.md): follow it
