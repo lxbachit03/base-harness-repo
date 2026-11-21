@@ -81,10 +81,25 @@ separate ones.
 `agy` is Google's Antigravity CLI (1.5.13 here); `agy models` also lists
 `claude-opus-5-5-*`, `claude-sonnet-5-5-*` and `gpt-oss-120b-medium`, which this list does
 not offer. The effort is the suffix of the ID. Its default mode auto-approves edits and
-safe commands; add `--mode plan|accept-edits` when the task calls for it, and
-`--dangerously-skip-permissions` or `--sandbox` only when the User asks for that exact
-flag. Its footer shows the User's account email and quota bars: leave the email out of
-briefs and records, and expect each worker to spend the quota.
+safe commands; add `--mode plan|accept-edits` when the task calls for it, and `--sandbox`
+only when the User asks for it; the permission flag follows the choice below. Its footer
+shows the User's account email and quota bars: leave the email out of briefs and records,
+and expect each worker to spend the quota.
+
+Permission flag for every worker you start (select exactly one by marking `[x]`). If none
+or several are marked, use the first. The User chose Skip on 2026-11-21 so that workers in
+the panes do not stop to ask. `<perm>` in the start lines below stands for the marked
+choice.
+
+- [x] Skip: `<perm>` is `--dangerously-skip-permissions` (`agy 1.5.14 --help`: "Auto-approve
+  all tool permission requests without prompting"; Claude Code names it the same, not run
+  in the app).
+- [ ] Ask: `<perm>` is empty, and a worker that reaches a dialog is `blocked` (section 4).
+
+With Skip a worker reads outside the workspace, runs network and unsandboxed commands and
+edits files with no dialog (`agy` still blocks its list of system commands). The paths and
+limits in the brief and your review of `git status` and `git diff` are then the only guard;
+the flag covers only workers you start, never the User's own spaces or terminals.
 
 ## 4. Orchestrate one task
 
@@ -92,9 +107,9 @@ briefs and records, and expect each worker to spend the quota.
    task, and the paths it may write. Take none of these from yourself: each worker spends
    the User's tokens or quota.
 2. Start in the background, with a name and a working directory:
-   - Claude: `hc run --bg --name <name> --cwd "<Windows path>" -- claude --model <id> "<brief>"`;
+   - Claude: `hc run --bg --name <name> --cwd "<Windows path>" -- claude --model <id> <perm> "<brief>"`;
      the brief given as the last argument arrived.
-   - `agy`: `hc run --bg --name <name> --cwd "<Windows path>" -- agy --model <id>`, then
+   - `agy`: `hc run --bg --name <name> --cwd "<Windows path>" -- agy --model <id> <perm>`, then
      `hc send <name> "<brief>"` once it is idle (the run paused 6 s). `agy` rejects a prompt
      as an argument (`unexpected argument`).
 3. Write the brief. The worker has not seen this conversation, so it carries what this
@@ -149,7 +164,8 @@ same terminal (section 4).
    in the User's window, named for the task, with the repository as its folder. Create it
    with the agent as `--argv` and no `--task`:
 
-   `herdr-app do space.new --name <name> --folder "<Windows path>" --argv '["agy","--model","<id>"]' --focus true`
+   `herdr-app do space.new --name <name> --folder "<Windows path>" --argv '["agy","--model","<id>","<perm>"]' --focus true`
+   (leave the `"<perm>"` element out when it is empty)
 
    It prints `{ "space", "tab", "terminal" }`; the terminal (for example `t3`) is the
    `<name>` of section 4. `--focus false` keeps the User's current view and adds the space
@@ -157,10 +173,10 @@ same terminal (section 4).
    argument, `agy` rejects it (`unexpected argument`), and non-ASCII text in it arrived
    garbled through the PowerShell wrapper. A launch that failed this way leaves the
    terminal at a PowerShell prompt; start the agent there with
-   `hc send <terminal> "agy --model <id>"`.
+   `hc send <terminal> "agy --model <id> <perm>"`.
 3. Wait with `hc wait <terminal>` until the status is `idle` (`agy` reports it), then give
    the brief with `hc send --wait <terminal> "<brief>"`, as in section 4. For a Claude
-   worker use `--argv '["claude","--model","<id>"]'` and the marker of section 4; this
+   worker use `--argv '["claude","--model","<id>","<perm>"]'` and the marker of section 4; this
    was not run in the app.
 4. Collect with `hc read <terminal> --lines 100` and check that `herdr-app ls` lists the
    space with the terminal's status. Review as in section 4.
@@ -182,6 +198,10 @@ showed the space active with `idle` and `antigravity`.
   shell with no parent terminal outlives this session.
 - Never run `hc server stop` or `hc server restart` on the User's core: it affects every
   terminal.
+- With the Skip choice a worker raises no permission dialog, so name the allowed paths and
+  the limits (no commit, push, staging, install) in every brief and inspect the changes
+  before you report; a `blocked` worker is then a question, not an approval, and you still
+  never answer it for the User.
 - Use `--on <machine>`, `hc machine`, and `hc exec` or `hc file` with `--on` only for a
   machine the User names.
 - An experiment uses its own core: set `HC_SESSION=<name>` on every command, run

@@ -102,3 +102,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Add to HERDR-APP.md how to show a worker in the Herdr desktop app window](1121-herdr-app-visible-worker.md) — `#085_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
 - [Offer the Herdr attach command when an own named session runs, with a box for Claude to open it](1121-herdr-own-session-attach.md) — `#086_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
 - [Refresh the utilizing-tools-agy skill and docs/tools/antigravity from five agy workers run through the Herdr desktop app](1121-agy-tools-skill-refresh.md) — `#087_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
+- [Start Herdr desktop app workers with --dangerously-skip-permissions so they do not ask the User](1121-herdr-app-skip-permissions.md) — `#088_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
