@@ -101,3 +101,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Split the Herdr instructions into HERDR-TUI.md (TUI) and HERDR-APP.md (desktop app and hc)](1121-herdr-app-file-split.md) — `#084_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
 - [Add to HERDR-APP.md how to show a worker in the Herdr desktop app window](1121-herdr-app-visible-worker.md) — `#085_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
 - [Offer the Herdr attach command when an own named session runs, with a box for Claude to open it](1121-herdr-own-session-attach.md) — `#086_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
+- [Refresh the utilizing-tools-agy skill and docs/tools/antigravity from five agy workers run through the Herdr desktop app](1121-agy-tools-skill-refresh.md) — `#087_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`

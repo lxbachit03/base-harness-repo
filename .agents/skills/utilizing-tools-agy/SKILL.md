@@ -13,6 +13,13 @@ never promises that a documented capability is enabled here.
 docs-harness/harness-constraints/0822-user-authority-operation-gate.md owns task authority and persistent permissions. Inspect the effects of
 an unfamiliar command before running it.
 
+Tool names differ by surface and release. Checked on 2026-11-21 in five `agy`
+1.5.14 CLI sessions (docs/tools/antigravity/README.md holds the evidence): the
+names below were exposed in every one. The older and IDE names `view_file`,
+`write_to_file`, `replace_file_content`, `list_dir`, `grep_search`,
+`read_url_content` and `generate_image` were exposed in none. Use the name in
+your own session's tool schema when it differs.
+
 ## Mandatory Response Contract
 
 When this skill triggers, begin the response with a concise Markdown table
@@ -25,10 +32,12 @@ before calling tools, then continue directly into execution:
 | `<actual_name>` | `<concise rationale>` | `<files, endpoints, or user-visible scope>` |
 ```
 
-Use actual exposed names. A plugin skill carries its `<plugin>:<skill>` name. If
-a skill is selected, name the skill and the concrete tool it enables. If no
-external capability is needed, declare the native tool that carries the task.
-Never invent a tool, MCP server, plugin, skill, connection, or permission.
+Use actual exposed names. A plugin skill carries the name the session's skill
+list shows: bare in `agy` 1.5.14, or `<plugin>:<skill>` where the list
+qualifies it (the User's `/` menu always shows the qualified form). If a skill is selected, name the skill and the concrete tool it
+enables. If no external capability is needed, declare the native tool that
+carries the task. Never invent a tool, MCP server, plugin, skill, connection,
+or permission.
 
 ## Workflow
 
@@ -47,36 +56,44 @@ and a bounded target.
 
 | Task type | Preferred AGY capability |
 | :--- | :--- |
-| Read a known file | `view_file` with a line range |
-| Inspect directory layout | `list_dir` |
-| Search content across files | `grep_search` |
-| Edit an existing file | `replace_file_content` |
-| Create a file or persist an artifact | `write_to_file` |
-| Shell, build, test, git | `run_command`, within task authority |
+| Read a known file | `read_file` with `StartLine`/`EndLine` (at most 800 lines or 46,080 bytes per call) |
+| Inspect directory layout, search content across files | `run_command` (`Get-ChildItem`, `rg`, `Select-String`); no dedicated list or grep tool |
+| Edit an existing file | `edit_file` (`Target` → `Replacement`; replaces every match) |
+| Create a file or persist an artifact | `write_file` (`Overwrite` or `Append`, never both) |
+| Shell, build, test, git | `run_command`, within task authority; sandboxed by default (workspace only, no network), `BypassSandbox: true` needs User approval |
 | Long-running process | `manage_task` (`list`, `status`, `send_input`, `kill`) |
-| Deferred or recurring wakeup | `schedule` (one-shot timer or cron) |
-| Bounded independent investigation | `invoke_subagent`; `define_subagent` for a reusable role |
+| Deferred or recurring wakeup | `schedule` (one-shot timer or 5-field cron) |
+| Bounded independent investigation | `invoke_subagent` (types `self`, `research` read-only, `image-generator`; `Workspace` `inherit`/`branch`/`share`; `Model` `inherit`/`flash_lite`/`flash`/`pro`); `define_subagent` for a reusable role |
 | Coordinate running subagents | `manage_subagents`, `send_message` |
-| Current web facts | `read_url_content` for a known URL, `search_web` for discovery |
-| Visual asset or mockup | `generate_image` |
+| Scripted fan-out or pipeline of agents and tools | `run_workflow` (Python script; the `run-workflow` skill explains it) |
+| Shared-board agent swarm | `swarm`, only after the User runs `/swarm` |
+| Current web facts | `search_web` (summary with source URLs); no dedicated URL reader in `agy` 1.5.14 sessions |
+| Image asset or mockup | `invoke_subagent` with the `image-generator` type |
 | A decision only the User can make | `ask_question` |
-| Browser automation or web debugging | `chrome-devtools-plugin` skills |
-| Modern web platform guidance | `modern-web-guidance-plugin` skills |
-| AGY configuration or SDK work | `builtin` and SDK skills |
+| Hand a plan to the execution model | `exit_plan_mode`, present only in plan-mode (Orchestrator) sessions |
+| Browser automation or web debugging | `chrome-devtools-plugin` skills (`chrome-devtools`, `debug-optimize-lcp`, `a11y-debugging`, `cookie-debugging`, `memory-leak-debugging`, `troubleshooting`) |
+| Modern web platform guidance | `modern-web-guidance-plugin` skills (`modern-web-guidance`, `chrome-extensions`) |
+| AGY configuration or SDK work | `agy-customizations`, `antigravity-guide`, `google-antigravity-sdk` skills |
 | Semantic judgment, fast classification, Jev primitives | `typesafe-ai` (`.agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1`) |
 | Repository procedure | the matching repository workflow skill |
 
 Capability discovery rules:
 
 - **Built-in tools**: trust the session's exposed tool definitions. Configuration
-  can gate a tool the release ships.
+  and the session mode can gate a tool the release ships (`swarm` needs
+  `/swarm`; `exit_plan_mode` needs plan mode).
 - **Plugins and their skills**: discover from the session's exposed skill list,
   not from memory of what a plugin usually provides. A plugin being known is not
-  a plugin being enabled in this workspace.
+  a plugin being enabled in this workspace, and an enabled plugin is not an MCP
+  tool: the three enabled plugins contributed no MCP tool to any of the five
+  checked sessions.
 - **MCP**: an MCP-backed plugin needs a reachable server and, where applicable,
-  an authenticated account before its tools do real work.
+  an authenticated account before its tools do real work. Configuration lives in
+  `~/.gemini/config/mcp_config.json`, `.agents/mcp_config.json` or a plugin's
+  `mcp_config.json`.
 - **Repository skills**: read the repository's own routing before selecting one,
-  so the skill and the task's authority agree.
+  so the skill and the task's authority agree. Some skills are hidden from the
+  model (`disable-model-invocation`) and run only when the User names them.
 
 ### Phase 2: Mandatory Declaration
 
@@ -104,9 +121,10 @@ to executed work or a reported gap.
 
 | Layer | What it is | How it loads | Availability proof |
 | :--- | :--- | :--- | :--- |
-| Built-in tool | Native function (`view_file`, `run_command`, ...) | Exposed in the session | Tool schema present in session |
-| MCP plugin | External server contributing tools and skills | Plugin configuration for the workspace | Reachable server plus callable tools |
-| Plugin skill | Procedure shipped by a plugin, named `<plugin>:<skill>` | Loaded with its plugin | Entry in the session's skill list |
+| Built-in tool | Native function (`read_file`, `run_command`, ...) | Exposed in the session | Tool schema present in session |
+| MCP plugin | External server contributing tools and skills | `mcp_config.json` for the workspace or plugin | Reachable server plus callable tools |
+| Plugin skill | Procedure shipped by a plugin | Loaded with its plugin | Entry in the session's skill list |
+| Builtin skill | Procedure shipped with `agy` (`agy-customizations`, `antigravity-guide`, `run-workflow`) | Exposed in the session | Entry in the session's skill list |
 | Repository skill | Workflow procedure owned by this repository | Repository skill directories | Entry in the session's skill list |
 | Subagent | Isolated agent run with its own context | `invoke_subagent`, optionally `define_subagent` | Subagent starts and returns work |
 
@@ -115,6 +133,8 @@ to executed work or a reported gap.
 - Read-only inspection is the default for investigation. Mutating files,
   installing or enabling a plugin, changing configuration, and any external or
   destructive action need authority for that specific target.
+- Reading a file outside the workspace, or running a command with
+  `BypassSandbox: true`, raises a permission dialog that only the User answers.
 - Connection state is a ladder, not a boolean: configured plugin → reachable
   server → authenticated account → permitted tool → authorized action. Report the
   missing rung rather than the top one.
@@ -130,11 +150,13 @@ to executed work or a reported gap.
 - Executing tools before declaring the selected set.
 - Stopping after the declaration table instead of continuing into execution.
 - Listing every available capability when one or two are relevant.
-- Guessing a tool name, plugin status, connection state, or opaque identifier.
-- Dumping a whole large file when a line range or `grep_search` answers the task.
-- Asserting implementation details instead of inspecting them with `view_file` or
+- Guessing a tool name, plugin status, connection state, or opaque identifier,
+  including a tool name remembered from older or IDE documentation.
+- Dumping a whole large file when a line range or `rg` answers the task.
+- Asserting implementation details instead of inspecting them with `read_file` or
   `run_command`.
 - Using `run_command` to sleep when `schedule` expresses the wait.
+- Opening a swarm the User did not ask for.
 - Treating a successful tool call as proof without inspecting its result.
 - Claiming completion while a required connection, proof, or decision remains
   missing.

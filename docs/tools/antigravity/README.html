@@ -1,0 +1,1390 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Antigravity Tools Reference</title>
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('agy-doc-theme');
+        if (saved === 'light' || saved === 'dark') {
+          document.documentElement.dataset.theme = saved;
+        }
+      } catch (_) {}
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --surface: #f6f8fa;
+      --surface-alt: #eef2f6;
+      --header-bg: rgba(255, 255, 255, 0.92);
+      --text: #1f2328;
+      --text-muted: #57606a;
+      --accent: #0969da;
+      --accent-soft: #ddf4ff;
+      --border: #d0d7de;
+      --border-subtle: #e5e9ef;
+      --code-bg: #eff2f5;
+      --pre-bg: #f6f8fa;
+      --table-head-bg: #eef2f6;
+      --table-stripe: #f8fafc;
+      --quote-border: #0969da;
+      --focus-ring: #0969da;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0d1117;
+        --surface: #161b22;
+        --surface-alt: #1c2128;
+        --header-bg: rgba(13, 17, 23, 0.92);
+        --text: #e6edf3;
+        --text-muted: #9da7b3;
+        --accent: #58a6ff;
+        --accent-soft: rgba(56, 139, 253, 0.16);
+        --border: #30363d;
+        --border-subtle: #21262d;
+        --code-bg: #1f242c;
+        --pre-bg: #161b22;
+        --table-head-bg: #1c2128;
+        --table-stripe: #131820;
+        --quote-border: #58a6ff;
+        --focus-ring: #58a6ff;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-alt: #1c2128;
+      --header-bg: rgba(13, 17, 23, 0.92);
+      --text: #e6edf3;
+      --text-muted: #9da7b3;
+      --accent: #58a6ff;
+      --accent-soft: rgba(56, 139, 253, 0.16);
+      --border: #30363d;
+      --border-subtle: #21262d;
+      --code-bg: #1f242c;
+      --pre-bg: #161b22;
+      --table-head-bg: #1c2128;
+      --table-stripe: #131820;
+      --quote-border: #58a6ff;
+      --focus-ring: #58a6ff;
+    }
+
+    :root[data-theme="light"] {
+      color-scheme: light;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: clip;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: -100px;
+      left: 1rem;
+      z-index: 100;
+      padding: 0.5rem 0.9rem;
+      border-radius: 6px;
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    :root[data-theme="dark"] .skip-link {
+      color: #0d1117;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .skip-link {
+        color: #0d1117;
+      }
+    }
+
+    .skip-link:focus {
+      top: 0.75rem;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: var(--header-bg);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: calc(17.5rem + 2rem + 78ch + 2rem);
+      margin: 0 auto;
+      padding: 0.65rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .brand-label {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-right: auto;
+      white-space: nowrap;
+    }
+
+    .header-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      flex: 1 1 18rem;
+      justify-content: flex-end;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex: 1 1 13rem;
+      max-width: 24rem;
+    }
+
+    .search-input {
+      width: 100%;
+      min-width: 0;
+      padding: 0.42rem 0.65rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .filter-count {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.42rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn:hover {
+      background: var(--surface-alt);
+      border-color: var(--accent);
+    }
+
+    .toc-toggle {
+      display: inline-flex;
+    }
+
+    .page-shell {
+      max-width: calc(17.5rem + 2rem + 78ch + 2rem);
+      margin: 0 auto;
+      padding: 1.25rem 1rem 3rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+
+    .toc-sidebar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+    }
+
+    .toc-sidebar[data-open="false"] .toc-list {
+      display: none;
+    }
+
+    .toc-title {
+      margin: 0 0 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+
+    .toc-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .toc-item a {
+      display: block;
+      padding: 0.28rem 0.5rem;
+      border-radius: 5px;
+      border-left: 2px solid transparent;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.86rem;
+      line-height: 1.35;
+      transition: background-color 0.12s ease, color 0.12s ease;
+    }
+
+    .toc-item--h3 a {
+      padding-left: 1.15rem;
+      font-size: 0.82rem;
+    }
+
+    .toc-item a:hover {
+      color: var(--text);
+      background: var(--surface-alt);
+    }
+
+    .toc-item a.is-active {
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-left-color: var(--accent);
+      font-weight: 600;
+    }
+
+    @media (min-width: 800px) {
+      .toc-toggle {
+        display: none;
+      }
+
+      .page-shell {
+        grid-template-columns: minmax(14.5rem, 17.5rem) minmax(0, 78ch);
+        justify-content: center;
+        align-items: start;
+        gap: 2rem;
+        padding: 1.75rem 1.25rem 4rem;
+      }
+
+      .toc-sidebar {
+        position: sticky;
+        top: 4.5rem;
+        max-height: calc(100vh - 5.5rem);
+        overflow-y: auto;
+      }
+
+      .toc-sidebar[data-open="false"] .toc-list {
+        display: flex;
+      }
+    }
+
+    .doc-content {
+      min-width: 0;
+      max-width: 78ch;
+      width: 100%;
+    }
+
+    [id] {
+      scroll-margin-top: 4.75rem;
+    }
+
+    h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(1.55rem, 2.5vw, 2rem);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+
+    h2 {
+      margin: 2rem 0 0.75rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 1.35rem;
+      line-height: 1.3;
+    }
+
+    h3 {
+      margin: 1.5rem 0 0.6rem;
+      font-size: 1.1rem;
+      line-height: 1.35;
+    }
+
+    p {
+      margin: 0 0 0.9rem;
+    }
+
+    ul, ol {
+      margin: 0 0 1rem;
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.38rem;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 1.75rem 0;
+    }
+
+    blockquote {
+      margin: 0 0 1rem;
+      padding: 0.75rem 1rem;
+      border-left: 4px solid var(--quote-border);
+      background: var(--surface);
+      border-radius: 0 6px 6px 0;
+    }
+
+    blockquote p:last-child {
+      margin-bottom: 0;
+    }
+
+    a {
+      color: var(--accent);
+      text-underline-offset: 2px;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.875em;
+      background: var(--code-bg);
+      padding: 0.14em 0.35em;
+      border-radius: 4px;
+      overflow-wrap: anywhere;
+    }
+
+    .code-block {
+      margin: 1rem 0 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--pre-bg);
+      overflow: hidden;
+      max-width: 100%;
+    }
+
+    .code-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-alt);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .copy-btn {
+      padding: 0.22rem 0.55rem;
+      font-size: 0.78rem;
+    }
+
+    pre {
+      margin: 0;
+      padding: 0.9rem 1rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.45;
+      background: var(--pre-bg);
+      color: var(--text);
+    }
+
+    pre code {
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      font-size: inherit;
+      overflow-wrap: normal;
+      white-space: pre;
+    }
+
+    .table-wrap {
+      margin: 0.85rem 0 1.25rem;
+      max-width: 100%;
+      max-height: 70vh;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: var(--table-head-bg);
+      color: var(--text);
+      text-align: left;
+      font-weight: 600;
+      padding: 0.6rem 0.75rem;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: 0.55rem 0.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(even) {
+      background: var(--table-stripe);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .is-filtered-out {
+      display: none !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Bỏ qua tới nội dung</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <span class="brand-label">Antigravity CLI (agy) Reference</span>
+      <div class="header-controls">
+        <div class="search-box">
+          <input
+            type="search"
+            id="page-filter"
+            class="search-input"
+            placeholder="Lọc nội dung, tool, skill, lệnh..."
+            aria-label="Lọc nội dung trang"
+            autocomplete="off"
+          >
+          <span id="filter-count" class="filter-count" aria-live="polite"></span>
+        </div>
+        <button
+          type="button"
+          id="theme-toggle"
+          class="btn"
+          aria-label="Chuyển đổi giao diện sáng hoặc tối"
+          aria-pressed="false"
+        >
+          Chủ đề
+        </button>
+        <button
+          type="button"
+          id="toc-toggle"
+          class="btn toc-toggle"
+          aria-expanded="false"
+          aria-controls="toc-nav"
+          aria-label="Mở hoặc đóng mục lục"
+        >
+          Mục lục
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-shell">
+    <nav id="toc-nav" class="toc-sidebar" aria-label="Mục lục" data-open="false">
+      <p class="toc-title">Mục lục</p>
+      <ul id="toc-list" class="toc-list"></ul>
+    </nav>
+
+    <main id="main-content" class="doc-content">
+      <h1 id="cam-nang-tools-mcp-plugins-skills-cua-google-antigravity-agy">Cẩm Nang Tools, MCP, Plugins &amp; Skills Của Google Antigravity (agy)</h1>
+
+      <blockquote>
+        <p><strong>Tài liệu tham khảo kỹ thuật cho nhóm phát triển (Team-Facing Documentation)</strong><br>
+        <em>Vị trí lưu trữ</em>: <code>docs/tools/antigravity/README.md</code><br>
+        <em>Cập nhật</em>: 2026-11-21, theo Antigravity CLI <code>agy</code> <strong>1.5.14</strong> (mục changelog mới nhất: 1.5.13, phát hành 2026-11-20).<br>
+        <em>Nguồn</em>: năm worker <code>agy</code> chạy qua ứng dụng Herdr (<code>gemini-4-hydrogen-high</code>, <code>gemini-4-neon-high</code>, <code>gemini-4-argon-high</code>, <code>gemini-pro-orchestrator-neon</code>, <code>gemini-pro-orchestrator-g1-pro</code>) cùng nhận một brief chỉ đọc, đối chiếu chéo với tài liệu chính thức <a href="https://antigravity.google/docs/" rel="noopener noreferrer"><code>https://antigravity.google/docs/</code></a> và <code>agy changelog</code>. Menu <code>/</code> và <code>/help</code> được đọc thêm trực tiếp từ một worker. Mục nào chỉ một nguồn xác nhận được ghi rõ là <em>có điều kiện</em>. Bằng chứng nằm ở <code>docs-harness/harness-improvements/1121-agy-tools-skill-refresh.md</code>.<br>
+        <em>Mục đích</em>: tổng hợp công cụ tích hợp sẵn (built-in tools), MCP, Plugins, Skills, Slash Commands và chế độ quyền của nền tảng AI Agent <strong>Google Antigravity (AGY)</strong>.</p>
+      </blockquote>
+
+      <p>Danh sách thực tế phụ thuộc phiên bản, bề mặt (CLI, IDE, App) và chế độ chạy. Khi lệch với tài liệu này, schema tool của phiên đang chạy là nguồn quyết định.</p>
+
+      <hr>
+
+      <section aria-labelledby="1-tong-quan-kien-truc-antigravity">
+        <h2 id="1-tong-quan-kien-truc-antigravity">1. Tổng Quan Kiến Trúc Antigravity</h2>
+
+        <p><strong>Google Antigravity (AGY)</strong> là nền tảng lập trình cặp và điều phối AI Agent tự trị do Google DeepMind phát triển. CLI <code>agy</code> là một binary độc lập dùng chung agent harness với Antigravity App 2.0 và IDE. Nền tảng cho phép:</p>
+
+        <ul>
+          <li>Đọc, ghi, sửa tệp và chạy lệnh PowerShell/Shell trên máy của lập trình viên, mặc định trong sandbox.</li>
+          <li>Chạy tác vụ nền và hẹn giờ đánh thức (Reactive Wakeup), không cần polling.</li>
+          <li>Khởi tạo subagent, chạy script điều phối nhiều agent bằng Python (<code>run_workflow</code>), hoặc mở swarm trên bảng chung (<code>/swarm</code>).</li>
+          <li>Mở rộng bằng Plugins, MCP servers, Skills, Rules, Hooks và custom agents.</li>
+        </ul>
+
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span>text</span>
+            <button type="button" class="btn copy-btn" aria-label="Sao chép sơ đồ kiến trúc">Copy</button>
+          </div>
+          <pre><code>+---------------------------------------------------------------------------------------+
+|                              Antigravity CLI (agy 1.5.14)                            |
++---------------------------------------------------------------------------------------+
+|  [14 Built-in Tools]   [3 Plugins]            [30 Skills]       [Slash Commands]      |
+|  - File: read/write/   - chrome-devtools      - 5 builtin       - /goal /plan         |
+|    edit                - modern-web-guidance  - 9 plugin        - /grill-me /learn    |
+|  - run_command         - google-antigravity-  - 16 repository   - /compact /schedule  |
+|  - Multi-agent           sdk                                    - /browser /teamwork  |
+|  - search_web          (0 MCP tool trong các  (đếm trong phiên  - /boost /swarm       |
+|  - ask_question         phiên đã kiểm tra)     của repo này)                          |
++---------------------------------------------------------------------------------------+</code></pre>
+        </div>
+      </section>
+
+      <hr>
+
+      <section aria-labelledby="2-built-in-tools-cong-cu-cot-loi">
+        <h2 id="2-built-in-tools-cong-cu-cot-loi">2. Built-in Tools (Công Cụ Cốt Lõi)</h2>
+
+        <p>Cả năm phiên kiểm tra đều thấy đúng <strong>14 tool</strong> dưới đây (hai phiên Orchestrator thấy thêm <code>exit_plan_mode</code>, xem 2.6).</p>
+
+        <section aria-labelledby="2-1-thao-tac-tep-ma-nguon">
+          <h3 id="2-1-thao-tac-tep-ma-nguon">2.1 Thao Tác Tệp &amp; Mã Nguồn</h3>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Bảng 2.1 Thao Tác Tệp và Mã Nguồn">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tool</th>
+                  <th>Chức năng</th>
+                  <th>Tham số / giới hạn chính</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><code>read_file</code></strong></td>
+                  <td>Đọc text, ảnh, PDF, video, audio theo đường dẫn tuyệt đối.</td>
+                  <td><code>Path</code>, <code>StartLine</code>, <code>EndLine</code>, <code>ByteOffset</code>; tối đa 800 dòng hoặc 46.080 bytes mỗi lần.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>write_file</code></strong></td>
+                  <td>Tạo tệp mới, ghi đè hoặc nối cuối; tự tạo thư mục cha.</td>
+                  <td><code>Path</code>, <code>Content</code>, <code>Overwrite</code>, <code>Append</code> (không dùng chung <code>Overwrite=true</code>), <code>ArtifactMetadata</code>. Lỗi nếu tệp tồn tại mà không đặt <code>Overwrite</code> hoặc <code>Append</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>edit_file</code></strong></td>
+                  <td>Thay một khối liên tục trong tệp có sẵn, khớp chính xác kể cả khoảng trắng.</td>
+                  <td><code>Path</code>, <code>Target</code>, <code>Replacement</code>, <code>ArtifactMetadata</code>. Thay mọi vị trí khớp <code>Target</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Không có tool riêng để liệt kê thư mục hay tìm nội dung: dùng <code>run_command</code> (<code>Get-ChildItem</code>, <code>rg</code>, <code>Select-String</code>).</p>
+        </section>
+
+        <section aria-labelledby="2-2-thuc-thi-he-thong-tien-trinh">
+          <h3 id="2-2-thuc-thi-he-thong-tien-trinh">2.2 Thực Thi Hệ Thống &amp; Tiến Trình</h3>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Bảng 2.2 Thực Thi Hệ Thống và Tiến Trình">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tool</th>
+                  <th>Chức năng</th>
+                  <th>Tham số / giới hạn chính</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><code>run_command</code></strong></td>
+                  <td>Chạy lệnh PowerShell trên Windows, mỗi lần là một phiên mới (không giữ <code>cwd</code> và biến môi trường).</td>
+                  <td><code>CommandLine</code>, <code>toolSummary</code>, <code>WaitMsBeforeAsync</code> (500–10.000 ms), <code>BypassSandbox</code> (mặc định <code>false</code>), <code>IsDaemon</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>manage_task</code></strong></td>
+                  <td>Quản lý tiến trình nền của hội thoại.</td>
+                  <td><code>Action</code> (<code>list</code>, <code>status</code>, <code>send_input</code>, <code>kill</code>), <code>TaskId</code>, <code>Input</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>schedule</code></strong></td>
+                  <td>Hẹn một lần (timer) hoặc định kỳ (cron 5 trường) để đánh thức agent.</td>
+                  <td><code>Prompt</code>, <code>DurationSeconds</code> hoặc <code>CronExpression</code>, <code>TimerCondition</code> (<code>never</code>, <code>any</code>, ID), <code>ExactTiming</code>, <code>IsDaemon</code>, <code>MaxIterations</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="2-3-da-dac-vu-multi-agent">
+          <h3 id="2-3-da-dac-vu-multi-agent">2.3 Đa Đặc Vụ (Multi-Agent)</h3>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Bảng 2.3 Đa Đặc Vụ">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tool</th>
+                  <th>Chức năng</th>
+                  <th>Tham số / giới hạn chính</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><code>invoke_subagent</code></strong></td>
+                  <td>Chạy subagent nền, tự báo lại khi xong.</td>
+                  <td><code>TypeName</code>, <code>Role</code>, <code>Prompt</code>, <code>Model</code> (<code>inherit</code>, <code>flash_lite</code>, <code>flash</code>, <code>pro</code>), <code>Workspace</code> (<code>inherit</code>, <code>branch</code>, <code>share</code>).</td>
+                </tr>
+                <tr>
+                  <td><strong><code>define_subagent</code></strong></td>
+                  <td>Định nghĩa loại subagent dùng lại trong hội thoại.</td>
+                  <td><code>Name</code>, <code>Description</code>, <code>SystemPrompt</code>, <code>EnableWriteTools</code>, <code>EnableMCPTools</code>, <code>EnableSubagentTools</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>manage_subagents</code></strong></td>
+                  <td>Liệt kê hoặc dừng subagent.</td>
+                  <td><code>Action</code> (<code>list</code>, <code>kill</code>, <code>kill_all</code>), <code>ConversationIds</code>. <code>kill</code> xóa cả subagent con và workspace <code>branch</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>send_message</code></strong></td>
+                  <td>Gửi tin cho subagent hoặc peer qua Conversation ID (không gửi cho User).</td>
+                  <td><code>Recipient</code>, <code>Message</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>run_workflow</code></strong></td>
+                  <td>Chạy script Python điều phối nhiều agent và tool (<code>agent</code>, <code>parallel</code>, <code>pipeline</code>, <code>phase</code>, <code>trajectory</code>, <code>call_tool</code>). Phát hành rộng rãi từ 1.5.9.</td>
+                  <td><code>Script</code> hoặc <code>ScriptPath</code>, <code>Args</code>, <code>Cwd</code>, <code>Description</code>, <code>WaitMsBeforeAsync</code> (≤ 10.000 ms). Skill <code>run-workflow</code> hướng dẫn cách viết.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>swarm</code></strong></td>
+                  <td>Điều phối nhóm agent trên bảng chung. Chỉ gọi khi User dùng <code>/swarm</code>, skill yêu cầu hoặc swarm đang mở (từ 1.5.13, agent không tự mở swarm).</td>
+                  <td><code>action</code> (<code>status</code>, <code>models</code>, <code>add</code>, <code>model</code>, <code>kill</code>, <code>title</code>), <code>name</code>, <code>brief</code>, <code>model</code>, <code>workspace</code>, <code>fork</code>, <code>n</code>, <code>tasks</code>, <code>all</code>, <code>title</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p><strong>Loại subagent có sẵn</strong>: <code>self</code> (kế thừa cấu hình, tool, model của agent cha), <code>research</code> (chỉ đọc, sandbox không mạng), <code>image-generator</code> (tạo và sửa ảnh, trả đường dẫn tệp). Ba chế độ workspace: <code>inherit</code> (dùng chung workspace cha), <code>branch</code> (bản sao hoặc nhánh cô lập), <code>share</code> (working copy riêng, chia sẻ kho gốc kiểu git worktree).</p>
+        </section>
+
+        <section aria-labelledby="2-4-tra-cuu-web">
+          <h3 id="2-4-tra-cuu-web">2.4 Tra Cứu Web</h3>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Bảng 2.4 Tra Cứu Web">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tool</th>
+                  <th>Chức năng</th>
+                  <th>Tham số</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><code>search_web</code></strong></td>
+                  <td>Tìm kiếm web, trả bản tóm tắt kèm URL trích dẫn.</td>
+                  <td><code>query</code>, <code>domain</code> (tùy chọn).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Không có tool đọc URL riêng và không có tool sinh ảnh riêng: tạo ảnh qua <code>invoke_subagent</code> với loại <code>image-generator</code>.</p>
+        </section>
+
+        <section aria-labelledby="2-5-giao-tiep-nguoi-dung">
+          <h3 id="2-5-giao-tiep-nguoi-dung">2.5 Giao Tiếp Người Dùng</h3>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Bảng 2.5 Giao Tiếp Người Dùng">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tool</th>
+                  <th>Chức năng</th>
+                  <th>Tham số</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><code>ask_question</code></strong></td>
+                  <td>Hiện câu hỏi trắc nghiệm (một hoặc nhiều lựa chọn) và chờ trả lời; giao diện tự thêm mục <em>Other</em>.</td>
+                  <td><code>questions</code> (mảng <code>question</code>, <code>options</code>, <code>is_multi_select</code>).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="2-6-chi-co-trong-mot-so-phien-co-dieu-kien">
+          <h3 id="2-6-chi-co-trong-mot-so-phien-co-dieu-kien">2.6 Chỉ Có Trong Một Số Phiên (có điều kiện)</h3>
+
+          <ul>
+            <li><strong><code>exit_plan_mode</code></strong> (<code>plan</code>): tắt Plan Mode và bàn giao kế hoạch cho model thực thi. Hai phiên Orchestrator (Neon, Argon) thấy tool này và cho biết đang chạy giao thức hai pha; ba phiên Gemini 4 không thấy.</li>
+            <li>Subagent <code>browser</code>: changelog (1.5.1) nói chỉ chạy như một subagent, nhưng không phiên nào liệt kê nó trong danh sách subagent.</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="2-7-ten-tool-cu-va-trang-thai">
+          <h3 id="2-7-ten-tool-cu-va-trang-thai">2.7 Tên Tool Cũ Và Trạng Thái</h3>
+
+          <p>Tài liệu cũ và bề mặt IDE còn dùng các tên sau. Không phiên <code>agy</code> 1.5.14 nào thấy chúng:</p>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Bảng 2.7 Tên Tool Cũ và Trạng Thái">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tên cũ</th>
+                  <th>Thay bằng</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>view_file</code></td>
+                  <td><code>read_file</code></td>
+                </tr>
+                <tr>
+                  <td><code>write_to_file</code></td>
+                  <td><code>write_file</code></td>
+                </tr>
+                <tr>
+                  <td><code>replace_file_content</code> (<code>TargetContent</code>, <code>ReplacementContent</code>)</td>
+                  <td><code>edit_file</code> (<code>Target</code>, <code>Replacement</code>)</td>
+                </tr>
+                <tr>
+                  <td><code>list_dir</code>, <code>grep_search</code>, <code>find_by_name</code></td>
+                  <td><code>run_command</code>. Changelog 1.2.7 gỡ chúng khỏi bộ mặc định; chỉ custom agent khai báo rõ mới còn dùng.</td>
+                </tr>
+                <tr>
+                  <td><code>read_url_content</code></td>
+                  <td>không có tool tương đương (dùng <code>search_web</code>)</td>
+                </tr>
+                <tr>
+                  <td><code>generate_image</code></td>
+                  <td>subagent <code>image-generator</code> (từ 1.2.16)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <hr>
+
+      <section aria-labelledby="3-model-context-protocol-mcp-plugins">
+        <h2 id="3-model-context-protocol-mcp-plugins">3. Model Context Protocol (MCP) &amp; Plugins</h2>
+
+        <section aria-labelledby="3-1-cau-hinh-mcp">
+          <h3 id="3-1-cau-hinh-mcp">3.1 Cấu Hình MCP</h3>
+
+          <ul>
+            <li>Tệp cấu hình: <code>~/.gemini/config/mcp_config.json</code> (toàn cục), <code>.agents/mcp_config.json</code> (workspace), <code>plugins/&lt;tên&gt;/mcp_config.json</code> (plugin).</li>
+            <li>Hỗ trợ <strong>Stdio</strong> (<code>command</code>, <code>args</code>, <code>env</code>) và <strong>Streamable HTTP</strong> (<code>url</code>, còn nhận khóa cũ <code>serverUrl</code>, <code>headers</code>). Không hỗ trợ HTTP+SSE cũ (spec 2024-11-05); dùng cầu nối như <code>mcp-remote</code>.</li>
+            <li>Quản lý: <code>agy mcp add|remove|list|enable|disable</code> hoặc <code>/mcp</code>. MCP server của plugin tự có tiền tố <code>&lt;plugin&gt;_&lt;server&gt;</code>.</li>
+            <li>Trong các phiên đã kiểm tra, <strong>không có tool MCP nào</strong> được nạp. Hai phiên đọc được <code>~/.gemini/config/mcp_config.json</code> thấy tệp rỗng (0 byte); ba phiên còn lại bị sandbox chặn đọc.</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="3-2-ba-plugin-dang-bat">
+          <h3 id="3-2-ba-plugin-dang-bat">3.2 Ba Plugin Đang Bật</h3>
+
+          <p>Cả ba hiện <code>enabled</code> trong <code>agy plugin list --json</code> và đều <strong>không</strong> cấp tool MCP trong phiên; chúng chỉ cấp skill.</p>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Bảng 3.2 Ba Plugin Đang Bật">
+            <table>
+              <thead>
+                <tr>
+                  <th>Plugin</th>
+                  <th>Phiên bản</th>
+                  <th>Cung cấp</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>chrome-devtools-plugin</code></td>
+                  <td>1.10.1</td>
+                  <td>6 skill điều khiển trình duyệt qua Chrome DevTools (xem 4.2). Cần MCP Chrome DevTools hoạt động mới chạy thật (skill ghi rõ không áp dụng với <code>--slim</code>).</td>
+                </tr>
+                <tr>
+                  <td><code>modern-web-guidance-plugin</code></td>
+                  <td>1.0.0</td>
+                  <td>2 skill hướng dẫn web hiện đại. Chạy <code>npx -y modern-web-guidance@latest</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>google-antigravity-sdk</code></td>
+                  <td>0.0.9</td>
+                  <td>1 skill về Antigravity SDK.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="3-3-cau-truc-va-quan-ly-plugin">
+          <h3 id="3-3-cau-truc-va-quan-ly-plugin">3.3 Cấu Trúc Và Quản Lý Plugin</h3>
+
+          <ul>
+            <li>Một plugin gồm <code>plugin.json</code> (hoặc <code>.antigravity-plugin/plugin.json</code>), <code>skills/</code>, <code>rules/</code> (khuyến nghị <code>AGENTS.md</code>), <code>agents.json</code>, <code>mcp_config.json</code>, <code>hooks.json</code> (với plugin native bắt buộc nằm ở gốc plugin).</li>
+            <li>Lệnh: <code>agy plugin list|import|install|uninstall|enable|disable|validate|link</code> và <code>/plugin</code>. Trạng thái bật/tắt lưu trong <code>config.json</code>. <code>validate</code> nhận <code>.zip</code>, URL, link GitHub <code>/tree/&lt;nhánh&gt;/&lt;đường dẫn&gt;</code> (từ 1.5.11).</li>
+            <li>Admin có <code>pluginControls</code> (<code>pluginsDisabled</code>, <code>marketplaceDisabled</code>, từ 1.5.9).</li>
+          </ul>
+        </section>
+      </section>
+
+      <hr>
+
+      <section aria-labelledby="4-skills">
+        <h2 id="4-skills">4. Skills</h2>
+
+        <p>Phiên của repo này thấy <strong>30 skill</strong>: 5 builtin, 9 plugin, 16 repository. Trong danh sách skill mà model nhận (<code>&lt;skills&gt;</code>) tên hiển thị <strong>trần</strong>, không có tiền tố <code>&lt;plugin&gt;:</code>; trong menu <code>/</code> skill plugin hiện kèm tiền tố (xem 5.1). Tài liệu chính thức ghi tiền tố dùng để tránh trùng tên.</p>
+
+        <section aria-labelledby="4-1-skill-builtin-cua-agy-5">
+          <h3 id="4-1-skill-builtin-cua-agy-5">4.1 Skill Builtin Của <code>agy</code> (5)</h3>
+
+          <ul>
+            <li><strong><code>agy-customizations</code></strong>: tùy biến Skills, Rules, Plugins, Hooks, MCP.</li>
+            <li><strong><code>antigravity-guide</code></strong>: sitemap và cẩm nang CLI, App 2.0, IDE, SDK, slash commands.</li>
+            <li><strong><code>run-workflow</code></strong>: viết và chạy workflow Python với tool <code>run_workflow</code>.</li>
+            <li><strong><code>swarm_monitor</code></strong>: chỉ cho worker giám sát phát hiện swarm bị kẹt.</li>
+            <li><strong><code>swarm_pane</code></strong>: chỉ cho coordinator cập nhật giao diện Swarm trong <code>/swarm</code>.</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="4-2-skill-cua-plugin-9">
+          <h3 id="4-2-skill-cua-plugin-9">4.2 Skill Của Plugin (9)</h3>
+
+          <ul>
+            <li><code>chrome-devtools-plugin</code>: <strong><code>chrome-devtools</code></strong> (điều khiển và gỡ lỗi trình duyệt), <strong><code>debug-optimize-lcp</code></strong>, <strong><code>memory-leak-debugging</code></strong>, <strong><code>a11y-debugging</code></strong>, <strong><code>cookie-debugging</code></strong> (cookie, session, 401/403, SameSite), <strong><code>troubleshooting</code></strong> (lỗi kết nối MCP và trang đích).</li>
+            <li><code>modern-web-guidance-plugin</code>: <strong><code>modern-web-guidance</code></strong> (tra cứu trước khi viết UI web), <strong><code>chrome-extensions</code></strong> (Manifest V3).</li>
+            <li><code>google-antigravity-sdk</code>: <strong><code>google-antigravity-sdk</code></strong>.</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="4-3-skill-cua-repository-agents-skills">
+          <h3 id="4-3-skill-cua-repository-agents-skills">4.3 Skill Của Repository (<code>.agents/skills/</code>)</h3>
+
+          <p>Danh sách đầy đủ và mới nhất nằm trong thư mục <code>.agents/skills/</code>; bảng dưới chỉ nêu nhóm đang có ngày 2026-11-21.</p>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Bảng 4.3 Skill Của Repository">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nhóm</th>
+                  <th>Skill</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Quy trình Harness</td>
+                  <td><code>goal-griller</code>, <code>improve-harness</code>, <code>prompt-leverage</code>, <code>sequence-execution-plan</code>, <code>writing-for-agents</code>, <code>xia</code>, <code>onboarding</code>, <code>prd-research</code></td>
+                </tr>
+                <tr>
+                  <td>Chọn công cụ theo nền tảng</td>
+                  <td><code>utilizing-tools-agy</code>, <code>utilizing-tools-claude</code>, <code>utilizing-tools-codex</code>, <code>utilizing-tools-opencode</code>, <code>utilizing-tools-orca-ade</code></td>
+                </tr>
+                <tr>
+                  <td>Thiết kế và AI có kiểu</td>
+                  <td><code>asset-design-systems</code>, <code>asset-design-systems-hallmark</code>, <code>typesafe-ai</code></td>
+                </tr>
+                <tr>
+                  <td>Ẩn khỏi model (<code>disable-model-invocation: true</code>), chỉ chạy khi User gọi tên</td>
+                  <td><code>domain-audit</code>, <code>harness-check</code>, <code>init-harness-repo</code>, <code>ticket-solving</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <hr>
+
+      <section aria-labelledby="5-slash-commands-che-do-quyen-sandbox">
+        <h2 id="5-slash-commands-che-do-quyen-sandbox">5. Slash Commands, Chế Độ Quyền &amp; Sandbox</h2>
+
+        <section aria-labelledby="5-1-slash-commands">
+          <h3 id="5-1-slash-commands">5.1 Slash Commands</h3>
+
+          <p>Gõ <code>/</code> trong <code>agy</code> mở menu <strong>80 mục</strong> (đọc trực tiếp từ một phiên <code>agy</code> 1.5.14, <code>/help</code> liệt kê riêng nhóm lệnh built-in). Menu gồm bốn nhóm:</p>
+
+          <p><strong>a) 38 lệnh built-in của CLI</strong> (bí danh trong ngoặc): <code>/add-dir</code>, <code>/agents</code>, <code>/artifact</code>, <code>/btw</code>, <code>/changelog</code>, <code>/clear</code> (<code>/new</code>), <code>/codesearch</code> (<code>/cs</code>, <code>/search</code>), <code>/config</code> (<code>/settings</code>), <code>/context</code>, <code>/copy</code>, <code>/credits</code>, <code>/diff</code>, <code>/effort</code>, <code>/exit</code> (<code>/quit</code>), <code>/feedback</code>, <code>/fork</code> (<code>/branch</code>), <code>/help</code>, <code>/hooks</code>, <code>/keybindings</code>, <code>/logout</code>, <code>/mcp</code>, <code>/model</code>, <code>/open</code>, <code>/permissions</code>, <code>/plugin</code>, <code>/projects</code>, <code>/record</code>, <code>/remote-control</code>, <code>/rename</code>, <code>/resume</code> (<code>/switch</code>, <code>/conversation</code>), <code>/rewind</code> (<code>/undo</code>), <code>/skills</code>, <code>/statusline</code>, <code>/tasks</code>, <code>/thinking</code>, <code>/title</code>, <code>/usage</code> (<code>/quota</code>), <code>/voice</code>.</p>
+
+          <p><strong>b) 9 lệnh mức prompt</strong> (cũng nằm trong prompt hệ thống của phiên; agent không tự gọi):</p>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Bảng 5.1b 9 Lệnh Mức Prompt">
+            <table>
+              <thead>
+                <tr>
+                  <th>Lệnh</th>
+                  <th>Mô tả</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>/goal</code></td>
+                  <td>Chạy tới khi mục tiêu hoàn tất.</td>
+                </tr>
+                <tr>
+                  <td><code>/compact</code></td>
+                  <td>Nén lịch sử hội thoại để giải phóng context.</td>
+                </tr>
+                <tr>
+                  <td><code>/schedule</code></td>
+                  <td>Chạy chỉ thị theo lịch hoặc hẹn một lần.</td>
+                </tr>
+                <tr>
+                  <td><code>/browser</code></td>
+                  <td>Gọi browser agent cho tác vụ web.</td>
+                </tr>
+                <tr>
+                  <td><code>/plan</code></td>
+                  <td>Lập kế hoạch kỹ trước khi thực thi.</td>
+                </tr>
+                <tr>
+                  <td><code>/grill-me</code></td>
+                  <td>Phỏng vấn để thống nhất kế hoạch.</td>
+                </tr>
+                <tr>
+                  <td><code>/teamwork</code></td>
+                  <td>Gọi nhóm agent tự trị cho dự án lớn.</td>
+                </tr>
+                <tr>
+                  <td><code>/learn</code></td>
+                  <td>Rút bài học thành skill hoặc rule tái dùng.</td>
+                </tr>
+                <tr>
+                  <td><code>/boost</code></td>
+                  <td>Gọi bộ điều phối đa agent Boost cho tác vụ phức tạp.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p><strong>c) <code>/swarm</code></strong>: chạy swarm nhiều agent song song trên một việc; menu ghi nhãn <em>Preview &amp; Quota Heavy</em>. <code>/swarm board</code> mở bảng chung.</p>
+
+          <p><strong>d) Mỗi skill là một slash command</strong> (<code>/&lt;skill&gt;</code>), gồm cả skill ẩn khỏi model như <code>/harness-check</code>, <code>/domain-audit</code>, <code>/init-harness-repo</code>, <code>/ticket-solving</code> (User gọi được dù model không tự chọn). Skill của plugin hiện <strong>kèm tiền tố</strong>: <code>/chrome-devtools-plugin:chrome-devtools</code>, <code>/modern-web-guidance-plugin:modern-web-guidance</code>, <code>/google-antigravity-sdk:google-antigravity-sdk</code>. Menu đọc được 78 mục (38 + 9 + <code>/swarm</code> + 30 skill); hai mục còn lại chưa hiện khi cuộn (có thể là hai skill repo như <code>/xia</code>, <code>/writing-for-agents</code>).</p>
+
+          <ul>
+            <li>Có thể xếp chuỗi nhiều slash command (<code>/plan /grill-me ...</code>, từ 1.1.5). Frontmatter <code>disable-slash-command: true</code> ẩn skill khỏi menu <code>/</code> nhưng model vẫn gọi được; cờ <code>--disable-slash-commands</code> dùng với <code>agy -p</code>.</li>
+            <li>Phím tắt đáng nhớ trong <code>/help</code>: <code>Shift+Tab</code> đổi chế độ, <code>Ctrl+O</code> xem trajectory, <code>Alt+J</code> quản lý subagent, <code>Ctrl+K</code> duyệt nhanh subagent, <code>Ctrl+G</code> mở prompt trong <code>$EDITOR</code>, <code>Ctrl+R</code> xem artifact.</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="5-2-co-va-lenh-con-cli">
+          <h3 id="5-2-co-va-lenh-con-cli">5.2 Cờ Và Lệnh Con CLI</h3>
+
+          <ul>
+            <li>Cờ: <code>--model</code>, <code>--effort</code> (<code>low</code>, <code>medium</code>, <code>high</code>, <code>xhigh</code>, <code>max</code>), <code>--mode</code> (<code>accept-edits</code>, <code>auto</code>, <code>plan</code>), <code>--sandbox</code>, <code>--dangerously-skip-permissions</code>, <code>--agent</code>, <code>--add-dir</code>, <code>-p/--print</code>, <code>-c/--continue</code>, <code>--input-format</code>/<code>--output-format</code> (<code>stream-json</code>), <code>--json-schema</code>, <code>--remote-agent</code>, <code>--remote-control</code>.</li>
+            <li>Lệnh con: <code>acp</code>, <code>agent(s)</code>, <code>changelog</code>, <code>install</code>, <code>mcp</code>, <code>mic-serve</code>, <code>models</code>, <code>plugin(s)</code>, <code>remote-control</code>, <code>update</code>.</li>
+            <li><code>-p/--print</code> chạy một lần không tương tác; <code>-i/--prompt-interactive</code> vào chế độ tương tác với prompt đầu.</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="5-3-che-do-quyen-va-sandbox">
+          <h3 id="5-3-che-do-quyen-va-sandbox">5.3 Chế Độ Quyền Và Sandbox</h3>
+
+          <ul>
+            <li>Chế độ thực thi: <code>default</code>, <code>accept-edits</code>, <code>auto</code>, <code>plan</code> (xoay bằng Shift+Tab). Preset quyền: Request Review, Default, Auto, Turbo. Luật ưu tiên <code>Deny &gt; Ask &gt; Allow</code>.</li>
+            <li>Sandbox terminal (AppContainer trên Windows) mặc định: ghi trong workspace, thư mục <code>brain/</code> của agy và <code>/tmp</code>; <strong>không mạng</strong>; <strong>không đọc tệp ngoài workspace</strong>. Đọc tệp ngoài workspace hoặc <code>BypassSandbox: true</code> bật hộp thoại xin quyền mà chỉ User trả lời được. Trên Windows, <code>pnpm install|add|remove|update|dlx|create</code> buộc <code>BypassSandbox: true</code>.</li>
+            <li>Từ 1.5.10 sandbox chặn mặc định <code>~/.config</code>, <code>AppData\Roaming</code>, <code>~/.git-credentials</code>; từ 1.4.6 chặn <code>~/.docker</code>, <code>~/.kube</code>, <code>~/_netrc</code>.</li>
+            <li><code>--dangerously-skip-permissions</code> vẫn chặn danh sách lệnh hệ thống (1.5.2).</li>
+            <li>Phiên có Plan Mode bật (hai phiên Orchestrator) từ chối tool sửa tệp cho tới khi gọi <code>exit_plan_mode</code>.</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="5-4-model">
+          <h3 id="5-4-model">5.4 Model</h3>
+
+          <p>Danh sách theo tài khoản và bản phát hành, lấy bằng <code>agy models</code>: họ <code>gemini-4-hydrogen-*</code>, <code>gemini-4-neon-*</code>, <code>gemini-4-argon-*</code>, <code>gemini-pro-orchestrator-*</code>, <code>gemini-3.8-flash-*</code>, ngoài ra <code>claude-*</code> và <code>gpt-oss-120b-medium</code>. Hydrogen/Carbon từ 1.5.8, Orchestrator từ 1.5.10, Neon từ 1.5.12.</p>
+        </section>
+      </section>
+
+      <hr>
+
+      <section aria-labelledby="6-kha-nang-mo-rong-va-tuy-bien">
+        <h2 id="6-kha-nang-mo-rong-va-tuy-bien">6. Khả Năng Mở Rộng Và Tùy Biến</h2>
+
+        <ol>
+          <li><strong>Rules</strong>: <code>GEMINI.md</code>, <code>AGENTS.md</code>, <code>.agents/rules/*.md</code>, <code>.agents/rules.json</code> (không còn dùng <code>.agentrules</code>). Mỗi tệp tối đa 24 KB; toàn bộ rule luôn bật có ngân sách riêng 20.000 token.</li>
+          <li><strong>Custom Skills</strong>: <code>.agents/skills/&lt;tên&gt;/SKILL.md</code>, nạp theo progressive disclosure; cũng quét <code>.agent/</code>, <code>_agents/</code>, <code>_agent/</code>, <code>skills.json</code>, <code>~/.gemini/config/</code> và skill builtin. <code>SKILL.md</code> thiếu <code>name</code> thì lấy tên thư mục (1.5.10).</li>
+          <li><strong>Custom agents</strong>: Markdown <code>agent.md</code> có YAML frontmatter; gọi trực tiếp bằng <code>@&lt;subagent&gt; &lt;tin nhắn&gt;</code>.</li>
+          <li><strong>MCP và Plugins</strong>: xem mục 3.</li>
+          <li><strong>Hooks (<code>hooks.json</code>)</strong>: 6 sự kiện <code>SessionStart</code>, <code>PreToolUse</code> (trả <code>allow</code>, <code>deny</code>, <code>ask</code>, <code>force_ask</code>), <code>PostToolUse</code>, <code>PreInvocation</code>, <code>PostInvocation</code>, <code>Stop</code>; chỉ hỗ trợ <code>type: "command"</code> đồng bộ.</li>
+          <li><strong>Thứ tự nạp customization (cao xuống thấp)</strong>: workspace (<code>.agents/</code> và các biến thể) → cấu hình khai báo (<code>skills.json</code>, <code>plugins.json</code>) → <code>~/.gemini/config/</code> → customization builtin.</li>
+        </ol>
+      </section>
+
+      <hr>
+
+      <section aria-labelledby="7-moc-thay-doi-quan-trong-va-gioi-han-kiem-chung">
+        <h2 id="7-moc-thay-doi-quan-trong-va-gioi-han-kiem-chung">7. Mốc Thay Đổi Quan Trọng Và Giới Hạn Kiểm Chứng</h2>
+
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Bảng 7 Mốc Thay Đổi Quan Trọng">
+          <table>
+            <thead>
+              <tr>
+                <th>Phiên bản</th>
+                <th>Thay đổi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.2.7</td>
+                <td>Gỡ <code>find_by_name</code>, <code>grep_search</code>, <code>list_dir</code> khỏi bộ tool mặc định</td>
+              </tr>
+              <tr>
+                <td>1.2.16</td>
+                <td>Sinh ảnh chuyển sang subagent <code>image-generator</code></td>
+              </tr>
+              <tr>
+                <td>1.5.5</td>
+                <td>Thêm <code>/swarm</code>; worktree giữ thay đổi chưa commit</td>
+              </tr>
+              <tr>
+                <td>1.5.9</td>
+                <td><code>run_workflow</code> phát hành rộng rãi (Python nhúng sẵn)</td>
+              </tr>
+              <tr>
+                <td>1.5.10</td>
+                <td>Thêm model Orchestrator; sandbox chặn đọc <code>~/.config</code>, <code>AppData\Roaming</code></td>
+              </tr>
+              <tr>
+                <td>1.5.13</td>
+                <td>Gộp đọc/tìm/sửa độc lập chạy song song; gỡ skill <code>swarm</code> khỏi gợi ý tự động</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Chưa kiểm chứng: nội dung thô các trang <code>antigravity.google/docs/*.md</code> (phiên sandbox không đọc được URL; nguồn dựa trên <code>search_web</code> và changelog nhúng trong binary), danh sách custom agent (<code>agy agents</code> bị sandbox chặn), kết nối thật của MCP Chrome DevTools, và liệu bộ tool khác nhau ở bề mặt IDE/App 2.0. Menu <code>/</code> đã đọc từ một phiên (hydrogen), chưa so với bề mặt IDE/App và còn hai mục cuối chưa thấy.</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var root = document.documentElement;
+      var main = document.getElementById('main-content');
+      var tocNav = document.getElementById('toc-nav');
+      var tocList = document.getElementById('toc-list');
+      var tocToggle = document.getElementById('toc-toggle');
+      var themeToggle = document.getElementById('theme-toggle');
+      var filterInput = document.getElementById('page-filter');
+      var filterCount = document.getElementById('filter-count');
+
+      function normalizeText(value) {
+        return value
+          .toLowerCase()
+          .replace(/đ/g, 'd')
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '');
+      }
+
+      /* 1. Theme switcher with localStorage fallback */
+      function getEffectiveTheme() {
+        var explicit = root.dataset.theme;
+        if (explicit === 'light' || explicit === 'dark') {
+          return explicit;
+        }
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+      }
+
+      function syncThemeButton() {
+        if (!themeToggle) return;
+        var current = getEffectiveTheme();
+        var isDark = current === 'dark';
+        themeToggle.setAttribute('aria-pressed', String(isDark));
+        themeToggle.textContent = isDark ? 'Chủ đề: Tối' : 'Chủ đề: Sáng';
+      }
+
+      syncThemeButton();
+
+      if (themeToggle) {
+        themeToggle.addEventListener('click', function () {
+          var next = getEffectiveTheme() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('agy-doc-theme', next);
+          } catch (_) {}
+          syncThemeButton();
+        });
+      }
+
+      /* 2. Mobile TOC toggle */
+      if (tocToggle && tocNav) {
+        tocToggle.addEventListener('click', function () {
+          var isOpen = tocNav.dataset.open === 'true';
+          var nextOpen = !isOpen;
+          tocNav.dataset.open = String(nextOpen);
+          tocToggle.setAttribute('aria-expanded', String(nextOpen));
+        });
+      }
+
+      /* 3. Auto-build TOC from h2/h3 and track active heading */
+      var headings = main ? Array.prototype.slice.call(main.querySelectorAll('h2[id], h3[id]')) : [];
+      var tocLinksById = Object.create(null);
+
+      if (tocList && headings.length > 0) {
+        var frag = document.createDocumentFragment();
+        headings.forEach(function (heading) {
+          var li = document.createElement('li');
+          li.className = 'toc-item toc-item--' + heading.tagName.toLowerCase();
+          var link = document.createElement('a');
+          link.href = '#' + heading.id;
+          link.textContent = heading.textContent.trim();
+          link.addEventListener('click', function () {
+            if (window.innerWidth < 800 && tocNav && tocToggle) {
+              tocNav.dataset.open = 'false';
+              tocToggle.setAttribute('aria-expanded', 'false');
+            }
+          });
+          tocLinksById[heading.id] = link;
+          li.appendChild(link);
+          frag.appendChild(li);
+        });
+        tocList.appendChild(frag);
+      }
+
+      var activeId = '';
+      function setActiveToc(id) {
+        if (!id || id === activeId) return;
+        if (activeId && tocLinksById[activeId]) {
+          tocLinksById[activeId].classList.remove('is-active');
+          tocLinksById[activeId].removeAttribute('aria-current');
+        }
+        activeId = id;
+        var nextLink = tocLinksById[id];
+        if (nextLink) {
+          nextLink.classList.add('is-active');
+          nextLink.setAttribute('aria-current', 'location');
+        }
+      }
+
+      if (headings.length > 0) {
+        setActiveToc(headings[0].id);
+        if ('IntersectionObserver' in window) {
+          var visibleIds = new Set();
+          var observer = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                  visibleIds.add(entry.target.id);
+                } else {
+                  visibleIds.delete(entry.target.id);
+                }
+              });
+              for (var i = 0; i < headings.length; i++) {
+                var h = headings[i];
+                if (!h.classList.contains('is-filtered-out') && visibleIds.has(h.id)) {
+                  setActiveToc(h.id);
+                  break;
+                }
+              }
+            },
+            { rootMargin: '-76px 0px -70% 0px', threshold: [0, 1] }
+          );
+          headings.forEach(function (h) {
+            observer.observe(h);
+          });
+        }
+      }
+
+      /* 4. Copy button for code blocks with selection fallback */
+      function selectNodeText(node) {
+        if (!window.getSelection || !document.createRange) return false;
+        try {
+          var range = document.createRange();
+          range.selectNodeContents(node);
+          var selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          return true;
+        } catch (_) {
+          return false;
+        }
+      }
+
+      var codeBlocks = main ? Array.prototype.slice.call(main.querySelectorAll('.code-block')) : [];
+      codeBlocks.forEach(function (block) {
+        var btn = block.querySelector('.copy-btn');
+        var pre = block.querySelector('pre');
+        if (!btn || !pre) return;
+
+        var resetTimer = null;
+        function showFeedback(label) {
+          btn.textContent = label;
+          if (resetTimer) clearTimeout(resetTimer);
+          resetTimer = setTimeout(function () {
+            btn.textContent = 'Copy';
+          }, 2200);
+        }
+
+        btn.addEventListener('click', function () {
+          var text = pre.textContent || '';
+          if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+            navigator.clipboard.writeText(text).then(
+              function () {
+                showFeedback('Đã chép');
+              },
+              function () {
+                var selected = selectNodeText(pre);
+                showFeedback(selected ? 'Đã chọn (Ctrl+C)' : 'Không thể chép');
+              }
+            );
+          } else {
+            var selected = selectNodeText(pre);
+            showFeedback(selected ? 'Đã chọn (Ctrl+C)' : 'Không thể chép');
+          }
+        });
+      });
+
+      /* 5. Live content filter for rows, paragraphs, list items, and code blocks */
+      function applyFilter(rawQuery) {
+        if (!main) return;
+        var q = rawQuery.trim().toLowerCase();
+        var qNorm = normalizeText(q);
+
+        var rows = Array.prototype.slice.call(main.querySelectorAll('tbody tr'));
+        var listItems = Array.prototype.slice.call(main.querySelectorAll('li'));
+        var blocks = Array.prototype.slice.call(main.querySelectorAll('p, blockquote, .code-block'));
+        var tables = Array.prototype.slice.call(main.querySelectorAll('.table-wrap'));
+        var lists = Array.prototype.slice.call(main.querySelectorAll('ul, ol'));
+        var sections = Array.prototype.slice.call(main.querySelectorAll('section'));
+        var hrs = Array.prototype.slice.call(main.querySelectorAll('hr'));
+
+        if (!q) {
+          rows.concat(listItems, blocks, tables, lists, sections, hrs).forEach(function (el) {
+            el.classList.remove('is-filtered-out');
+          });
+          if (filterCount) filterCount.textContent = '';
+          return;
+        }
+
+        function matches(el) {
+          var text = el.textContent || '';
+          return text.toLowerCase().indexOf(q) !== -1 || normalizeText(text).indexOf(qNorm) !== -1;
+        }
+
+        var matchCount = 0;
+
+        rows.forEach(function (tr) {
+          var hit = matches(tr);
+          tr.classList.toggle('is-filtered-out', !hit);
+          if (hit) matchCount++;
+        });
+
+        tables.forEach(function (wrap) {
+          var hasVisibleRow = wrap.querySelector('tbody tr:not(.is-filtered-out)') !== null;
+          wrap.classList.toggle('is-filtered-out', !hasVisibleRow);
+        });
+
+        listItems.forEach(function (li) {
+          var hit = matches(li);
+          li.classList.toggle('is-filtered-out', !hit);
+          if (hit) matchCount++;
+        });
+
+        lists.forEach(function (list) {
+          var hasVisibleItem = list.querySelector('li:not(.is-filtered-out)') !== null;
+          list.classList.toggle('is-filtered-out', !hasVisibleItem);
+        });
+
+        blocks.forEach(function (block) {
+          if (block.closest('blockquote') && block.tagName === 'P') {
+            block.classList.remove('is-filtered-out');
+            return;
+          }
+          var hit = matches(block);
+          block.classList.toggle('is-filtered-out', !hit);
+          if (hit) matchCount++;
+        });
+
+        /* Evaluate deepest sections first so parent sections stay visible if child sections match */
+        sections.slice().reverse().forEach(function (sec) {
+          var heading = sec.querySelector(':scope > h2, :scope > h3');
+          var headingHit = heading ? matches(heading) : false;
+          var hasVisibleContent =
+            sec.querySelector(':scope > .table-wrap:not(.is-filtered-out), :scope > ul:not(.is-filtered-out), :scope > ol:not(.is-filtered-out), :scope > p:not(.is-filtered-out), :scope > .code-block:not(.is-filtered-out), :scope > section:not(.is-filtered-out)') !== null;
+
+          if (headingHit && !hasVisibleContent) {
+            sec.querySelectorAll(':scope > p, :scope > .table-wrap, :scope > .table-wrap tbody tr, :scope > ul, :scope > ol, :scope > ul li, :scope > ol li, :scope > .code-block').forEach(function (child) {
+              child.classList.remove('is-filtered-out');
+            });
+            hasVisibleContent = true;
+          }
+
+          sec.classList.toggle('is-filtered-out', !hasVisibleContent);
+        });
+
+        hrs.forEach(function (hr) {
+          hr.classList.add('is-filtered-out');
+        });
+
+        if (filterCount) {
+          filterCount.textContent = matchCount === 0 ? '0 kết quả' : matchCount + ' kết quả';
+        }
+      }
+
+      if (filterInput) {
+        filterInput.addEventListener('input', function () {
+          applyFilter(filterInput.value);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

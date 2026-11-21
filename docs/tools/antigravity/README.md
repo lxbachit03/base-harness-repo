@@ -1,155 +1,236 @@
-# Cẩm Nang Toàn Diện Về Tools, MCP & Skills Của Google Antigravity
+# Cẩm Nang Tools, MCP, Plugins & Skills Của Google Antigravity (agy)
 
 > **Tài liệu tham khảo kỹ thuật cho nhóm phát triển (Team-Facing Documentation)**  
 > *Vị trí lưu trữ*: `docs/tools/antigravity/README.md`  
-> *Mục đích*: Tổng hợp chi tiết toàn bộ các công cụ tích hợp sẵn (Built-in Core Tools), hệ thống Model Context Protocol (MCP), Plugins, Skills và Slash Commands của nền tảng AI Agent **Google Antigravity (AGY)**.
+> *Cập nhật*: 2026-11-21, theo Antigravity CLI `agy` **1.5.14** (mục changelog mới nhất: 1.5.13, phát hành 2026-11-20).  
+> *Nguồn*: năm worker `agy` chạy qua ứng dụng Herdr (`gemini-4-hydrogen-high`, `gemini-4-neon-high`, `gemini-4-argon-high`, `gemini-pro-orchestrator-neon`, `gemini-pro-orchestrator-g1-pro`) cùng nhận một brief chỉ đọc, đối chiếu chéo với tài liệu chính thức `https://antigravity.google/docs/` và `agy changelog`. Menu `/` và `/help` được đọc thêm trực tiếp từ một worker. Mục nào chỉ một nguồn xác nhận được ghi rõ là *có điều kiện*. Bằng chứng nằm ở `docs-harness/harness-improvements/1121-agy-tools-skill-refresh.md`.  
+> *Mục đích*: tổng hợp công cụ tích hợp sẵn (built-in tools), MCP, Plugins, Skills, Slash Commands và chế độ quyền của nền tảng AI Agent **Google Antigravity (AGY)**.
+
+Danh sách thực tế phụ thuộc phiên bản, bề mặt (CLI, IDE, App) và chế độ chạy. Khi lệch với tài liệu này, schema tool của phiên đang chạy là nguồn quyết định.
 
 ---
 
 ## 1. Tổng Quan Kiến Trúc Antigravity
 
-**Google Antigravity (AGY)** là một nền tảng lập trình cặp (Pair-Programming) và điều phối AI Agent tự trị thế hệ mới được phát triển bởi Google DeepMind. Nền tảng này kết hợp sức mạnh mô hình ngôn ngữ lớn (LLM) với một bộ công cụ phong phú cho phép:
+**Google Antigravity (AGY)** là nền tảng lập trình cặp và điều phối AI Agent tự trị do Google DeepMind phát triển. CLI `agy` là một binary độc lập dùng chung agent harness với Antigravity App 2.0 và IDE. Nền tảng cho phép:
 
-- Thao tác trực tiếp trên cây thư mục, tệp mã nguồn và hệ điều hành của lập trình viên.
-- Chạy các tác vụ nền, hẹn giờ đánh thức (Reactive Wakeup / Schedule) không cần vòng lặp thăm dò (polling).
-- Khởi tạo và điều phối hệ thống đa đặc vụ song song (Multi-Agent Workspaces).
-- Tương tác với trình duyệt Chrome qua giao thức Chrome DevTools Protocol (CDP) thông qua MCP.
-- Tự động hóa tạo Artifacts, hình ảnh UI mockup, và giao tiếp tương tác với người dùng qua Modal trắc nghiệm.
+- Đọc, ghi, sửa tệp và chạy lệnh PowerShell/Shell trên máy của lập trình viên, mặc định trong sandbox.
+- Chạy tác vụ nền và hẹn giờ đánh thức (Reactive Wakeup), không cần polling.
+- Khởi tạo subagent, chạy script điều phối nhiều agent bằng Python (`run_workflow`), hoặc mở swarm trên bảng chung (`/swarm`).
+- Mở rộng bằng Plugins, MCP servers, Skills, Rules, Hooks và custom agents.
 
 ```text
-+-----------------------------------------------------------------------------------+
-|                            Google Antigravity Runtime                            |
-+-----------------------------------------------------------------------------------+
-|  [Core Tools]       [MCP Plugins]             [Skills]         [Slash Commands]   |
-|  - Filesystem       - Chrome DevTools MCP     - goal-griller   - /goal            |
-|  - Execution (OS)   - Modern Web Guidance     - onboarding     - /plan            |
-|  - Multi-Agent      - Antigravity SDK         - improve-harness- /grill-me        |
-|  - Web & Image                                - xia, ...       - /learn           |
-+-----------------------------------------------------------------------------------+
++---------------------------------------------------------------------------------------+
+|                              Antigravity CLI (agy 1.5.14)                            |
++---------------------------------------------------------------------------------------+
+|  [14 Built-in Tools]   [3 Plugins]            [30 Skills]       [Slash Commands]      |
+|  - File: read/write/   - chrome-devtools      - 5 builtin       - /goal /plan         |
+|    edit                - modern-web-guidance  - 9 plugin        - /grill-me /learn    |
+|  - run_command         - google-antigravity-  - 16 repository   - /compact /schedule  |
+|  - Multi-agent           sdk                                    - /browser /teamwork  |
+|  - search_web          (0 MCP tool trong các  (đếm trong phiên  - /boost /swarm       |
+|  - ask_question         phiên đã kiểm tra)     của repo này)                          |
++---------------------------------------------------------------------------------------+
 ```
 
 ---
 
-## 2. Danh Mục Built-in Core Tools (Công Cụ Cốt Lõi)
+## 2. Built-in Tools (Công Cụ Cốt Lõi)
 
-Hệ thống cung cấp sẵn 13 công cụ nền tảng được phân chia thành 5 nhóm chức năng chính:
+Cả năm phiên kiểm tra đều thấy đúng **14 tool** dưới đây (hai phiên Orchestrator thấy thêm `exit_plan_mode`, xem 2.6).
 
-### 2.1 Thao Tác Tệp & Mã Nguồn (Filesystem & Code Manipulation)
+### 2.1 Thao Tác Tệp & Mã Nguồn
 
-| Tên Tool | Chức Năng Chi Tiết | Trường Hợp Sử Dụng (Use Cases) |
+| Tool | Chức năng | Tham số / giới hạn chính |
 | :--- | :--- | :--- |
-| **`view_file`** | Đọc nội dung tệp tin từ ổ đĩa cục bộ. Hỗ trợ xem text (kèm chỉ số dòng `StartLine`, `EndLine`, phân trang tối đa 800 dòng/lần) và xem file nhị phân (Ảnh, PDF, Video, Audio). | Khảo sát mã nguồn, kiểm tra cấu hình, đọc tài liệu, kiểm tra ảnh UI đã sinh. |
-| **`write_to_file`** | Tạo tệp tin mới hoặc ghi đè toàn bộ nội dung tệp tin. Tự động tạo thư mục cha nếu chưa tồn tại. Hỗ trợ metadata cho các User Artifacts. | Tạo module mới, khởi tạo file cấu hình, xuất tài liệu kế hoạch/báo cáo Walkthrough. |
-| **`replace_file_content`** | Chỉnh sửa một khối mã nguồn liên tục (chunk replacement) trong file hiện có một cách chính xác dựa trên đoạn `TargetContent` và `ReplacementContent`. | Refactor code, thêm import, sửa lỗi cú pháp, chỉnh sửa tài liệu mà không cần viết lại cả file lớn. |
-| **`list_dir`** | Liệt kê danh sách các tệp và thư mục con cấp 1 (kèm kích thước dung lượng và trạng thái tệp). | Khám phá cấu trúc dự án, kiểm tra danh mục tệp tin trước khi tìm kiếm sâu. |
-| **`grep_search`** | Tìm kiếm chuỗi hoặc biểu thức chính quy (Regex) theo từng dòng trên toàn bộ thư mục bằng ripgrep. | Tìm định nghĩa hàm, tìm nơi import module, tra cứu chuỗi cấu hình trên toàn repo. |
+| **`read_file`** | Đọc text, ảnh, PDF, video, audio theo đường dẫn tuyệt đối. | `Path`, `StartLine`, `EndLine`, `ByteOffset`; tối đa 800 dòng hoặc 46.080 bytes mỗi lần. |
+| **`write_file`** | Tạo tệp mới, ghi đè hoặc nối cuối; tự tạo thư mục cha. | `Path`, `Content`, `Overwrite`, `Append` (không dùng chung `Overwrite=true`), `ArtifactMetadata`. Lỗi nếu tệp tồn tại mà không đặt `Overwrite` hoặc `Append`. |
+| **`edit_file`** | Thay một khối liên tục trong tệp có sẵn, khớp chính xác kể cả khoảng trắng. | `Path`, `Target`, `Replacement`, `ArtifactMetadata`. Thay mọi vị trí khớp `Target`. |
 
----
+Không có tool riêng để liệt kê thư mục hay tìm nội dung: dùng `run_command` (`Get-ChildItem`, `rg`, `Select-String`).
 
-### 2.2 Thực Thi Hệ Thống & Quản Lý Tiến Trình (Terminal & OS Execution)
+### 2.2 Thực Thi Hệ Thống & Tiến Trình
 
-| Tên Tool | Chức Năng Chi Tiết | Trường Hợp Sử Dụng (Use Cases) |
+| Tool | Chức năng | Tham số / giới hạn chính |
 | :--- | :--- | :--- |
-| **`run_command`** | Thực thi các lệnh PowerShell / Shell trực tiếp trên hệ thống của người dùng. Hỗ trợ cả chạy đồng bộ chờ kết quả và đẩy xuống nền chạy bất đồng bộ (Background Task). | Chạy test suite, build project, chạy linter, kiểm tra git status, khởi động dev server. |
-| **`manage_task`** | Quản lý các tiến trình đang chạy ngầm (`list`, `status`, `send_input`, `kill`). | Kiểm tra tiến trình dev server, gửi tín hiệu ngắt (Ctrl+C), tương tác với lệnh CLI yêu cầu input. |
-| **`schedule`** | Đặt lịch hẹn giờ một lần (Timer) hoặc định kỳ (Cron expression) để tự động đánh thức Agent gửi thông báo trong tương lai. | Hẹn giờ kiểm tra deploy sau 5 phút, kiểm tra health-check định kỳ, tránh dùng lệnh `sleep` làm kẹt luồng. |
+| **`run_command`** | Chạy lệnh PowerShell trên Windows, mỗi lần là một phiên mới (không giữ `cwd` và biến môi trường). | `CommandLine`, `toolSummary`, `WaitMsBeforeAsync` (500–10.000 ms), `BypassSandbox` (mặc định `false`), `IsDaemon`. |
+| **`manage_task`** | Quản lý tiến trình nền của hội thoại. | `Action` (`list`, `status`, `send_input`, `kill`), `TaskId`, `Input`. |
+| **`schedule`** | Hẹn một lần (timer) hoặc định kỳ (cron 5 trường) để đánh thức agent. | `Prompt`, `DurationSeconds` hoặc `CronExpression`, `TimerCondition` (`never`, `any`, ID), `ExactTiming`, `IsDaemon`, `MaxIterations`. |
 
----
+### 2.3 Đa Đặc Vụ (Multi-Agent)
 
-### 2.3 Hệ Thống Đa Đặc Vụ (Multi-Agent & Subagent Orchestration)
-
-| Tên Tool | Chức Năng Chi Tiết | Trường Hợp Sử Dụng (Use Cases) |
+| Tool | Chức năng | Tham số / giới hạn chính |
 | :--- | :--- | :--- |
-| **`define_subagent`** | Định nghĩa một loại subagent chuyên biệt mới (gồm Tên, Mô tả, System Prompt riêng, và quyền kích hoạt công cụ: Write, MCP, Subagent). | Tạo agent chuyên gia đọc code chỉ đọc (Read-only researcher), tạo agent chuyên viết test. |
-| **`invoke_subagent`** | Khởi chạy một hoặc nhiều Subagent song song trong nền với các chế độ workspace: `inherit` (dùng chung), `branch` (tách nhánh riêng biệt), `share` (dùng chung ổ đĩa). | Ủy thác việc khảo sát tài liệu dài mà không làm ô nhiễm context chính; chạy tác vụ nghiên cứu song song. |
-| **`manage_subagents`** | Quản lý danh sách các Subagent đang hoạt động (`list`, `kill`, `kill_all`). | Kiểm tra trạng thái làm việc của subagent, hủy subagent bị treo. |
-| **`send_message`** | Gửi tin nhắn và hướng dẫn tiếp theo cho Subagent thông qua Conversation ID. | Phối hợp làm việc giữa Parent Agent và Subagents. |
+| **`invoke_subagent`** | Chạy subagent nền, tự báo lại khi xong. | `TypeName`, `Role`, `Prompt`, `Model` (`inherit`, `flash_lite`, `flash`, `pro`), `Workspace` (`inherit`, `branch`, `share`). |
+| **`define_subagent`** | Định nghĩa loại subagent dùng lại trong hội thoại. | `Name`, `Description`, `SystemPrompt`, `EnableWriteTools`, `EnableMCPTools`, `EnableSubagentTools`. |
+| **`manage_subagents`** | Liệt kê hoặc dừng subagent. | `Action` (`list`, `kill`, `kill_all`), `ConversationIds`. `kill` xóa cả subagent con và workspace `branch`. |
+| **`send_message`** | Gửi tin cho subagent hoặc peer qua Conversation ID (không gửi cho User). | `Recipient`, `Message`. |
+| **`run_workflow`** | Chạy script Python điều phối nhiều agent và tool (`agent`, `parallel`, `pipeline`, `phase`, `trajectory`, `call_tool`). Phát hành rộng rãi từ 1.5.9. | `Script` hoặc `ScriptPath`, `Args`, `Cwd`, `Description`, `WaitMsBeforeAsync` (≤ 10.000 ms). Skill `run-workflow` hướng dẫn cách viết. |
+| **`swarm`** | Điều phối nhóm agent trên bảng chung. Chỉ gọi khi User dùng `/swarm`, skill yêu cầu hoặc swarm đang mở (từ 1.5.13, agent không tự mở swarm). | `action` (`status`, `models`, `add`, `model`, `kill`, `title`), `name`, `brief`, `model`, `workspace`, `fork`, `n`, `tasks`, `all`, `title`. |
 
----
+**Loại subagent có sẵn**: `self` (kế thừa cấu hình, tool, model của agent cha), `research` (chỉ đọc, sandbox không mạng), `image-generator` (tạo và sửa ảnh, trả đường dẫn tệp). Ba chế độ workspace: `inherit` (dùng chung workspace cha), `branch` (bản sao hoặc nhánh cô lập), `share` (working copy riêng, chia sẻ kho gốc kiểu git worktree).
 
-### 2.4 Tra Cứu Trực Tuyến & Sinh Hình Ảnh (Web & Visual Generation)
+### 2.4 Tra Cứu Web
 
-| Tên Tool | Chức Năng Chi Tiết | Trường Hợp Sử Dụng (Use Cases) |
+| Tool | Chức năng | Tham số |
 | :--- | :--- | :--- |
-| **`search_web`** | Tìm kiếm thông tin trên Internet thời gian thực kèm theo trích dẫn nguồn (URL citations). | Tra cứu tài liệu thư viện mới nhất, tìm cách fix lỗi runtime chưa từng gặp, tra cứu spec chuẩn web. |
-| **`read_url_content`** | Gửi HTTP request ngầm để đọc và chuyển đổi HTML của trang web thành định dạng Markdown gọn gàng. | Đọc tài liệu API chính thức, đọc bài viết hướng dẫn trên GitHub/Blog kỹ thuật. |
-| **`generate_image`** | Sử dụng mô hình sinh ảnh AI của Google để tạo mới hoặc chỉnh sửa hình ảnh UI mockups, diagrams, và visual assets. | Thiết kế giao diện demo UI/UX, tạo logo/icon placeholder thực tế, trực quan hóa ý tưởng thiết kế. |
+| **`search_web`** | Tìm kiếm web, trả bản tóm tắt kèm URL trích dẫn. | `query`, `domain` (tùy chọn). |
 
----
+Không có tool đọc URL riêng và không có tool sinh ảnh riêng: tạo ảnh qua `invoke_subagent` với loại `image-generator`.
 
-### 2.5 Giao Tiếp Người Dùng Tương Tác (Interactive UI)
+### 2.5 Giao Tiếp Người Dùng
 
-| Tên Tool | Chức Năng Chi Tiết | Trường Hợp Sử Dụng (Use Cases) |
+| Tool | Chức năng | Tham số |
 | :--- | :--- | :--- |
-| **`ask_question`** | Hiển thị một Modal tương tác trực quan ngay trên giao diện chat của người dùng với các lựa chọn trắc nghiệm (Single/Multi-select) và ô nhập tùy ý. | Xin ý kiến xác nhận của User khi có nhiều phương án kiến trúc, làm rõ yêu cầu mơ hồ trước khi viết code. |
+| **`ask_question`** | Hiện câu hỏi trắc nghiệm (một hoặc nhiều lựa chọn) và chờ trả lời; giao diện tự thêm mục *Other*. | `questions` (mảng `question`, `options`, `is_multi_select`). |
+
+### 2.6 Chỉ Có Trong Một Số Phiên (có điều kiện)
+
+- **`exit_plan_mode`** (`plan`): tắt Plan Mode và bàn giao kế hoạch cho model thực thi. Hai phiên Orchestrator (Neon, Argon) thấy tool này và cho biết đang chạy giao thức hai pha; ba phiên Gemini 4 không thấy.
+- Subagent `browser`: changelog (1.5.1) nói chỉ chạy như một subagent, nhưng không phiên nào liệt kê nó trong danh sách subagent.
+
+### 2.7 Tên Tool Cũ Và Trạng Thái
+
+Tài liệu cũ và bề mặt IDE còn dùng các tên sau. Không phiên `agy` 1.5.14 nào thấy chúng:
+
+| Tên cũ | Thay bằng |
+| :--- | :--- |
+| `view_file` | `read_file` |
+| `write_to_file` | `write_file` |
+| `replace_file_content` (`TargetContent`, `ReplacementContent`) | `edit_file` (`Target`, `Replacement`) |
+| `list_dir`, `grep_search`, `find_by_name` | `run_command`. Changelog 1.2.7 gỡ chúng khỏi bộ mặc định; chỉ custom agent khai báo rõ mới còn dùng. |
+| `read_url_content` | không có tool tương đương (dùng `search_web`) |
+| `generate_image` | subagent `image-generator` (từ 1.2.16) |
 
 ---
 
-## 3. Hệ Thống Model Context Protocol (MCP) & Plugins
+## 3. Model Context Protocol (MCP) & Plugins
 
-Antigravity hỗ trợ chuẩn **Model Context Protocol (MCP)**, tích hợp sẵn 3 plugins mạnh mẽ:
+### 3.1 Cấu Hình MCP
 
-### 3.1 `chrome-devtools-plugin` (Chrome DevTools MCP Server)
-Cung cấp khả năng kết nối trực tiếp với trình duyệt Chrome thông qua Chrome DevTools Protocol (CDP):
-- **Tự động hóa trình duyệt (Browser Automation)**: Mở tab mới, điều hướng trang web, click phần tử, nhập dữ liệu biểu mẫu, chụp ảnh toàn trang (Full-page screenshot).
-- **Phân tích hiệu năng (Core Web Vitals)**: Đo lường và gỡ lỗi các chỉ số **LCP (Largest Contentful Paint)**, **INP (Interaction to Next Paint)**, **CLS (Cumulative Layout Shift)**.
-- **Phát hiện rò rỉ bộ nhớ (Memory Leaks)**: Chụp và phân tích Heap Snapshots, tìm kiếm đối tượng JS không được Garbage Collector thu hồi.
-- **Kiểm toán tiếp cận (Accessibility - a11y)**: Đo lường độ tương phản màu sắc, cấu trúc cây Accessibility Tree, hỗ trợ ARIA labels.
+- Tệp cấu hình: `~/.gemini/config/mcp_config.json` (toàn cục), `.agents/mcp_config.json` (workspace), `plugins/<tên>/mcp_config.json` (plugin).
+- Hỗ trợ **Stdio** (`command`, `args`, `env`) và **Streamable HTTP** (`url`, còn nhận khóa cũ `serverUrl`, `headers`). Không hỗ trợ HTTP+SSE cũ (spec 2024-11-05); dùng cầu nối như `mcp-remote`.
+- Quản lý: `agy mcp add|remove|list|enable|disable` hoặc `/mcp`. MCP server của plugin tự có tiền tố `<plugin>_<server>`.
+- Trong các phiên đã kiểm tra, **không có tool MCP nào** được nạp. Hai phiên đọc được `~/.gemini/config/mcp_config.json` thấy tệp rỗng (0 byte); ba phiên còn lại bị sandbox chặn đọc.
 
-### 3.2 `modern-web-guidance-plugin`
-Plugin cung cấp cơ sở tri thức hiện đại cho lập trình Web Frontend:
-- **Chrome Extensions Development (Manifest V3)**: Kiến trúc Content Scripts, Background Service Workers, Action Popups, Side Panels, `declarativeNetRequest`.
-- **Modern CSS & JS**: View Transitions API, CSS Anchor Positioning, `:has()` selector, Subgrid, Web Workers, Scroll-driven animations.
+### 3.2 Ba Plugin Đang Bật
 
-### 3.3 `google-antigravity-sdk`
-Bộ công cụ SDK cho phép thiết kế, cấu hình và lập trình đa đặc vụ AI Agent tự trị trong hệ sinh thái Antigravity.
+Cả ba hiện `enabled` trong `agy plugin list --json` và đều **không** cấp tool MCP trong phiên; chúng chỉ cấp skill.
 
----
+| Plugin | Phiên bản | Cung cấp |
+| :--- | :--- | :--- |
+| `chrome-devtools-plugin` | 1.10.1 | 6 skill điều khiển trình duyệt qua Chrome DevTools (xem 4.2). Cần MCP Chrome DevTools hoạt động mới chạy thật (skill ghi rõ không áp dụng với `--slim`). |
+| `modern-web-guidance-plugin` | 1.0.0 | 2 skill hướng dẫn web hiện đại. Chạy `npx -y modern-web-guidance@latest`. |
+| `google-antigravity-sdk` | 0.0.9 | 1 skill về Antigravity SDK. |
 
-## 4. Danh Mục Kỹ Năng & Phân Bổ Theo Plugin (Skills & Plugins Mapping)
+### 3.3 Cấu Trúc Và Quản Lý Plugin
 
-Các kỹ năng (Skills) được phân bổ theo Plugin gốc và các Kỹ năng quản trị cục bộ trong repository:
-
-### 4.1 Nhóm Skills Cung Cấp Bởi `chrome-devtools-plugin`
-Plugin này cung cấp kết nối MCP tới Chrome DevTools và bao gồm 5 skills chuyên sâu:
-- **`chrome-devtools-plugin:chrome-devtools`**: Điều khiển trình duyệt, click, nhập liệu, chụp ảnh màn hình và tự động hóa thao tác người dùng.
-- **`chrome-devtools-plugin:debug-optimize-lcp`**: Chẩn đoán và tối ưu hóa thời gian tải / hiển thị nội dung chính (Largest Contentful Paint).
-- **`chrome-devtools-plugin:memory-leak-debugging`**: Phân tích heap snapshot, tìm và sửa lỗi tràn bộ nhớ / rò rỉ bộ nhớ JS và Node.js.
-- **`chrome-devtools-plugin:a11y-debugging`**: Kiểm tra và sửa lỗi chuẩn tiếp cận (Web Accessibility, ARIA labels, contrast ratio).
-- **`chrome-devtools-plugin:troubleshooting`**: Khắc phục sự cố kết nối MCP server và target browser khi gặp lỗi.
-
-### 4.2 Nhóm Skills Cung Cấp Bởi `modern-web-guidance-plugin`
-- **`modern-web-guidance-plugin:chrome-extensions`**: Hướng dẫn xây dựng và phát hành tiện ích mở rộng Chrome Manifest V3 (Service Workers, Content Scripts, DeclarativeNetRequest).
-- **`modern-web-guidance-plugin:modern-web-guidance`**: Tra cứu và áp dụng best practices cho HTML5/CSS hiện đại, View Transitions API, Web APIs.
-
-### 4.3 Nhóm Skills Tích Hợp Sẵn Của Antigravity Core (`builtin`)
-- **`builtin:antigravity-guide`**: Cẩm nang tra cứu toàn diện về Antigravity CLI, Antigravity 2.0, slash commands, keybindings, SDK.
-- **`builtin:agy-customizations`**: Hướng dẫn tùy biến Rules, Plugins, Hooks, MCP servers và Custom Skills.
-- **`google-antigravity-sdk:google-antigravity-sdk`**: Thiết kế, triển khai và điều phối multi-agent systems bằng Antigravity SDK.
-
-### 4.4 Nhóm Skills Quản Trị Quy Trình & Kiến Trúc Dự Án (Repository Local Skills)
-Nằm trong thư mục `.agents/skills/`:
-- **`utilizing-tools-agy`**: Tự động chọn lọc và triển khai bộ công cụ AGY / MCPs tối ưu cho mọi bài toán kèm bảng khai báo bắt buộc.
-- **`goal-griller`**: Phỏng vấn làm rõ mục tiêu (`/goal`) trước khi bắt đầu tự trị.
-- **`prompt-leverage`**: Chuẩn hóa prompt thô thành chỉ thị thực thi có bằng chứng kiểm tra.
-- **`sequence-execution-plan`**: Xây dựng kế hoạch thực thi phụ thuộc nhiều giai đoạn.
-- **`improve-harness`**: Thử nghiệm và nâng cấp các quy tắc của Harness repo (`$improve-harness`).
-- **`writing-for-agents`**: Chuẩn mực soạn thảo tài liệu và chỉ dẫn cho AI Agents.
-- **`onboarding`**: Khảo sát và phân tách luồng dữ liệu cho dự án brownfield thành từng thư mục độc lập (`docs-harness/onboarding/<flow-name>/`).
-- **`xia`**: Nghiên cứu kỹ thuật, tìm kiếm các mẫu thiết kế và tài liệu trước khi code.
+- Một plugin gồm `plugin.json` (hoặc `.antigravity-plugin/plugin.json`), `skills/`, `rules/` (khuyến nghị `AGENTS.md`), `agents.json`, `mcp_config.json`, `hooks.json` (với plugin native bắt buộc nằm ở gốc plugin).
+- Lệnh: `agy plugin list|import|install|uninstall|enable|disable|validate|link` và `/plugin`. Trạng thái bật/tắt lưu trong `config.json`. `validate` nhận `.zip`, URL, link GitHub `/tree/<nhánh>/<đường dẫn>` (từ 1.5.11).
+- Admin có `pluginControls` (`pluginsDisabled`, `marketplaceDisabled`, từ 1.5.9).
 
 ---
 
-## 5. Slash Commands & Hệ Thống Tùy Biến (Customizations)
+## 4. Skills
 
-### 5.1 Slash Commands Có Thể Dùng Trong Chat UI
-- **`/goal`** hoặc **`/goal-griller`**: Bắt đầu phiên phỏng vấn định hình mục tiêu thực thi tự trị.
-- **`/plan`**: Kích hoạt chế độ lập kế hoạch từng bước trước khi viết mã.
-- **`/grill-me`**: Phỏng vấn đối đáp 1-1 với AI Agent để làm rõ các quyết định kiến trúc khó.
-- **`/learn`**: Ra lệnh cho Agent ghi nhớ bài học / kinh nghiệm sửa lỗi vào bộ nhớ dài hạn.
+Phiên của repo này thấy **30 skill**: 5 builtin, 9 plugin, 16 repository. Trong danh sách skill mà model nhận (`<skills>`) tên hiển thị **trần**, không có tiền tố `<plugin>:`; trong menu `/` skill plugin hiện kèm tiền tố (xem 5.1). Tài liệu chính thức ghi tiền tố dùng để tránh trùng tên.
 
-### 5.2 Khả Năng Mở Rộng Của Antigravity
-1. **Rules (`.agentrules` / `AGENTS.md`)**: Thiết lập luật cấm, quy chuẩn code, và hành vi bắt buộc cho Agent.
-2. **Custom Skills (`.agents/skills/<skill-name>/SKILL.md`)**: Thêm các kỹ năng tự động hóa chuyên biệt cho dự án.
-3. **Custom MCP Servers**: Thêm kết nối tới Database (PostgreSQL, MySQL), Cloud (AWS, GCP), hoặc dịch vụ nội bộ qua giao thức MCP.
-4. **Lifecycle Hooks**: Đăng ký các hook can thiệp trước/sau khi gọi tool (`PreToolUse`, `PostToolUse`).
+### 4.1 Skill Builtin Của `agy` (5)
+
+- **`agy-customizations`**: tùy biến Skills, Rules, Plugins, Hooks, MCP.
+- **`antigravity-guide`**: sitemap và cẩm nang CLI, App 2.0, IDE, SDK, slash commands.
+- **`run-workflow`**: viết và chạy workflow Python với tool `run_workflow`.
+- **`swarm_monitor`**: chỉ cho worker giám sát phát hiện swarm bị kẹt.
+- **`swarm_pane`**: chỉ cho coordinator cập nhật giao diện Swarm trong `/swarm`.
+
+### 4.2 Skill Của Plugin (9)
+
+- `chrome-devtools-plugin`: **`chrome-devtools`** (điều khiển và gỡ lỗi trình duyệt), **`debug-optimize-lcp`**, **`memory-leak-debugging`**, **`a11y-debugging`**, **`cookie-debugging`** (cookie, session, 401/403, SameSite), **`troubleshooting`** (lỗi kết nối MCP và trang đích).
+- `modern-web-guidance-plugin`: **`modern-web-guidance`** (tra cứu trước khi viết UI web), **`chrome-extensions`** (Manifest V3).
+- `google-antigravity-sdk`: **`google-antigravity-sdk`**.
+
+### 4.3 Skill Của Repository (`.agents/skills/`)
+
+Danh sách đầy đủ và mới nhất nằm trong thư mục `.agents/skills/`; bảng dưới chỉ nêu nhóm đang có ngày 2026-11-21.
+
+| Nhóm | Skill |
+| :--- | :--- |
+| Quy trình Harness | `goal-griller`, `improve-harness`, `prompt-leverage`, `sequence-execution-plan`, `writing-for-agents`, `xia`, `onboarding`, `prd-research` |
+| Chọn công cụ theo nền tảng | `utilizing-tools-agy`, `utilizing-tools-claude`, `utilizing-tools-codex`, `utilizing-tools-opencode`, `utilizing-tools-orca-ade` |
+| Thiết kế và AI có kiểu | `asset-design-systems`, `asset-design-systems-hallmark`, `typesafe-ai` |
+| Ẩn khỏi model (`disable-model-invocation: true`), chỉ chạy khi User gọi tên | `domain-audit`, `harness-check`, `init-harness-repo`, `ticket-solving` |
+
+---
+
+## 5. Slash Commands, Chế Độ Quyền & Sandbox
+
+### 5.1 Slash Commands
+
+Gõ `/` trong `agy` mở menu **80 mục** (đọc trực tiếp từ một phiên `agy` 1.5.14, `/help` liệt kê riêng nhóm lệnh built-in). Menu gồm bốn nhóm:
+
+**a) 38 lệnh built-in của CLI** (bí danh trong ngoặc): `/add-dir`, `/agents`, `/artifact`, `/btw`, `/changelog`, `/clear` (`/new`), `/codesearch` (`/cs`, `/search`), `/config` (`/settings`), `/context`, `/copy`, `/credits`, `/diff`, `/effort`, `/exit` (`/quit`), `/feedback`, `/fork` (`/branch`), `/help`, `/hooks`, `/keybindings`, `/logout`, `/mcp`, `/model`, `/open`, `/permissions`, `/plugin`, `/projects`, `/record`, `/remote-control`, `/rename`, `/resume` (`/switch`, `/conversation`), `/rewind` (`/undo`), `/skills`, `/statusline`, `/tasks`, `/thinking`, `/title`, `/usage` (`/quota`), `/voice`.
+
+**b) 9 lệnh mức prompt** (cũng nằm trong prompt hệ thống của phiên; agent không tự gọi):
+
+| Lệnh | Mô tả |
+| :--- | :--- |
+| `/goal` | Chạy tới khi mục tiêu hoàn tất. |
+| `/compact` | Nén lịch sử hội thoại để giải phóng context. |
+| `/schedule` | Chạy chỉ thị theo lịch hoặc hẹn một lần. |
+| `/browser` | Gọi browser agent cho tác vụ web. |
+| `/plan` | Lập kế hoạch kỹ trước khi thực thi. |
+| `/grill-me` | Phỏng vấn để thống nhất kế hoạch. |
+| `/teamwork` | Gọi nhóm agent tự trị cho dự án lớn. |
+| `/learn` | Rút bài học thành skill hoặc rule tái dùng. |
+| `/boost` | Gọi bộ điều phối đa agent Boost cho tác vụ phức tạp. |
+
+**c) `/swarm`**: chạy swarm nhiều agent song song trên một việc; menu ghi nhãn *Preview & Quota Heavy*. `/swarm board` mở bảng chung.
+
+**d) Mỗi skill là một slash command** (`/<skill>`), gồm cả skill ẩn khỏi model như `/harness-check`, `/domain-audit`, `/init-harness-repo`, `/ticket-solving` (User gọi được dù model không tự chọn). Skill của plugin hiện **kèm tiền tố**: `/chrome-devtools-plugin:chrome-devtools`, `/modern-web-guidance-plugin:modern-web-guidance`, `/google-antigravity-sdk:google-antigravity-sdk`. Menu đọc được 78 mục (38 + 9 + `/swarm` + 30 skill); hai mục còn lại chưa hiện khi cuộn (có thể là hai skill repo như `/xia`, `/writing-for-agents`).
+
+- Có thể xếp chuỗi nhiều slash command (`/plan /grill-me ...`, từ 1.1.5). Frontmatter `disable-slash-command: true` ẩn skill khỏi menu `/` nhưng model vẫn gọi được; cờ `--disable-slash-commands` dùng với `agy -p`.
+- Phím tắt đáng nhớ trong `/help`: `Shift+Tab` đổi chế độ, `Ctrl+O` xem trajectory, `Alt+J` quản lý subagent, `Ctrl+K` duyệt nhanh subagent, `Ctrl+G` mở prompt trong `$EDITOR`, `Ctrl+R` xem artifact.
+
+### 5.2 Cờ Và Lệnh Con CLI
+
+- Cờ: `--model`, `--effort` (`low`, `medium`, `high`, `xhigh`, `max`), `--mode` (`accept-edits`, `auto`, `plan`), `--sandbox`, `--dangerously-skip-permissions`, `--agent`, `--add-dir`, `-p/--print`, `-c/--continue`, `--input-format`/`--output-format` (`stream-json`), `--json-schema`, `--remote-agent`, `--remote-control`.
+- Lệnh con: `acp`, `agent(s)`, `changelog`, `install`, `mcp`, `mic-serve`, `models`, `plugin(s)`, `remote-control`, `update`.
+- `-p/--print` chạy một lần không tương tác; `-i/--prompt-interactive` vào chế độ tương tác với prompt đầu.
+
+### 5.3 Chế Độ Quyền Và Sandbox
+
+- Chế độ thực thi: `default`, `accept-edits`, `auto`, `plan` (xoay bằng Shift+Tab). Preset quyền: Request Review, Default, Auto, Turbo. Luật ưu tiên `Deny > Ask > Allow`.
+- Sandbox terminal (AppContainer trên Windows) mặc định: ghi trong workspace, thư mục `brain/` của agy và `/tmp`; **không mạng**; **không đọc tệp ngoài workspace**. Đọc tệp ngoài workspace hoặc `BypassSandbox: true` bật hộp thoại xin quyền mà chỉ User trả lời được. Trên Windows, `pnpm install|add|remove|update|dlx|create` buộc `BypassSandbox: true`.
+- Từ 1.5.10 sandbox chặn mặc định `~/.config`, `AppData\Roaming`, `~/.git-credentials`; từ 1.4.6 chặn `~/.docker`, `~/.kube`, `~/_netrc`.
+- `--dangerously-skip-permissions` vẫn chặn danh sách lệnh hệ thống (1.5.2).
+- Phiên có Plan Mode bật (hai phiên Orchestrator) từ chối tool sửa tệp cho tới khi gọi `exit_plan_mode`.
+
+### 5.4 Model
+
+Danh sách theo tài khoản và bản phát hành, lấy bằng `agy models`: họ `gemini-4-hydrogen-*`, `gemini-4-neon-*`, `gemini-4-argon-*`, `gemini-pro-orchestrator-*`, `gemini-3.8-flash-*`, ngoài ra `claude-*` và `gpt-oss-120b-medium`. Hydrogen/Carbon từ 1.5.8, Orchestrator từ 1.5.10, Neon từ 1.5.12.
+
+---
+
+## 6. Khả Năng Mở Rộng Và Tùy Biến
+
+1. **Rules**: `GEMINI.md`, `AGENTS.md`, `.agents/rules/*.md`, `.agents/rules.json` (không còn dùng `.agentrules`). Mỗi tệp tối đa 24 KB; toàn bộ rule luôn bật có ngân sách riêng 20.000 token.
+2. **Custom Skills**: `.agents/skills/<tên>/SKILL.md`, nạp theo progressive disclosure; cũng quét `.agent/`, `_agents/`, `_agent/`, `skills.json`, `~/.gemini/config/` và skill builtin. `SKILL.md` thiếu `name` thì lấy tên thư mục (1.5.10).
+3. **Custom agents**: Markdown `agent.md` có YAML frontmatter; gọi trực tiếp bằng `@<subagent> <tin nhắn>`.
+4. **MCP và Plugins**: xem mục 3.
+5. **Hooks (`hooks.json`)**: 6 sự kiện `SessionStart`, `PreToolUse` (trả `allow`, `deny`, `ask`, `force_ask`), `PostToolUse`, `PreInvocation`, `PostInvocation`, `Stop`; chỉ hỗ trợ `type: "command"` đồng bộ.
+6. **Thứ tự nạp customization (cao xuống thấp)**: workspace (`.agents/` và các biến thể) → cấu hình khai báo (`skills.json`, `plugins.json`) → `~/.gemini/config/` → customization builtin.
+
+---
+
+## 7. Mốc Thay Đổi Quan Trọng Và Giới Hạn Kiểm Chứng
+
+| Phiên bản | Thay đổi |
+| :--- | :--- |
+| 1.2.7 | Gỡ `find_by_name`, `grep_search`, `list_dir` khỏi bộ tool mặc định |
+| 1.2.16 | Sinh ảnh chuyển sang subagent `image-generator` |
+| 1.5.5 | Thêm `/swarm`; worktree giữ thay đổi chưa commit |
+| 1.5.9 | `run_workflow` phát hành rộng rãi (Python nhúng sẵn) |
+| 1.5.10 | Thêm model Orchestrator; sandbox chặn đọc `~/.config`, `AppData\Roaming` |
+| 1.5.13 | Gộp đọc/tìm/sửa độc lập chạy song song; gỡ skill `swarm` khỏi gợi ý tự động |
+
+Chưa kiểm chứng: nội dung thô các trang `antigravity.google/docs/*.md` (phiên sandbox không đọc được URL; nguồn dựa trên `search_web` và changelog nhúng trong binary), danh sách custom agent (`agy agents` bị sandbox chặn), kết nối thật của MCP Chrome DevTools, và liệu bộ tool khác nhau ở bề mặt IDE/App 2.0. Menu `/` đã đọc từ một phiên (hydrogen), chưa so với bề mặt IDE/App và còn hai mục cuối chưa thấy.
