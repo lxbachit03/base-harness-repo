@@ -63,7 +63,7 @@ separate ones.
 
 - [ ] `gemini-3.8-flash-low`: Gemini 3.8 Flash (Low), run 2026-11-21
 - [ ] `gemini-3.8-flash-medium`: Gemini 3.8 Flash (Medium)
-- [x] `gemini-3.8-flash-high`: Gemini 3.8 Flash (High), run 2026-11-21
+- [ ] `gemini-3.8-flash-high`: Gemini 3.8 Flash (High), run 2026-11-21
 - [ ] `gemini-4-neon-low`: Gemini 4 Neon (Low)
 - [ ] `gemini-4-neon-medium`: Gemini 4 Neon (Medium)
 - [ ] `gemini-4-neon-high`: Gemini 4 Neon (High)
@@ -73,7 +73,7 @@ separate ones.
 - [ ] `gemini-4-argon-high`: Gemini 4 Argon (High)
 - [ ] `gemini-4-hydrogen-low`: Gemini 4 Hydrogen (Low)
 - [ ] `gemini-4-hydrogen-medium`: Gemini 4 Hydrogen (Medium)
-- [ ] `gemini-4-hydrogen-high`: Gemini 4 Hydrogen (High)
+- [x] `gemini-4-hydrogen-high`: Gemini 4 Hydrogen (High)
 - [ ] `gemini-4-hydrogen-xhigh`: Gemini 4 Hydrogen (XHigh)
 - [ ] `gemini-pro-orchestrator-neon`: Orchestrator (Neon)
 - [ ] `gemini-pro-orchestrator-g1-pro`: Orchestrator (Argon)
