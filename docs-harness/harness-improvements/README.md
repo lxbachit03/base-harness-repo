@@ -100,3 +100,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Tell Herdr TUI, the Herdr desktop app and herdr-core (hc) apart in HERDR-TUI.md, and test hc for orchestration](1121-herdr-app-hc-orchestration.md) — `#083_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
 - [Split the Herdr instructions into HERDR-TUI.md (TUI) and HERDR-APP.md (desktop app and hc)](1121-herdr-app-file-split.md) — `#084_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
 - [Add to HERDR-APP.md how to show a worker in the Herdr desktop app window](1121-herdr-app-visible-worker.md) — `#085_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
+- [Offer the Herdr attach command when an own named session runs, with a box for Claude to open it](1121-herdr-own-session-attach.md) — `#086_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`

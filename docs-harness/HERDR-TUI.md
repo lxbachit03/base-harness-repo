@@ -22,6 +22,12 @@ and drives a Herdr session of its own, as the own-session steps below say.
 
 - [ ] Allow an own named session
 
+Attach command for an own session (matters only when the box above is marked; mark `[x]` to
+let Claude open the command in a terminal tab of the host, leave `[ ]` to get the command
+and run it yourself):
+
+- [ ] Open the attach command myself
+
 1. Check `test "${HERDR_ENV:-}" = 1` (PowerShell: `$env:HERDR_ENV -eq '1'`). When it
    fails and the switch is `[ ]`, tell the User this session is not inside a Herdr pane and
    stop; they start the agent from a Herdr pane (run `herdr`, then the agent, in a pane).
@@ -50,11 +56,25 @@ would not carry this conversation; this way the conversation stays here.
    pane: skip `--current` and `$HERDR_PANE_ID`, take pane IDs from the JSON of
    `workspace create` (`.result.root_pane.pane_id`) and `pane split`, and pass them
    explicitly. Section 3 then applies unchanged.
-4. Give the User the name and tell them `herdr session attach <name>` in a terminal shows
-   every pane. A `blocked` dialog is theirs to answer there; Claude Code's auto mode
-   refused this session's `agent send-keys` answer to one in the replay.
+4. Right after `agent start` succeeds, before the call that waits for the worker
+   (`agent prompt --wait`), write the attach command, `herdr session attach <name>`, in a
+   message to the User, so it is on screen while the worker runs, not only in the final
+   report; write it again whenever the worker is `blocked`. It shows every pane of the
+   session. A `blocked` dialog is theirs to answer there; Claude Code's auto mode refused
+   this session's `agent send-keys` answer to one in the replay.
+   - Box `[ ]`: show the command alone in its own fenced `powershell` block (no `$` prompt,
+     no output inside) with one line saying it opens the session's panes, so the User runs it
+     from there.
+   - Box `[x]`: open it in a terminal tool of the host that keeps a process running in a
+     tab the User can see and type in (Claude Desktop: `run_in_terminal` with a short
+     title and the repository as `cwd`), and name the tab. Without such a tool, show the
+     block as for `[ ]`.
+   - Never run `herdr session attach` through a shell tool that waits for the command to
+     exit (such as Bash): it opens an interactive TUI and does not return.
 5. When the User no longer needs the panes, run `herdr session stop <name>` and then
-   `herdr session delete <name>`; stop and delete only a session you created.
+   `herdr session delete <name>`; stop and delete only a session you created. Then close
+   the terminal tab you opened for the attach command (Claude Desktop: `stop_terminal_tab`
+   with `close: true`), never a tab the User opened.
 
 ## 2. Model
 

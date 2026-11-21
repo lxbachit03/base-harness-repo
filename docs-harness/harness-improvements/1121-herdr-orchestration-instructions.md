@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Add docs-harness/HERDR-TUI.md so Claude can open a Herdr pane and orchestrate other agents
 CREATED: 2026-11-21
-STATUS: active
+STATUS: completed
 REFERENCES:
 - docs-harness/HERDR-TUI.md
 - docs-harness/INDEX.md
@@ -106,6 +106,8 @@ creates and stops, never in the User's own session.
   "own named session" procedure from the steps already run on 2026-11-21, plus one line
   that `pane run` types into an agent's pane, then run the documented steps from this
   Desktop session. Nothing is committed or pushed.
+- 2026-11-21: At the User's request ran the fresh Desktop-style replay of the own-session
+  switch (see Validation) and closed the record. No file text changed. Nothing is pushed.
 
 ## Validation
 
@@ -223,6 +225,34 @@ follows the steps unaided, `session attach` by the User for a `blocked` dialog f
 mode (the replay's attach worked on a named session), and whether the background server
 outlives the Desktop session that started it.
 
+Fresh replay of the own-session switch, 2026-11-21, coordinator `claude-sonnet-5-5`
+(`claude -p`, Read, Glob, Grep and Bash allowed, `HERDR_*` and `HC_*` variables removed so
+it is outside Herdr, 23 turns, 177 s). The prompt, in Vietnamese: use Herdr TUI for a small
+read-only task on `agy` (four files of `docs-harness/claude-instructions`, file name and
+first heading), the User is in Claude Desktop and ticks "Allow an own named session" in the
+prompt (the box in the committed file stays `[ ]`), take the other marked boxes, leave the
+`default` session alone, then report the session name and attach command and stop and
+delete the session.
+- Available and retrieved: it read the INDEX and `HERDR-TUI.md` (and not `HERDR-APP.md`)
+  with the session retrieval.
+- Exercised: `herdr session list --json` showed only `default`; it started
+  `herdr --session claude-readtitles server`, created the workspace with
+  `--session` after `herdr`, `--env HARNESS_ROLE=worker`, `--no-focus` and explicit pane
+  `w1:p1`, started `agy` as `titles` with `gemini-3.8-flash-high`, gave a brief carrying
+  the worker role and the Load line, got `idle` from `agent prompt --wait` on the first
+  send (no `agent_prompt_stalled`, no `blocked`), read the result, and ran `session stop`
+  then `session delete`; `herdr session list` afterwards showed only `default`.
+- Result: the four names and first headings were right (compared with the files);
+  `git status` stayed clean; it reported the session name and `herdr session attach
+  claude-readtitles` and said the command is dead after the delete.
+- Slips and limits: it ran one `herdr status` without `--session` before the named session
+  existed; that command is read-only (the gate step 2 asks for it) and it said so. It noticed
+  that the box is `[ ]` and treated the User's words in the prompt as the permission,
+  and said how to make it durable. It did not hit `blocked`, a Claude worker, a write or
+  the question of whether the background server outlives the Desktop session.
+Cost: about 47k cache-creation and 676k cache-read tokens over 23 turns, plus the `agy`
+quota of one four-file read with Harness loading.
+
 Not covered by those runs: a coordinator that is itself a Claude session inside a Herdr pane
 and follows the file by itself, a worker doing real work in the repository (its start-up
 reads `AGENTS.md` and the INDEX), `blocked` approval handling beyond the trust dialog,
@@ -247,26 +277,20 @@ the unprompted behavior).
 
 ## Decision and Result
 
-Decision: pending fresh rerun, for the own-session switch only. The earlier decision
-stands for the rest: `HERDR-TUI.md` was retrieved and exercised in the 2026-11-21 replay
-(Sonnet 5.5 inside Herdr followed the gate, question, pane, agent, brief, wait, resend,
-read and review steps unaided; outside Herdr it stopped at the gate), and the Gemini
-checklist and the Harness context checkbox were read and used. The switch and its steps
-ran as written from this session (see Validation); whether a fresh Desktop Claude follows
-them unaided is unverified.
+Decision: keep. `HERDR-TUI.md` was available, retrieved and exercised in every case run:
+inside a Herdr pane the coordinator followed the gate, question, pane, agent, brief, wait,
+resend, read and review steps unaided; outside Herdr with the switch `[ ]` it stopped at the
+gate; and in the 2026-11-21 fresh replay a Desktop-style Sonnet 5.5 coordinator with the
+own-session permission started its own named session, drove an `agy` worker with explicit
+pane IDs, verified the result, stopped and deleted the session and left `default` alone.
+The Gemini checklist and the Harness context checkbox were read and used.
 
-Replay task: in a fresh Claude Desktop session with the switch marked `[x]`, give one
-prompt to use Herdr for a small read-only task. Expect it to read `HERDR-TUI.md`, find
-`HERDR_ENV` unset, start `herdr --session <name> server`, drive it with explicit pane IDs,
-ask kind, model and context, report the session name and the attach command, and stop and
-delete the session on request. With the switch `[ ]` it expects the earlier stop at the
-gate. Owner: the User or a later session. Cost: about 100k tokens per case; the User is
-cost-sensitive, so the record stays active until the User asks for it.
-
-Observed earlier, not changed here: the coordinator's session retrieval costs about 80k
-tokens of context before any Herdr step; it asked kind, model and context but not the
-paths the worker may write (the task was read-only).
+Observed, not changed: the replay ran `herdr status` before it had a named session and took
+the permission from the prompt instead of the box; both are consistent with the file. The
+coordinator's session retrieval costs tens of thousands of tokens before any Herdr step, and
+it did not ask which paths a worker may write (the task was read-only).
 
 Remaining proof, not required: a worker that edits files, `blocked` approvals beyond the
-trust dialog, parallel workers, a Claude-kind worker started by a coordinator, long turns,
-`--machine`, and briefs beyond a few KB. Nothing is committed or pushed.
+trust dialog, parallel workers, a Claude-kind worker started by a coordinator in this mode,
+long turns, `--machine`, briefs beyond a few KB, and whether the background server outlives
+the Desktop session that started it. Nothing is pushed.
