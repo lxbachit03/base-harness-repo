@@ -149,6 +149,11 @@ Resources:
   meets the User's requirements.
 - [Jev System One configuration manifest](JEV-AI.md): declarative manifest for
   project context, semantic scripts catalog, and dynamic criteria.
+- [Herdr TUI orchestration](HERDR-TUI.md): read only when the User asks for the Herdr TUI, a
+  Herdr pane or the `herdr` command; other requests skip it. When the User names only
+  "Herdr", ask whether they mean the TUI or the desktop app before reading either.
+- [Herdr desktop app and `hc` orchestration](HERDR-APP.md): read only when the User asks
+  for the Herdr app, the desktop app or `hc`; other requests skip it.
 
 ## TAG: [IMPROVE_HARNESS]
 

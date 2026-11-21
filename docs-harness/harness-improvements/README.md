@@ -96,3 +96,7 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Run code research in Haiku 5.5 subagents with a User-selectable effort](1120-research-subagents.md) — `#079_IMPROVE_HARNESS_1120`, `PRIORITY: [MEDIUM]`
 - [Ask the User about /compact before a task when context is above 50%](1121-claude-compact-before-task.md) — `#080_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
 - [Let the coding sub-session consult an Opus 5.5 advisor, with an on/off switch and an effort checklist](1121-coding-advisor-addon.md) — `#081_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
+- [Add docs-harness/HERDR-TUI.md so Claude can open a Herdr pane and orchestrate other agents](1121-herdr-orchestration-instructions.md) — `#082_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
+- [Tell Herdr TUI, the Herdr desktop app and herdr-core (hc) apart in HERDR-TUI.md, and test hc for orchestration](1121-herdr-app-hc-orchestration.md) — `#083_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
+- [Split the Herdr instructions into HERDR-TUI.md (TUI) and HERDR-APP.md (desktop app and hc)](1121-herdr-app-file-split.md) — `#084_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
+- [Add to HERDR-APP.md how to show a worker in the Herdr desktop app window](1121-herdr-app-visible-worker.md) — `#085_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
