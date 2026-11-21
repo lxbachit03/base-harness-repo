@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bảng công việc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Claymorphism reference tokens */
+  --clay-bg:#f5f5fa;
+  --clay-bg-2:#f0eeff;
+  --clay-bg-3:#eefbf5;
+  --clay-white:#ffffff;
+  --clay-lav:#f3e8ff;
+  --clay-coral:#f76d6d;
+  --clay-sky:#62cdff;
+  --clay-purple:#d6a2ff;
+  --clay-green:#7ae582;
+  --clay-peach:#ffb347;
+  --clay-text:#2d3557;
+  --clay-text-2:#555b7a;
+  --clay-shadow-tint:112,100,176;
+  --radius-card:32px;
+  --radius-ctl:24px;
+  --radius-pill:999px;
+  --pad-card:2rem;
+  --font:"Nunito","Quicksand","Poppins",system-ui,-apple-system,"Segoe UI",sans-serif;
+
+  /* Contrast-verified semantic extensions derived from clay tokens */
+  --clay-text-strong:#3b2d5e;       /* 6.60:1 on #c4b5fd, 10.33:1 on #f3e8ff */
+  --clay-btn-bg:#c4b5fd;            /* primary interactive clay button */
+  --clay-focus:#6d28d9;             /* >=3.85:1 on all clay surfaces */
+  --clay-edge:#7b70a8;              /* >=3.77:1 UI edge on white/bg/lav */
+  --clay-track:#e6dff7;             /* progress bar recessed track */
+  --clay-col-todo:#eef6ff;
+  --clay-col-doing:#fff8ec;
+  --clay-col-done:#eefbf5;          /* --clay-bg-3 */
+  --clay-done-card:#f4fcf7;
+  --clay-coral-soft:#ffe2e2;        /* substitute for #f76d6d text bg (4.19:1 -> 7.42:1/9.80:1) */
+  --clay-coral-ink:#8c1d28;         /* 7.42:1 on #ffe2e2, 9.05:1 on #ffffff */
+  --clay-peach-soft:#fff1db;        /* 10.72:1 with --clay-text */
+  --clay-sky-soft:#dff3ff;          /* 10.46:1 with --clay-text */
+
+  /* Shadow tokens: container = outer only; interactive = 3-shadow clay stack */
+  --clay-container-shadow:0 24px 52px rgba(var(--clay-shadow-tint),.20);
+  --clay-hero-shadow:0 35px 68px rgba(var(--clay-shadow-tint),.26);
+  --clay-stack:
+    0 12px 24px rgba(var(--clay-shadow-tint),.30),
+    inset 0 -4px 8px rgba(95,70,140,.22),
+    inset 0 4px 8px rgba(255,255,255,.72);
+  --clay-stack-sm:
+    0 8px 16px rgba(var(--clay-shadow-tint),.22),
+    inset 0 -3px 6px rgba(95,70,140,.18),
+    inset 0 3px 6px rgba(255,255,255,.75);
+  --clay-stack-card:
+    0 14px 28px rgba(var(--clay-shadow-tint),.20),
+    inset 0 -5px 10px rgba(95,70,140,.14),
+    inset 0 5px 10px rgba(255,255,255,.85);
+
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+
+html{scroll-padding-top:env(safe-area-inset-top,0px);overflow-x:clip}
+*,*::before,*::after{box-sizing:inherit}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background-color:var(--clay-bg);
+  background-image:
+    radial-gradient(circle at 12% 8%,var(--clay-bg-2) 0%,transparent 42%),
+    radial-gradient(circle at 88% 16%,var(--clay-bg-3) 0%,transparent 38%),
+    radial-gradient(circle at 50% 95%,var(--clay-bg-2) 0%,transparent 48%);
+  color:var(--clay-text);
+  font-family:var(--font);
+  line-height:1.5;
+  overflow-x:clip;
+}
+
+.wrap{
+  max-width:1080px;
+  margin:0 auto;
+  padding:32px 20px 56px;
+}
+
+.hero-head{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:6px;
+}
+
+.hero-badge{
+  width:48px;
+  height:48px;
+  flex:0 0 auto;
+  border-radius:18px;
+  background:var(--clay-lav);
+  display:grid;
+  place-items:center;
+  box-shadow:var(--clay-container-shadow);
+}
+
+h1{
+  margin:0;
+  font-size:clamp(28px,4.8vw,44px);
+  font-weight:800;
+  letter-spacing:-.02em;
+  line-height:1.12;
+  color:var(--clay-text);
+}
+
+.sub{
+  margin:0 0 24px;
+  color:var(--clay-text-2);
+  font-weight:600;
+  font-size:15px;
+}
+
+/* Container card: outer shadow only per guardrail */
+.progress{
+  background:var(--clay-lav);
+  border-radius:var(--radius-card);
+  padding:var(--pad-card);
+  margin-bottom:24px;
+  box-shadow:var(--clay-hero-shadow);
+}
+
+.pg-top{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:12px 20px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+
+.pg-num{
+  font-size:clamp(34px,6vw,50px);
+  font-weight:800;
+  letter-spacing:-.03em;
+  line-height:1;
+  color:var(--clay-text-strong);
+}
+
+.pg-num small{
+  display:inline-block;
+  font-size:.36em;
+  font-weight:700;
+  color:var(--clay-text-2);
+  letter-spacing:0;
+  margin-left:10px;
+}
+
+.pg-note{
+  color:var(--clay-text-2);
+  font-size:15px;
+  font-weight:700;
+}
+
+.bar{
+  display:flex;
+  height:20px;
+  border-radius:var(--radius-pill);
+  overflow:hidden;
+  background:var(--clay-track);
+  padding:3px;
+  gap:4px;
+}
+
+.bar span{
+  display:block;
+  min-width:0;
+  border-radius:var(--radius-pill);
+  transition:flex-grow 260ms ease;
+}
+
+.bar .b-done{background:var(--clay-green)}
+.bar .b-doing{background:var(--clay-peach)}
+.bar .b-todo{background:var(--clay-sky)}
+
+.pg-legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 18px;
+  margin-top:12px;
+  font-size:13px;
+  font-weight:700;
+  color:var(--clay-text-2);
+}
+
+.pg-legend span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+
+.pg-legend i{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  display:inline-block;
+}
+
+.pg-legend .l-done{background:var(--clay-green)}
+.pg-legend .l-doing{background:var(--clay-peach)}
+.pg-legend .l-todo{background:var(--clay-sky)}
+
+/* Form controls */
+input,select,button{
+  font:inherit;
+  color:inherit;
+}
+
+.add{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto auto;
+  gap:12px;
+  margin-bottom:20px;
+  align-items:center;
+}
+
+.add input,.add select{
+  background:var(--clay-white);
+  color:var(--clay-text);
+  border:2px solid var(--clay-edge);
+  border-radius:var(--radius-ctl);
+  padding:12px 16px;
+  min-width:0;
+  width:100%;
+  font-weight:600;
+  box-shadow:0 10px 20px rgba(var(--clay-shadow-tint),.12);
+}
+
+.add input::placeholder{
+  color:var(--clay-text-2);
+  opacity:1;
+}
+
+/* Primary interactive clay button: 3-shadow stack */
+.clay-btn{
+  background:var(--clay-btn-bg);
+  color:var(--clay-text-strong);
+  border:0;
+  border-radius:var(--radius-ctl);
+  padding:13px 26px;
+  font-weight:800;
+  cursor:pointer;
+  white-space:nowrap;
+  box-shadow:var(--clay-stack);
+  transition:transform 120ms ease,opacity 120ms ease;
+}
+
+.clay-btn:hover{opacity:.94}
+.clay-btn:active{transform:translateY(2px) scale(.98)}
+
+:focus-visible{
+  outline:3px solid var(--clay-focus);
+  outline-offset:3px;
+}
+
+/* Toolbar: view switcher + priority filters */
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px 16px;
+  margin-bottom:18px;
+}
+
+.views{display:flex;align-items:center}
+
+/* Segmented tray: container gets outer shadow only */
+.seg{
+  display:inline-flex;
+  flex-wrap:wrap;
+  gap:6px;
+  background:var(--clay-white);
+  border-radius:var(--radius-pill);
+  padding:6px;
+  box-shadow:var(--clay-container-shadow);
+  max-width:100%;
+}
+
+.seg button{
+  background:transparent;
+  color:var(--clay-text-2);
+  border:0;
+  border-radius:var(--radius-pill);
+  padding:8px 18px;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform 120ms ease,opacity 120ms ease;
+}
+
+.seg button:hover{color:var(--clay-text)}
+.seg button:active{transform:translateY(2px) scale(.98)}
+
+.seg button[aria-pressed="true"]{
+  background:var(--clay-btn-bg);
+  color:var(--clay-text-strong);
+  font-weight:800;
+  box-shadow:var(--clay-stack-sm);
+}
+
+.filters{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.chip{
+  background:var(--clay-white);
+  color:var(--clay-text-2);
+  border:0;
+  border-radius:var(--radius-pill);
+  padding:8px 16px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:700;
+  box-shadow:var(--clay-stack-sm);
+  transition:transform 120ms ease,opacity 120ms ease;
+}
+
+.chip:hover{color:var(--clay-text)}
+.chip:active{transform:translateY(2px) scale(.98)}
+
+.chip[aria-pressed="true"]{
+  background:var(--clay-btn-bg);
+  color:var(--clay-text-strong);
+  font-weight:800;
+}
+
+.chip[data-f="high"][aria-pressed="true"]{
+  background:var(--clay-coral-soft);
+  color:var(--clay-coral-ink);
+}
+
+.chip[data-f="mid"][aria-pressed="true"]{
+  background:var(--clay-peach);
+  color:var(--clay-text);
+}
+
+.chip[data-f="low"][aria-pressed="true"]{
+  background:var(--clay-sky);
+  color:var(--clay-text);
+}
+
+.weeknav{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+}
+
+.weeknav .lbl{
+  font-weight:800;
+  color:var(--clay-text);
+  margin-left:4px;
+}
+
+/* Board & Week columns: containers get outer shadow only */
+.board{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:20px;
+  align-items:start;
+}
+
+.col{
+  background:var(--clay-white);
+  border:2px solid transparent;
+  border-radius:var(--radius-card);
+  padding:20px;
+  min-height:210px;
+  min-width:0;
+  box-shadow:var(--clay-container-shadow);
+  transition:transform 120ms ease;
+}
+
+.col[data-s="todo"]{background:var(--clay-col-todo)}
+.col[data-s="doing"]{background:var(--clay-col-doing)}
+.col[data-s="done"]{background:var(--clay-col-done)}
+
+.col.over{
+  border:2px dashed var(--clay-focus);
+  transform:translateY(-2px);
+}
+
+.col-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 2px 16px;
+  min-width:0;
+}
+
+.col-head i{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  display:block;
+  flex:0 0 auto;
+  box-shadow:inset 0 -2px 3px rgba(95,70,140,.22),inset 0 2px 3px rgba(255,255,255,.8);
+}
+
+.col[data-s="todo"] .col-head i{background:var(--clay-sky)}
+.col[data-s="doing"] .col-head i{background:var(--clay-peach)}
+.col[data-s="done"] .col-head i{background:var(--clay-green)}
+
+.col-head h2{
+  font-size:17px;
+  margin:0;
+  font-weight:800;
+  color:var(--clay-text);
+}
+
+.col-head .count{
+  margin-left:auto;
+  font-size:13px;
+  font-weight:800;
+  color:var(--clay-text-2);
+  background:var(--clay-white);
+  border-radius:var(--radius-pill);
+  padding:2px 11px;
+  box-shadow:0 4px 10px rgba(var(--clay-shadow-tint),.12);
+}
+
+/* Task cards: interactive draggable clay tiles (full 3-shadow stack) */
+.card{
+  position:relative;
+  background:var(--clay-white);
+  border-radius:var(--radius-ctl);
+  padding:15px 16px 15px 22px;
+  margin-bottom:14px;
+  cursor:grab;
+  box-shadow:var(--clay-stack-card);
+  transition:transform 120ms ease,opacity 120ms ease;
+  min-width:0;
+}
+
+.card:last-child{margin-bottom:0}
+
+.card::before{
+  content:"";
+  position:absolute;
+  left:10px;
+  top:14px;
+  bottom:14px;
+  width:5px;
+  border-radius:var(--radius-pill);
+  background:var(--clay-sky);
+}
+
+.card.p-high::before{background:var(--clay-coral)}
+.card.p-mid::before{background:var(--clay-peach)}
+.card.p-low::before{background:var(--clay-sky)}
+
+.card:active{cursor:grabbing}
+.card.dragging{opacity:.45;transform:scale(.98)}
+
+.card.is-done{background:var(--clay-done-card)}
+.card .t{
+  font-weight:700;
+  color:var(--clay-text);
+  overflow-wrap:anywhere;
+}
+.card.is-done .t{
+  text-decoration:line-through;
+  color:var(--clay-text-2);
+}
+
+.meta{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:10px;
+  flex-wrap:wrap;
+}
+
+.tag{
+  font-size:12px;
+  font-weight:700;
+  border-radius:var(--radius-pill);
+  padding:3px 10px;
+  background:var(--clay-bg-2);
+  color:var(--clay-text-2);
+}
+
+.tag.p-high{background:var(--clay-coral-soft);color:var(--clay-coral-ink)}
+.tag.p-mid{background:var(--clay-peach-soft);color:var(--clay-text)}
+.tag.p-low{background:var(--clay-sky-soft);color:var(--clay-text)}
+.tag.doing{background:var(--clay-lav);color:var(--clay-text-strong)}
+
+.tag.late{
+  background:var(--clay-coral-soft);
+  color:var(--clay-coral-ink);
+  font-weight:800;
+}
+
+.acts{
+  margin-left:auto;
+  display:flex;
+  gap:6px;
+}
+
+.acts button{
+  background:var(--clay-bg-2);
+  color:var(--clay-text);
+  border:0;
+  border-radius:12px;
+  width:32px;
+  height:32px;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:800;
+  line-height:1;
+  display:grid;
+  place-items:center;
+  box-shadow:
+    0 4px 10px rgba(var(--clay-shadow-tint),.18),
+    inset 0 -2px 4px rgba(95,70,140,.18),
+    inset 0 2px 4px rgba(255,255,255,.85);
+  transition:transform 120ms ease,opacity 120ms ease;
+}
+
+.acts button:hover:not(:disabled){opacity:.88}
+.acts button:active:not(:disabled){transform:translateY(2px) scale(.95)}
+.acts button:disabled{opacity:.32;cursor:default}
+
+.acts button.del{
+  background:var(--clay-coral-soft);
+  color:var(--clay-coral-ink);
+}
+
+.empty{
+  color:var(--clay-text-2);
+  font-size:14px;
+  font-weight:600;
+  text-align:center;
+  padding:22px 8px;
+}
+
+[hidden]{display:none!important}
+
+/* Week view */
+.week{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:10px;
+  align-items:start;
+}
+
+.week .col,.extra .col{
+  border-radius:24px;
+  padding:12px;
+  min-height:160px;
+}
+
+.week .col-head{
+  flex-wrap:wrap;
+  gap:4px 6px;
+  margin-bottom:12px;
+}
+
+.week .col-head h2{font-size:14px}
+
+.dsub{
+  font-size:12px;
+  font-weight:700;
+  color:var(--clay-text-2);
+}
+
+.col.today{
+  background:var(--clay-lav);
+  border:2px solid var(--clay-focus);
+}
+
+.col.today .dsub{
+  color:var(--clay-text-strong);
+  font-weight:800;
+}
+
+.week .card{
+  border-radius:18px;
+  padding:10px 10px 10px 16px;
+  margin-bottom:10px;
+  font-size:13px;
+}
+
+.week .card::before{
+  left:7px;
+  top:10px;
+  bottom:10px;
+  width:4px;
+}
+
+.week .acts button{
+  width:28px;
+  height:28px;
+  border-radius:10px;
+  font-size:13px;
+}
+
+.addday{
+  width:100%;
+  margin-top:8px;
+  background:var(--clay-bg);
+  color:var(--clay-text-strong);
+  border:2px dashed var(--clay-edge);
+  border-radius:16px;
+  padding:8px 10px;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:700;
+  transition:transform 120ms ease,opacity 120ms ease;
+}
+
+.addday:hover{background:var(--clay-lav)}
+.addday:active{transform:translateY(2px) scale(.98)}
+
+.extra{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+  margin-top:18px;
+  align-items:start;
+}
+
+/* Responsive */
+@media (max-width:1020px){
+  .week{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media (max-width:820px){
+  .board,.extra{grid-template-columns:1fr}
+  .add{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .add input[type="text"]{grid-column:1/-1}
+  .add .clay-btn{grid-column:1/-1;width:100%}
+}
+
+@media (max-width:520px){
+  .wrap{padding:20px 14px 44px}
+  .progress{padding:22px 18px;border-radius:26px}
+  .col{padding:16px;border-radius:26px}
+  .week,.add{grid-template-columns:1fr}
+  .controls{align-items:stretch}
+}
+
+/* Accessibility & fallbacks */
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  .clay-btn:active,.seg button:active,.chip:active,.acts button:active,.addday:active,.col.over{transform:none!important}
+}
+
+@media (prefers-reduced-transparency:reduce){
+  body{background-image:none;background-color:var(--clay-bg)}
+  .progress,.col,.seg,.card,.clay-btn,.chip,.acts button{
+    box-shadow:none;
+    border:2px solid var(--clay-edge);
+  }
+}
+
+@media (forced-colors:active){
+  .progress,.col,.seg,.card,.clay-btn,.chip,.acts button,.tag,.bar,.bar span,.col-head .count,.hero-badge{
+    forced-color-adjust:auto;
+    box-shadow:none;
+    border:2px solid ButtonText;
+  }
+  .col.today{border:3px solid Highlight}
+  .col.over{border:3px dashed Highlight}
+  .seg button[aria-pressed="true"],.chip[aria-pressed="true"]{
+    background:Highlight;
+    color:HighlightText;
+  }
+  .card::before{background:Highlight}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero-head">
+    <div class="hero-badge" aria-hidden="true">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3b2d5e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="4" width="16" height="16" rx="5"></rect>
+        <path d="M8.5 12.2l2.4 2.4 4.8-5.1"></path>
+      </svg>
+    </div>
+    <h1>Bảng công việc</h1>
+  </div>
+  <p class="sub">Kéo thẻ giữa các cột hoặc dùng nút mũi tên để đổi trạng thái.</p>
+
+  <section class="progress" aria-label="Tiến độ">
+    <div class="pg-top">
+      <div class="pg-num" id="pct">0%<small id="frac">0/0 việc xong</small></div>
+      <div class="pg-note" id="note"></div>
+    </div>
+    <div class="bar" aria-hidden="true"><span class="b-done" id="bDone"></span><span class="b-doing" id="bDoing"></span><span class="b-todo" id="bTodo"></span></div>
+    <div class="pg-legend" aria-hidden="true">
+      <span><i class="l-done"></i>Hoàn thành</span>
+      <span><i class="l-doing"></i>Đang làm</span>
+      <span><i class="l-todo"></i>Cần làm</span>
+    </div>
+  </section>
+
+  <div class="add">
+    <input type="text" id="title" placeholder="Bạn cần làm gì?" aria-label="Tên công việc" maxlength="120">
+    <select id="prio" aria-label="Mức ưu tiên">
+      <option value="high">Ưu tiên cao</option>
+      <option value="mid" selected>Ưu tiên vừa</option>
+      <option value="low">Ưu tiên thấp</option>
+    </select>
+    <input type="date" id="due" aria-label="Hạn hoàn thành">
+    <button class="clay-btn" id="addBtn">Thêm việc</button>
+  </div>
+
+  <div class="controls">
+    <div class="views">
+      <div class="seg" role="group" aria-label="Chế độ xem">
+        <button data-v="board" aria-pressed="true">Theo trạng thái</button>
+        <button data-v="week" aria-pressed="false">Theo tuần</button>
+      </div>
+    </div>
+    <div class="filters" role="group" aria-label="Lọc theo ưu tiên">
+      <button class="chip" data-f="all" aria-pressed="true">Tất cả</button>
+      <button class="chip" data-f="high" aria-pressed="false">Cao</button>
+      <button class="chip" data-f="mid" aria-pressed="false">Vừa</button>
+      <button class="chip" data-f="low" aria-pressed="false">Thấp</button>
+    </div>
+  </div>
+
+  <div class="weeknav" id="weeknav" hidden>
+    <button class="chip" id="prevW" aria-label="Tuần trước">←</button>
+    <button class="chip" id="thisW">Tuần này</button>
+    <button class="chip" id="nextW" aria-label="Tuần sau">→</button>
+    <span class="lbl" id="wlabel"></span>
+  </div>
+
+  <div class="board" id="board"></div>
+  <div class="week" id="week" hidden></div>
+  <div class="extra" id="extra" hidden></div>
+</div>
+
+<script>
+(function(){
+  var KEY="bang-cong-viec-v1";
+  var COLS=[["todo","Cần làm"],["doing","Đang làm"],["done","Hoàn thành"]];
+  var PL={high:"Cao",mid:"Vừa",low:"Thấp"};
+  var tasks=[],filter="all",dragId=null;
+
+  function load(){
+    try{var r=localStorage.getItem(KEY);if(r){tasks=JSON.parse(r)||[];return}}catch(e){}
+    var d=new Date(),iso=function(n){var x=new Date(d);x.setDate(x.getDate()+n);return isoDate(x)};
+    tasks=[
+      {id:1,t:"Gửi báo cáo tuần cho nhóm",p:"high",s:"doing",d:iso(0)},
+      {id:2,t:"Đặt lịch khám răng",p:"mid",s:"todo",d:iso(3)},
+      {id:3,t:"Dọn hộp thư đến",p:"low",s:"todo",d:""},
+      {id:4,t:"Thanh toán tiền điện",p:"high",s:"done",d:iso(-1)}
+    ];
+  }
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch(e){}}
+
+  function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+  function pad(n){return n<10?"0"+n:""+n}
+  function isoDate(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+  function today(){return isoDate(new Date())}
+  function mondayOf(d){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
+  var view="board",ws=mondayOf(new Date());
+  function fmt(s){var p=s.split("-");return p[2]+"/"+p[1]}
+
+  function card(t){
+    var c=el("div","card p-"+t.p+(t.s==="done"?" is-done":""));
+    c.draggable=true;c.dataset.id=t.id;
+    c.appendChild(el("div","t",t.t));
+    var m=el("div","meta");
+    m.appendChild(el("span","tag p-"+t.p,PL[t.p]));
+    if(view==="week"&&t.s==="doing")m.appendChild(el("span","tag doing","Đang làm"));
+    if(t.d){
+      var late=t.s!=="done"&&t.d<today();
+      if(view!=="week"||late)m.appendChild(el("span","tag"+(late?" late":""),(late?"Quá hạn ":"Hạn ")+fmt(t.d)));
+    }
+    var a=el("div","acts"),i=COLS.findIndex(function(x){return x[0]===t.s});
+    var L=el("button",null,"←");L.title="Chuyển sang cột trước";L.setAttribute("aria-label","Chuyển sang cột trước");L.disabled=i===0;
+    var R=el("button",null,"→");R.title="Chuyển sang cột sau";R.setAttribute("aria-label","Chuyển sang cột sau");R.disabled=i===2;
+    var X=el("button","del","×");X.title="Xóa việc";X.setAttribute("aria-label","Xóa việc");
+    L.onclick=function(){move(t.id,COLS[i-1][0])};
+    R.onclick=function(){move(t.id,COLS[i+1][0])};
+    X.onclick=function(){tasks=tasks.filter(function(x){return x.id!==t.id});save();render()};
+    if(view==="week"){
+      var K=el("button",null,t.s==="done"?"↺":"✓");K.title=t.s==="done"?"Mở lại việc":"Đánh dấu xong";K.setAttribute("aria-label",K.title);
+      K.onclick=function(){move(t.id,t.s==="done"?"todo":"done")};
+      a.append(K,X);
+    }else a.append(L,R,X);
+    m.appendChild(a);c.appendChild(m);
+    c.addEventListener("dragstart",function(e){dragId=t.id;c.classList.add("dragging");try{e.dataTransfer.setData("text/plain",String(t.id))}catch(x){}});
+    c.addEventListener("dragend",function(){c.classList.remove("dragging");dragId=null;document.querySelectorAll(".col.over").forEach(function(n){n.classList.remove("over")})});
+    return c;
+  }
+
+  function move(id,s){tasks.forEach(function(t){if(t.id===id)t.s=s});save();render()}
+
+  function render(){
+    var isW=view==="week";
+    document.getElementById("board").hidden=isW;
+    document.getElementById("week").hidden=!isW;
+    document.getElementById("extra").hidden=!isW;
+    document.getElementById("weeknav").hidden=!isW;
+    if(isW)renderWeek();
+    var b=document.getElementById("board");b.textContent="";
+    if(!isW)COLS.forEach(function(c){
+      var col=el("div","col");col.dataset.s=c[0];
+      var list=tasks.filter(function(t){return t.s===c[0]&&(filter==="all"||t.p===filter)});
+      var h=el("div","col-head");h.appendChild(el("i"));h.appendChild(el("h2",null,c[1]));h.appendChild(el("span","count",String(list.length)));
+      col.appendChild(h);
+      if(!list.length)col.appendChild(el("div","empty",c[0]==="todo"?"Chưa có việc nào. Thêm việc ở phía trên.":"Kéo thẻ vào đây."));
+      list.forEach(function(t){col.appendChild(card(t))});
+      col.addEventListener("dragover",function(e){e.preventDefault();col.classList.add("over")});
+      col.addEventListener("dragleave",function(e){if(!col.contains(e.relatedTarget))col.classList.remove("over")});
+      col.addEventListener("drop",function(e){e.preventDefault();col.classList.remove("over");if(dragId!=null)move(dragId,c[0])});
+      b.appendChild(col);
+    });
+    var n=tasks.length,d=tasks.filter(function(t){return t.s==="done"}).length,g=tasks.filter(function(t){return t.s==="doing"}).length,o=n-d-g;
+    var pct=n?Math.round(d/n*100):0;
+    document.getElementById("pct").firstChild.nodeValue=pct+"%";
+    document.getElementById("frac").textContent=d+"/"+n+" việc xong";
+    document.getElementById("bDone").style.flexGrow=d;
+    document.getElementById("bDoing").style.flexGrow=g;
+    document.getElementById("bTodo").style.flexGrow=o;
+    var late=tasks.filter(function(t){return t.s!=="done"&&t.d&&t.d<today()}).length;
+    document.getElementById("note").textContent=!n?"Chưa có công việc nào.":late?late+" việc đã quá hạn.":d===n?"Bạn đã xong tất cả.":"Còn "+(n-d)+" việc cần hoàn thành.";
+  }
+
+  function setDate(id,d){tasks.forEach(function(t){if(t.id===id)t.d=d});save();render()}
+  function dayCol(title,sub,list,dateVal,cls){
+    var col=el("div","col"+(cls||""));
+    var h=el("div","col-head");h.appendChild(el("h2",null,title));if(sub)h.appendChild(el("span","dsub",sub));h.appendChild(el("span","count",String(list.length)));
+    col.appendChild(h);
+    list.forEach(function(t){col.appendChild(card(t))});
+    if(dateVal!==null){
+      var A=el("button","addday","+ Thêm việc");
+      A.onclick=function(){document.getElementById("due").value=dateVal;document.getElementById("title").focus()};
+      col.appendChild(A);
+      col.addEventListener("dragover",function(e){e.preventDefault();col.classList.add("over")});
+      col.addEventListener("dragleave",function(e){if(!col.contains(e.relatedTarget))col.classList.remove("over")});
+      col.addEventListener("drop",function(e){e.preventDefault();col.classList.remove("over");if(dragId!=null)setDate(dragId,dateVal)});
+    }
+    return col;
+  }
+  function renderWeek(){
+    var W=document.getElementById("week"),E=document.getElementById("extra");W.textContent="";E.textContent="";
+    var names=["Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy","Chủ nhật"],tod=today();
+    var vis=function(t){return filter==="all"||t.p===filter};
+    for(var k=0;k<7;k++){
+      var d=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+k),s=isoDate(d);
+      var list=tasks.filter(function(t){return t.d===s&&vis(t)});
+      W.appendChild(dayCol(names[k],pad(d.getDate())+"/"+pad(d.getMonth()+1),list,s,s===tod?" today":""));
+    }
+    var e=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+6),first=isoDate(ws);
+    document.getElementById("wlabel").textContent=pad(ws.getDate())+"/"+pad(ws.getMonth()+1)+" – "+pad(e.getDate())+"/"+pad(e.getMonth()+1)+"/"+e.getFullYear();
+    E.appendChild(dayCol("Chưa đặt ngày","",tasks.filter(function(t){return !t.d&&vis(t)}),"",""));
+    var over=tasks.filter(function(t){return t.d&&t.d<first&&t.s!=="done"&&vis(t)});
+    if(over.length)E.appendChild(dayCol("Chưa xong từ trước tuần này","",over,null,""));
+  }
+  function add(){
+    var inp=document.getElementById("title"),v=inp.value.trim();
+    if(!v){inp.focus();return}
+    tasks.push({id:Date.now(),t:v,p:document.getElementById("prio").value,s:"todo",d:document.getElementById("due").value});
+    inp.value="";document.getElementById("due").value="";save();render();inp.focus();
+  }
+  document.getElementById("addBtn").onclick=add;
+  document.getElementById("title").addEventListener("keydown",function(e){if(e.key==="Enter")add()});
+  document.querySelectorAll(".filters .chip").forEach(function(c){
+    c.onclick=function(){
+      filter=c.dataset.f;
+      document.querySelectorAll(".filters .chip").forEach(function(x){x.setAttribute("aria-pressed",String(x===c))});
+      render();
+    };
+  });
+  document.querySelectorAll(".seg button").forEach(function(b){
+    b.onclick=function(){view=b.dataset.v;document.querySelectorAll(".seg button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});render()};
+  });
+  function shift(n){ws=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+n);render()}
+  document.getElementById("prevW").onclick=function(){shift(-7)};
+  document.getElementById("nextW").onclick=function(){shift(7)};
+  document.getElementById("thisW").onclick=function(){ws=mondayOf(new Date());render()};
+  load();render();
+})();
+</script>
+</body>
+</html>
