@@ -33,6 +33,10 @@ When the session runs a Claude model or a Claude platform, read
 [claude-instructions/README.md](claude-instructions/README.md) and every Markdown
 file under `claude-instructions/`, after the layers step. Other sessions skip it.
 
+When the session runs on an Antigravity (AGY) host, read
+[agy-instructions/README.md](agy-instructions/README.md) and every Markdown file
+under `agy-instructions/`, after the layers step. Other sessions skip it.
+
 Before task work, read [project-constraints/README.md](project-constraints/README.md)
 and every Markdown file recursively under `project-constraints/`, including unindexed
 files; apply active constraints as the guide directs. This applies to every
@@ -57,6 +61,7 @@ after changes, a workspace switch, or a compaction that loses routing context.
 
 ```text
 docs-harness/
+├── agy-instructions/
 ├── harness-constraints/
 ├── claude-instructions/
 ├── domain/
@@ -368,6 +373,21 @@ Resources:
   [model add-on folder](layers/layer-1/agents/README.md)
 - [Layer 2 folder](layers/layer-2/README.md)
 - [Hook mechanism and activation contract](layers/layer-2/hooks/README.md)
+
+### agy-instructions/
+
+Folder: [agy-instructions/](agy-instructions/)
+
+Purpose: instructions written for working on Google Antigravity (AGY).
+
+Read when: the session runs on an Antigravity host, at session start, after the
+layers step.
+
+Skip when: the session does not run on an Antigravity host.
+
+Resources:
+
+- [Antigravity instructions guide](agy-instructions/README.md)
 
 ### claude-instructions/
 
