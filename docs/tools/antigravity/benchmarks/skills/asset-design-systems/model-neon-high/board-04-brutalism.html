@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bảng công việc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&family=Syne:wght@800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Brutalism (Neo) reference tokens */
+  --nb-black:#000000;
+  --nb-paper:#fffdf5;
+  --nb-surface:#ffffff;
+  --nb-muted:#404040;
+  --nb-disabled:#595959;
+  --nb-yellow:#ffd23f;
+  --nb-coral:#ff6b6b;
+  --nb-sky:#74b9ff;
+  --nb-green:#88d498;
+  --nb-orange:#ffa552;
+  --nb-lav:#b8a9fa;
+  --nb-border:3px solid var(--nb-black);
+  --nb-shadow-s:3px 3px 0 0 #000000;
+  --nb-shadow-m:5px 5px 0 0 #000000;
+  --nb-shadow-l:8px 8px 0 0 #000000;
+  --nb-radius:0px;
+  --font-display:"Syne","Archivo Black","Bebas Neue","Space Grotesk",sans-serif;
+  --font-head:"Space Grotesk","Inter",system-ui,sans-serif;
+  --font-body:"Inter","DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"Space Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:light;
+  box-sizing:border-box;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+
+body{
+  margin:0;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  background:var(--nb-paper);
+  color:var(--nb-black);
+  font-family:var(--font-body);
+  font-size:1.05rem;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+
+input,select,button{
+  font:inherit;
+  color:var(--nb-black);
+  border-radius:var(--nb-radius);
+}
+
+:focus-visible{
+  outline:3px solid var(--nb-black);
+  outline-offset:3px;
+}
+
+/* Bold top navigation bar: thick bottom border, zero transparency or blur */
+.topbar{
+  background:var(--nb-paper);
+  border-bottom:var(--nb-border);
+  width:100%;
+}
+.topbar-inner{
+  max-width:1180px;
+  margin:0 auto;
+  padding:20px 32px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px 24px;
+  flex-wrap:wrap;
+}
+.brand{min-width:0;flex:1 1 280px}
+.kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:var(--nb-black);
+  color:var(--nb-paper);
+  font-family:var(--font-mono);
+  font-size:.8rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  padding:4px 10px;
+  margin-bottom:10px;
+}
+h1{
+  margin:0 0 6px;
+  font-family:var(--font-head);
+  font-weight:700;
+  font-size:clamp(2.25rem,5.5vw,3.75rem);
+  line-height:1;
+  letter-spacing:-.025em;
+  text-transform:uppercase;
+  overflow-wrap:anywhere;
+}
+.sub{
+  margin:0;
+  color:var(--nb-muted);
+  font-size:1rem;
+  line-height:1.5;
+  max-width:58ch;
+}
+.today-stamp{
+  background:var(--nb-surface);
+  border:var(--nb-border);
+  box-shadow:var(--nb-shadow-s);
+  padding:10px 14px;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  flex-shrink:0;
+}
+.today-stamp .st-lbl{
+  font-family:var(--font-mono);
+  font-size:.75rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--nb-muted);
+}
+.today-stamp .st-val{
+  font-family:var(--font-mono);
+  font-size:1rem;
+  font-weight:700;
+  color:var(--nb-black);
+}
+
+/* Main workspace container (1000-1200px, padding 24-32px) */
+.wrap{
+  max-width:1180px;
+  margin:0 auto;
+  padding:28px 32px 56px;
+}
+
+/* Hero progress panel: large 8px shadow tier, asymmetric 2-column macro layout */
+.progress{
+  background:var(--nb-yellow);
+  border:var(--nb-border);
+  box-shadow:var(--nb-shadow-l);
+  border-radius:var(--nb-radius);
+  margin-bottom:28px;
+  display:grid;
+  grid-template-columns:minmax(220px,1fr) minmax(0,1.85fr);
+}
+.pg-stat{
+  padding:24px 26px;
+  border-right:var(--nb-border);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:12px;
+  min-width:0;
+}
+.pg-label{
+  font-family:var(--font-head);
+  font-size:.95rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  margin:0;
+}
+.pg-num{
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:clamp(3rem,7vw,5.5rem);
+  line-height:1;
+  letter-spacing:-.02em;
+  color:var(--nb-black);
+  display:block;
+}
+.pg-frac{
+  display:inline-block;
+  align-self:flex-start;
+  background:var(--nb-black);
+  color:var(--nb-paper);
+  font-family:var(--font-mono);
+  font-size:.9rem;
+  font-weight:700;
+  padding:5px 12px;
+  letter-spacing:.02em;
+}
+.pg-detail{
+  padding:24px 26px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:16px;
+  min-width:0;
+}
+.pg-note{
+  margin:0;
+  font-family:var(--font-head);
+  font-size:1.15rem;
+  font-weight:700;
+  line-height:1.35;
+  color:var(--nb-black);
+}
+.bar{
+  display:flex;
+  height:28px;
+  background:var(--nb-paper);
+  border:var(--nb-border);
+  overflow:hidden;
+  width:100%;
+}
+.bar span{
+  display:block;
+  min-width:0;
+  height:100%;
+  transition:flex-grow .25s ease;
+}
+.bar span:not([hidden])~span:not([hidden]){
+  border-left:var(--nb-border);
+}
+.bar .b-done{background:var(--nb-green)}
+.bar .b-doing{background:var(--nb-orange)}
+.bar .b-todo{background:var(--nb-sky)}
+
+.pg-legend{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+.leg-item{
+  background:var(--nb-paper);
+  border:var(--nb-border);
+  box-shadow:var(--nb-shadow-s);
+  padding:8px 10px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+}
+.leg-swatch{
+  width:16px;
+  height:16px;
+  border:var(--nb-border);
+  flex-shrink:0;
+}
+.leg-swatch.s-done{background:var(--nb-green)}
+.leg-swatch.s-doing{background:var(--nb-orange)}
+.leg-swatch.s-todo{background:var(--nb-sky)}
+.leg-text{
+  font-family:var(--font-head);
+  font-size:.85rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.leg-count{
+  margin-left:auto;
+  font-family:var(--font-mono);
+  font-size:.95rem;
+  font-weight:700;
+}
+
+/* Add task panel: medium 5px shadow tier, mechanical field alignment */
+.add-panel{
+  background:var(--nb-surface);
+  border:var(--nb-border);
+  box-shadow:var(--nb-shadow-m);
+  padding:20px 24px;
+  margin-bottom:24px;
+}
+.add{
+  display:grid;
+  grid-template-columns:minmax(0,1.8fr) minmax(170px,.8fr) minmax(165px,.75fr) auto;
+  gap:12px;
+  align-items:end;
+}
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width:0;
+}
+.field label{
+  font-family:var(--font-head);
+  font-size:.85rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  color:var(--nb-black);
+}
+.add input,.add select{
+  width:100%;
+  min-width:0;
+  min-height:48px;
+  padding:10px 12px;
+  background:var(--nb-paper);
+  border:var(--nb-border);
+  color:var(--nb-black);
+  font-size:1rem;
+  line-height:1.3;
+}
+.add input::placeholder{color:var(--nb-muted);opacity:1}
+
+/* Neubrutalist primary CTA button (recipe) */
+.nb-btn{
+  background:var(--nb-coral);
+  color:var(--nb-black);
+  border:var(--nb-border);
+  box-shadow:var(--nb-shadow-m);
+  border-radius:var(--nb-radius);
+  font-family:var(--font-head);
+  font-size:.95rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  padding:0 22px;
+  min-height:48px;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:transform .08s,box-shadow .08s;
+}
+.nb-btn:hover{
+  transform:translate(2px,2px);
+  box-shadow:3px 3px 0 0 var(--nb-black);
+}
+.nb-btn:active{
+  transform:translate(5px,5px);
+  box-shadow:0 0 0 0 var(--nb-black);
+}
+
+/* Structural toolbar strip separating input from board */
+.toolbar{
+  border-top:var(--nb-border);
+  border-bottom:var(--nb-border);
+  padding:16px 0;
+  margin-bottom:24px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.toolbar-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px 20px;
+  flex-wrap:wrap;
+}
+.tool-group{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  min-width:0;
+}
+.tool-label{
+  font-family:var(--font-mono);
+  font-size:.82rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  color:var(--nb-black);
+}
+
+/* View switcher (segmented mechanical buttons) */
+.seg{
+  display:inline-flex;
+  max-width:100%;
+  border:var(--nb-border);
+  box-shadow:var(--nb-shadow-s);
+  background:var(--nb-surface);
+}
+.seg button{
+  background:var(--nb-surface);
+  color:var(--nb-black);
+  border:0;
+  min-height:48px;
+  padding:0 18px;
+  font-family:var(--font-head);
+  font-size:.95rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  cursor:pointer;
+  transition:background .08s,color .08s;
+}
+.seg button+button{
+  border-left:var(--nb-border);
+}
+.seg button:hover:not([aria-pressed="true"]){
+  background:var(--nb-yellow);
+}
+.seg button[aria-pressed="true"]{
+  background:var(--nb-black);
+  color:var(--nb-yellow);
+}
+
+/* Priority filter chips & week nav buttons: small 3px shadow tier */
+.filters{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  min-width:0;
+}
+.chip,.wnav-btn{
+  background:var(--nb-surface);
+  color:var(--nb-black);
+  border:var(--nb-border);
+  box-shadow:var(--nb-shadow-s);
+  min-height:48px;
+  padding:0 14px;
+  font-family:var(--font-head);
+  font-size:.9rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  cursor:pointer;
+  transition:transform .08s,box-shadow .08s,background .08s;
+}
+.wnav-btn{min-width:48px}
+.chip:hover:not([aria-pressed="true"]),.wnav-btn:hover{
+  transform:translate(1px,1px);
+  box-shadow:2px 2px 0 0 var(--nb-black);
+  background:var(--nb-yellow);
+}
+.chip:active,.wnav-btn:active{
+  transform:translate(3px,3px);
+  box-shadow:0 0 0 0 var(--nb-black);
+}
+.chip[aria-pressed="true"]{
+  background:var(--nb-black);
+  color:var(--nb-yellow);
+  transform:translate(3px,3px);
+  box-shadow:0 0 0 0 var(--nb-black);
+}
+
+.weeknav{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  padding-top:12px;
+  border-top:var(--nb-border);
+}
+.weeknav .lbl{
+  font-family:var(--font-mono);
+  font-size:.95rem;
+  font-weight:700;
+  background:var(--nb-yellow);
+  border:var(--nb-border);
+  padding:9px 14px;
+  min-height:48px;
+  display:inline-flex;
+  align-items:center;
+}
+
+/* Board view: 3 columns */
+.board{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:20px;
+  align-items:start;
+}
+.col{
+  background:var(--nb-paper);
+  border:var(--nb-border);
+  box-shadow:var(--nb-shadow-m);
+  min-height:220px;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  transition:background .1s;
+}
+.col.over{
+  background:var(--nb-yellow);
+  outline:3px dashed var(--nb-black);
+  outline-offset:4px;
+}
+.col-head{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:12px 14px;
+  border-bottom:var(--nb-border);
+  background:var(--nb-paper);
+  flex-wrap:wrap;
+}
+.col[data-s="todo"] .col-head{background:var(--nb-sky)}
+.col[data-s="doing"] .col-head{background:var(--nb-orange)}
+.col[data-s="done"] .col-head{background:var(--nb-green)}
+.col.extra-undated .col-head{background:var(--nb-lav)}
+.col.extra-overdue .col-head{background:var(--nb-coral)}
+.col.today .col-head{background:var(--nb-yellow)}
+.col.today{box-shadow:var(--nb-shadow-l)}
+
+.col-idx{
+  font-family:var(--font-mono);
+  font-size:.82rem;
+  font-weight:700;
+  background:var(--nb-paper);
+  color:var(--nb-black);
+  border:var(--nb-border);
+  padding:1px 6px;
+  line-height:1.3;
+}
+.col-head h2{
+  margin:0;
+  font-family:var(--font-head);
+  font-size:1rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+  color:var(--nb-black);
+}
+.dsub{
+  font-family:var(--font-mono);
+  font-size:.85rem;
+  font-weight:700;
+  color:var(--nb-black);
+}
+.today-tag{
+  font-family:var(--font-mono);
+  font-size:.72rem;
+  font-weight:700;
+  text-transform:uppercase;
+  background:var(--nb-black);
+  color:var(--nb-yellow);
+  padding:2px 6px;
+}
+.col-head .count{
+  margin-left:auto;
+  background:var(--nb-black);
+  color:var(--nb-paper);
+  font-family:var(--font-mono);
+  font-size:.85rem;
+  font-weight:700;
+  min-width:28px;
+  text-align:center;
+  padding:2px 7px;
+}
+.col-body{
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  min-width:0;
+}
+
+/* Task cards: medium 5px shadow tier, drafted priority rail + calm readable body */
+.card{
+  background:var(--nb-surface);
+  border:var(--nb-border);
+  box-shadow:var(--nb-shadow-m);
+  display:grid;
+  grid-template-columns:10px minmax(0,1fr);
+  cursor:grab;
+  min-width:0;
+  transition:transform .08s,box-shadow .08s;
+}
+.card:active{cursor:grabbing}
+.card.dragging{
+  opacity:.55;
+  border-style:dashed;
+}
+.card-rail{
+  border-right:var(--nb-border);
+  background:var(--nb-paper);
+}
+.card.p-high .card-rail{background:var(--nb-coral)}
+.card.p-mid .card-rail{background:var(--nb-yellow)}
+.card.p-low .card-rail{background:var(--nb-paper)}
+.card-main{
+  padding:12px 14px;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.card .t{
+  font-family:var(--font-body);
+  font-size:1rem;
+  font-weight:600;
+  line-height:1.45;
+  color:var(--nb-black);
+  overflow-wrap:anywhere;
+}
+.card.is-done{
+  background:var(--nb-paper);
+}
+.card.is-done .t{
+  text-decoration:line-through;
+  text-decoration-thickness:2px;
+  color:var(--nb-muted);
+}
+
+.meta{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  font-family:var(--font-mono);
+  font-size:.78rem;
+  font-weight:700;
+  text-transform:uppercase;
+  padding:3px 7px;
+  border:var(--nb-border);
+  background:var(--nb-paper);
+  color:var(--nb-black);
+  line-height:1.2;
+}
+.tag.prio-high{background:var(--nb-coral)}
+.tag.prio-mid{background:var(--nb-yellow)}
+.tag.prio-low{background:var(--nb-paper)}
+.tag.status-doing{background:var(--nb-orange)}
+.tag.status-done{background:var(--nb-green)}
+.tag.late{
+  background:var(--nb-coral);
+  color:var(--nb-black);
+}
+
+.acts{
+  display:flex;
+  gap:6px;
+  padding-top:8px;
+  border-top:var(--nb-border);
+}
+.acts button{
+  background:var(--nb-paper);
+  color:var(--nb-black);
+  border:var(--nb-border);
+  box-shadow:var(--nb-shadow-s);
+  min-width:48px;
+  min-height:48px;
+  padding:0 10px;
+  font-family:var(--font-mono);
+  font-size:1.05rem;
+  font-weight:700;
+  line-height:1;
+  cursor:pointer;
+  transition:transform .08s,box-shadow .08s,background .08s;
+}
+.acts button:hover:not(:disabled){
+  background:var(--nb-yellow);
+  transform:translate(1px,1px);
+  box-shadow:2px 2px 0 0 var(--nb-black);
+}
+.acts button:active:not(:disabled){
+  transform:translate(3px,3px);
+  box-shadow:0 0 0 0 var(--nb-black);
+}
+.acts button.act-del{
+  margin-left:auto;
+  background:var(--nb-surface);
+}
+.acts button.act-del:hover:not(:disabled){
+  background:var(--nb-coral);
+}
+.acts button:disabled{
+  background:var(--nb-paper);
+  color:var(--nb-disabled);
+  border-style:dashed;
+  box-shadow:none;
+  cursor:not-allowed;
+}
+
+.empty{
+  color:var(--nb-muted);
+  font-size:.95rem;
+  font-weight:500;
+  text-align:center;
+  padding:20px 10px;
+  border:var(--nb-border);
+  border-style:dashed;
+  background:var(--nb-surface);
+}
+
+/* Week view: 7 day columns on wide desktop + extra section */
+.week{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:10px;
+  align-items:start;
+}
+.week .col-head{
+  padding:10px;
+  gap:4px 6px;
+}
+.week .col-head h2{font-size:.88rem}
+.week .col-body{
+  padding:8px;
+  gap:10px;
+}
+.week .card{
+  grid-template-columns:8px minmax(0,1fr);
+  box-shadow:var(--nb-shadow-s);
+}
+.week .card-main{padding:8px;gap:8px}
+.week .card .t{font-size:.92rem;line-height:1.35}
+.week .tag{font-size:.7rem;padding:2px 5px}
+.week .acts{gap:6px;padding-top:6px}
+.week .acts button{
+  flex:1 1 0;
+  min-width:0;
+  min-height:48px;
+  padding:0 4px;
+}
+.week .acts button.act-del{margin-left:0}
+
+.addday{
+  width:100%;
+  min-height:48px;
+  background:var(--nb-surface);
+  color:var(--nb-black);
+  border:var(--nb-border);
+  border-style:dashed;
+  font-family:var(--font-head);
+  font-size:.85rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+  padding:8px;
+  cursor:pointer;
+  transition:background .08s;
+}
+.addday:hover{
+  background:var(--nb-yellow);
+  border-style:solid;
+}
+
+.extra{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:20px;
+  margin-top:20px;
+  align-items:start;
+}
+
+/* Responsive breakpoints: borders and shadows remain full strength at every breakpoint */
+@media (max-width:1120px){
+  .week{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .week .col-body{padding:12px}
+  .week .card-main{padding:10px 12px}
+}
+@media (max-width:900px){
+  .board{grid-template-columns:1fr}
+  .add{grid-template-columns:1fr 1fr}
+  .add .field-title{grid-column:1/-1}
+  .add .nb-btn{grid-column:1/-1;width:100%}
+}
+@media (max-width:760px){
+  .topbar-inner{padding:18px 20px}
+  .wrap{padding:24px 20px 48px}
+  .progress{grid-template-columns:1fr}
+  .pg-stat{border-right:0;border-bottom:var(--nb-border);padding:20px}
+  .pg-detail{padding:20px}
+  .pg-legend{grid-template-columns:1fr}
+  .extra{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .topbar-inner{padding:16px}
+  .wrap{padding:20px 16px 44px}
+  .add-panel{padding:16px}
+  .add{grid-template-columns:1fr}
+  .week{grid-template-columns:1fr}
+  .seg{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  .seg button{padding:0 10px;font-size:.85rem}
+  .tool-group{width:100%}
+  .today-stamp{width:100%}
+}
+
+/* Accessibility fallbacks */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    transition:none!important;
+    animation:none!important;
+  }
+  .nb-btn:hover,.nb-btn:active,
+  .chip:hover:not([aria-pressed="true"]),.chip:active,
+  .wnav-btn:hover,.wnav-btn:active,
+  .acts button:hover:not(:disabled),.acts button:active:not(:disabled){
+    transform:none;
+  }
+}
+
+@media (prefers-reduced-transparency:reduce){
+  .card.dragging{
+    opacity:1;
+    outline:3px dashed var(--nb-black);
+    outline-offset:3px;
+  }
+}
+
+@media (forced-colors:active){
+  :root{
+    --nb-border:3px solid CanvasText;
+    --nb-shadow-s:none;
+    --nb-shadow-m:none;
+    --nb-shadow-l:none;
+  }
+  .topbar,.progress,.add-panel,.col,.card,.seg,.chip,.wnav-btn,.nb-btn,.acts button,.tag,.bar,.leg-item,.today-stamp,.addday,.empty,.weeknav .lbl{
+    border:3px solid CanvasText;
+    box-shadow:none;
+  }
+  .seg button[aria-pressed="true"],
+  .chip[aria-pressed="true"]{
+    background:Highlight;
+    color:HighlightText;
+    border-color:Highlight;
+    forced-color-adjust:none;
+  }
+  .bar .b-done{
+    background:Highlight;
+    forced-color-adjust:none;
+  }
+  .bar span:not([hidden])~span:not([hidden]){
+    border-left:3px solid CanvasText;
+  }
+  .acts button:disabled{
+    color:GrayText;
+    border-color:GrayText;
+  }
+  :focus-visible{
+    outline:3px solid Highlight;
+    outline-offset:3px;
+  }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="kicker">BẢNG VIỆC // KANBAN &amp; TUẦN</span>
+      <h1>Bảng công việc</h1>
+      <p class="sub">Kéo thẻ giữa các cột hoặc dùng nút mũi tên để đổi trạng thái.</p>
+    </div>
+    <div class="today-stamp" aria-label="Ngày hôm nay">
+      <span class="st-lbl">Hôm nay</span>
+      <span class="st-val" id="todayLabel">--/--/----</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="progress" aria-label="Tiến độ">
+    <div class="pg-stat">
+      <p class="pg-label">Tiến độ hoàn thành</p>
+      <div class="pg-num" id="pct">0%</div>
+      <div class="pg-frac" id="frac">0/0 việc xong</div>
+    </div>
+    <div class="pg-detail">
+      <p class="pg-note" id="note" aria-live="polite"></p>
+      <div class="bar" role="img" aria-label="Thanh tiến độ theo trạng thái">
+        <span class="b-done" id="bDone"></span>
+        <span class="b-doing" id="bDoing"></span>
+        <span class="b-todo" id="bTodo"></span>
+      </div>
+      <div class="pg-legend">
+        <div class="leg-item"><span class="leg-swatch s-done" aria-hidden="true"></span><span class="leg-text">Hoàn thành</span><span class="leg-count" id="cDone">0</span></div>
+        <div class="leg-item"><span class="leg-swatch s-doing" aria-hidden="true"></span><span class="leg-text">Đang làm</span><span class="leg-count" id="cDoing">0</span></div>
+        <div class="leg-item"><span class="leg-swatch s-todo" aria-hidden="true"></span><span class="leg-text">Cần làm</span><span class="leg-count" id="cTodo">0</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="add-panel" aria-label="Thêm công việc mới">
+    <form class="add" id="addForm" novalidate>
+      <div class="field field-title">
+        <label for="title">Tên công việc</label>
+        <input type="text" id="title" placeholder="Bạn cần làm gì?" aria-label="Tên công việc" maxlength="120" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="prio">Mức ưu tiên</label>
+        <select id="prio" aria-label="Mức ưu tiên">
+          <option value="high">Ưu tiên cao</option>
+          <option value="mid" selected>Ưu tiên vừa</option>
+          <option value="low">Ưu tiên thấp</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="due">Hạn hoàn thành</label>
+        <input type="date" id="due" aria-label="Hạn hoàn thành">
+      </div>
+      <button type="submit" class="nb-btn" id="addBtn">Thêm việc</button>
+    </form>
+  </section>
+
+  <div class="toolbar">
+    <div class="toolbar-row">
+      <div class="tool-group">
+        <span class="tool-label">Xem:</span>
+        <div class="seg" role="group" aria-label="Chế độ xem">
+          <button type="button" data-v="board" aria-pressed="true">Theo trạng thái</button>
+          <button type="button" data-v="week" aria-pressed="false">Theo tuần</button>
+        </div>
+      </div>
+      <div class="tool-group">
+        <span class="tool-label">Ưu tiên:</span>
+        <div class="filters" role="group" aria-label="Lọc theo ưu tiên">
+          <button type="button" class="chip" data-f="all" aria-pressed="true">Tất cả</button>
+          <button type="button" class="chip" data-f="high" aria-pressed="false">Cao</button>
+          <button type="button" class="chip" data-f="mid" aria-pressed="false">Vừa</button>
+          <button type="button" class="chip" data-f="low" aria-pressed="false">Thấp</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="weeknav" id="weeknav" hidden>
+      <button type="button" class="wnav-btn" id="prevW" aria-label="Tuần trước">←</button>
+      <button type="button" class="wnav-btn" id="thisW">Tuần này</button>
+      <button type="button" class="wnav-btn" id="nextW" aria-label="Tuần sau">→</button>
+      <span class="lbl" id="wlabel"></span>
+    </div>
+  </div>
+
+  <div class="board" id="board"></div>
+  <div class="week" id="week" hidden></div>
+  <div class="extra" id="extra" hidden></div>
+</main>
+
+<script>
+(function(){
+  var KEY="bang-cong-viec-v1";
+  var COLS=[["todo","Cần làm","01"],["doing","Đang làm","02"],["done","Hoàn thành","03"]];
+  var PL={high:"Cao",mid:"Vừa",low:"Thấp"};
+  var PM={high:"▲",mid:"■",low:"●"};
+  var tasks=[],filter="all",dragId=null;
+
+  function pad(n){return n<10?"0"+n:""+n}
+  function isoDate(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+  function today(){return isoDate(new Date())}
+  function mondayOf(d){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
+  var view="board",ws=mondayOf(new Date());
+  function fmt(s){var p=s.split("-");return p[2]+"/"+p[1]}
+
+  function load(){
+    try{
+      var r=localStorage.getItem(KEY);
+      if(r){
+        var parsed=JSON.parse(r);
+        if(Array.isArray(parsed)){tasks=parsed;return}
+      }
+    }catch(e){}
+    var d=new Date(),iso=function(n){var x=new Date(d);x.setDate(x.getDate()+n);return isoDate(x)};
+    tasks=[
+      {id:1,t:"Gửi báo cáo tuần cho nhóm",p:"high",s:"doing",d:iso(0)},
+      {id:2,t:"Đặt lịch khám răng",p:"mid",s:"todo",d:iso(3)},
+      {id:3,t:"Dọn hộp thư đến",p:"low",s:"todo",d:""},
+      {id:4,t:"Thanh toán tiền điện",p:"high",s:"done",d:iso(-1)}
+    ];
+  }
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch(e){}}
+
+  function el(tag,cls,text){
+    var e=document.createElement(tag);
+    if(cls)e.className=cls;
+    if(text!=null)e.textContent=text;
+    return e;
+  }
+
+  function resolveDragId(e){
+    if(dragId!=null)return dragId;
+    try{
+      var raw=e.dataTransfer.getData("text/plain");
+      if(raw){var n=Number(raw);if(!isNaN(n))return n}
+    }catch(x){}
+    return null;
+  }
+
+  function card(t){
+    var c=el("article","card p-"+t.p+(t.s==="done"?" is-done":""));
+    c.draggable=true;
+    c.dataset.id=String(t.id);
+    c.appendChild(el("div","card-rail"));
+
+    var body=el("div","card-main");
+    body.appendChild(el("div","t",t.t));
+
+    var m=el("div","meta");
+    m.appendChild(el("span","tag prio-"+t.p,PM[t.p]+" "+PL[t.p]));
+    if(view==="week"&&t.s==="doing")m.appendChild(el("span","tag status-doing","Đang làm"));
+    if(view==="week"&&t.s==="done")m.appendChild(el("span","tag status-done","✓ Xong"));
+    if(t.d){
+      var late=t.s!=="done"&&t.d<today();
+      if(view!=="week"||late){
+        m.appendChild(el("span","tag"+(late?" late":""),(late?"! Quá hạn ":"Hạn ")+fmt(t.d)));
+      }
+    }
+    body.appendChild(m);
+
+    var a=el("div","acts");
+    var i=COLS.findIndex(function(x){return x[0]===t.s});
+    var L=el("button",null,"←");L.type="button";L.title="Chuyển sang cột trước";L.setAttribute("aria-label","Chuyển sang cột trước");L.disabled=i<=0;
+    var R=el("button",null,"→");R.type="button";R.title="Chuyển sang cột sau";R.setAttribute("aria-label","Chuyển sang cột sau");R.disabled=i>=2;
+    var X=el("button","act-del","×");X.type="button";X.title="Xóa việc";X.setAttribute("aria-label","Xóa việc");
+    L.onclick=function(){if(i>0)move(t.id,COLS[i-1][0])};
+    R.onclick=function(){if(i<2)move(t.id,COLS[i+1][0])};
+    X.onclick=function(){tasks=tasks.filter(function(x){return x.id!==t.id});save();render()};
+
+    if(view==="week"){
+      var K=el("button",null,t.s==="done"?"↺":"✓");
+      K.type="button";
+      K.title=t.s==="done"?"Mở lại việc":"Đánh dấu xong";
+      K.setAttribute("aria-label",K.title);
+      K.onclick=function(){move(t.id,t.s==="done"?"todo":"done")};
+      a.append(K,X);
+    }else{
+      a.append(L,R,X);
+    }
+    body.appendChild(a);
+    c.appendChild(body);
+
+    c.addEventListener("dragstart",function(e){
+      dragId=t.id;
+      c.classList.add("dragging");
+      try{e.dataTransfer.setData("text/plain",String(t.id));e.dataTransfer.effectAllowed="move"}catch(x){}
+    });
+    c.addEventListener("dragend",function(){
+      c.classList.remove("dragging");
+      dragId=null;
+      document.querySelectorAll(".col.over").forEach(function(n){n.classList.remove("over")});
+    });
+    return c;
+  }
+
+  function move(id,s){
+    tasks.forEach(function(t){if(t.id===id)t.s=s});
+    save();
+    render();
+  }
+
+  function setDate(id,d){
+    tasks.forEach(function(t){if(t.id===id)t.d=d});
+    save();
+    render();
+  }
+
+  function dayCol(title,sub,list,dateVal,cls,isToday){
+    var col=el("section","col"+(cls||""));
+    var h=el("div","col-head");
+    h.appendChild(el("h2",null,title));
+    if(sub)h.appendChild(el("span","dsub",sub));
+    if(isToday)h.appendChild(el("span","today-tag","Hôm nay"));
+    h.appendChild(el("span","count",String(list.length)));
+    col.appendChild(h);
+
+    var bd=el("div","col-body");
+    list.forEach(function(t){bd.appendChild(card(t))});
+    if(dateVal!==null){
+      var A=el("button","addday","+ Thêm việc");
+      A.type="button";
+      A.onclick=function(){
+        document.getElementById("due").value=dateVal;
+        document.getElementById("title").focus();
+      };
+      bd.appendChild(A);
+      col.addEventListener("dragover",function(e){e.preventDefault();col.classList.add("over")});
+      col.addEventListener("dragleave",function(e){if(!col.contains(e.relatedTarget))col.classList.remove("over")});
+      col.addEventListener("drop",function(e){
+        e.preventDefault();
+        col.classList.remove("over");
+        var id=resolveDragId(e);
+        if(id!=null)setDate(id,dateVal);
+      });
+    }
+    col.appendChild(bd);
+    return col;
+  }
+
+  function renderWeek(){
+    var W=document.getElementById("week"),E=document.getElementById("extra");
+    W.textContent="";
+    E.textContent="";
+    var names=["Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy","Chủ nhật"],tod=today();
+    var vis=function(t){return filter==="all"||t.p===filter};
+    for(var k=0;k<7;k++){
+      var d=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+k),s=isoDate(d);
+      var list=tasks.filter(function(t){return t.d===s&&vis(t)});
+      W.appendChild(dayCol(names[k],pad(d.getDate())+"/"+pad(d.getMonth()+1),list,s,s===tod?" today":"",s===tod));
+    }
+    var e=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+6),first=isoDate(ws);
+    document.getElementById("wlabel").textContent=pad(ws.getDate())+"/"+pad(ws.getMonth()+1)+" – "+pad(e.getDate())+"/"+pad(e.getMonth()+1)+"/"+e.getFullYear();
+    E.appendChild(dayCol("Chưa đặt ngày","",tasks.filter(function(t){return !t.d&&vis(t)}),""," extra-undated",false));
+    var over=tasks.filter(function(t){return t.d&&t.d<first&&t.s!=="done"&&vis(t)});
+    if(over.length){
+      E.appendChild(dayCol("Chưa xong từ trước tuần này","",over,null," extra-overdue",false));
+    }
+  }
+
+  function render(){
+    var isW=view==="week";
+    document.getElementById("board").hidden=isW;
+    document.getElementById("week").hidden=!isW;
+    document.getElementById("extra").hidden=!isW;
+    document.getElementById("weeknav").hidden=!isW;
+    if(isW)renderWeek();
+
+    var b=document.getElementById("board");
+    b.textContent="";
+    if(!isW){
+      COLS.forEach(function(c){
+        var col=el("section","col");
+        col.dataset.s=c[0];
+        var list=tasks.filter(function(t){return t.s===c[0]&&(filter==="all"||t.p===filter)});
+        var h=el("div","col-head");
+        h.appendChild(el("span","col-idx",c[2]));
+        h.appendChild(el("h2",null,c[1]));
+        h.appendChild(el("span","count",String(list.length)));
+        col.appendChild(h);
+
+        var bd=el("div","col-body");
+        if(!list.length){
+          bd.appendChild(el("div","empty",c[0]==="todo"?"Chưa có việc nào. Thêm việc ở phía trên.":"Kéo thẻ vào đây."));
+        }
+        list.forEach(function(t){bd.appendChild(card(t))});
+        col.appendChild(bd);
+
+        col.addEventListener("dragover",function(e){e.preventDefault();col.classList.add("over")});
+        col.addEventListener("dragleave",function(e){if(!col.contains(e.relatedTarget))col.classList.remove("over")});
+        col.addEventListener("drop",function(e){
+          e.preventDefault();
+          col.classList.remove("over");
+          var id=resolveDragId(e);
+          if(id!=null)move(id,c[0]);
+        });
+        b.appendChild(col);
+      });
+    }
+
+    var n=tasks.length;
+    var d=tasks.filter(function(t){return t.s==="done"}).length;
+    var g=tasks.filter(function(t){return t.s==="doing"}).length;
+    var o=n-d-g;
+    var pct=n?Math.round(d/n*100):0;
+
+    document.getElementById("pct").textContent=pct+"%";
+    document.getElementById("frac").textContent=d+"/"+n+" việc xong";
+    document.getElementById("cDone").textContent=String(d);
+    document.getElementById("cDoing").textContent=String(g);
+    document.getElementById("cTodo").textContent=String(o);
+
+    var bDone=document.getElementById("bDone");
+    var bDoing=document.getElementById("bDoing");
+    var bTodo=document.getElementById("bTodo");
+    bDone.style.flexGrow=d;bDone.hidden=d===0;
+    bDoing.style.flexGrow=g;bDoing.hidden=g===0;
+    bTodo.style.flexGrow=o;bTodo.hidden=o===0;
+
+    var late=tasks.filter(function(t){return t.s!=="done"&&t.d&&t.d<today()}).length;
+    document.getElementById("note").textContent=!n
+      ?"Chưa có công việc nào."
+      :late
+        ?late+" việc đã quá hạn."
+        :d===n
+          ?"Bạn đã xong tất cả."
+          :"Còn "+(n-d)+" việc cần hoàn thành.";
+  }
+
+  function add(){
+    var inp=document.getElementById("title"),v=inp.value.trim();
+    if(!v){inp.focus();return}
+    tasks.push({
+      id:Date.now(),
+      t:v,
+      p:document.getElementById("prio").value,
+      s:"todo",
+      d:document.getElementById("due").value
+    });
+    inp.value="";
+    document.getElementById("due").value="";
+    save();
+    render();
+    inp.focus();
+  }
+
+  var now=new Date();
+  document.getElementById("todayLabel").textContent=pad(now.getDate())+"/"+pad(now.getMonth()+1)+"/"+now.getFullYear();
+
+  document.getElementById("addForm").addEventListener("submit",function(e){e.preventDefault();add()});
+  document.querySelectorAll(".filters .chip").forEach(function(c){
+    c.onclick=function(){
+      filter=c.dataset.f;
+      document.querySelectorAll(".filters .chip").forEach(function(x){x.setAttribute("aria-pressed",String(x===c))});
+      render();
+    };
+  });
+  document.querySelectorAll(".seg button").forEach(function(b){
+    b.onclick=function(){
+      view=b.dataset.v;
+      document.querySelectorAll(".seg button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});
+      render();
+    };
+  });
+  function shift(n){ws=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+n);render()}
+  document.getElementById("prevW").onclick=function(){shift(-7)};
+  document.getElementById("nextW").onclick=function(){shift(7)};
+  document.getElementById("thisW").onclick=function(){ws=mondayOf(new Date());render()};
+
+  load();
+  render();
+})();
+</script>
+</body>
+</html>

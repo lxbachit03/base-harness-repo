@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bảng công việc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* Reference tokens (.agents/skills/asset-design-systems/references/glassmorphism.md) */
+  --glass-fill: rgba(255, 255, 255, .15);
+  --glass-fill-2: rgba(255, 255, 255, .25);
+  --glass-fill-3: rgba(255, 255, 255, .40);
+  --glass-fill-dark: rgba(17, 25, 40, .75);
+  --glass-edge: rgba(255, 255, 255, .20);
+  --glass-edge-2: rgba(255, 255, 255, .30);
+  --glass-blur: 12px;          /* 8-12 light frost (front layers) */
+  --glass-blur-heavy: 20px;    /* 16-24 heavy diffusion (back layers) */
+  --glass-sat: 150%;
+  --glass-radius: 16px;
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, .10);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, .50), inset 0 -1px 0 rgba(255, 255, 255, .10);
+  --bg-cool: linear-gradient(135deg, #4a00e0, #2575fc);
+  --bg-aurora: linear-gradient(135deg, #8e2de2, #00d2ff);
+  --bg-dark: linear-gradient(135deg, #0f0c29, #302b63 50%, #24243e);
+  --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fw-body: 500;
+
+  /* Contrast-verified substitutions (Guardrail 6: dark-tinted glass for white text over vivid gradients/blobs; near-opaque white glass for dark text #111927) */
+  --stage-bg: var(--bg-cool);
+  --surface-panel: var(--glass-fill-dark);           /* rgba(17,25,40,.75) -> >=10.10:1 for #fff over #00d2ff */
+  --surface-card: rgba(17, 25, 40, .82);             /* higher-density dark glass for inner cards (no nested blur) */
+  --surface-card-over: rgba(17, 25, 40, .90);
+  --surface-input: rgba(17, 25, 40, .85);
+  --surface-cta: rgba(255, 255, 255, .92);           /* near-opaque white glass for #111927 dark ink (>=14.93:1) */
+  --surface-cta-hover: rgba(255, 255, 255, 1);
+  --surface-solid: rgba(17, 25, 40, .95);
+  --edge-panel: var(--glass-edge-2);
+  --edge-ui: rgba(255, 255, 255, .45);               /* >=3.37:1 UI edge contrast over worst cyan pixel */
+  --ink: #ffffff;
+  --ink-muted: #cbd5e1;                              /* >=6.80:1 over rgba(17,25,40,.75)>#00d2ff */
+  --ink-disabled: #94a3b8;                           /* >=4.72:1 over rgba(17,25,40,.82)>#00d2ff */
+  --ink-dark: #111927;                               /* 14.93:1 to 17.61:1 on --surface-cta */
+
+  /* Status & priority tokens (all >=5.34:1 against panel/card glass over #00d2ff) */
+  --todo: #7dd3fc;
+  --doing: #fde047;
+  --done: #6ee7b7;
+  --high: #fda4af;
+  --mid: #fde047;
+  --low: #cbd5e1;
+
+  /* Spacing tokens from reference: 24-48px padding inside, 24-32px gaps */
+  --pad-panel: clamp(24px, 3vw, 32px);
+  --gap-grid: 24px;
+  --radius-panel: var(--glass-radius);
+  --radius-inner: 12px;
+  --radius-pill: 999px;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --stage-bg: var(--bg-dark);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, .37);
+  }
+}
+
+:root[data-theme="dark"] {
+  --stage-bg: var(--bg-dark);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, .37);
+}
+
+:root[data-theme="light"] {
+  --stage-bg: var(--bg-cool);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, .10);
+}
+
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-weight: var(--fw-body);
+  color: var(--ink);
+  background: #0f0c29;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Stage & decorative blurred blobs (sibling backdrop layer to avoid backdrop-root trap on glass ancestors) */
+.glass-stage {
+  position: relative;
+  min-height: 100vh;
+  background: var(--stage-bg);
+  overflow-x: hidden;
+  padding: clamp(16px, 3vw, 36px) clamp(12px, 2.5vw, 28px) 56px;
+}
+
+.backdrop-blobs {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+.blob-pink {
+  width: 380px;
+  height: 380px;
+  background: rgba(255, 0, 153, .50);
+  top: -60px;
+  left: -80px;
+}
+
+.blob-cyan {
+  width: 400px;
+  height: 400px;
+  background: rgba(0, 210, 255, .45);
+  top: 22%;
+  right: -100px;
+}
+
+.blob-aurora {
+  width: 360px;
+  height: 360px;
+  background: rgba(142, 45, 226, .50);
+  bottom: -80px;
+  left: 25%;
+}
+
+/* Layout container — never set opacity, filter, mask or clip-path on ancestors of glass */
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-grid);
+  min-width: 0;
+}
+
+/* Back-layer glass surfaces: heavier blur (20px) */
+.glass-back {
+  background: var(--surface-panel);
+  border: 1px solid var(--edge-panel);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
+  padding: var(--pad-panel);
+  color: var(--ink);
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy)) saturate(var(--glass-sat));
+          backdrop-filter: blur(var(--glass-blur-heavy)) saturate(var(--glass-sat));
+  min-width: 0;
+}
+
+/* Front-layer glass control surface: lighter blur (12px) */
+.glass-front {
+  background: var(--surface-panel);
+  border: 1px solid var(--edge-ui);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
+  padding: var(--pad-panel);
+  color: var(--ink);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+          backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  min-width: 0;
+}
+
+/* Hero header + progress section */
+.top-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: var(--gap-grid);
+  align-items: stretch;
+}
+
+.hero-head {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--todo);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.brand-eyebrow svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+h1 {
+  font-size: clamp(26px, 4.5vw, 42px);
+  font-weight: 800;
+  letter-spacing: -.025em;
+  margin: 4px 0 8px;
+  line-height: 1.12;
+  color: var(--ink);
+}
+
+.sub {
+  color: var(--ink-muted);
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.util-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding-top: 8px;
+}
+
+/* Progress card */
+.progress {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.pg-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.pg-metric {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.pg-ring {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.pg-ring-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, .18);
+  stroke-width: 6;
+}
+
+.pg-ring-val {
+  fill: none;
+  stroke: var(--done);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transition: stroke-dashoffset .35s ease;
+}
+
+.pg-num {
+  font-size: clamp(30px, 5vw, 46px);
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1.05;
+  color: var(--ink);
+}
+
+.pg-num small {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  letter-spacing: 0;
+  margin-top: 4px;
+}
+
+.pg-note {
+  color: var(--ink-muted);
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--surface-input);
+  border: 1px solid var(--edge-ui);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+}
+
+.bar {
+  display: flex;
+  height: 16px;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background: var(--surface-input);
+  border: 1px solid var(--edge-ui);
+  gap: 3px;
+  padding: 2px;
+}
+
+.bar span {
+  display: block;
+  min-width: 0;
+  border-radius: var(--radius-pill);
+  transition: flex-grow .35s ease;
+}
+
+.bar .b-done { background: var(--done); }
+.bar .b-doing { background: var(--doing); }
+.bar .b-todo { background: var(--todo); }
+
+.pg-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+.pg-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pg-legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Controls panel: add form + view switcher + week nav + filters */
+.controls-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.add {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 12px;
+  min-width: 0;
+}
+
+input, select, button {
+  font: inherit;
+  font-weight: var(--fw-body);
+  color: inherit;
+}
+
+.add input,
+.add select {
+  background: var(--surface-input);
+  color: var(--ink);
+  border: 1px solid var(--edge-ui);
+  border-radius: var(--radius-inner);
+  padding: 11px 14px;
+  min-width: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15);
+  transition: border-color .15s ease, background-color .15s ease;
+}
+
+.add input::placeholder {
+  color: var(--ink-muted);
+}
+
+.add select option {
+  background: #111927;
+  color: #ffffff;
+}
+
+.btn {
+  background: var(--surface-cta);
+  color: var(--ink-dark);
+  border: 1px solid #ffffff;
+  border-radius: var(--radius-inner);
+  padding: 11px 20px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .20);
+  transition: background-color .15s ease, transform .15s ease;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: var(--surface-cta-hover);
+}
+
+:focus-visible {
+  outline: 3px solid var(--todo);
+  outline-offset: 2px;
+}
+
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.views {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  background: var(--surface-input);
+  border: 1px solid var(--edge-ui);
+  border-radius: var(--radius-inner);
+  padding: 3px;
+  gap: 4px;
+}
+
+.seg button {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  padding: 7px 15px;
+  cursor: pointer;
+  color: var(--ink-muted);
+  font-weight: 600;
+  font-size: 14px;
+  transition: background-color .15s ease, color .15s ease;
+}
+
+.seg button:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, .10);
+}
+
+.seg button[aria-pressed="true"] {
+  background: var(--surface-cta);
+  color: var(--ink-dark);
+  border-color: #ffffff;
+  font-weight: 700;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.chip,
+.util-btn {
+  background: var(--surface-input);
+  border: 1px solid var(--edge-ui);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+
+.chip:hover,
+.util-btn:hover {
+  color: var(--ink);
+  border-color: #ffffff;
+  background: rgba(17, 25, 40, .92);
+}
+
+.chip[aria-pressed="true"],
+.util-btn[aria-pressed="true"] {
+  background: var(--surface-cta);
+  color: var(--ink-dark);
+  border-color: #ffffff;
+  font-weight: 700;
+}
+
+.weeknav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+.weeknav .lbl {
+  font-weight: 700;
+  margin-left: 6px;
+  color: var(--ink);
+  font-size: 14px;
+}
+
+/* Board & Week Columns */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-grid);
+  align-items: start;
+}
+
+.col {
+  background: var(--surface-panel);
+  border: 1px solid var(--edge-panel);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
+  padding: 24px;
+  min-height: 220px;
+  min-width: 0;
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy)) saturate(var(--glass-sat));
+          backdrop-filter: blur(var(--glass-blur-heavy)) saturate(var(--glass-sat));
+  transition: background-color .15s ease, border-color .15s ease;
+}
+
+.col.over {
+  background: var(--surface-card-over);
+  border-color: var(--todo);
+  box-shadow: var(--glass-shadow), 0 0 0 2px var(--todo);
+}
+
+.col-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  min-width: 0;
+}
+
+.col-head i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: block;
+  flex-shrink: 0;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.col-head h2 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.col-head .count {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--surface-input);
+  border: 1px solid var(--edge-ui);
+  border-radius: var(--radius-pill);
+  padding: 1px 10px;
+}
+
+.col[data-s="todo"] .col-head i { background: var(--todo); color: var(--todo); }
+.col[data-s="doing"] .col-head i { background: var(--doing); color: var(--doing); }
+.col[data-s="done"] .col-head i { background: var(--done); color: var(--done); }
+
+/* Task cards: sits inside .col, so uses dark glass fill + highlight WITHOUT nested backdrop-filter */
+.card {
+  background: var(--surface-card);
+  border: 1px solid var(--edge-ui);
+  border-left: 6px solid var(--low);
+  border-radius: var(--radius-inner);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .20), var(--glass-highlight);
+  cursor: grab;
+  min-width: 0;
+  transition: background-color .15s ease, border-color .15s ease;
+}
+
+.card:hover {
+  background: var(--surface-card-over);
+}
+
+.card.p-high { border-left-color: var(--high); }
+.card.p-mid { border-left-color: var(--mid); }
+.card.p-low { border-left-color: var(--low); }
+
+/* Avoid opacity<1 on glass elements (Guardrail 5); use rgba fill & dashed outline while dragging */
+.card.dragging {
+  background: rgba(17, 25, 40, .55);
+  border-style: dashed;
+  border-color: var(--todo);
+}
+
+.card .t {
+  font-weight: 600;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  font-size: 15px;
+}
+
+.card.is-done .t {
+  text-decoration: line-through;
+  color: var(--ink-muted);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--surface-input);
+  border: 1px solid var(--edge-ui);
+  border-radius: 6px;
+  padding: 2px 8px;
+  color: var(--ink-muted);
+}
+
+.tag.late {
+  color: var(--high);
+  border-color: var(--high);
+  font-weight: 700;
+}
+
+.acts {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+
+.acts button {
+  background: var(--surface-input);
+  border: 1px solid var(--edge-ui);
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .15s ease, color .15s ease;
+}
+
+.acts button:hover:not(:disabled) {
+  background: var(--surface-cta);
+  color: var(--ink-dark);
+  border-color: #ffffff;
+}
+
+/* No opacity<1 on disabled buttons; use verified rgba/hex tokens */
+.acts button:disabled {
+  color: var(--ink-disabled);
+  border-color: rgba(255, 255, 255, .20);
+  background: rgba(17, 25, 40, .50);
+  cursor: default;
+}
+
+.empty {
+  color: var(--ink-muted);
+  font-size: 14px;
+  text-align: center;
+  padding: 24px 8px;
+  border: 1px dashed var(--edge-panel);
+  border-radius: var(--radius-inner);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* Week view */
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+
+.week .col,
+.extra .col {
+  padding: 16px;
+}
+
+.week .card {
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.week .col-head {
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin-bottom: 12px;
+}
+
+.week .col-head h2 {
+  font-size: 14px;
+}
+
+.dsub {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.col.today {
+  border-color: var(--todo);
+  box-shadow: var(--glass-shadow), var(--glass-highlight), 0 0 0 1px var(--todo);
+}
+
+.col.today .dsub {
+  color: var(--todo);
+  font-weight: 700;
+}
+
+.addday {
+  width: 100%;
+  background: var(--surface-input);
+  border: 1px dashed var(--edge-ui);
+  border-radius: 10px;
+  padding: 8px;
+  color: var(--ink-muted);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+
+.addday:hover {
+  color: var(--ink);
+  border-color: #ffffff;
+  border-style: solid;
+}
+
+.extra {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-grid);
+  align-items: start;
+}
+
+/* Responsive layout: guarantees zero horizontal scroll at 400px */
+@media (max-width: 1120px) {
+  .top-grid {
+    grid-template-columns: 1fr;
+  }
+  .week {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .board,
+  .week,
+  .extra {
+    grid-template-columns: 1fr;
+  }
+  .add {
+    grid-template-columns: 1fr 1fr;
+  }
+  .add input[type="text"],
+  .add .btn {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .add {
+    grid-template-columns: 1fr;
+  }
+  .col,
+  .glass-back,
+  .glass-front {
+    padding: 18px 14px;
+  }
+}
+
+/* Required Fallbacks: @supports not backdrop-filter, prefers-reduced-transparency, manual solid toggle, prefers-reduced-motion, forced-colors */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass-back,
+  .glass-front,
+  .col {
+    background: rgba(17, 25, 40, .88);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-back,
+  .glass-front,
+  .col,
+  .card {
+    background: var(--surface-solid);
+    -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+  }
+  .backdrop-blobs {
+    display: none;
+  }
+}
+
+:root[data-opaque="true"] .glass-back,
+:root[data-opaque="true"] .glass-front,
+:root[data-opaque="true"] .col,
+:root[data-opaque="true"] .card {
+  background: var(--surface-solid);
+  -webkit-backdrop-filter: none;
+          backdrop-filter: none;
+}
+
+:root[data-opaque="true"] .backdrop-blobs {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .glass-back,
+  .glass-front,
+  .col,
+  .card,
+  .add input,
+  .add select,
+  .btn,
+  .chip,
+  .util-btn,
+  .seg,
+  .seg button,
+  .tag,
+  .acts button,
+  .addday {
+    background: Canvas;
+    color: CanvasText;
+    border-color: CanvasText;
+    -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+    box-shadow: none;
+  }
+  .chip[aria-pressed="true"],
+  .util-btn[aria-pressed="true"],
+  .seg button[aria-pressed="true"],
+  .btn {
+    background: Highlight;
+    color: HighlightText;
+  }
+}
+</style>
+</head>
+<body>
+<div class="glass-stage">
+  <div class="backdrop-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-cyan"></div>
+    <div class="blob blob-aurora"></div>
+  </div>
+
+  <div class="wrap">
+    <div class="top-grid">
+      <header class="glass-back hero-head">
+        <div>
+          <div class="brand-eyebrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+              <path d="M8 12l3 3 5-6"></path>
+            </svg>
+            <span>Không gian làm việc kính mờ</span>
+          </div>
+          <h1>Bảng công việc</h1>
+          <p class="sub">Kéo thẻ giữa các cột hoặc dùng nút mũi tên để đổi trạng thái.</p>
+        </div>
+        <div class="util-bar" role="group" aria-label="Tùy chọn hiển thị">
+          <button type="button" class="util-btn" id="themeBtn" aria-pressed="false">Nền: Tự động</button>
+          <button type="button" class="util-btn" id="opaqueBtn" aria-pressed="false">Giảm trong suốt</button>
+        </div>
+      </header>
+
+      <section class="glass-back progress" aria-label="Tiến độ">
+        <div class="pg-top">
+          <div class="pg-metric">
+            <svg class="pg-ring" viewBox="0 0 64 64" aria-hidden="true">
+              <circle class="pg-ring-track" cx="32" cy="32" r="26"></circle>
+              <circle class="pg-ring-val" id="ringVal" cx="32" cy="32" r="26" stroke-dasharray="163.36" stroke-dashoffset="163.36"></circle>
+            </svg>
+            <div class="pg-num" id="pct">0%<small id="frac">0/0 việc xong</small></div>
+          </div>
+          <div class="pg-note" id="note"></div>
+        </div>
+        <div>
+          <div class="bar" aria-hidden="true">
+            <span class="b-done" id="bDone"></span>
+            <span class="b-doing" id="bDoing"></span>
+            <span class="b-todo" id="bTodo"></span>
+          </div>
+          <div class="pg-legend" aria-hidden="true" style="margin-top:10px">
+            <span><i style="background:var(--done)"></i>Hoàn thành</span>
+            <span><i style="background:var(--doing)"></i>Đang làm</span>
+            <span><i style="background:var(--todo)"></i>Cần làm</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="glass-front controls-stack" aria-label="Điều khiển công việc">
+      <div class="add">
+        <input type="text" id="title" placeholder="Bạn cần làm gì?" aria-label="Tên công việc" maxlength="120">
+        <select id="prio" aria-label="Mức ưu tiên">
+          <option value="high">Ưu tiên cao</option>
+          <option value="mid" selected>Ưu tiên vừa</option>
+          <option value="low">Ưu tiên thấp</option>
+        </select>
+        <input type="date" id="due" aria-label="Hạn hoàn thành">
+        <button type="button" class="btn" id="addBtn">Thêm việc</button>
+      </div>
+
+      <div class="toolbar-row">
+        <div class="views">
+          <div class="seg" role="group" aria-label="Chế độ xem">
+            <button type="button" data-v="board" aria-pressed="true">Theo trạng thái</button>
+            <button type="button" data-v="week" aria-pressed="false">Theo tuần</button>
+          </div>
+        </div>
+
+        <div class="filters" role="group" aria-label="Lọc theo ưu tiên">
+          <button type="button" class="chip" data-f="all" aria-pressed="true">Tất cả</button>
+          <button type="button" class="chip" data-f="high" aria-pressed="false">Cao</button>
+          <button type="button" class="chip" data-f="mid" aria-pressed="false">Vừa</button>
+          <button type="button" class="chip" data-f="low" aria-pressed="false">Thấp</button>
+        </div>
+      </div>
+
+      <div class="weeknav" id="weeknav" hidden>
+        <button type="button" class="chip" id="prevW" aria-label="Tuần trước">←</button>
+        <button type="button" class="chip" id="thisW">Tuần này</button>
+        <button type="button" class="chip" id="nextW" aria-label="Tuần sau">→</button>
+        <span class="lbl" id="wlabel"></span>
+      </div>
+    </section>
+
+    <div class="board" id="board"></div>
+    <div class="week" id="week" hidden></div>
+    <div class="extra" id="extra" hidden></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var KEY = "bang-cong-viec-v1";
+  var COLS = [["todo","Cần làm"],["doing","Đang làm"],["done","Hoàn thành"]];
+  var PL = {high:"Cao",mid:"Vừa",low:"Thấp"};
+  var tasks = [], filter = "all", dragId = null;
+
+  function load(){
+    try {
+      var r = localStorage.getItem(KEY);
+      if (r) {
+        tasks = JSON.parse(r) || [];
+        return;
+      }
+    } catch (e) {}
+    var d = new Date(), iso = function(n){
+      var x = new Date(d);
+      x.setDate(x.getDate() + n);
+      return isoDate(x);
+    };
+    tasks = [
+      {id:1, t:"Gửi báo cáo tuần cho nhóm", p:"high", s:"doing", d:iso(0)},
+      {id:2, t:"Đặt lịch khám răng", p:"mid", s:"todo", d:iso(3)},
+      {id:3, t:"Dọn hộp thư đến", p:"low", s:"todo", d:""},
+      {id:4, t:"Thanh toán tiền điện", p:"high", s:"done", d:iso(-1)}
+    ];
+  }
+
+  function save(){
+    try {
+      localStorage.setItem(KEY, JSON.stringify(tasks));
+    } catch (e) {}
+  }
+
+  function el(tag, cls, text){
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function pad(n){ return n < 10 ? "0" + n : "" + n; }
+  function isoDate(d){ return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function today(){ return isoDate(new Date()); }
+  function mondayOf(d){
+    var x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    x.setDate(x.getDate() - ((x.getDay() + 6) % 7));
+    return x;
+  }
+
+  var view = "board", ws = mondayOf(new Date());
+  function fmt(s){
+    var p = s.split("-");
+    return p[2] + "/" + p[1];
+  }
+
+  function card(t){
+    var c = el("div", "card p-" + t.p + (t.s === "done" ? " is-done" : ""));
+    c.draggable = true;
+    c.dataset.id = t.id;
+    c.appendChild(el("div", "t", t.t));
+    var m = el("div", "meta");
+    m.appendChild(el("span", "tag", PL[t.p]));
+    if (view === "week" && t.s === "doing") m.appendChild(el("span", "tag", "Đang làm"));
+    if (t.d) {
+      var late = t.s !== "done" && t.d < today();
+      if (view !== "week" || late) {
+        m.appendChild(el("span", "tag" + (late ? " late" : ""), (late ? "Quá hạn " : "Hạn ") + fmt(t.d)));
+      }
+    }
+    var a = el("div", "acts"), i = COLS.findIndex(function(x){ return x[0] === t.s; });
+    var L = el("button", null, "←");
+    L.type = "button";
+    L.title = "Chuyển sang cột trước";
+    L.setAttribute("aria-label", "Chuyển sang cột trước");
+    L.disabled = i === 0;
+
+    var R = el("button", null, "→");
+    R.type = "button";
+    R.title = "Chuyển sang cột sau";
+    R.setAttribute("aria-label", "Chuyển sang cột sau");
+    R.disabled = i === 2;
+
+    var X = el("button", null, "×");
+    X.type = "button";
+    X.title = "Xóa việc";
+    X.setAttribute("aria-label", "Xóa việc");
+
+    L.onclick = function(){ move(t.id, COLS[i - 1][0]); };
+    R.onclick = function(){ move(t.id, COLS[i + 1][0]); };
+    X.onclick = function(){
+      tasks = tasks.filter(function(x){ return x.id !== t.id; });
+      save();
+      render();
+    };
+    if (view === "week") {
+      var K = el("button", null, t.s === "done" ? "↺" : "✓");
+      K.type = "button";
+      K.title = t.s === "done" ? "Mở lại việc" : "Đánh dấu xong";
+      K.setAttribute("aria-label", K.title);
+      K.onclick = function(){ move(t.id, t.s === "done" ? "todo" : "done"); };
+      a.append(K, X);
+    } else {
+      a.append(L, R, X);
+    }
+    m.appendChild(a);
+    c.appendChild(m);
+    c.addEventListener("dragstart", function(e){
+      dragId = t.id;
+      c.classList.add("dragging");
+      try { e.dataTransfer.setData("text/plain", String(t.id)); } catch (x) {}
+    });
+    c.addEventListener("dragend", function(){
+      c.classList.remove("dragging");
+      dragId = null;
+      document.querySelectorAll(".col.over").forEach(function(n){ n.classList.remove("over"); });
+    });
+    return c;
+  }
+
+  function move(id, s){
+    tasks.forEach(function(t){ if (t.id === id) t.s = s; });
+    save();
+    render();
+  }
+
+  function render(){
+    var isW = view === "week";
+    document.getElementById("board").hidden = isW;
+    document.getElementById("week").hidden = !isW;
+    document.getElementById("extra").hidden = !isW;
+    document.getElementById("weeknav").hidden = !isW;
+    if (isW) renderWeek();
+    var b = document.getElementById("board");
+    b.textContent = "";
+    if (!isW) {
+      COLS.forEach(function(c){
+        var col = el("div", "col");
+        col.dataset.s = c[0];
+        var list = tasks.filter(function(t){ return t.s === c[0] && (filter === "all" || t.p === filter); });
+        var h = el("div", "col-head");
+        h.appendChild(el("i"));
+        h.appendChild(el("h2", null, c[1]));
+        h.appendChild(el("span", "count", String(list.length)));
+        col.appendChild(h);
+        if (!list.length) {
+          col.appendChild(el("div", "empty", c[0] === "todo" ? "Chưa có việc nào. Thêm việc ở phía trên." : "Kéo thẻ vào đây."));
+        }
+        list.forEach(function(t){ col.appendChild(card(t)); });
+        col.addEventListener("dragover", function(e){ e.preventDefault(); col.classList.add("over"); });
+        col.addEventListener("dragleave", function(e){ if (!col.contains(e.relatedTarget)) col.classList.remove("over"); });
+        col.addEventListener("drop", function(e){
+          e.preventDefault();
+          col.classList.remove("over");
+          if (dragId != null) move(dragId, c[0]);
+        });
+        b.appendChild(col);
+      });
+    }
+    var n = tasks.length;
+    var d = tasks.filter(function(t){ return t.s === "done"; }).length;
+    var g = tasks.filter(function(t){ return t.s === "doing"; }).length;
+    var o = n - d - g;
+    var pct = n ? Math.round(d / n * 100) : 0;
+    document.getElementById("pct").firstChild.nodeValue = pct + "%";
+    document.getElementById("frac").textContent = d + "/" + n + " việc xong";
+    document.getElementById("bDone").style.flexGrow = d;
+    document.getElementById("bDoing").style.flexGrow = g;
+    document.getElementById("bTodo").style.flexGrow = o;
+    var circ = 163.36;
+    var ring = document.getElementById("ringVal");
+    if (ring) ring.style.strokeDashoffset = String(circ - (circ * pct / 100));
+    var late = tasks.filter(function(t){ return t.s !== "done" && t.d && t.d < today(); }).length;
+    document.getElementById("note").textContent = !n ? "Chưa có công việc nào." : late ? late + " việc đã quá hạn." : d === n ? "Bạn đã xong tất cả." : "Còn " + (n - d) + " việc cần hoàn thành.";
+  }
+
+  function setDate(id, d){
+    tasks.forEach(function(t){ if (t.id === id) t.d = d; });
+    save();
+    render();
+  }
+
+  function dayCol(title, sub, list, dateVal, cls){
+    var col = el("div", "col" + (cls || ""));
+    var h = el("div", "col-head");
+    h.appendChild(el("h2", null, title));
+    if (sub) h.appendChild(el("span", "dsub", sub));
+    h.appendChild(el("span", "count", String(list.length)));
+    col.appendChild(h);
+    list.forEach(function(t){ col.appendChild(card(t)); });
+    if (dateVal !== null) {
+      var A = el("button", "addday", "+ Thêm việc");
+      A.type = "button";
+      A.onclick = function(){
+        document.getElementById("due").value = dateVal;
+        document.getElementById("title").focus();
+      };
+      col.appendChild(A);
+      col.addEventListener("dragover", function(e){ e.preventDefault(); col.classList.add("over"); });
+      col.addEventListener("dragleave", function(e){ if (!col.contains(e.relatedTarget)) col.classList.remove("over"); });
+      col.addEventListener("drop", function(e){
+        e.preventDefault();
+        col.classList.remove("over");
+        if (dragId != null) setDate(dragId, dateVal);
+      });
+    }
+    return col;
+  }
+
+  function renderWeek(){
+    var W = document.getElementById("week"), E = document.getElementById("extra");
+    W.textContent = "";
+    E.textContent = "";
+    var names = ["Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy","Chủ nhật"], tod = today();
+    var vis = function(t){ return filter === "all" || t.p === filter; };
+    for (var k = 0; k < 7; k++) {
+      var d = new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + k), s = isoDate(d);
+      var list = tasks.filter(function(t){ return t.d === s && vis(t); });
+      W.appendChild(dayCol(names[k], pad(d.getDate()) + "/" + pad(d.getMonth() + 1), list, s, s === tod ? " today" : ""));
+    }
+    var e = new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + 6), first = isoDate(ws);
+    document.getElementById("wlabel").textContent = pad(ws.getDate()) + "/" + pad(ws.getMonth() + 1) + " – " + pad(e.getDate()) + "/" + pad(e.getMonth() + 1) + "/" + e.getFullYear();
+    E.appendChild(dayCol("Chưa đặt ngày", "", tasks.filter(function(t){ return !t.d && vis(t); }), "", ""));
+    var over = tasks.filter(function(t){ return t.d && t.d < first && t.s !== "done" && vis(t); });
+    if (over.length) E.appendChild(dayCol("Chưa xong từ trước tuần này", "", over, null, ""));
+  }
+
+  function add(){
+    var inp = document.getElementById("title"), v = inp.value.trim();
+    if (!v) { inp.focus(); return; }
+    tasks.push({
+      id: Date.now(),
+      t: v,
+      p: document.getElementById("prio").value,
+      s: "todo",
+      d: document.getElementById("due").value
+    });
+    inp.value = "";
+    document.getElementById("due").value = "";
+    save();
+    render();
+    inp.focus();
+  }
+
+  document.getElementById("addBtn").onclick = add;
+  document.getElementById("title").addEventListener("keydown", function(e){
+    if (e.key === "Enter") add();
+  });
+
+  document.querySelectorAll(".filters .chip").forEach(function(c){
+    c.onclick = function(){
+      filter = c.dataset.f;
+      document.querySelectorAll(".filters .chip").forEach(function(x){
+        x.setAttribute("aria-pressed", String(x === c));
+      });
+      render();
+    };
+  });
+
+  document.querySelectorAll(".seg button").forEach(function(b){
+    b.onclick = function(){
+      view = b.dataset.v;
+      document.querySelectorAll(".seg button").forEach(function(x){
+        x.setAttribute("aria-pressed", String(x === b));
+      });
+      render();
+    };
+  });
+
+  function shift(n){
+    ws = new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + n);
+    render();
+  }
+  document.getElementById("prevW").onclick = function(){ shift(-7); };
+  document.getElementById("nextW").onclick = function(){ shift(7); };
+  document.getElementById("thisW").onclick = function(){ ws = mondayOf(new Date()); render(); };
+
+  /* Theme & reduced-transparency manual toggles (Guardrail 3) */
+  var themeCycle = ["auto", "light", "dark"];
+  var themeIdx = 0;
+  var themeLabels = {auto: "Nền: Tự động", light: "Nền: Sáng", dark: "Nền: Tối"};
+  var themeBtn = document.getElementById("themeBtn");
+  themeBtn.onclick = function(){
+    themeIdx = (themeIdx + 1) % themeCycle.length;
+    var mode = themeCycle[themeIdx];
+    if (mode === "auto") {
+      document.documentElement.removeAttribute("data-theme");
+      themeBtn.setAttribute("aria-pressed", "false");
+    } else {
+      document.documentElement.setAttribute("data-theme", mode);
+      themeBtn.setAttribute("aria-pressed", "true");
+    }
+    themeBtn.textContent = themeLabels[mode];
+  };
+
+  var opaqueBtn = document.getElementById("opaqueBtn");
+  opaqueBtn.onclick = function(){
+    var active = document.documentElement.getAttribute("data-opaque") === "true";
+    if (active) {
+      document.documentElement.removeAttribute("data-opaque");
+      opaqueBtn.setAttribute("aria-pressed", "false");
+    } else {
+      document.documentElement.setAttribute("data-opaque", "true");
+      opaqueBtn.setAttribute("aria-pressed", "true");
+    }
+  };
+
+  load();
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bảng công việc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600&display=swap">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  /* Reference tokens: Aurora / Mesh Gradient */
+  --au-midnight:#0b0d1a;
+  --au-base:#05010f;
+  --au-space:#111827;
+  --au-cosmic:#1e1b4b;
+  --au-purple:#7c3aed;
+  --au-violet:#a855f7;
+  --au-pink:#ec4899;
+  --au-rose:#f472b6;
+  --au-blue:#3b82f6;
+  --au-cyan:#06b6d4;
+  --au-green:#10b981;
+  --au-mint:#34d399;
+  --au-teal:#2dd4bf;
+  --au-text:#e0e7ff;
+  --au-text-2:#a5b4fc;
+  --au-text-bright:#f8fafc;
+  --au-panel:rgba(10,8,20,.55);
+  --au-panel-edge:rgba(255,255,255,.12);
+  --au-blur:14px;
+  --au-orb-blur:80px;
+  --au-drift:18s;
+  --font:"Sora","Inter","Outfit",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --section-gap:clamp(80px,10vw,140px);
+
+  /* Contrast-verified semantic derivations from reference tokens (capped at 4 hues: violet, teal, pink/rose, blue) */
+  --au-surface:rgba(11,13,26,.78);
+  --au-surface-solid:var(--au-midnight);
+  --au-control-edge:rgba(165,180,252,.55);
+  --au-panel-border-strong:rgba(224,231,255,.62);
+  --au-todo:var(--au-violet);
+  --au-doing:var(--au-rose);
+  --au-done:var(--au-teal);
+  --au-high:var(--au-rose);
+  --au-mid:var(--au-violet);
+  --au-low:var(--au-teal);
+  --au-radius-panel:18px;
+  --au-radius-card:14px;
+  --au-radius-ctrl:11px;
+  --au-radius-pill:999px;
+  --au-shadow:0 18px 44px rgba(5,1,15,.55);
+  color-scheme:dark;
+}
+
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;
+  min-height:100vh;
+  background-color:var(--au-base);
+  color:var(--au-text-bright);
+  font-family:var(--font);
+  font-weight:400;
+  letter-spacing:.01em;
+  line-height:1.55;
+}
+
+/* Aurora stage recipe */
+.aurora{
+  position:relative;
+  min-height:100vh;
+  overflow-x:hidden;
+  overflow-y: hidden;
+  background-color:var(--au-base);
+  background-image:
+    radial-gradient(40% 50% at 20% 30%,rgba(99,102,241,.55),transparent 70%),
+    radial-gradient(45% 55% at 75% 25%,rgba(45,212,191,.45),transparent 70%),
+    radial-gradient(50% 60% at 60% 75%,rgba(236,72,153,.40),transparent 70%),
+    radial-gradient(40% 50% at 30% 80%,rgba(139,92,246,.45),transparent 70%);
+}
+.aurora::before{
+  content:"";
+  position:fixed;
+  inset:-20%;
+  pointer-events:none;
+  z-index:0;
+  background:conic-gradient(from 120deg at 50% 30%,#3a29ff,#2dd4bf,#ec4899,#8b5cf6,#3a29ff);
+  filter:blur(var(--au-orb-blur)) saturate(1.4);
+  opacity:.55;
+  animation:drift var(--au-drift) ease-in-out infinite alternate;
+}
+@keyframes drift{
+  from{transform:translate3d(-4%,-2%,0) rotate(0)}
+  to{transform:translate3d(4%,3%,0) rotate(8deg)}
+}
+
+/* Frosted glass panel recipe: text always sits on a panel, never on the raw drifting gradient */
+.aurora-panel{
+  position:relative;
+  z-index:1;
+  background:var(--au-panel);
+  border:1px solid var(--au-panel-edge);
+  border-radius:var(--au-radius-panel);
+  color:var(--au-text-bright);
+  box-shadow:var(--au-shadow);
+  -webkit-backdrop-filter:blur(var(--au-blur));
+  backdrop-filter:blur(var(--au-blur));
+}
+
+.wrap{
+  position:relative;
+  z-index:1;
+  max-width:1260px;
+  margin:0 auto;
+  padding:clamp(16px,3.5vw,36px) clamp(12px,3vw,24px) clamp(40px,6vw,72px);
+}
+
+/* Hero + Progress Panel */
+.hero-panel{
+  padding:clamp(16px,3vw,28px);
+  margin-bottom:18px;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.1fr 1fr;
+  gap:clamp(14px,2.5vw,24px);
+  align-items:stretch;
+}
+.brand-box{
+  background:var(--au-surface-solid);
+  border:1px solid var(--au-control-edge);
+  border-radius:var(--au-radius-card);
+  padding:clamp(14px,2.2vw,22px);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-width:0;
+}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  align-self:flex-start;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--au-teal);
+  background:var(--au-cosmic);
+  border:1px solid var(--au-control-edge);
+  border-radius:var(--au-radius-pill);
+  padding:3px 12px;
+  margin-bottom:10px;
+}
+.eyebrow-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--au-teal);
+  display:inline-block;
+}
+h1{
+  font-size:clamp(26px,4.5vw,42px);
+  font-weight:700;
+  letter-spacing:-.02em;
+  line-height:1.12;
+  margin:0 0 8px;
+  color:var(--au-text-bright);
+  background:linear-gradient(135deg,var(--au-violet),var(--au-pink),var(--au-blue),var(--au-cyan));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.sub{
+  color:var(--au-text);
+  margin:0;
+  font-size:clamp(13.5px,1.6vw,15px);
+}
+
+/* Progress card inside hero */
+.progress{
+  background:var(--au-surface-solid);
+  border:1px solid var(--au-control-edge);
+  border-radius:var(--au-radius-card);
+  padding:clamp(14px,2.2vw,22px);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-width:0;
+}
+.pg-top{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+.pg-num{
+  font-size:clamp(30px,5vw,48px);
+  font-weight:700;
+  letter-spacing:-.03em;
+  line-height:1;
+  color:var(--au-text-bright);
+}
+.pg-num small{
+  font-size:.38em;
+  font-weight:500;
+  color:var(--au-text-2);
+  letter-spacing:.01em;
+  margin-left:8px;
+}
+.pg-note{
+  color:var(--au-text);
+  font-size:13.5px;
+  font-weight:500;
+}
+.bar{
+  display:flex;
+  height:14px;
+  border-radius:var(--au-radius-pill);
+  overflow:hidden;
+  background:var(--au-base);
+  border:1px solid var(--au-control-edge);
+  gap:3px;
+  padding:2px;
+}
+.bar span{
+  display:block;
+  min-width:0;
+  border-radius:var(--au-radius-pill);
+  transition:flex-grow .35s ease;
+}
+.bar .b-done{background:var(--au-done)}
+.bar .b-doing{background:var(--au-doing)}
+.bar .b-todo{background:var(--au-todo)}
+.pg-legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:10px;
+  font-size:12.5px;
+  color:var(--au-text-2);
+}
+.pg-legend span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.pg-legend i{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  display:inline-block;
+}
+.pg-legend .lg-done{background:var(--au-done)}
+.pg-legend .lg-doing{background:var(--au-doing)}
+.pg-legend .lg-todo{background:var(--au-todo)}
+
+.wave-divider{
+  display:block;
+  width:100%;
+  height:18px;
+  margin-top:14px;
+  opacity:.7;
+}
+
+/* Controls Panel: Add form + View toggle + Week nav + Priority filters */
+.controls-panel{
+  padding:clamp(14px,2.4vw,22px);
+  margin-bottom:18px;
+}
+.add{
+  display:grid;
+  grid-template-columns:1fr auto auto auto;
+  gap:10px;
+  margin-bottom:14px;
+}
+input,select,button{
+  font:inherit;
+  color:inherit;
+}
+.add input,.add select{
+  background:var(--au-surface-solid);
+  color:var(--au-text-bright);
+  border:1px solid var(--au-control-edge);
+  border-radius:var(--au-radius-ctrl);
+  padding:10px 13px;
+  min-width:0;
+  max-width:100%;
+}
+.add input::placeholder{
+  color:var(--au-text-2);
+  opacity:1;
+}
+.btn{
+  background:var(--au-teal);
+  color:var(--au-base);
+  border:1px solid var(--au-teal);
+  border-radius:var(--au-radius-ctrl);
+  padding:10px 18px;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:transform .15s ease,background-color .15s ease;
+}
+.btn:hover{
+  background:var(--au-mint);
+  border-color:var(--au-mint);
+}
+:focus-visible{
+  outline:3px solid var(--au-teal);
+  outline-offset:2px;
+}
+
+.toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.views{
+  display:flex;
+  align-items:center;
+}
+.seg{
+  display:inline-flex;
+  flex-wrap:wrap;
+  background:var(--au-surface-solid);
+  border:1px solid var(--au-control-edge);
+  border-radius:var(--au-radius-ctrl);
+  padding:3px;
+  gap:3px;
+}
+.seg button{
+  background:transparent;
+  border:1px solid transparent;
+  border-radius:8px;
+  padding:6px 14px;
+  cursor:pointer;
+  font-size:13.5px;
+  font-weight:500;
+  color:var(--au-text);
+}
+.seg button[aria-pressed="true"]{
+  background:var(--au-purple);
+  color:var(--au-text-bright);
+  border-color:var(--au-panel-border-strong);
+  font-weight:600;
+}
+
+.filters{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.chip{
+  background:var(--au-surface-solid);
+  border:1px solid var(--au-control-edge);
+  border-radius:var(--au-radius-pill);
+  padding:5px 14px;
+  cursor:pointer;
+  font-size:13.5px;
+  font-weight:500;
+  color:var(--au-text);
+  transition:border-color .15s ease,background-color .15s ease;
+}
+.chip:hover{
+  border-color:var(--au-text-bright);
+  color:var(--au-text-bright);
+}
+.chip[aria-pressed="true"]{
+  background:var(--au-purple);
+  color:var(--au-text-bright);
+  border-color:var(--au-panel-border-strong);
+  font-weight:600;
+}
+
+.weeknav{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid var(--au-panel-edge);
+  flex-wrap:wrap;
+}
+.weeknav .lbl{
+  font-weight:600;
+  margin-left:4px;
+  color:var(--au-text-bright);
+  background:var(--au-surface-solid);
+  border:1px solid var(--au-control-edge);
+  border-radius:var(--au-radius-pill);
+  padding:4px 12px;
+  font-size:13.5px;
+}
+
+/* Status Board & Week Grid */
+.board{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  align-items:start;
+}
+.col{
+  position:relative;
+  z-index:1;
+  background:var(--au-panel);
+  border:1px solid var(--au-panel-edge);
+  border-radius:var(--au-radius-panel);
+  padding:14px;
+  min-height:210px;
+  min-width:0;
+  box-shadow:var(--au-shadow);
+  -webkit-backdrop-filter:blur(var(--au-blur));
+  backdrop-filter:blur(var(--au-blur));
+  transition:border-color .15s ease,background-color .15s ease;
+}
+.col.over{
+  border-color:var(--au-teal);
+  box-shadow:0 0 0 2px var(--au-teal),var(--au-shadow);
+}
+.col-head{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:var(--au-surface);
+  border:1px solid var(--au-control-edge);
+  border-radius:12px;
+  padding:8px 11px;
+  margin-bottom:12px;
+}
+.col-head i{
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  display:block;
+  flex-shrink:0;
+}
+.col-head h2{
+  font-size:15px;
+  margin:0;
+  font-weight:600;
+  color:var(--au-text-bright);
+}
+.col-head .count{
+  margin-left:auto;
+  font-size:12.5px;
+  font-weight:600;
+  color:var(--au-text);
+  background:var(--au-surface-solid);
+  border:1px solid var(--au-control-edge);
+  border-radius:var(--au-radius-pill);
+  padding:1px 9px;
+}
+.col[data-s="todo"] .col-head i{background:var(--au-todo)}
+.col[data-s="doing"] .col-head i{background:var(--au-doing)}
+.col[data-s="done"] .col-head i{background:var(--au-done)}
+
+/* Task Cards */
+.card{
+  background:var(--au-surface);
+  border:1px solid var(--au-control-edge);
+  border-left:5px solid var(--au-low);
+  border-radius:var(--au-radius-card);
+  padding:12px 13px;
+  margin-bottom:10px;
+  cursor:grab;
+  min-width:0;
+  transition:border-color .15s ease,transform .15s ease;
+}
+.card:hover{
+  border-color:var(--au-text-bright);
+}
+.card.p-high{border-left-color:var(--au-high)}
+.card.p-mid{border-left-color:var(--au-mid)}
+.card.p-low{border-left-color:var(--au-low)}
+.card.dragging{opacity:.45}
+.card .t{
+  font-weight:500;
+  color:var(--au-text-bright);
+  overflow-wrap:anywhere;
+}
+.card.is-done .t{
+  text-decoration:line-through;
+  color:var(--au-text-2);
+}
+.meta{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:10px;
+  flex-wrap:wrap;
+}
+.tag{
+  font-size:12px;
+  font-weight:500;
+  background:var(--au-surface-solid);
+  border:1px solid var(--au-control-edge);
+  border-radius:7px;
+  padding:2px 8px;
+  color:var(--au-text);
+}
+.tag.late{
+  color:var(--au-rose);
+  border-color:var(--au-rose);
+  font-weight:600;
+}
+.acts{
+  margin-left:auto;
+  display:flex;
+  gap:4px;
+}
+.acts button{
+  background:var(--au-surface-solid);
+  border:1px solid var(--au-control-edge);
+  border-radius:7px;
+  width:28px;
+  height:28px;
+  cursor:pointer;
+  color:var(--au-text);
+  font-size:15px;
+  line-height:1;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.acts button:hover:not(:disabled){
+  background:var(--au-purple);
+  color:var(--au-text-bright);
+  border-color:var(--au-text-bright);
+}
+.acts button:disabled{
+  opacity:.35;
+  cursor:default;
+}
+.empty{
+  background:var(--au-surface);
+  border:1px dashed var(--au-control-edge);
+  border-radius:12px;
+  color:var(--au-text-2);
+  font-size:13.5px;
+  text-align:center;
+  padding:18px 10px;
+}
+
+[hidden]{display:none!important}
+
+/* Week View */
+.week{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:10px;
+  align-items:start;
+}
+.week .col,.extra .col{padding:10px}
+.week .card{padding:9px 10px;font-size:13.5px}
+.week .col-head{flex-wrap:wrap;gap:4px 6px;padding:7px 9px}
+.week .col-head h2{font-size:13.5px}
+.dsub{
+  font-size:12.5px;
+  color:var(--au-text-2);
+}
+.col.today{
+  border-color:var(--au-teal);
+  box-shadow:0 0 0 1px var(--au-teal),var(--au-shadow);
+}
+.col.today .dsub{
+  color:var(--au-teal);
+  font-weight:700;
+}
+.addday{
+  width:100%;
+  background:var(--au-surface);
+  border:1px dashed var(--au-control-edge);
+  border-radius:10px;
+  padding:7px 8px;
+  color:var(--au-text);
+  cursor:pointer;
+  font-size:13px;
+  font-weight:500;
+}
+.addday:hover{
+  color:var(--au-text-bright);
+  border-color:var(--au-teal);
+  border-style:solid;
+}
+.extra{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin-top:14px;
+  align-items:start;
+}
+
+/* Responsive breakpoints down to 400px without horizontal scroll */
+@media (max-width:1100px){
+  .week{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:860px){
+  .hero-grid{grid-template-columns:1fr}
+  .board,.week,.extra{grid-template-columns:1fr}
+  .add{grid-template-columns:1fr 1fr}
+  .add input[type="text"]{grid-column:1/-1}
+  .add .btn{grid-column:1/-1}
+}
+@media (max-width:520px){
+  .add{grid-template-columns:1fr}
+  .toolbar{flex-direction:column;align-items:stretch}
+  .seg{width:100%}
+  .seg button{flex:1 1 auto;text-align:center}
+}
+
+/* Fallbacks: backdrop-filter support, reduced motion, reduced transparency, forced colors */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .aurora-panel,.col{background:rgba(11,13,26,.92)}
+}
+@media (prefers-reduced-motion:reduce){
+  .aurora::before{animation:none}
+  *,*::before,*::after{transition:none!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
+@media (prefers-reduced-transparency:reduce){
+  .aurora-panel,.col,.card,.col-head,.empty,.addday{
+    background:var(--au-midnight);
+    -webkit-backdrop-filter:none;
+    backdrop-filter:none;
+  }
+}
+@media (forced-colors:active){
+  .aurora::before{display:none}
+  h1{background:none;-webkit-background-clip: border-box;background-clip:border-box;color:CanvasText}
+  .aurora-panel,.col,.card,.chip,.btn,.seg,.add input,.add select,.tag,.acts button,.addday,.brand-box,.progress,.col-head{
+    background:Canvas;
+    color:CanvasText;
+    border-color:CanvasText;
+    -webkit-backdrop-filter:none;
+    backdrop-filter:none;
+  }
+  .chip[aria-pressed="true"],.seg button[aria-pressed="true"],.btn{
+    background:Highlight;
+    color:HighlightText;
+    border-color:Highlight;
+  }
+}
+</style>
+</head>
+<body>
+<div class="aurora">
+  <div class="wrap">
+    <header class="aurora-panel hero-panel">
+      <div class="hero-grid">
+        <div class="brand-box">
+          <div>
+            <span class="eyebrow"><i class="eyebrow-dot" aria-hidden="true"></i>Aurora Workspace</span>
+            <h1>Bảng công việc</h1>
+          </div>
+          <p class="sub">Kéo thẻ giữa các cột hoặc dùng nút mũi tên để đổi trạng thái.</p>
+        </div>
+
+        <section class="progress" aria-label="Tiến độ">
+          <div class="pg-top">
+            <div class="pg-num" id="pct">0%<small id="frac">0/0 việc xong</small></div>
+            <div class="pg-note" id="note"></div>
+          </div>
+          <div>
+            <div class="bar" aria-hidden="true">
+              <span class="b-done" id="bDone"></span>
+              <span class="b-doing" id="bDoing"></span>
+              <span class="b-todo" id="bTodo"></span>
+            </div>
+            <div class="pg-legend" aria-hidden="true">
+              <span><i class="lg-done"></i>Hoàn thành</span>
+              <span><i class="lg-doing"></i>Đang làm</span>
+              <span><i class="lg-todo"></i>Cần làm</span>
+            </div>
+          </div>
+        </section>
+      </div>
+      <svg class="wave-divider" viewBox="0 0 1200 24" fill="none" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 12C200 2 400 22 600 12C800 2 1000 22 1200 12" stroke="url(#auWave)" stroke-width="1.5" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="auWave" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#a855f7"/>
+            <stop offset="35%" stop-color="#2dd4bf"/>
+            <stop offset="70%" stop-color="#ec4899"/>
+            <stop offset="100%" stop-color="#3b82f6"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </header>
+
+    <section class="aurora-panel controls-panel" aria-label="Điều khiển công việc">
+      <div class="add">
+        <input type="text" id="title" placeholder="Bạn cần làm gì?" aria-label="Tên công việc" maxlength="120">
+        <select id="prio" aria-label="Mức ưu tiên">
+          <option value="high">Ưu tiên cao</option>
+          <option value="mid" selected>Ưu tiên vừa</option>
+          <option value="low">Ưu tiên thấp</option>
+        </select>
+        <input type="date" id="due" aria-label="Hạn hoàn thành">
+        <button class="btn" id="addBtn" type="button">Thêm việc</button>
+      </div>
+
+      <div class="toolbar">
+        <div class="views">
+          <div class="seg" role="group" aria-label="Chế độ xem">
+            <button type="button" data-v="board" aria-pressed="true">Theo trạng thái</button>
+            <button type="button" data-v="week" aria-pressed="false">Theo tuần</button>
+          </div>
+        </div>
+
+        <div class="filters" role="group" aria-label="Lọc theo ưu tiên">
+          <button type="button" class="chip" data-f="all" aria-pressed="true">Tất cả</button>
+          <button type="button" class="chip" data-f="high" aria-pressed="false">Cao</button>
+          <button type="button" class="chip" data-f="mid" aria-pressed="false">Vừa</button>
+          <button type="button" class="chip" data-f="low" aria-pressed="false">Thấp</button>
+        </div>
+      </div>
+
+      <div class="weeknav" id="weeknav" hidden>
+        <button type="button" class="chip" id="prevW" aria-label="Tuần trước">←</button>
+        <button type="button" class="chip" id="thisW">Tuần này</button>
+        <button type="button" class="chip" id="nextW" aria-label="Tuần sau">→</button>
+        <span class="lbl" id="wlabel"></span>
+      </div>
+    </section>
+
+    <main>
+      <div class="board" id="board"></div>
+      <div class="week" id="week" hidden></div>
+      <div class="extra" id="extra" hidden></div>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var KEY="bang-cong-viec-v1";
+  var COLS=[["todo","Cần làm"],["doing","Đang làm"],["done","Hoàn thành"]];
+  var PL={high:"Cao",mid:"Vừa",low:"Thấp"};
+  var tasks=[],filter="all",dragId=null;
+
+  function load(){
+    try{var r=localStorage.getItem(KEY);if(r){tasks=JSON.parse(r)||[];return}}catch(e){}
+    var d=new Date(),iso=function(n){var x=new Date(d);x.setDate(x.getDate()+n);return isoDate(x)};
+    tasks=[
+      {id:1,t:"Gửi báo cáo tuần cho nhóm",p:"high",s:"doing",d:iso(0)},
+      {id:2,t:"Đặt lịch khám răng",p:"mid",s:"todo",d:iso(3)},
+      {id:3,t:"Dọn hộp thư đến",p:"low",s:"todo",d:""},
+      {id:4,t:"Thanh toán tiền điện",p:"high",s:"done",d:iso(-1)}
+    ];
+  }
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch(e){}}
+
+  function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+  function pad(n){return n<10?"0"+n:""+n}
+  function isoDate(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+  function today(){return isoDate(new Date())}
+  function mondayOf(d){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
+  var view="board",ws=mondayOf(new Date());
+  function fmt(s){var p=s.split("-");return p[2]+"/"+p[1]}
+
+  function card(t){
+    var c=el("div","card p-"+t.p+(t.s==="done"?" is-done":""));
+    c.draggable=true;c.dataset.id=t.id;
+    c.appendChild(el("div","t",t.t));
+    var m=el("div","meta");
+    m.appendChild(el("span","tag",PL[t.p]));
+    if(view==="week"&&t.s==="doing")m.appendChild(el("span","tag","Đang làm"));
+    if(t.d){
+      var late=t.s!=="done"&&t.d<today();
+      if(view!=="week"||late)m.appendChild(el("span","tag"+(late?" late":""),(late?"Quá hạn ":"Hạn ")+fmt(t.d)));
+    }
+    var a=el("div","acts"),i=COLS.findIndex(function(x){return x[0]===t.s});
+    var L=el("button",null,"←");L.type="button";L.title="Chuyển sang cột trước";L.setAttribute("aria-label","Chuyển sang cột trước");L.disabled=i===0;
+    var R=el("button",null,"→");R.type="button";R.title="Chuyển sang cột sau";R.setAttribute("aria-label","Chuyển sang cột sau");R.disabled=i===2;
+    var X=el("button",null,"×");X.type="button";X.title="Xóa việc";X.setAttribute("aria-label","Xóa việc");
+    L.onclick=function(){move(t.id,COLS[i-1][0])};
+    R.onclick=function(){move(t.id,COLS[i+1][0])};
+    X.onclick=function(){tasks=tasks.filter(function(x){return x.id!==t.id});save();render()};
+    if(view==="week"){
+      var K=el("button",null,t.s==="done"?"↺":"✓");K.type="button";K.title=t.s==="done"?"Mở lại việc":"Đánh dấu xong";K.setAttribute("aria-label",K.title);
+      K.onclick=function(){move(t.id,t.s==="done"?"todo":"done")};
+      a.append(K,X);
+    }else a.append(L,R,X);
+    m.appendChild(a);c.appendChild(m);
+    c.addEventListener("dragstart",function(e){dragId=t.id;c.classList.add("dragging");try{e.dataTransfer.setData("text/plain",String(t.id))}catch(x){}});
+    c.addEventListener("dragend",function(){c.classList.remove("dragging");dragId=null;document.querySelectorAll(".col.over").forEach(function(n){n.classList.remove("over")})});
+    return c;
+  }
+
+  function move(id,s){tasks.forEach(function(t){if(t.id===id)t.s=s});save();render()}
+
+  function render(){
+    var isW=view==="week";
+    document.getElementById("board").hidden=isW;
+    document.getElementById("week").hidden=!isW;
+    document.getElementById("extra").hidden=!isW;
+    document.getElementById("weeknav").hidden=!isW;
+    if(isW)renderWeek();
+    var b=document.getElementById("board");b.textContent="";
+    if(!isW)COLS.forEach(function(c){
+      var col=el("div","col");col.dataset.s=c[0];
+      var list=tasks.filter(function(t){return t.s===c[0]&&(filter==="all"||t.p===filter)});
+      var h=el("div","col-head");h.appendChild(el("i"));h.appendChild(el("h2",null,c[1]));h.appendChild(el("span","count",String(list.length)));
+      col.appendChild(h);
+      if(!list.length)col.appendChild(el("div","empty",c[0]==="todo"?"Chưa có việc nào. Thêm việc ở phía trên.":"Kéo thẻ vào đây."));
+      list.forEach(function(t){col.appendChild(card(t))});
+      col.addEventListener("dragover",function(e){e.preventDefault();col.classList.add("over")});
+      col.addEventListener("dragleave",function(e){if(!col.contains(e.relatedTarget))col.classList.remove("over")});
+      col.addEventListener("drop",function(e){e.preventDefault();col.classList.remove("over");if(dragId!=null)move(dragId,c[0])});
+      b.appendChild(col);
+    });
+    var n=tasks.length,d=tasks.filter(function(t){return t.s==="done"}).length,g=tasks.filter(function(t){return t.s==="doing"}).length,o=n-d-g;
+    var pct=n?Math.round(d/n*100):0;
+    document.getElementById("pct").firstChild.nodeValue=pct+"%";
+    document.getElementById("frac").textContent=d+"/"+n+" việc xong";
+    document.getElementById("bDone").style.flexGrow=d;
+    document.getElementById("bDoing").style.flexGrow=g;
+    document.getElementById("bTodo").style.flexGrow=o;
+    var late=tasks.filter(function(t){return t.s!=="done"&&t.d&&t.d<today()}).length;
+    document.getElementById("note").textContent=!n?"Chưa có công việc nào.":late?late+" việc đã quá hạn.":d===n?"Bạn đã xong tất cả.":"Còn "+(n-d)+" việc cần hoàn thành.";
+  }
+
+  function setDate(id,d){tasks.forEach(function(t){if(t.id===id)t.d=d});save();render()}
+  function dayCol(title,sub,list,dateVal,cls){
+    var col=el("div","col"+(cls||""));
+    var h=el("div","col-head");h.appendChild(el("h2",null,title));if(sub)h.appendChild(el("span","dsub",sub));h.appendChild(el("span","count",String(list.length)));
+    col.appendChild(h);
+    list.forEach(function(t){col.appendChild(card(t))});
+    if(dateVal!==null){
+      var A=el("button","addday","+ Thêm việc");A.type="button";
+      A.onclick=function(){document.getElementById("due").value=dateVal;document.getElementById("title").focus()};
+      col.appendChild(A);
+      col.addEventListener("dragover",function(e){e.preventDefault();col.classList.add("over")});
+      col.addEventListener("dragleave",function(e){if(!col.contains(e.relatedTarget))col.classList.remove("over")});
+      col.addEventListener("drop",function(e){e.preventDefault();col.classList.remove("over");if(dragId!=null)setDate(dragId,dateVal)});
+    }
+    return col;
+  }
+  function renderWeek(){
+    var W=document.getElementById("week"),E=document.getElementById("extra");W.textContent="";E.textContent="";
+    var names=["Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy","Chủ nhật"],tod=today();
+    var vis=function(t){return filter==="all"||t.p===filter};
+    for(var k=0;k<7;k++){
+      var d=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+k),s=isoDate(d);
+      var list=tasks.filter(function(t){return t.d===s&&vis(t)});
+      W.appendChild(dayCol(names[k],pad(d.getDate())+"/"+pad(d.getMonth()+1),list,s,s===tod?" today":""));
+    }
+    var e=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+6),first=isoDate(ws);
+    document.getElementById("wlabel").textContent=pad(ws.getDate())+"/"+pad(ws.getMonth()+1)+" – "+pad(e.getDate())+"/"+pad(e.getMonth()+1)+"/"+e.getFullYear();
+    E.appendChild(dayCol("Chưa đặt ngày","",tasks.filter(function(t){return !t.d&&vis(t)}),"",""));
+    var over=tasks.filter(function(t){return t.d&&t.d<first&&t.s!=="done"&&vis(t)});
+    if(over.length)E.appendChild(dayCol("Chưa xong từ trước tuần này","",over,null,""));
+  }
+  function add(){
+    var inp=document.getElementById("title"),v=inp.value.trim();
+    if(!v){inp.focus();return}
+    tasks.push({id:Date.now(),t:v,p:document.getElementById("prio").value,s:"todo",d:document.getElementById("due").value});
+    inp.value="";document.getElementById("due").value="";save();render();inp.focus();
+  }
+  document.getElementById("addBtn").onclick=add;
+  document.getElementById("title").addEventListener("keydown",function(e){if(e.key==="Enter")add()});
+  document.querySelectorAll(".filters .chip").forEach(function(c){
+    c.onclick=function(){
+      filter=c.dataset.f;
+      document.querySelectorAll(".filters .chip").forEach(function(x){x.setAttribute("aria-pressed",String(x===c))});
+      render();
+    };
+  });
+  document.querySelectorAll(".seg button").forEach(function(b){
+    b.onclick=function(){view=b.dataset.v;document.querySelectorAll(".seg button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});render()};
+  });
+  function shift(n){ws=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+n);render()}
+  document.getElementById("prevW").onclick=function(){shift(-7)};
+  document.getElementById("nextW").onclick=function(){shift(7)};
+  document.getElementById("thisW").onclick=function(){ws=mondayOf(new Date());render()};
+  load();render();
+})();
+</script>
+</body>
+</html>

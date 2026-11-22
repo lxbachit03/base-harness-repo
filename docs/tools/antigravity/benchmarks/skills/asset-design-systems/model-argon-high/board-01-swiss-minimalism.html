@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bảng công việc</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap">
+<style>
+:root{
+  --ink:#1a1a1a; --ink-2:#666666; --paper:#ffffff; --paper-2:#f5f5f5; --rule:#cccccc; --black:#000000;
+  --accent:#e30613;                       /* one accent per composition; alt #0057a8 */
+  --font:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --fs-display:clamp(3rem,5vw,5rem); --fs-h2:clamp(1.75rem,3vw,2.5rem); --fs-body:1rem; --fs-label:.75rem;
+  --lh-body:1.5; --lh-display:1; --track-display:-.03em; --track-label:.08em;
+  --cols:12; --gutter:24px; --margin:48px; --max:1200px; --unit:8px;   /* margin 32px <=1024, 20px <=600 */
+  --radius:0; --rule:1px; --rule-strong:3px; --t:150ms ease;
+  /* Contrast-verified aliases derived from reference tokens (#666666 >= 5.27:1 replaces #cccccc/#999999 on UI edges & muted text) */
+  --rule-w:1px;
+  --rule-color:var(--ink-2);
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (max-width:1024px){
+  :root{--margin:32px}
+}
+@media (max-width:600px){
+  :root{--margin:20px;--gutter:16px}
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font);
+  font-size:var(--fs-body);
+  line-height:var(--lh-body);
+  text-align:left;
+  overflow-x:hidden;
+}
+[hidden]{display:none!important}
+
+/* 12-column Swiss modular grid */
+.page{
+  display:grid;
+  grid-template-columns:repeat(var(--cols),minmax(0,1fr));
+  gap:var(--gutter);
+  max-width:var(--max);
+  margin-inline:auto;
+  padding-inline:var(--margin);
+  padding-block:calc(var(--unit) * 5) calc(var(--unit) * 8);
+}
+.page > *{min-width:0}
+
+.rule-strong{border-top:var(--rule-strong) solid var(--black)}
+
+/* Asymmetric Masthead: Title in cols 1-5, Progress figure in cols 7-12 */
+.masthead-title{
+  grid-column:1 / 6;
+  border-top:var(--rule-strong) solid var(--black);
+  padding-top:calc(var(--unit) * 2);
+}
+.index-kicker{
+  display:block;
+  font-size:var(--fs-label);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--ink-2);
+  margin-bottom:var(--unit);
+}
+h1{
+  margin:0 0 calc(var(--unit) * 1.5);
+  font-size:var(--fs-display);
+  line-height:var(--lh-display);
+  letter-spacing:var(--track-display);
+  font-weight:800;
+  color:var(--black);
+  max-width:65ch;
+}
+.sub{
+  margin:0;
+  color:var(--ink-2);
+  font-size:var(--fs-body);
+  max-width:60ch;
+}
+
+/* Progress Section (cols 7-12) */
+.progress{
+  grid-column:7 / 13;
+  border-top:var(--rule-strong) solid var(--black);
+  padding-top:calc(var(--unit) * 2);
+  background:var(--paper);
+}
+.pg-top{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:calc(var(--unit) * 2);
+  flex-wrap:wrap;
+  margin-bottom:calc(var(--unit) * 2);
+}
+.pg-num{
+  font-size:var(--fs-display);
+  font-weight:800;
+  letter-spacing:var(--track-display);
+  line-height:var(--lh-display);
+  color:var(--black);
+}
+.pg-num small{
+  display:block;
+  font-size:var(--fs-label);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--ink-2);
+  margin-top:var(--unit);
+}
+.pg-note{
+  margin:0;
+  color:var(--ink);
+  font-size:var(--fs-body);
+  font-weight:600;
+  max-width:60ch;
+}
+.bar{
+  display:flex;
+  height:calc(var(--unit) * 2);
+  border-radius:var(--radius);
+  background:var(--paper-2);
+  border:var(--rule-w) solid var(--black);
+  gap:0;
+}
+.bar span{
+  display:block;
+  min-width:0;
+  transition:flex-grow var(--t);
+}
+.bar .b-done{background:var(--black)}
+.bar .b-doing{background:var(--accent)}
+.bar .b-todo{background:var(--ink-2)}
+
+.pg-legend{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:var(--unit);
+  margin:calc(var(--unit) * 1.5) 0 0;
+  padding-top:var(--unit);
+  border-top:var(--rule-w) solid var(--rule-color);
+}
+.pg-legend div{min-width:0}
+.pg-legend dt{
+  font-size:var(--fs-label);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--ink-2);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.pg-legend dd{
+  margin:2px 0 0;
+  font-size:var(--fs-body);
+  font-weight:800;
+  color:var(--black);
+}
+.swatch{
+  display:inline-block;
+  width:10px;
+  height:10px;
+  flex-shrink:0;
+}
+.swatch-done{background:var(--black)}
+.swatch-doing{background:var(--accent)}
+.swatch-todo{background:var(--ink-2)}
+
+/* Controls & Input Row: Input = bottom rule 1px, focus rule 3px in accent */
+.controls-band{
+  grid-column:1 / -1;
+  border-top:var(--rule-strong) solid var(--black);
+  padding-top:calc(var(--unit) * 2);
+}
+.add{
+  display:grid;
+  grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr) auto;
+  gap:var(--gutter);
+  align-items:end;
+}
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+}
+.field-label{
+  font-size:var(--fs-label);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--ink-2);
+}
+input,select,button{
+  font:inherit;
+  color:inherit;
+  border-radius:var(--radius);
+  text-align:left;
+}
+.add input,.add select{
+  width:100%;
+  min-width:0;
+  background:var(--paper);
+  color:var(--ink);
+  border:0;
+  border-bottom:var(--rule-w) solid var(--black);
+  padding:var(--unit) 0;
+  font-size:var(--fs-body);
+  line-height:var(--lh-body);
+  transition:border-color var(--t);
+}
+.add input::placeholder{
+  color:var(--ink-2);
+  opacity:1;
+}
+.add input:focus,.add select:focus{
+  border-bottom:var(--rule-strong) solid var(--accent);
+}
+
+/* Reference .btn recipe */
+.btn{
+  border:2px solid var(--black);
+  background:transparent;
+  color:var(--black);
+  padding:.75rem 1.25rem;
+  font:600 .875rem/1 var(--font);
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  cursor:pointer;
+  transition:background var(--t),color var(--t);
+}
+.btn:hover{
+  background:var(--black);
+  color:var(--paper);
+}
+.btn:focus-visible,:focus-visible{
+  outline:3px solid var(--accent);
+  outline-offset:2px;
+}
+
+/* Navigation bar: text links, uppercase labels */
+.nav-band{
+  grid-column:1 / -1;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:calc(var(--unit) * 2);
+  border-top:var(--rule-w) solid var(--rule-color);
+  border-bottom:var(--rule-w) solid var(--black);
+  padding-block:var(--unit);
+}
+.views,.filters,.weeknav{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:var(--unit);
+}
+.weeknav{
+  grid-column:1 / -1;
+  border-bottom:var(--rule-w) solid var(--rule-color);
+  padding-bottom:var(--unit);
+}
+.nav-group-label{
+  font-size:var(--fs-label);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--ink-2);
+  margin-right:var(--unit);
+}
+.seg{
+  display:inline-flex;
+  flex-wrap:wrap;
+  gap:var(--unit);
+}
+.seg button,.chip{
+  background:transparent;
+  border:0;
+  border-bottom:var(--rule-strong) solid transparent;
+  padding:6px 4px;
+  font:600 var(--fs-label)/1.4 var(--font);
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--ink-2);
+  cursor:pointer;
+  transition:color var(--t),border-color var(--t);
+}
+.seg button:hover,.chip:hover{
+  color:var(--black);
+  border-bottom-color:var(--black);
+}
+.seg button[aria-pressed="true"],.chip[aria-pressed="true"]{
+  color:var(--black);
+  font-weight:800;
+  border-bottom-color:var(--accent);
+}
+.weeknav .lbl{
+  font-size:var(--fs-body);
+  font-weight:800;
+  color:var(--black);
+  margin-left:var(--unit);
+}
+
+/* Status Board View: 3 columns on the 12-col grid */
+.board{
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:var(--gutter);
+  align-items:start;
+}
+.col{
+  background:var(--paper);
+  border-top:var(--rule-strong) solid var(--black);
+  padding-top:calc(var(--unit) * 1.5);
+  min-height:180px;
+  min-width:0;
+  transition:background var(--t),border-color var(--t);
+}
+.col.over{
+  background:var(--paper-2);
+  border-top-color:var(--accent);
+}
+.col-head{
+  display:flex;
+  align-items:baseline;
+  gap:var(--unit);
+  padding-bottom:calc(var(--unit) * 1.5);
+  margin-bottom:calc(var(--unit) * 2);
+  border-bottom:var(--rule-w) solid var(--black);
+  flex-wrap:wrap;
+}
+.col-head i{
+  width:10px;
+  height:10px;
+  display:inline-block;
+  flex-shrink:0;
+}
+.col[data-s="todo"] .col-head i{background:var(--ink-2)}
+.col[data-s="doing"] .col-head i{background:var(--accent)}
+.col[data-s="done"] .col-head i{background:var(--black)}
+.col-head h2{
+  font-size:var(--fs-h2);
+  line-height:var(--lh-display);
+  letter-spacing:var(--track-display);
+  margin:0;
+  font-weight:800;
+  color:var(--black);
+}
+.col-head .count{
+  margin-left:auto;
+  font-size:var(--fs-label);
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--ink-2);
+}
+
+/* Card = text under a top rule, no card chrome */
+.card{
+  background:var(--paper);
+  border:0;
+  border-top:var(--rule-w) solid var(--rule-color);
+  padding:calc(var(--unit) * 1.5) 0 calc(var(--unit) * 2);
+  cursor:grab;
+  min-width:0;
+}
+.card.p-high{border-top:var(--rule-strong) solid var(--accent)}
+.card.p-mid{border-top:var(--rule-strong) solid var(--black)}
+.card.p-low{border-top:var(--rule-w) solid var(--rule-color)}
+.card.dragging{
+  background:var(--paper-2);
+  outline:2px dashed var(--black);
+}
+.card .t{
+  font-weight:600;
+  color:var(--ink);
+  overflow-wrap:anywhere;
+  max-width:65ch;
+}
+.card.is-done .t{
+  text-decoration:line-through;
+  color:var(--ink-2);
+}
+.meta{
+  display:flex;
+  align-items:center;
+  gap:var(--unit);
+  margin-top:var(--unit);
+  flex-wrap:wrap;
+}
+.tag{
+  font-size:var(--fs-label);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  border:var(--rule-w) solid var(--rule-color);
+  background:var(--paper);
+  color:var(--ink-2);
+  padding:2px 6px;
+}
+.card.p-high .tag-prio{
+  border-color:var(--accent);
+  color:var(--accent);
+  font-weight:800;
+}
+.card.p-mid .tag-prio{
+  border-color:var(--black);
+  color:var(--black);
+}
+.tag.late{
+  color:var(--accent);
+  border-color:var(--accent);
+  background:var(--paper);
+  font-weight:800;
+}
+.acts{
+  margin-left:auto;
+  display:flex;
+  gap:4px;
+}
+.acts button{
+  background:var(--paper);
+  border:var(--rule-w) solid var(--black);
+  width:28px;
+  height:28px;
+  padding:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-start;
+  padding-left:7px;
+  cursor:pointer;
+  color:var(--black);
+  font-size:14px;
+  font-weight:800;
+  line-height:1;
+  transition:background var(--t),color var(--t);
+}
+.acts button:hover:not(:disabled){
+  background:var(--black);
+  color:var(--paper);
+}
+.acts button:disabled{
+  border-color:var(--rule-color);
+  color:var(--ink-2);
+  background:var(--paper-2);
+  cursor:default;
+}
+.empty{
+  color:var(--ink-2);
+  font-size:var(--fs-body);
+  text-align:left;
+  padding:calc(var(--unit) * 2) 0;
+  max-width:60ch;
+}
+
+/* Week View */
+.week{
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:calc(var(--unit) * 2);
+  align-items:start;
+}
+.week .col-head h2,.extra .col-head h2{
+  font-size:1.125rem;
+}
+.dsub{
+  font-size:var(--fs-label);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--ink-2);
+}
+.col.today{
+  border-top:var(--rule-strong) solid var(--accent);
+}
+.col.today .dsub{
+  color:var(--accent);
+  font-weight:800;
+}
+.addday{
+  width:100%;
+  background:var(--paper);
+  border:0;
+  border-top:var(--rule-w) solid var(--rule-color);
+  border-bottom:var(--rule-w) solid var(--black);
+  padding:var(--unit) 0;
+  color:var(--ink-2);
+  cursor:pointer;
+  font:600 var(--fs-label)/1.4 var(--font);
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  transition:color var(--t),border-color var(--t);
+}
+.addday:hover{
+  color:var(--black);
+  border-bottom-color:var(--accent);
+}
+.extra{
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:var(--gutter);
+  margin-top:calc(var(--unit) * 2);
+  align-items:start;
+}
+
+/* Responsive breakpoints including 400px width */
+@media (max-width:1024px){
+  .masthead-title{grid-column:1 / -1}
+  .progress{grid-column:1 / -1}
+  .week{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .add{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .add .field-title{grid-column:1 / -1}
+  .add .btn{grid-column:1 / -1}
+}
+@media (max-width:760px){
+  .board,.week,.extra,.add,.pg-legend{grid-template-columns:minmax(0,1fr)}
+}
+
+/* Accessibility & environment fallbacks */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+@media (prefers-reduced-transparency:reduce){
+  body,.col,.card,.tag{background:var(--paper)}
+}
+@media (forced-colors:active){
+  .col,.card,.btn,.tag,.acts button,.bar{border:1px solid CanvasText}
+  .seg button[aria-pressed="true"],.chip[aria-pressed="true"]{outline:2px solid Highlight}
+}
+@supports (backdrop-filter:none){
+  /* Swiss Minimalism uses 100% opaque flat surfaces without backdrop blur */
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead-title">
+    <span class="index-kicker">Hệ thống quản trị công việc · 01</span>
+    <h1>Bảng công việc</h1>
+    <p class="sub">Kéo thẻ giữa các cột hoặc dùng nút mũi tên để đổi trạng thái.</p>
+  </header>
+
+  <section class="progress" aria-label="Tiến độ">
+    <div class="pg-top">
+      <div class="pg-num" id="pct">0%<small id="frac">0/0 việc xong</small></div>
+      <p class="pg-note" id="note"></p>
+    </div>
+    <div class="bar" aria-hidden="true">
+      <span class="b-done" id="bDone"></span>
+      <span class="b-doing" id="bDoing"></span>
+      <span class="b-todo" id="bTodo"></span>
+    </div>
+    <dl class="pg-legend" aria-label="Thống kê trạng thái">
+      <div>
+        <dt><span class="swatch swatch-done" aria-hidden="true"></span>Hoàn thành</dt>
+        <dd id="cntDone">0</dd>
+      </div>
+      <div>
+        <dt><span class="swatch swatch-doing" aria-hidden="true"></span>Đang làm</dt>
+        <dd id="cntDoing">0</dd>
+      </div>
+      <div>
+        <dt><span class="swatch swatch-todo" aria-hidden="true"></span>Cần làm</dt>
+        <dd id="cntTodo">0</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="controls-band" aria-label="Thêm công việc mới">
+    <div class="add">
+      <label class="field field-title" for="title">
+        <span class="field-label">Công việc</span>
+        <input type="text" id="title" placeholder="Bạn cần làm gì?" aria-label="Tên công việc" maxlength="120">
+      </label>
+      <label class="field" for="prio">
+        <span class="field-label">Ưu tiên</span>
+        <select id="prio" aria-label="Mức ưu tiên">
+          <option value="high">Ưu tiên cao</option>
+          <option value="mid" selected>Ưu tiên vừa</option>
+          <option value="low">Ưu tiên thấp</option>
+        </select>
+      </label>
+      <label class="field" for="due">
+        <span class="field-label">Hạn chót</span>
+        <input type="date" id="due" aria-label="Hạn hoàn thành">
+      </label>
+      <button class="btn" id="addBtn" type="button">Thêm việc</button>
+    </div>
+  </section>
+
+  <nav class="nav-band" aria-label="Điều hướng và bộ lọc">
+    <div class="views">
+      <span class="nav-group-label">Chế độ</span>
+      <div class="seg" role="group" aria-label="Chế độ xem">
+        <button type="button" data-v="board" aria-pressed="true">Theo trạng thái</button>
+        <button type="button" data-v="week" aria-pressed="false">Theo tuần</button>
+      </div>
+    </div>
+    <div class="filters" role="group" aria-label="Lọc theo ưu tiên">
+      <span class="nav-group-label">Mức lọc</span>
+      <button type="button" class="chip" data-f="all" aria-pressed="true">Tất cả</button>
+      <button type="button" class="chip" data-f="high" aria-pressed="false">Cao</button>
+      <button type="button" class="chip" data-f="mid" aria-pressed="false">Vừa</button>
+      <button type="button" class="chip" data-f="low" aria-pressed="false">Thấp</button>
+    </div>
+  </nav>
+
+  <div class="weeknav" id="weeknav" hidden>
+    <button type="button" class="chip" id="prevW" aria-label="Tuần trước">←</button>
+    <button type="button" class="chip" id="thisW">Tuần này</button>
+    <button type="button" class="chip" id="nextW" aria-label="Tuần sau">→</button>
+    <span class="lbl" id="wlabel"></span>
+  </div>
+
+  <div class="board" id="board"></div>
+  <div class="week" id="week" hidden></div>
+  <div class="extra" id="extra" hidden></div>
+</main>
+
+<script>
+(function(){
+  var KEY="bang-cong-viec-v1";
+  var COLS=[["todo","Cần làm"],["doing","Đang làm"],["done","Hoàn thành"]];
+  var PL={high:"Cao",mid:"Vừa",low:"Thấp"};
+  var tasks=[],filter="all",dragId=null;
+
+  function load(){
+    try{var r=localStorage.getItem(KEY);if(r){tasks=JSON.parse(r)||[];return}}catch(e){}
+    var d=new Date(),iso=function(n){var x=new Date(d);x.setDate(x.getDate()+n);return isoDate(x)};
+    tasks=[
+      {id:1,t:"Gửi báo cáo tuần cho nhóm",p:"high",s:"doing",d:iso(0)},
+      {id:2,t:"Đặt lịch khám răng",p:"mid",s:"todo",d:iso(3)},
+      {id:3,t:"Dọn hộp thư đến",p:"low",s:"todo",d:""},
+      {id:4,t:"Thanh toán tiền điện",p:"high",s:"done",d:iso(-1)}
+    ];
+  }
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch(e){}}
+
+  function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+  function pad(n){return n<10?"0"+n:""+n}
+  function isoDate(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+  function today(){return isoDate(new Date())}
+  function mondayOf(d){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
+  var view="board",ws=mondayOf(new Date());
+  function fmt(s){var p=s.split("-");return p[2]+"/"+p[1]}
+
+  function card(t){
+    var c=el("div","card p-"+t.p+(t.s==="done"?" is-done":""));
+    c.draggable=true;c.dataset.id=t.id;
+    c.appendChild(el("div","t",t.t));
+    var m=el("div","meta");
+    m.appendChild(el("span","tag tag-prio",PL[t.p]));
+    if(view==="week"&&t.s==="doing")m.appendChild(el("span","tag","Đang làm"));
+    if(t.d){
+      var late=t.s!=="done"&&t.d<today();
+      if(view!=="week"||late)m.appendChild(el("span","tag"+(late?" late":""),(late?"Quá hạn ":"Hạn ")+fmt(t.d)));
+    }
+    var a=el("div","acts"),i=COLS.findIndex(function(x){return x[0]===t.s});
+    var L=el("button",null,"←");L.type="button";L.title="Chuyển sang cột trước";L.setAttribute("aria-label","Chuyển sang cột trước");L.disabled=i===0;
+    var R=el("button",null,"→");R.type="button";R.title="Chuyển sang cột sau";R.setAttribute("aria-label","Chuyển sang cột sau");R.disabled=i===2;
+    var X=el("button",null,"×");X.type="button";X.title="Xóa việc";X.setAttribute("aria-label","Xóa việc");
+    L.onclick=function(){move(t.id,COLS[i-1][0])};
+    R.onclick=function(){move(t.id,COLS[i+1][0])};
+    X.onclick=function(){tasks=tasks.filter(function(x){return x.id!==t.id});save();render()};
+    if(view==="week"){
+      var K=el("button",null,t.s==="done"?"↺":"✓");K.type="button";K.title=t.s==="done"?"Mở lại việc":"Đánh dấu xong";K.setAttribute("aria-label",K.title);
+      K.onclick=function(){move(t.id,t.s==="done"?"todo":"done")};
+      a.append(K,X);
+    }else a.append(L,R,X);
+    m.appendChild(a);c.appendChild(m);
+    c.addEventListener("dragstart",function(e){dragId=t.id;c.classList.add("dragging");try{e.dataTransfer.setData("text/plain",String(t.id))}catch(x){}});
+    c.addEventListener("dragend",function(){c.classList.remove("dragging");dragId=null;document.querySelectorAll(".col.over").forEach(function(n){n.classList.remove("over")})});
+    return c;
+  }
+
+  function move(id,s){tasks.forEach(function(t){if(t.id===id)t.s=s});save();render()}
+
+  function render(){
+    var isW=view==="week";
+    document.getElementById("board").hidden=isW;
+    document.getElementById("week").hidden=!isW;
+    document.getElementById("extra").hidden=!isW;
+    document.getElementById("weeknav").hidden=!isW;
+    if(isW)renderWeek();
+    var b=document.getElementById("board");b.textContent="";
+    if(!isW)COLS.forEach(function(c){
+      var col=el("div","col");col.dataset.s=c[0];
+      var list=tasks.filter(function(t){return t.s===c[0]&&(filter==="all"||t.p===filter)});
+      var h=el("div","col-head");h.appendChild(el("i"));h.appendChild(el("h2",null,c[1]));h.appendChild(el("span","count",String(list.length)));
+      col.appendChild(h);
+      if(!list.length)col.appendChild(el("div","empty",c[0]==="todo"?"Chưa có việc nào. Thêm việc ở phía trên.":"Kéo thẻ vào đây."));
+      list.forEach(function(t){col.appendChild(card(t))});
+      col.addEventListener("dragover",function(e){e.preventDefault();col.classList.add("over")});
+      col.addEventListener("dragleave",function(e){if(!col.contains(e.relatedTarget))col.classList.remove("over")});
+      col.addEventListener("drop",function(e){e.preventDefault();col.classList.remove("over");if(dragId!=null)move(dragId,c[0])});
+      b.appendChild(col);
+    });
+    var n=tasks.length,d=tasks.filter(function(t){return t.s==="done"}).length,g=tasks.filter(function(t){return t.s==="doing"}).length,o=n-d-g;
+    var pct=n?Math.round(d/n*100):0;
+    document.getElementById("pct").firstChild.nodeValue=pct+"%";
+    document.getElementById("frac").textContent=d+"/"+n+" việc xong";
+    document.getElementById("bDone").style.flexGrow=d;
+    document.getElementById("bDoing").style.flexGrow=g;
+    document.getElementById("bTodo").style.flexGrow=o;
+    var cDone=document.getElementById("cntDone"),cDoing=document.getElementById("cntDoing"),cTodo=document.getElementById("cntTodo");
+    if(cDone)cDone.textContent=String(d);
+    if(cDoing)cDoing.textContent=String(g);
+    if(cTodo)cTodo.textContent=String(o);
+    var late=tasks.filter(function(t){return t.s!=="done"&&t.d&&t.d<today()}).length;
+    document.getElementById("note").textContent=!n?"Chưa có công việc nào.":late?late+" việc đã quá hạn.":d===n?"Bạn đã xong tất cả.":"Còn "+(n-d)+" việc cần hoàn thành.";
+  }
+
+  function setDate(id,d){tasks.forEach(function(t){if(t.id===id)t.d=d});save();render()}
+  function dayCol(title,sub,list,dateVal,cls){
+    var col=el("div","col"+(cls||""));
+    var h=el("div","col-head");h.appendChild(el("h2",null,title));if(sub)h.appendChild(el("span","dsub",sub));h.appendChild(el("span","count",String(list.length)));
+    col.appendChild(h);
+    list.forEach(function(t){col.appendChild(card(t))});
+    if(dateVal!==null){
+      var A=el("button","addday","+ Thêm việc");A.type="button";
+      A.onclick=function(){document.getElementById("due").value=dateVal;document.getElementById("title").focus()};
+      col.appendChild(A);
+      col.addEventListener("dragover",function(e){e.preventDefault();col.classList.add("over")});
+      col.addEventListener("dragleave",function(e){if(!col.contains(e.relatedTarget))col.classList.remove("over")});
+      col.addEventListener("drop",function(e){e.preventDefault();col.classList.remove("over");if(dragId!=null)setDate(dragId,dateVal)});
+    }
+    return col;
+  }
+  function renderWeek(){
+    var W=document.getElementById("week"),E=document.getElementById("extra");W.textContent="";E.textContent="";
+    var names=["Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy","Chủ nhật"],tod=today();
+    var vis=function(t){return filter==="all"||t.p===filter};
+    for(var k=0;k<7;k++){
+      var d=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+k),s=isoDate(d);
+      var list=tasks.filter(function(t){return t.d===s&&vis(t)});
+      W.appendChild(dayCol(names[k],pad(d.getDate())+"/"+pad(d.getMonth()+1),list,s,s===tod?" today":""));
+    }
+    var e=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+6),first=isoDate(ws);
+    document.getElementById("wlabel").textContent=pad(ws.getDate())+"/"+pad(ws.getMonth()+1)+" – "+pad(e.getDate())+"/"+pad(e.getMonth()+1)+"/"+e.getFullYear();
+    E.appendChild(dayCol("Chưa đặt ngày","",tasks.filter(function(t){return !t.d&&vis(t)}),"",""));
+    var over=tasks.filter(function(t){return t.d&&t.d<first&&t.s!=="done"&&vis(t)});
+    if(over.length)E.appendChild(dayCol("Chưa xong từ trước tuần này","",over,null,""));
+  }
+  function add(){
+    var inp=document.getElementById("title"),v=inp.value.trim();
+    if(!v){inp.focus();return}
+    tasks.push({id:Date.now(),t:v,p:document.getElementById("prio").value,s:"todo",d:document.getElementById("due").value});
+    inp.value="";document.getElementById("due").value="";save();render();inp.focus();
+  }
+  document.getElementById("addBtn").onclick=add;
+  document.getElementById("title").addEventListener("keydown",function(e){if(e.key==="Enter")add()});
+  document.querySelectorAll(".filters .chip").forEach(function(c){
+    c.onclick=function(){
+      filter=c.dataset.f;
+      document.querySelectorAll(".filters .chip").forEach(function(x){x.setAttribute("aria-pressed",String(x===c))});
+      render();
+    };
+  });
+  document.querySelectorAll(".seg button").forEach(function(b){
+    b.onclick=function(){view=b.dataset.v;document.querySelectorAll(".seg button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});render()};
+  });
+  function shift(n){ws=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+n);render()}
+  document.getElementById("prevW").onclick=function(){shift(-7)};
+  document.getElementById("nextW").onclick=function(){shift(7)};
+  document.getElementById("thisW").onclick=function(){ws=mondayOf(new Date());render()};
+  load();render();
+})();
+</script>
+</body>
+</html>

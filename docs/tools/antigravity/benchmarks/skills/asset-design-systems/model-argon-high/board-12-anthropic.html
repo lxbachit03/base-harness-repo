@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bảng công việc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  box-sizing: border-box;
+  /* Anthropic brand look tokens [ANTH] */
+  --bg: #faf9f5;
+  --surface: #ffffff;
+  --surface-2: #f5f4ed;
+  --surface-3: #f0eee6;
+  --line: #e8e6dc;
+  --line-2: #dedcd1;
+  --ink: #141413;
+  --ink-2: #3d3d3a;
+  --muted: #5e5d59;              /* Substituted for #87867f (3.47:1 fails on #faf9f5); #5e5d59 is 6.26:1 */
+  --ui-edge: #73726c;            /* Gray-550: 4.58:1 on #faf9f5, 4.82:1 on #ffffff */
+  --accent: #d97757;
+  --accent-interactive: #c6613f; /* 3.85:1 on #faf9f5, 4.05:1 on #ffffff for UI focus/edges */
+  --olive: #788c5d;              /* 3.49:1 on #faf9f5, 3.68:1 on #ffffff (UI bar segment) */
+  --sky: #6a9bcc;
+  --fig: #c46686;
+  --oat: #e3dacc;
+  --cactus: #bcd1ca;
+  --heather: #cbcadb;
+  --coral: #ebcece;
+  --iris: #dfdbfd;
+  --iris-deep: #4a3aa7;          /* 6.39:1 on --iris, 7.77:1 on --bg */
+  --periwinkle: #cde2fb;
+  --periwinkle-deep: #184f95;    /* 6.12:1 on --periwinkle, 7.85:1 on --bg (substitutes sky #6a9bcc 2.78:1) */
+
+  /* Semantic roles separated from clay accent [ARTD] */
+  --bar-done: var(--olive);
+  --bar-doing: var(--periwinkle-deep);
+  --bar-todo: var(--iris-deep);
+  --bar-track: var(--surface-3);
+
+  --prio-high-bg: var(--coral);
+  --prio-high-fg: var(--ink);
+  --prio-mid-bg: var(--oat);
+  --prio-mid-fg: var(--ink);
+  --prio-low-bg: var(--surface-3);
+  --prio-low-fg: var(--ink-2);
+
+  --tag-doing-bg: var(--periwinkle);
+  --tag-doing-fg: var(--periwinkle-deep);
+  --tag-due-bg: var(--surface-2);
+  --tag-due-fg: var(--muted);
+  --tag-late-bg: var(--accent);
+  --tag-late-fg: var(--ink);     /* Ink on clay 5.90:1 [ANTH Guardrails] */
+
+  --topbar-bg: rgba(250, 249, 245, 0.88);
+  --radius-xs: 4px;
+  --r-ctl: 8px;
+  --r-card: 12px;
+  --radius-pill: 999px;
+  --font-serif: "Newsreader", "Source Serif 4", Georgia, serif;
+  --font-sans: "Inter", "DM Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    /* Anthropic dark surfaces [ANTH, DERIVED] */
+    --bg: #141413;
+    --surface: #1f1e1d;
+    --surface-2: #262624;
+    --surface-3: #30302e;
+    --line: #30302e;
+    --line-2: #3d3d3a;
+    --ink: #faf9f5;
+    --ink-2: #e8e6dc;
+    --muted: #b0aea5;            /* 8.29:1 on #141413, 7.35:1 on #1f1e1d */
+    --ui-edge: #87867f;          /* 5.05:1 on #141413, 4.47:1 on #1f1e1d */
+    --accent: #d97757;           /* 5.90:1 on #141413 */
+    --accent-interactive: #d97757;
+
+    --bar-done: var(--cactus);
+    --bar-doing: var(--sky);
+    --bar-todo: var(--heather);
+    --bar-track: var(--surface-3);
+
+    --prio-high-bg: var(--surface-2);
+    --prio-high-fg: var(--coral);
+    --prio-mid-bg: var(--surface-2);
+    --prio-mid-fg: var(--oat);
+    --prio-low-bg: var(--surface-2);
+    --prio-low-fg: var(--ink-2);
+
+    --tag-doing-bg: var(--surface-2);
+    --tag-doing-fg: var(--periwinkle);
+    --tag-due-bg: var(--surface-2);
+    --tag-due-fg: var(--muted);
+    --tag-late-bg: var(--accent);
+    --tag-late-fg: #141413;
+
+    --topbar-bg: rgba(20, 20, 19, 0.88);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #141413;
+  --surface: #1f1e1d;
+  --surface-2: #262624;
+  --surface-3: #30302e;
+  --line: #30302e;
+  --line-2: #3d3d3a;
+  --ink: #faf9f5;
+  --ink-2: #e8e6dc;
+  --muted: #b0aea5;
+  --ui-edge: #87867f;
+  --accent: #d97757;
+  --accent-interactive: #d97757;
+
+  --bar-done: var(--cactus);
+  --bar-doing: var(--sky);
+  --bar-todo: var(--heather);
+  --bar-track: var(--surface-3);
+
+  --prio-high-bg: var(--surface-2);
+  --prio-high-fg: var(--coral);
+  --prio-mid-bg: var(--surface-2);
+  --prio-mid-fg: var(--oat);
+  --prio-low-bg: var(--surface-2);
+  --prio-low-fg: var(--ink-2);
+
+  --tag-doing-bg: var(--surface-2);
+  --tag-doing-fg: var(--periwinkle);
+  --tag-due-bg: var(--surface-2);
+  --tag-due-fg: var(--muted);
+  --tag-late-bg: var(--accent);
+  --tag-late-fg: #141413;
+
+  --topbar-bg: rgba(20, 20, 19, 0.88);
+}
+
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1rem/1.5 var(--font-sans);
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  overflow-x: hidden;
+}
+
+h1, h2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  text-wrap: balance;
+  margin: 0;
+}
+
+a {
+  color: var(--ink);
+  text-decoration-color: var(--accent);
+  text-underline-offset: 0.2em;
+}
+
+input, select, button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-interactive);
+  outline-offset: 2px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* Sticky Editorial Topbar */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+@supports (backdrop-filter: blur(10px)) {
+  .topbar {
+    background: var(--topbar-bg);
+    backdrop-filter: blur(10px);
+  }
+}
+
+.topbar-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  color: var(--ink);
+}
+
+.brand-mark {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-interactive);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.theme-btn {
+  border: 1px solid var(--ui-edge);
+  border-radius: var(--radius-pill);
+  padding: 0.375rem 0.875rem;
+  font: 500 0.8125rem/1.4 var(--font-sans);
+  letter-spacing: 0.01em;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.theme-btn:hover {
+  background: var(--surface-3);
+  color: var(--ink);
+}
+
+/* Page Container with Artifact Safe-Area Gutters */
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 28px max(16px, env(safe-area-inset-right, 0px)) 56px max(16px, env(safe-area-inset-left, 0px));
+}
+
+/* Editorial Header */
+.hero {
+  margin-bottom: 24px;
+}
+
+.hero h1 {
+  font-size: clamp(1.75rem, 4vw, 2.375rem);
+  line-height: 1.2;
+  font-weight: 400;
+  margin-bottom: 6px;
+}
+
+.sub {
+  color: var(--muted);
+  margin: 0;
+  font-size: 1rem;
+  max-width: 65ch;
+}
+
+/* Progress Section: Display Serif focal point, quiet surface shift without heavy card border */
+.progress {
+  background: var(--surface-2);
+  border-radius: var(--r-card);
+  padding: 22px 24px;
+  margin-bottom: 24px;
+}
+
+.pg-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.pg-num {
+  font-family: var(--font-serif);
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  line-height: 1.12;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.pg-num small {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0;
+  margin-left: 10px;
+}
+
+.pg-note {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.bar {
+  display: flex;
+  height: 12px;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background: var(--bar-track);
+  gap: 3px;
+}
+
+.bar span {
+  display: block;
+  min-width: 0;
+  transition: flex-grow 0.3s ease;
+}
+
+.bar .b-done {
+  background: var(--bar-done);
+}
+
+.bar .b-doing {
+  background: var(--bar-doing);
+}
+
+.bar .b-todo {
+  background: var(--bar-todo);
+}
+
+.pg-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.pg-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pg-legend i {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-pill);
+  display: inline-block;
+}
+
+.pg-legend .lg-done { background: var(--bar-done); }
+.pg-legend .lg-doing { background: var(--bar-doing); }
+.pg-legend .lg-todo { background: var(--bar-todo); }
+
+/* Task Creation Form */
+.add {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.add input,
+.add select {
+  background: var(--surface);
+  border: 1px solid var(--ui-edge);
+  border-radius: var(--r-ctl);
+  padding: 0.55rem 0.75rem;
+  min-width: 0;
+  font-size: 0.9375rem;
+  color: var(--ink);
+}
+
+.add input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.btn {
+  border: 0;
+  border-radius: var(--radius-pill);
+  padding: 0.65rem 1.25rem;
+  font: 500 0.8125rem/1.5 var(--font-sans);
+  letter-spacing: 0.01em;
+  background: var(--ink);
+  color: var(--bg);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn.secondary {
+  background: var(--surface-2);
+  color: var(--ink-2);
+  border: 1px solid var(--ui-edge);
+}
+
+/* Controls Toolbar: View Switcher + Priority Filter Chips */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.seg {
+  display: inline-flex;
+  background: var(--surface-2);
+  border: 1px solid var(--ui-edge);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+  gap: 2px;
+}
+
+.seg button {
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-pill);
+  padding: 0.4rem 0.95rem;
+  font: 500 0.8125rem/1.4 var(--font-sans);
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.seg button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  background: var(--surface-2);
+  border: 1px solid var(--ui-edge);
+  border-radius: var(--radius-pill);
+  padding: 0.375rem 0.9rem;
+  cursor: pointer;
+  font: 500 0.8125rem/1.4 var(--font-sans);
+  letter-spacing: 0.01em;
+  color: var(--ink-2);
+}
+
+.chip:hover {
+  background: var(--surface-3);
+  color: var(--ink);
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+/* Week Navigation */
+.weeknav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.weeknav .lbl {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-left: 6px;
+}
+
+/* Status Board Columns */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.col {
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: var(--r-card);
+  padding: 14px;
+  min-height: 200px;
+  min-width: 0;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.col.over {
+  background: var(--surface-3);
+  border-color: var(--accent-interactive);
+}
+
+.col-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 2px 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line-2);
+}
+
+.col-head i {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-pill);
+  display: block;
+  flex-shrink: 0;
+}
+
+.col[data-s="todo"] .col-head i { background: var(--bar-todo); }
+.col[data-s="doing"] .col-head i { background: var(--bar-doing); }
+.col[data-s="done"] .col-head i { background: var(--bar-done); }
+
+.col-head h2 {
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.col-head .count {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-pill);
+  padding: 1px 9px;
+}
+
+/* Task Cards: Clean Editorial Surface, No Left-Border Accent Rail Cliché */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-ctl);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  cursor: grab;
+  transition: border-color 0.15s ease;
+}
+
+.card:hover {
+  border-color: var(--ui-edge);
+}
+
+.card.dragging {
+  opacity: 0.45;
+}
+
+.card .t {
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+
+.card.is-done .t {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+  padding: 2px 9px;
+  background: var(--tag-due-bg);
+  color: var(--tag-due-fg);
+  border: 1px solid var(--line-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tag.p-high {
+  background: var(--prio-high-bg);
+  color: var(--prio-high-fg);
+  border-color: transparent;
+}
+
+.tag.p-mid {
+  background: var(--prio-mid-bg);
+  color: var(--prio-mid-fg);
+  border-color: transparent;
+}
+
+.tag.p-low {
+  background: var(--prio-low-bg);
+  color: var(--prio-low-fg);
+  border-color: transparent;
+}
+
+.tag.doing-tag {
+  background: var(--tag-doing-bg);
+  color: var(--tag-doing-fg);
+  border-color: transparent;
+}
+
+.tag.due-tag {
+  font-family: var(--font-mono);
+}
+
+.tag.late {
+  font-family: var(--font-mono);
+  background: var(--tag-late-bg);
+  color: var(--tag-late-fg);
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.acts {
+  margin-left: auto;
+  display: flex;
+  gap: 3px;
+}
+
+.acts button {
+  background: var(--surface-2);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-xs);
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.acts button:hover:not(:disabled) {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+.acts button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 24px 8px;
+}
+
+/* Week View Grid */
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+  align-items: start;
+}
+
+.week .col,
+.extra .col {
+  padding: 10px;
+}
+
+.week .card {
+  padding: 10px;
+}
+
+.week .col-head {
+  flex-wrap: wrap;
+  gap: 2px 6px;
+  margin-bottom: 10px;
+}
+
+.week .col-head h2 {
+  font-size: 0.9375rem;
+}
+
+.dsub {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.col.today {
+  border-color: var(--accent-interactive);
+  background: var(--surface-3);
+}
+
+.col.today .dsub {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.addday {
+  width: 100%;
+  background: transparent;
+  border: 1px dashed var(--ui-edge);
+  border-radius: var(--r-ctl);
+  padding: 7px 6px;
+  color: var(--muted);
+  cursor: pointer;
+  font: 500 0.8125rem/1.3 var(--font-sans);
+  margin-top: 2px;
+}
+
+.addday:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: var(--surface);
+}
+
+.extra {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+  align-items: start;
+}
+
+/* Responsive Breakpoints (Zero horizontal scroll at 400px) */
+@media (max-width: 1080px) {
+  .week {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 820px) {
+  .board,
+  .week,
+  .extra {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .add {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .add input[type="text"],
+  .add .btn {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .add {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .seg {
+    width: 100%;
+    justify-content: center;
+  }
+  .seg button {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+/* Accessibility & Environment Fallbacks */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .topbar {
+    background: var(--bg) !important;
+    backdrop-filter: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .card,
+  .col,
+  .progress,
+  .chip,
+  .seg,
+  .btn,
+  .tag,
+  .acts button {
+    border: 1px solid CanvasText;
+  }
+  .chip[aria-pressed="true"],
+  .seg button[aria-pressed="true"],
+  .btn {
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+  .bar span {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>Không gian làm việc</span>
+    </div>
+    <button type="button" class="theme-btn" id="themeBtn" aria-label="Đổi giao diện sáng tối">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+      </svg>
+      <span id="themeLbl">Giao diện</span>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <header class="hero">
+    <h1>Bảng công việc</h1>
+    <p class="sub">Kéo thẻ giữa các cột hoặc dùng nút mũi tên để đổi trạng thái.</p>
+  </header>
+
+  <section class="progress" aria-label="Tiến độ">
+    <div class="pg-top">
+      <div class="pg-num" id="pct">0%<small id="frac">0/0 việc xong</small></div>
+      <div class="pg-note" id="note"></div>
+    </div>
+    <div class="bar" aria-hidden="true">
+      <span class="b-done" id="bDone"></span>
+      <span class="b-doing" id="bDoing"></span>
+      <span class="b-todo" id="bTodo"></span>
+    </div>
+    <div class="pg-legend" aria-hidden="true">
+      <span><i class="lg-done"></i>Hoàn thành</span>
+      <span><i class="lg-doing"></i>Đang làm</span>
+      <span><i class="lg-todo"></i>Cần làm</span>
+    </div>
+  </section>
+
+  <div class="add">
+    <input type="text" id="title" placeholder="Bạn cần làm gì?" aria-label="Tên công việc" maxlength="120">
+    <select id="prio" aria-label="Mức ưu tiên">
+      <option value="high">Ưu tiên cao</option>
+      <option value="mid" selected>Ưu tiên vừa</option>
+      <option value="low">Ưu tiên thấp</option>
+    </select>
+    <input type="date" id="due" aria-label="Hạn hoàn thành">
+    <button type="button" class="btn" id="addBtn">Thêm việc</button>
+  </div>
+
+  <div class="toolbar">
+    <div class="views">
+      <div class="seg" role="group" aria-label="Chế độ xem">
+        <button type="button" data-v="board" aria-pressed="true">Theo trạng thái</button>
+        <button type="button" data-v="week" aria-pressed="false">Theo tuần</button>
+      </div>
+    </div>
+    <div class="filters" role="group" aria-label="Lọc theo ưu tiên">
+      <button type="button" class="chip" data-f="all" aria-pressed="true">Tất cả</button>
+      <button type="button" class="chip" data-f="high" aria-pressed="false">Cao</button>
+      <button type="button" class="chip" data-f="mid" aria-pressed="false">Vừa</button>
+      <button type="button" class="chip" data-f="low" aria-pressed="false">Thấp</button>
+    </div>
+  </div>
+
+  <div class="weeknav" id="weeknav" hidden>
+    <button type="button" class="chip" id="prevW" aria-label="Tuần trước">←</button>
+    <button type="button" class="chip" id="thisW">Tuần này</button>
+    <button type="button" class="chip" id="nextW" aria-label="Tuần sau">→</button>
+    <span class="lbl" id="wlabel"></span>
+  </div>
+
+  <div class="board" id="board"></div>
+  <div class="week" id="week" hidden></div>
+  <div class="extra" id="extra" hidden></div>
+</main>
+
+<script>
+(function(){
+  var KEY = "bang-cong-viec-v1";
+  var THEME_KEY = "bang-cong-viec-theme";
+  var COLS = [["todo", "Cần làm"], ["doing", "Đang làm"], ["done", "Hoàn thành"]];
+  var PL = { high: "Cao", mid: "Vừa", low: "Thấp" };
+  var tasks = [], filter = "all", dragId = null;
+
+  function initTheme(){
+    var root = document.documentElement;
+    var saved = null;
+    try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+    if (saved === "light" || saved === "dark") {
+      root.setAttribute("data-theme", saved);
+    }
+    updateThemeLabel();
+    document.getElementById("themeBtn").onclick = function(){
+      var cur = root.getAttribute("data-theme");
+      var isDark = cur ? cur === "dark" : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      var next = isDark ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+      updateThemeLabel();
+    };
+  }
+
+  function updateThemeLabel(){
+    var root = document.documentElement;
+    var cur = root.getAttribute("data-theme");
+    var isDark = cur ? cur === "dark" : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    document.getElementById("themeLbl").textContent = isDark ? "Sáng" : "Tối";
+  }
+
+  function load(){
+    try {
+      var r = localStorage.getItem(KEY);
+      if (r) {
+        tasks = JSON.parse(r) || [];
+        return;
+      }
+    } catch (e) {}
+    var d = new Date(), iso = function(n){
+      var x = new Date(d);
+      x.setDate(x.getDate() + n);
+      return isoDate(x);
+    };
+    tasks = [
+      { id: 1, t: "Gửi báo cáo tuần cho nhóm", p: "high", s: "doing", d: iso(0) },
+      { id: 2, t: "Đặt lịch khám răng", p: "mid", s: "todo", d: iso(3) },
+      { id: 3, t: "Dọn hộp thư đến", p: "low", s: "todo", d: "" },
+      { id: 4, t: "Thanh toán tiền điện", p: "high", s: "done", d: iso(-1) }
+    ];
+  }
+
+  function save(){
+    try { localStorage.setItem(KEY, JSON.stringify(tasks)); } catch (e) {}
+  }
+
+  function el(tag, cls, text){
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function pad(n){ return n < 10 ? "0" + n : "" + n; }
+  function isoDate(d){ return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function today(){ return isoDate(new Date()); }
+  function mondayOf(d){
+    var x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    x.setDate(x.getDate() - ((x.getDay() + 6) % 7));
+    return x;
+  }
+
+  var view = "board", ws = mondayOf(new Date());
+  function fmt(s){
+    var p = s.split("-");
+    return p[2] + "/" + p[1];
+  }
+
+  function card(t){
+    var c = el("div", "card p-" + t.p + (t.s === "done" ? " is-done" : ""));
+    c.draggable = true;
+    c.dataset.id = t.id;
+    c.appendChild(el("div", "t", t.t));
+    var m = el("div", "meta");
+    m.appendChild(el("span", "tag p-" + t.p, PL[t.p]));
+    if (view === "week" && t.s === "doing") {
+      m.appendChild(el("span", "tag doing-tag", "Đang làm"));
+    }
+    if (t.d) {
+      var late = t.s !== "done" && t.d < today();
+      if (view !== "week" || late) {
+        m.appendChild(el("span", "tag " + (late ? "late" : "due-tag"), (late ? "Quá hạn " : "Hạn ") + fmt(t.d)));
+      }
+    }
+    var a = el("div", "acts");
+    var i = COLS.findIndex(function(x){ return x[0] === t.s; });
+    var L = el("button", null, "←");
+    L.type = "button";
+    L.title = "Chuyển sang cột trước";
+    L.setAttribute("aria-label", "Chuyển sang cột trước");
+    L.disabled = i === 0;
+    var R = el("button", null, "→");
+    R.type = "button";
+    R.title = "Chuyển sang cột sau";
+    R.setAttribute("aria-label", "Chuyển sang cột sau");
+    R.disabled = i === 2;
+    var X = el("button", null, "×");
+    X.type = "button";
+    X.title = "Xóa việc";
+    X.setAttribute("aria-label", "Xóa việc");
+    L.onclick = function(){ move(t.id, COLS[i - 1][0]); };
+    R.onclick = function(){ move(t.id, COLS[i + 1][0]); };
+    X.onclick = function(){
+      tasks = tasks.filter(function(x){ return x.id !== t.id; });
+      save();
+      render();
+    };
+    if (view === "week") {
+      var K = el("button", null, t.s === "done" ? "↺" : "✓");
+      K.type = "button";
+      K.title = t.s === "done" ? "Mở lại việc" : "Đánh dấu xong";
+      K.setAttribute("aria-label", K.title);
+      K.onclick = function(){ move(t.id, t.s === "done" ? "todo" : "done"); };
+      a.append(K, X);
+    } else {
+      a.append(L, R, X);
+    }
+    m.appendChild(a);
+    c.appendChild(m);
+    c.addEventListener("dragstart", function(e){
+      dragId = t.id;
+      c.classList.add("dragging");
+      try { e.dataTransfer.setData("text/plain", String(t.id)); } catch (x) {}
+    });
+    c.addEventListener("dragend", function(){
+      c.classList.remove("dragging");
+      dragId = null;
+      document.querySelectorAll(".col.over").forEach(function(n){ n.classList.remove("over"); });
+    });
+    return c;
+  }
+
+  function move(id, s){
+    tasks.forEach(function(t){ if (t.id === id) t.s = s; });
+    save();
+    render();
+  }
+
+  function render(){
+    var isW = view === "week";
+    document.getElementById("board").hidden = isW;
+    document.getElementById("week").hidden = !isW;
+    document.getElementById("extra").hidden = !isW;
+    document.getElementById("weeknav").hidden = !isW;
+    if (isW) renderWeek();
+    var b = document.getElementById("board");
+    b.textContent = "";
+    if (!isW) {
+      COLS.forEach(function(c){
+        var col = el("div", "col");
+        col.dataset.s = c[0];
+        var list = tasks.filter(function(t){ return t.s === c[0] && (filter === "all" || t.p === filter); });
+        var h = el("div", "col-head");
+        h.appendChild(el("i"));
+        h.appendChild(el("h2", null, c[1]));
+        h.appendChild(el("span", "count", String(list.length)));
+        col.appendChild(h);
+        if (!list.length) {
+          col.appendChild(el("div", "empty", c[0] === "todo" ? "Chưa có việc nào. Thêm việc ở phía trên." : "Kéo thẻ vào đây."));
+        }
+        list.forEach(function(t){ col.appendChild(card(t)); });
+        col.addEventListener("dragover", function(e){ e.preventDefault(); col.classList.add("over"); });
+        col.addEventListener("dragleave", function(e){ if (!col.contains(e.relatedTarget)) col.classList.remove("over"); });
+        col.addEventListener("drop", function(e){
+          e.preventDefault();
+          col.classList.remove("over");
+          if (dragId != null) move(dragId, c[0]);
+        });
+        b.appendChild(col);
+      });
+    }
+    var n = tasks.length;
+    var d = tasks.filter(function(t){ return t.s === "done"; }).length;
+    var g = tasks.filter(function(t){ return t.s === "doing"; }).length;
+    var o = n - d - g;
+    var pct = n ? Math.round(d / n * 100) : 0;
+    document.getElementById("pct").firstChild.nodeValue = pct + "%";
+    document.getElementById("frac").textContent = d + "/" + n + " việc xong";
+    document.getElementById("bDone").style.flexGrow = d;
+    document.getElementById("bDoing").style.flexGrow = g;
+    document.getElementById("bTodo").style.flexGrow = o;
+    var late = tasks.filter(function(t){ return t.s !== "done" && t.d && t.d < today(); }).length;
+    document.getElementById("note").textContent = !n ? "Chưa có công việc nào." : late ? late + " việc đã quá hạn." : d === n ? "Bạn đã xong tất cả." : "Còn " + (n - d) + " việc cần hoàn thành.";
+  }
+
+  function setDate(id, d){
+    tasks.forEach(function(t){ if (t.id === id) t.d = d; });
+    save();
+    render();
+  }
+
+  function dayCol(title, sub, list, dateVal, cls){
+    var col = el("div", "col" + (cls || ""));
+    var h = el("div", "col-head");
+    h.appendChild(el("h2", null, title));
+    if (sub) h.appendChild(el("span", "dsub", sub));
+    h.appendChild(el("span", "count", String(list.length)));
+    col.appendChild(h);
+    list.forEach(function(t){ col.appendChild(card(t)); });
+    if (dateVal !== null) {
+      var A = el("button", "addday", "+ Thêm việc");
+      A.type = "button";
+      A.onclick = function(){
+        document.getElementById("due").value = dateVal;
+        document.getElementById("title").focus();
+      };
+      col.appendChild(A);
+      col.addEventListener("dragover", function(e){ e.preventDefault(); col.classList.add("over"); });
+      col.addEventListener("dragleave", function(e){ if (!col.contains(e.relatedTarget)) col.classList.remove("over"); });
+      col.addEventListener("drop", function(e){
+        e.preventDefault();
+        col.classList.remove("over");
+        if (dragId != null) setDate(dragId, dateVal);
+      });
+    }
+    return col;
+  }
+
+  function renderWeek(){
+    var W = document.getElementById("week"), E = document.getElementById("extra");
+    W.textContent = "";
+    E.textContent = "";
+    var names = ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy", "Chủ nhật"], tod = today();
+    var vis = function(t){ return filter === "all" || t.p === filter; };
+    for (var k = 0; k < 7; k++) {
+      var d = new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + k), s = isoDate(d);
+      var list = tasks.filter(function(t){ return t.d === s && vis(t); });
+      W.appendChild(dayCol(names[k], pad(d.getDate()) + "/" + pad(d.getMonth() + 1), list, s, s === tod ? " today" : ""));
+    }
+    var e = new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + 6), first = isoDate(ws);
+    document.getElementById("wlabel").textContent = pad(ws.getDate()) + "/" + pad(ws.getMonth() + 1) + " – " + pad(e.getDate()) + "/" + pad(e.getMonth() + 1) + "/" + e.getFullYear();
+    E.appendChild(dayCol("Chưa đặt ngày", "", tasks.filter(function(t){ return !t.d && vis(t); }), "", ""));
+    var over = tasks.filter(function(t){ return t.d && t.d < first && t.s !== "done" && vis(t); });
+    if (over.length) {
+      E.appendChild(dayCol("Chưa xong từ trước tuần này", "", over, null, ""));
+    }
+  }
+
+  function add(){
+    var inp = document.getElementById("title"), v = inp.value.trim();
+    if (!v) {
+      inp.focus();
+      return;
+    }
+    tasks.push({
+      id: Date.now(),
+      t: v,
+      p: document.getElementById("prio").value,
+      s: "todo",
+      d: document.getElementById("due").value
+    });
+    inp.value = "";
+    document.getElementById("due").value = "";
+    save();
+    render();
+    inp.focus();
+  }
+
+  document.getElementById("addBtn").onclick = add;
+  document.getElementById("title").addEventListener("keydown", function(e){ if (e.key === "Enter") add(); });
+  document.querySelectorAll(".filters .chip").forEach(function(c){
+    c.onclick = function(){
+      filter = c.dataset.f;
+      document.querySelectorAll(".filters .chip").forEach(function(x){ x.setAttribute("aria-pressed", String(x === c)); });
+      render();
+    };
+  });
+  document.querySelectorAll(".seg button").forEach(function(b){
+    b.onclick = function(){
+      view = b.dataset.v;
+      document.querySelectorAll(".seg button").forEach(function(x){ x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    };
+  });
+  function shift(n){
+    ws = new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + n);
+    render();
+  }
+  document.getElementById("prevW").onclick = function(){ shift(-7); };
+  document.getElementById("nextW").onclick = function(){ shift(7); };
+  document.getElementById("thisW").onclick = function(){ ws = mondayOf(new Date()); render(); };
+  initTheme();
+  load();
+  render();
+})();
+</script>
+</body>
+</html>

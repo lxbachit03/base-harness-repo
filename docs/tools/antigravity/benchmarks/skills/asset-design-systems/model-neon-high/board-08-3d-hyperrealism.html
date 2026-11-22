@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bảng công việc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   3D Hyperrealism — Material Realism (Light) & Spatial 3D (Dark)
+   Tokens from .agents/skills/asset-design-systems/references/3d-hyperrealism.md
+   ========================================================================== */
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+
+  /* Reference :root — Material realism (light) */
+  --sk-bg:#f5f0eb;
+  --sk-surface:#ede5dc;
+  --sk-raised:#e8e0d8;
+  --sk-pressed:#d8d0c8;
+  --sk-text:#4a4240;
+  --sk-text-2:#5a504b;             /* contrast substitute for guide #7a706a (4.26:1) and #6a605a (4.01:1 on #d8d0c8); clears >=5.13:1 on all light surfaces */
+  --sk-emboss-light:#fffefa;
+  --sk-emboss-dark:#9a8a80;
+  --sk-coral:#d4836a;
+  --sk-sky:#7ca8c8;
+  --sk-sage:#8aaa8a;
+  --sk-gold:#c8a86a;
+  --sk-shadow:rgba(138,126,114,.35); /* warm brown, never pure black */
+  --sk-radius:14px;
+  --light-angle:135deg;            /* single top-left light source */
+
+  /* Reference :root — Spatial 3D (dark canvas) */
+  --imm-void:#0b0b0f;
+  --imm-space:#101018;
+  --imm-indigo:#161630;
+  --imm-slate:#1e1e2e;
+  --imm-cyan:#00e5ff;
+  --imm-violet:#7c3aed;
+  --imm-magenta:#e040fb;
+  --imm-amber:#f59e0b;
+  --imm-green:#10b981;
+  --imm-red:#f87171;               /* contrast substitute for #ef4444 (4.36:1 on #1e1e2e); 5.93:1 on #1e1e2e */
+  --imm-fog:#94a3b8;
+  --imm-text:#f1f5f9;
+  --font-display:"Exo 2",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+
+  /* Derived contrast-safe inks for light material palette (decorative coral/sky/sage/gold stay for 3D jewels & bars) */
+  --sk-coral-ink:#92351f;          /* 5.85:1 on #e8e0d8, 5.01:1 on #d8d0c8 */
+  --sk-coral-on:#231a17;           /* 5.89:1 on #d4836a */
+  --sk-sky-ink:#265675;            /* 6.02:1 on #e8e0d8, 6.95:1 on #f5f0eb */
+  --sk-sage-ink:#2f5c39;           /* 5.93:1 on #e8e0d8, 5.08:1 on #d8d0c8 */
+  --sk-gold-ink:#6b4c14;           /* 6.03:1 on #e8e0d8, 5.16:1 on #d8d0c8 */
+  --sk-edge:#786c64;               /* >=3.90:1 UI edge on #e8e0d8/#ede5dc/#f5f0eb */
+  --sk-edge-well:#6a605a;          /* 4.01:1 UI edge on #d8d0c8 */
+
+  /* Semantic theme bindings (Light = Material Realism) */
+  --bg:var(--sk-bg);
+  --panel-top:#f1ebe4;
+  --panel-bot:var(--sk-raised);
+  --surface:var(--sk-surface);
+  --well:var(--sk-pressed);
+  --text:var(--sk-text);
+  --text-2:var(--sk-text-2);
+  --border-ui:var(--sk-edge);
+  --border-well:var(--sk-edge-well);
+  --focus-ring:var(--sk-sky-ink);
+  --accent-bg-top:#5a504b;
+  --accent-bg-bot:#4a4240;
+  --accent-ink:var(--sk-emboss-light);
+  --today-ink:var(--sk-sky-ink);
+  --late-ink:var(--sk-coral-ink);
+  --status-todo:var(--sk-sky);
+  --status-doing:var(--sk-gold);
+  --status-done:var(--sk-sage);
+  --prio-high:var(--sk-coral);
+  --prio-mid:var(--sk-gold);
+  --prio-low:var(--sk-sky);
+  --status-todo-ink:var(--sk-sky-ink);
+  --status-doing-ink:var(--sk-gold-ink);
+  --status-done-ink:var(--sk-sage-ink);
+  --card-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.85),
+    inset -1px -1px 0 rgba(138,126,114,.18),
+    6px 8px 16px var(--sk-shadow),
+    -2px -2px 6px rgba(255,255,255,.72);
+  --card-shadow-hover:
+    inset 1px 1px 0 rgba(255,255,255,.92),
+    inset -1px -1px 0 rgba(138,126,114,.22),
+    8px 12px 22px rgba(138,126,114,.42),
+    -3px -3px 8px rgba(255,255,255,.8);
+  --well-shadow:
+    inset 3px 3px 6px rgba(138,126,114,.42),
+    inset -2px -2px 5px rgba(255,255,255,.76);
+  --btn-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.82),
+    inset -1px -1px 0 rgba(138,126,114,.18),
+    3px 4px 8px var(--sk-shadow),
+    -1px -1px 4px rgba(255,255,255,.65);
+  --btn-pressed:
+    inset 2px 2px 5px rgba(138,126,114,.48),
+    inset -1px -1px 3px rgba(255,255,255,.6);
+  --emboss-shadow:1px 1px 0 var(--sk-emboss-light),-1px -1px 0 rgba(154,138,128,.32);
+  --bevel-border:rgba(138,126,114,.28);
+  --glass-bg:transparent;
+  --glass-blur:0px;
+  --dial-face-top:#ece4db;
+  --dial-face-bot:#dfd6cc;
+  --dial-track:rgba(138,126,114,.28);
+  --dial-arc-start:#2f5c39;
+  --dial-arc-end:#5f8d68;
+  --poster-bg:
+    radial-gradient(ellipse 70% 55% at 10% 0%, rgba(255,254,250,.92) 0%, rgba(255,254,250,0) 62%),
+    radial-gradient(ellipse 55% 50% at 92% 100%, rgba(138,126,114,.14) 0%, rgba(138,126,114,0) 65%),
+    var(--sk-bg);
+  color-scheme:light;
+}
+
+/* Dark Variant — Spatial 3D + Inverted Material Realism (prefers-color-scheme) */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:var(--imm-void);
+    --panel-top:#222238;
+    --panel-bot:var(--imm-slate);
+    --surface:rgba(16,16,24,.82);
+    --well:var(--imm-space);
+    --text:var(--imm-text);
+    --text-2:var(--imm-fog);
+    --border-ui:#64748b;
+    --border-well:#64748b;
+    --focus-ring:var(--imm-cyan);
+    --accent-bg-top:#38eeff;
+    --accent-bg-bot:var(--imm-cyan);
+    --accent-ink:var(--imm-void);
+    --today-ink:var(--imm-cyan);
+    --late-ink:var(--imm-red);
+    --status-todo:var(--imm-cyan);
+    --status-doing:var(--imm-amber);
+    --status-done:var(--imm-green);
+    --prio-high:var(--imm-red);
+    --prio-mid:var(--imm-amber);
+    --prio-low:var(--imm-cyan);
+    --status-todo-ink:var(--imm-cyan);
+    --status-doing-ink:var(--imm-amber);
+    --status-done-ink:var(--imm-green);
+    --card-shadow:
+      inset 1px 1px 0 rgba(241,245,249,.16),
+      inset -1px -1px 0 rgba(0,0,0,.45),
+      8px 10px 24px rgba(0,0,0,.55),
+      -2px -2px 10px rgba(0,229,255,.06);
+    --card-shadow-hover:
+      inset 1px 1px 0 rgba(0,229,255,.32),
+      inset -1px -1px 0 rgba(0,0,0,.55),
+      10px 14px 28px rgba(0,0,0,.68),
+      -2px -2px 14px rgba(0,229,255,.12);
+    --well-shadow:
+      inset 3px 3px 8px rgba(0,0,0,.68),
+      inset -1px -1px 4px rgba(241,245,249,.09);
+    --btn-shadow:
+      inset 1px 1px 0 rgba(241,245,249,.16),
+      inset -1px -1px 0 rgba(0,0,0,.45),
+      4px 5px 12px rgba(0,0,0,.5);
+    --btn-pressed:
+      inset 2px 2px 6px rgba(0,0,0,.78),
+      inset -1px -1px 3px rgba(0,229,255,.14);
+    --emboss-shadow:0 1px 2px rgba(0,0,0,.7),0 0 18px rgba(0,229,255,.18);
+    --bevel-border:rgba(148,163,184,.24);
+    --glass-bg:rgba(16,16,24,.82);
+    --glass-blur:14px;
+    --dial-face-top:#16162a;
+    --dial-face-bot:#0e0e18;
+    --dial-track:rgba(148,163,184,.24);
+    --dial-arc-start:#00e5ff;
+    --dial-arc-end:#10b981;
+    --poster-bg:
+      radial-gradient(ellipse 60% 45% at 12% 8%, rgba(0,229,255,.14) 0%, rgba(0,229,255,0) 60%),
+      radial-gradient(ellipse 55% 50% at 88% 18%, rgba(124,58,237,.22) 0%, rgba(124,58,237,0) 62%),
+      radial-gradient(ellipse 55% 45% at 50% 98%, rgba(22,22,48,.92) 0%, rgba(11,11,15,0) 70%),
+      linear-gradient(160deg, var(--imm-void) 0%, var(--imm-space) 48%, var(--imm-indigo) 100%);
+    color-scheme:dark;
+  }
+}
+
+/* Explicit data-theme="dark" override */
+:root[data-theme="dark"]{
+  --bg:var(--imm-void);
+  --panel-top:#222238;
+  --panel-bot:var(--imm-slate);
+  --surface:rgba(16,16,24,.82);
+  --well:var(--imm-space);
+  --text:var(--imm-text);
+  --text-2:var(--imm-fog);
+  --border-ui:#64748b;
+  --border-well:#64748b;
+  --focus-ring:var(--imm-cyan);
+  --accent-bg-top:#38eeff;
+  --accent-bg-bot:var(--imm-cyan);
+  --accent-ink:var(--imm-void);
+  --today-ink:var(--imm-cyan);
+  --late-ink:var(--imm-red);
+  --status-todo:var(--imm-cyan);
+  --status-doing:var(--imm-amber);
+  --status-done:var(--imm-green);
+  --prio-high:var(--imm-red);
+  --prio-mid:var(--imm-amber);
+  --prio-low:var(--imm-cyan);
+  --status-todo-ink:var(--imm-cyan);
+  --status-doing-ink:var(--imm-amber);
+  --status-done-ink:var(--imm-green);
+  --card-shadow:
+    inset 1px 1px 0 rgba(241,245,249,.16),
+    inset -1px -1px 0 rgba(0,0,0,.45),
+    8px 10px 24px rgba(0,0,0,.55),
+    -2px -2px 10px rgba(0,229,255,.06);
+  --card-shadow-hover:
+    inset 1px 1px 0 rgba(0,229,255,.32),
+    inset -1px -1px 0 rgba(0,0,0,.55),
+    10px 14px 28px rgba(0,0,0,.68),
+    -2px -2px 14px rgba(0,229,255,.12);
+  --well-shadow:
+    inset 3px 3px 8px rgba(0,0,0,.68),
+    inset -1px -1px 4px rgba(241,245,249,.09);
+  --btn-shadow:
+    inset 1px 1px 0 rgba(241,245,249,.16),
+    inset -1px -1px 0 rgba(0,0,0,.45),
+    4px 5px 12px rgba(0,0,0,.5);
+  --btn-pressed:
+    inset 2px 2px 6px rgba(0,0,0,.78),
+    inset -1px -1px 3px rgba(0,229,255,.14);
+  --emboss-shadow:0 1px 2px rgba(0,0,0,.7),0 0 18px rgba(0,229,255,.18);
+  --bevel-border:rgba(148,163,184,.24);
+  --glass-bg:rgba(16,16,24,.82);
+  --glass-blur:14px;
+  --dial-face-top:#16162a;
+  --dial-face-bot:#0e0e18;
+  --dial-track:rgba(148,163,184,.24);
+  --dial-arc-start:#00e5ff;
+  --dial-arc-end:#10b981;
+  --poster-bg:
+    radial-gradient(ellipse 60% 45% at 12% 8%, rgba(0,229,255,.14) 0%, rgba(0,229,255,0) 60%),
+    radial-gradient(ellipse 55% 50% at 88% 18%, rgba(124,58,237,.22) 0%, rgba(124,58,237,0) 62%),
+    radial-gradient(ellipse 55% 45% at 50% 98%, rgba(22,22,48,.92) 0%, rgba(11,11,15,0) 70%),
+    linear-gradient(160deg, var(--imm-void) 0%, var(--imm-space) 48%, var(--imm-indigo) 100%);
+  color-scheme:dark;
+}
+
+html{
+  scroll-padding-top:env(safe-area-inset-top,0px);
+  background:var(--bg);
+}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--poster-bg);
+  background-attachment:scroll;
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:1rem;
+  line-height:1.55;
+  overflow-x:clip;
+}
+
+/* Spatial 3D progressive-enhancement background canvas (dark mode only) */
+.spatial-canvas{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
+  opacity:0;
+  transition:opacity .35s ease;
+}
+.spatial-canvas.is-active{opacity:1}
+
+.wrap{
+  position:relative;
+  z-index:1;
+  max-width:1260px;
+  margin:0 auto;
+  padding:28px 20px 56px;
+}
+
+/* Reusable 3D Material primitives */
+.sk-card{
+  background:linear-gradient(180deg, var(--panel-top), var(--panel-bot));
+  border:1px solid var(--bevel-border);
+  border-radius:var(--sk-radius);
+  box-shadow:var(--card-shadow);
+}
+.sk-well{
+  background:var(--well);
+  border:1px solid var(--bevel-border);
+  border-radius:12px;
+  box-shadow:var(--well-shadow);
+}
+.sk-btn{
+  background:linear-gradient(180deg, var(--panel-top), var(--panel-bot));
+  color:var(--text);
+  border:1px solid var(--bevel-border);
+  border-radius:10px;
+  padding:.62rem 1.15rem;
+  font:600 .9375rem var(--font-body);
+  cursor:pointer;
+  box-shadow:var(--btn-shadow);
+  transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+}
+.sk-btn:hover{transform:translateY(-1px)}
+.sk-btn:active{
+  box-shadow:var(--btn-pressed);
+  transform:translateY(1px);
+}
+.sk-emboss{text-shadow:var(--emboss-shadow)}
+
+/* Dark frosted glass panels so text never sits on raw WebGL canvas */
+.glass-panel{
+  background:linear-gradient(180deg, var(--panel-top), var(--panel-bot));
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .glass-panel{
+    background:var(--glass-bg);
+    -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(150%);
+            backdrop-filter:blur(var(--glass-blur)) saturate(150%);
+  }
+}
+:root[data-theme="dark"] .glass-panel{
+  background:var(--glass-bg);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(150%);
+          backdrop-filter:blur(var(--glass-blur)) saturate(150%);
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]) .glass-panel{background:rgba(16,16,24,.95)}
+  }
+  :root[data-theme="dark"] .glass-panel{background:rgba(16,16,24,.95)}
+}
+
+/* Header deck */
+.hero{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  padding:20px 22px;
+  margin-bottom:18px;
+}
+.brand{display:flex;align-items:center;gap:14px;min-width:0;flex:1 1 260px}
+.emblem{
+  width:46px;
+  height:46px;
+  flex:0 0 46px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(var(--light-angle), var(--panel-top), var(--panel-bot));
+  border:1px solid var(--bevel-border);
+  box-shadow:var(--btn-shadow);
+}
+.emblem svg{width:28px;height:28px;display:block}
+.hero-copy{min-width:0}
+h1{
+  font-family:var(--font-display);
+  font-size:clamp(24px,4.5vw,38px);
+  font-weight:800;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  margin:0 0 4px;
+  line-height:1.12;
+  color:var(--text);
+}
+.sub{
+  color:var(--text-2);
+  margin:0;
+  font-size:.9375rem;
+}
+.theme-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  white-space:nowrap;
+  padding:9px 14px;
+  font-size:.875rem;
+}
+.led{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  display:inline-block;
+  flex:0 0 10px;
+  background:radial-gradient(circle at 32% 28%, #fffefa 0%, var(--status-doing) 45%, #8a6424 100%);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.7), 0 1px 3px rgba(0,0,0,.28);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .led{
+    background:radial-gradient(circle at 32% 28%, #e0fcff 0%, var(--imm-cyan) 50%, #007a8a 100%);
+    box-shadow:0 0 8px rgba(0,229,255,.65);
+  }
+}
+:root[data-theme="dark"] .led{
+  background:radial-gradient(circle at 32% 28%, #e0fcff 0%, var(--imm-cyan) 50%, #007a8a 100%);
+  box-shadow:0 0 8px rgba(0,229,255,.65);
+}
+
+/* Progress instrument module */
+.progress{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:20px;
+  align-items:center;
+  padding:20px 22px;
+  margin-bottom:18px;
+}
+.dial-wrap{
+  width:92px;
+  height:92px;
+  border-radius:50%;
+  padding:6px;
+  background:linear-gradient(var(--light-angle), var(--panel-top), var(--well));
+  box-shadow:var(--card-shadow);
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+}
+.dial-svg{width:80px;height:80px;display:block}
+.dial-ring{
+  fill:none;
+  stroke-width:7;
+  stroke-linecap:round;
+  transition:stroke-dashoffset .35s ease;
+}
+.pg-body{min-width:0}
+.pg-top{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:10px 16px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+.pg-num{
+  font-family:var(--font-display);
+  font-size:clamp(30px,5.5vw,48px);
+  font-weight:800;
+  letter-spacing:-.02em;
+  line-height:1;
+  color:var(--text);
+}
+.pg-num small{
+  font-family:var(--font-body);
+  font-size:.36em;
+  font-weight:600;
+  color:var(--text-2);
+  letter-spacing:0;
+  margin-left:8px;
+  text-shadow:none;
+}
+.pg-note{
+  color:var(--text-2);
+  font-size:.9rem;
+  font-weight:500;
+}
+/* Recessed physical cylindrical bar */
+.bar{
+  position:relative;
+  display:flex;
+  height:18px;
+  border-radius:999px;
+  overflow:hidden;
+  padding:2px;
+  gap:3px;
+  background:var(--well);
+  box-shadow:var(--well-shadow);
+}
+.bar::after{
+  content:"";
+  position:absolute;
+  inset:2px 6px auto 6px;
+  height:5px;
+  border-radius:999px;
+  background:linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,0));
+  pointer-events:none;
+}
+.bar span{
+  display:block;
+  min-width:0;
+  border-radius:999px;
+  transition:flex-grow .35s ease;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.55), inset 0 -2px 3px rgba(0,0,0,.22);
+}
+.bar .b-done{background:linear-gradient(180deg, #9ec09e, var(--status-done))}
+.bar .b-doing{background:linear-gradient(180deg, #dcbf82, var(--status-doing))}
+.bar .b-todo{background:linear-gradient(180deg, #97bdd8, var(--status-todo))}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .bar .b-done{background:linear-gradient(180deg, #34d399, var(--imm-green))}
+  :root:not([data-theme="light"]) .bar .b-doing{background:linear-gradient(180deg, #fbbf24, var(--imm-amber))}
+  :root:not([data-theme="light"]) .bar .b-todo{background:linear-gradient(180deg, #5cf0ff, var(--imm-cyan))}
+}
+:root[data-theme="dark"] .bar .b-done{background:linear-gradient(180deg, #34d399, var(--imm-green))}
+:root[data-theme="dark"] .bar .b-doing{background:linear-gradient(180deg, #fbbf24, var(--imm-amber))}
+:root[data-theme="dark"] .bar .b-todo{background:linear-gradient(180deg, #5cf0ff, var(--imm-cyan))}
+
+.pg-legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 16px;
+  margin-top:10px;
+  font-size:.8125rem;
+  color:var(--text-2);
+}
+.leg-item{display:inline-flex;align-items:center;gap:6px;font-weight:500}
+
+/* 3D Domed Enamel / LED Jewels */
+.jewel{
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  display:inline-block;
+  flex:0 0 11px;
+  box-shadow:inset 1px 1px 2px rgba(255,255,255,.75), inset -1px -1px 2px rgba(0,0,0,.3), 1px 2px 3px rgba(0,0,0,.22);
+}
+.jewel.j-todo{background:radial-gradient(circle at 32% 28%, #eef7fc 0%, var(--status-todo) 52%, #4a7696 100%)}
+.jewel.j-doing{background:radial-gradient(circle at 32% 28%, #fdf6e6 0%, var(--status-doing) 52%, #8d6d33 100%)}
+.jewel.j-done{background:radial-gradient(circle at 32% 28%, #edf7ed 0%, var(--status-done) 52%, #4c6e4c 100%)}
+.jewel.j-high{background:radial-gradient(circle at 32% 28%, #fdece6 0%, var(--prio-high) 52%, #92432c 100%)}
+.jewel.j-mid{background:radial-gradient(circle at 32% 28%, #fdf6e6 0%, var(--prio-mid) 52%, #8d6d33 100%)}
+.jewel.j-low{background:radial-gradient(circle at 32% 28%, #eef7fc 0%, var(--prio-low) 52%, #4a7696 100%)}
+
+/* Add task console */
+.add-panel{
+  padding:14px 16px;
+  margin-bottom:16px;
+}
+.add{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto auto;
+  gap:10px;
+  align-items:stretch;
+}
+input,select,button{font:inherit;color:inherit}
+.add input,.add select{
+  background:var(--well);
+  color:var(--text);
+  border:1px solid var(--border-well);
+  border-radius:10px;
+  padding:10px 13px;
+  min-width:0;
+  box-shadow:var(--well-shadow);
+}
+.add input::placeholder{color:var(--text-2);opacity:1}
+.btn-primary{
+  background:linear-gradient(180deg, var(--accent-bg-top), var(--accent-bg-bot));
+  color:var(--accent-ink);
+  border:1px solid var(--accent-bg-bot);
+  border-radius:10px;
+  padding:10px 20px;
+  font-weight:700;
+  letter-spacing:.01em;
+  cursor:pointer;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.28),
+    inset -1px -1px 0 rgba(0,0,0,.22),
+    4px 5px 10px var(--sk-shadow);
+  transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(1px);box-shadow:inset 2px 2px 5px rgba(0,0,0,.38)}
+
+:focus-visible{
+  outline:3px solid var(--focus-ring);
+  outline-offset:2px;
+}
+
+/* Control deck (view switch + filters + weeknav) */
+.controls{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  padding:12px 16px;
+  margin-bottom:18px;
+}
+.views{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.seg{
+  display:inline-flex;
+  padding:4px;
+  gap:4px;
+  border-radius:12px;
+  background:var(--well);
+  border:1px solid var(--border-well);
+  box-shadow:var(--well-shadow);
+  max-width:100%;
+}
+.seg button{
+  background:transparent;
+  color:var(--text-2);
+  border:1px solid transparent;
+  border-radius:8px;
+  padding:7px 14px;
+  font-size:.875rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.seg button:hover{color:var(--text)}
+.seg button[aria-pressed="true"]{
+  background:linear-gradient(180deg, var(--accent-bg-top), var(--accent-bg-bot));
+  color:var(--accent-ink);
+  border-color:var(--accent-bg-bot);
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.26),
+    2px 3px 6px rgba(0,0,0,.22);
+}
+
+.filters{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:linear-gradient(180deg, var(--panel-top), var(--panel-bot));
+  color:var(--text);
+  border:1px solid var(--border-ui);
+  border-radius:999px;
+  padding:6px 14px;
+  font-size:.875rem;
+  font-weight:600;
+  cursor:pointer;
+  box-shadow:var(--btn-shadow);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.chip:hover{transform:translateY(-1px)}
+.chip:active{transform:translateY(1px);box-shadow:var(--btn-pressed)}
+.chip[aria-pressed="true"]{
+  background:linear-gradient(180deg, var(--accent-bg-top), var(--accent-bg-bot));
+  color:var(--accent-ink);
+  border-color:var(--accent-bg-bot);
+  box-shadow:var(--btn-pressed);
+}
+
+.weeknav{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:16px;
+  flex-wrap:wrap;
+  padding:10px 14px;
+}
+.weeknav .lbl{
+  font-family:var(--font-display);
+  font-weight:700;
+  letter-spacing:.03em;
+  margin-left:4px;
+  color:var(--text);
+}
+
+/* Board & columns — recessed milled trays holding raised tactile cards */
+.board{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  align-items:start;
+}
+.col{
+  background:var(--well);
+  border:1px solid var(--border-well);
+  border-radius:var(--sk-radius);
+  padding:14px;
+  min-height:200px;
+  min-width:0;
+  box-shadow:var(--well-shadow);
+  transition:border-color .18s ease, box-shadow .18s ease;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .col{
+    background:rgba(16,16,24,.84);
+    -webkit-backdrop-filter:blur(10px) saturate(140%);
+            backdrop-filter:blur(10px) saturate(140%);
+  }
+}
+:root[data-theme="dark"] .col{
+  background:rgba(16,16,24,.84);
+  -webkit-backdrop-filter:blur(10px) saturate(140%);
+          backdrop-filter:blur(10px) saturate(140%);
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]) .col{background:var(--imm-space)}
+  }
+  :root[data-theme="dark"] .col{background:var(--imm-space)}
+}
+
+.col.over{
+  border-color:var(--focus-ring);
+  box-shadow:var(--well-shadow), 0 0 0 2px var(--focus-ring);
+}
+.col-head{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:0 2px 14px;
+  min-width:0;
+}
+.col-head h2{
+  font-family:var(--font-display);
+  font-size:1rem;
+  font-weight:700;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  margin:0;
+  color:var(--text);
+}
+.col-head .count{
+  margin-left:auto;
+  font-size:.8125rem;
+  font-weight:700;
+  color:var(--text);
+  background:linear-gradient(180deg, var(--panel-top), var(--panel-bot));
+  border:1px solid var(--border-ui);
+  border-radius:999px;
+  padding:1px 10px;
+  box-shadow:var(--btn-shadow);
+}
+
+/* Raised 3D tactile task card */
+.card{
+  position:relative;
+  background:linear-gradient(180deg, var(--panel-top), var(--panel-bot));
+  border:1px solid var(--bevel-border);
+  border-radius:12px;
+  padding:12px 12px 11px 18px;
+  margin-bottom:12px;
+  box-shadow:var(--card-shadow);
+  cursor:grab;
+  min-width:0;
+  transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+}
+.card:last-child{margin-bottom:0}
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--card-shadow-hover);
+}
+.card:active{cursor:grabbing}
+
+/* Molded 3D priority spine on left edge */
+.card::before{
+  content:"";
+  position:absolute;
+  left:6px;
+  top:9px;
+  bottom:9px;
+  width:5px;
+  border-radius:999px;
+  background:linear-gradient(180deg, #9ec3dc, var(--prio-low));
+  box-shadow:inset 1px 0 1px rgba(255,255,255,.55), 1px 1px 2px rgba(0,0,0,.18);
+}
+.card.p-high::before{background:linear-gradient(180deg, #e7a18b, var(--prio-high))}
+.card.p-mid::before{background:linear-gradient(180deg, #dec388, var(--prio-mid))}
+.card.p-low::before{background:linear-gradient(180deg, #9ec3dc, var(--prio-low))}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .card.p-high::before{background:linear-gradient(180deg, #fca5a5, var(--imm-red));box-shadow:0 0 8px rgba(248,113,113,.45)}
+  :root:not([data-theme="light"]) .card.p-mid::before{background:linear-gradient(180deg, #fcd34d, var(--imm-amber));box-shadow:0 0 8px rgba(245,158,11,.4)}
+  :root:not([data-theme="light"]) .card.p-low::before{background:linear-gradient(180deg, #67e8f9, var(--imm-cyan));box-shadow:0 0 8px rgba(0,229,255,.4)}
+}
+:root[data-theme="dark"] .card.p-high::before{background:linear-gradient(180deg, #fca5a5, var(--imm-red));box-shadow:0 0 8px rgba(248,113,113,.45)}
+:root[data-theme="dark"] .card.p-mid::before{background:linear-gradient(180deg, #fcd34d, var(--imm-amber));box-shadow:0 0 8px rgba(245,158,11,.4)}
+:root[data-theme="dark"] .card.p-low::before{background:linear-gradient(180deg, #67e8f9, var(--imm-cyan));box-shadow:0 0 8px rgba(0,229,255,.4)}
+
+.card.dragging{opacity:.42;transform:scale(.98)}
+.card .t{
+  font-weight:600;
+  color:var(--text);
+  overflow-wrap:anywhere;
+  line-height:1.4;
+}
+.card.is-done{
+  background:var(--surface);
+  box-shadow:inset 1px 1px 3px rgba(138,126,114,.25), inset -1px -1px 2px rgba(255,255,255,.55);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .card.is-done{
+    background:rgba(16,16,24,.92);
+    box-shadow:inset 2px 2px 6px rgba(0,0,0,.6), inset -1px -1px 2px rgba(148,163,184,.08);
+  }
+}
+:root[data-theme="dark"] .card.is-done{
+  background:rgba(16,16,24,.92);
+  box-shadow:inset 2px 2px 6px rgba(0,0,0,.6), inset -1px -1px 2px rgba(148,163,184,.08);
+}
+.card.is-done .t{
+  text-decoration:line-through;
+  color:var(--text-2);
+}
+
+.meta{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:10px;
+  flex-wrap:wrap;
+}
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  font-size:.75rem;
+  font-weight:600;
+  border:1px solid var(--border-ui);
+  border-radius:7px;
+  padding:2px 8px;
+  color:var(--text-2);
+  background:var(--well);
+  box-shadow:inset 1px 1px 2px rgba(0,0,0,.12);
+}
+.tag.tag-prio-high{color:var(--late-ink);border-color:var(--late-ink)}
+.tag.tag-prio-mid{color:var(--status-doing-ink);border-color:var(--status-doing-ink)}
+.tag.tag-prio-low{color:var(--status-todo-ink);border-color:var(--status-todo-ink)}
+.tag.tag-doing{color:var(--status-doing-ink);border-color:var(--status-doing-ink)}
+.tag.late{
+  color:var(--late-ink);
+  border-color:var(--late-ink);
+  font-weight:700;
+}
+
+.acts{
+  margin-left:auto;
+  display:flex;
+  gap:4px;
+}
+.acts button{
+  background:linear-gradient(180deg, var(--panel-top), var(--panel-bot));
+  border:1px solid var(--border-ui);
+  border-radius:8px;
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  color:var(--text);
+  font-size:15px;
+  font-weight:700;
+  line-height:1;
+  box-shadow:var(--btn-shadow);
+  transition:transform .16s ease, box-shadow .16s ease;
+}
+.acts button:hover:not(:disabled){transform:translateY(-1px)}
+.acts button:active:not(:disabled){transform:translateY(1px);box-shadow:var(--btn-pressed)}
+.acts button:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+  box-shadow:none;
+}
+
+.empty{
+  color:var(--text-2);
+  font-size:.875rem;
+  text-align:center;
+  padding:22px 10px;
+}
+
+[hidden]{display:none!important}
+
+/* Week view */
+.week{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:10px;
+  align-items:start;
+}
+.week .col,.extra .col{padding:10px}
+.week .card{padding:9px 9px 9px 15px;font-size:.875rem}
+.week .col-head{flex-wrap:wrap;gap:3px 6px}
+.week .col-head h2{font-size:.85rem}
+.dsub{font-size:.78rem;font-weight:600;color:var(--text-2)}
+
+.col.today{
+  background:linear-gradient(180deg, var(--panel-top), var(--panel-bot));
+  border:2px solid var(--today-ink);
+  box-shadow:var(--card-shadow);
+}
+.col.today .dsub{color:var(--today-ink);font-weight:700}
+
+.addday{
+  width:100%;
+  margin-top:8px;
+  background:transparent;
+  border:1px dashed var(--border-well);
+  border-radius:9px;
+  padding:7px 8px;
+  color:var(--text-2);
+  font-weight:600;
+  cursor:pointer;
+  font-size:.8125rem;
+  transition:transform .16s ease, border-color .16s ease, color .16s ease;
+}
+.addday:hover{
+  color:var(--text);
+  border-color:var(--text);
+  transform:translateY(-1px);
+}
+.extra{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  margin-top:16px;
+  align-items:start;
+}
+
+/* Responsive — zero horizontal scroll down to 320px/400px */
+@media (max-width:1120px){
+  .week{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:860px){
+  .board,.week,.extra{grid-template-columns:1fr}
+  .add{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .add input[type="text"]{grid-column:1 / -1}
+  .add .btn-primary{grid-column:1 / -1}
+}
+@media (max-width:520px){
+  .wrap{padding:16px 12px 36px}
+  .hero{padding:16px}
+  .progress{grid-template-columns:1fr;justify-items:start;padding:16px}
+  .dial-wrap{width:76px;height:76px}
+  .dial-svg{width:64px;height:64px}
+  .add{grid-template-columns:1fr}
+  .controls{padding:12px}
+  .seg{width:100%}
+  .seg button{flex:1 1 0;padding:8px 8px;font-size:.8125rem}
+}
+
+/* Mandatory Accessibility & Environment Fallbacks */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    transition:none!important;
+    animation:none!important;
+  }
+  .spatial-canvas{display:none!important}
+}
+
+@media (prefers-reduced-transparency:reduce){
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]) .glass-panel,
+    :root:not([data-theme="light"]) .col{
+      background:#121220!important;
+      -webkit-backdrop-filter:none!important;
+              backdrop-filter:none!important;
+    }
+  }
+  :root[data-theme="dark"] .glass-panel,
+  :root[data-theme="dark"] .col{
+    background:#121220!important;
+    -webkit-backdrop-filter:none!important;
+            backdrop-filter:none!important;
+  }
+}
+
+@media (forced-colors:active){
+  body{background:Canvas!important;color:CanvasText!important}
+  .sk-card,.sk-well,.glass-panel,.col,.card,.seg,.chip,.sk-btn,.acts button,.add input,.add select,.addday{
+    background:Canvas!important;
+    color:CanvasText!important;
+    border:1px solid CanvasText!important;
+    box-shadow:none!important;
+    -webkit-backdrop-filter:none!important;
+            backdrop-filter:none!important;
+  }
+  .btn-primary,.seg button[aria-pressed="true"],.chip[aria-pressed="true"]{
+    background:Highlight!important;
+    color:HighlightText!important;
+    border:1px solid Highlight!important;
+  }
+  .sk-emboss{text-shadow:none!important}
+  .spatial-canvas{display:none!important}
+}
+</style>
+</head>
+<body>
+<canvas class="spatial-canvas" id="spatialCanvas" aria-hidden="true"></canvas>
+
+<div class="wrap">
+  <header class="hero sk-card glass-panel">
+    <div class="brand">
+      <div class="emblem" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <defs>
+            <linearGradient id="cubeTop" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f1ebe4"/>
+              <stop offset="100%" stop-color="#d4836a"/>
+            </linearGradient>
+            <linearGradient id="cubeLeft" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#7ca8c8"/>
+              <stop offset="100%" stop-color="#265675"/>
+            </linearGradient>
+            <linearGradient id="cubeRight" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#c8a86a"/>
+              <stop offset="100%" stop-color="#6b4c14"/>
+            </linearGradient>
+          </defs>
+          <polygon points="16,3 28,9.5 16,16 4,9.5" fill="url(#cubeTop)"/>
+          <polygon points="4,9.5 16,16 16,29 4,22.5" fill="url(#cubeLeft)"/>
+          <polygon points="28,9.5 16,16 16,29 28,22.5" fill="url(#cubeRight)"/>
+          <polyline points="4,9.5 16,16 28,9.5" stroke="rgba(255,255,255,.65)" stroke-width="1"/>
+          <line x1="16" y1="16" x2="16" y2="29" stroke="rgba(255,255,255,.35)" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="hero-copy">
+        <h1 class="sk-emboss">Bảng công việc</h1>
+        <p class="sub">Kéo thẻ giữa các cột hoặc dùng nút mũi tên để đổi trạng thái.</p>
+      </div>
+    </div>
+    <button type="button" class="sk-btn theme-btn" id="themeBtn" aria-pressed="false">
+      <span class="led" aria-hidden="true"></span>
+      <span id="themeLbl">Chế độ tối</span>
+    </button>
+  </header>
+
+  <section class="progress sk-card glass-panel" aria-label="Tiến độ">
+    <div class="dial-wrap" aria-hidden="true">
+      <svg class="dial-svg" viewBox="0 0 80 80">
+        <defs>
+          <linearGradient id="dialFace" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="var(--dial-face-top)"/>
+            <stop offset="100%" stop-color="var(--dial-face-bot)"/>
+          </linearGradient>
+          <linearGradient id="dialArc" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="var(--dial-arc-start)"/>
+            <stop offset="100%" stop-color="var(--dial-arc-end)"/>
+          </linearGradient>
+        </defs>
+        <circle cx="40" cy="40" r="36" fill="url(#dialFace)"/>
+        <circle cx="40" cy="40" r="29" fill="none" stroke="var(--dial-track)" stroke-width="7"/>
+        <circle id="dialProgress" class="dial-ring" cx="40" cy="40" r="29"
+          stroke="url(#dialArc)"
+          stroke-dasharray="182.21"
+          stroke-dashoffset="182.21"
+          transform="rotate(-90 40 40)"/>
+        <text id="dialTxt" x="40" y="44" text-anchor="middle" font-family="var(--font-display)" font-size="15" font-weight="800" fill="var(--text)">0%</text>
+      </svg>
+    </div>
+
+    <div class="pg-body">
+      <div class="pg-top">
+        <div class="pg-num sk-emboss" id="pct">0%<small id="frac">0/0 việc xong</small></div>
+        <div class="pg-note" id="note"></div>
+      </div>
+      <div class="bar" aria-hidden="true">
+        <span class="b-done" id="bDone"></span>
+        <span class="b-doing" id="bDoing"></span>
+        <span class="b-todo" id="bTodo"></span>
+      </div>
+      <div class="pg-legend" aria-hidden="true">
+        <span class="leg-item"><span class="jewel j-done"></span>Hoàn thành: <strong id="cntDone">0</strong></span>
+        <span class="leg-item"><span class="jewel j-doing"></span>Đang làm: <strong id="cntDoing">0</strong></span>
+        <span class="leg-item"><span class="jewel j-todo"></span>Cần làm: <strong id="cntTodo">0</strong></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="add-panel sk-card glass-panel" aria-label="Thêm công việc mới">
+    <div class="add">
+      <input type="text" id="title" placeholder="Bạn cần làm gì?" aria-label="Tên công việc" maxlength="120">
+      <select id="prio" aria-label="Mức ưu tiên">
+        <option value="high">Ưu tiên cao</option>
+        <option value="mid" selected>Ưu tiên vừa</option>
+        <option value="low">Ưu tiên thấp</option>
+      </select>
+      <input type="date" id="due" aria-label="Hạn hoàn thành">
+      <button type="button" class="btn-primary" id="addBtn">Thêm việc</button>
+    </div>
+  </section>
+
+  <div class="controls sk-card glass-panel">
+    <div class="views">
+      <div class="seg" role="group" aria-label="Chế độ xem">
+        <button type="button" data-v="board" aria-pressed="true">Theo trạng thái</button>
+        <button type="button" data-v="week" aria-pressed="false">Theo tuần</button>
+      </div>
+    </div>
+    <div class="filters" role="group" aria-label="Lọc theo ưu tiên">
+      <button type="button" class="chip filter-chip" data-f="all" aria-pressed="true">Tất cả</button>
+      <button type="button" class="chip filter-chip" data-f="high" aria-pressed="false"><span class="jewel j-high" aria-hidden="true"></span>Cao</button>
+      <button type="button" class="chip filter-chip" data-f="mid" aria-pressed="false"><span class="jewel j-mid" aria-hidden="true"></span>Vừa</button>
+      <button type="button" class="chip filter-chip" data-f="low" aria-pressed="false"><span class="jewel j-low" aria-hidden="true"></span>Thấp</button>
+    </div>
+  </div>
+
+  <div class="weeknav sk-card glass-panel" id="weeknav" hidden>
+    <button type="button" class="chip" id="prevW" aria-label="Tuần trước">←</button>
+    <button type="button" class="chip" id="thisW">Tuần này</button>
+    <button type="button" class="chip" id="nextW" aria-label="Tuần sau">→</button>
+    <span class="lbl" id="wlabel"></span>
+  </div>
+
+  <main>
+    <div class="board" id="board"></div>
+    <div class="week" id="week" hidden></div>
+    <div class="extra" id="extra" hidden></div>
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY="bang-cong-viec-v1";
+  var THEME_KEY="bang-cong-viec-theme-3d";
+  var COLS=[["todo","Cần làm"],["doing","Đang làm"],["done","Hoàn thành"]];
+  var PL={high:"Cao",mid:"Vừa",low:"Thấp"};
+  var DIAL_CIRC=2*Math.PI*29;
+  var tasks=[],filter="all",dragId=null;
+
+  function load(){
+    try{
+      var r=localStorage.getItem(KEY);
+      if(r){
+        var parsed=JSON.parse(r);
+        if(Array.isArray(parsed)){tasks=parsed;return}
+      }
+    }catch(e){}
+    var d=new Date(),iso=function(n){var x=new Date(d);x.setDate(x.getDate()+n);return isoDate(x)};
+    tasks=[
+      {id:1,t:"Gửi báo cáo tuần cho nhóm",p:"high",s:"doing",d:iso(0)},
+      {id:2,t:"Đặt lịch khám răng",p:"mid",s:"todo",d:iso(3)},
+      {id:3,t:"Dọn hộp thư đến",p:"low",s:"todo",d:""},
+      {id:4,t:"Thanh toán tiền điện",p:"high",s:"done",d:iso(-1)}
+    ];
+  }
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch(e){}}
+
+  function el(tag,cls,text){
+    var e=document.createElement(tag);
+    if(cls)e.className=cls;
+    if(text!=null)e.textContent=text;
+    return e;
+  }
+  function pad(n){return n<10?"0"+n:""+n}
+  function isoDate(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+  function today(){return isoDate(new Date())}
+  function mondayOf(d){
+    var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());
+    x.setDate(x.getDate()-((x.getDay()+6)%7));
+    return x;
+  }
+  var view="board",ws=mondayOf(new Date());
+  function fmt(s){var p=s.split("-");return p[2]+"/"+p[1]}
+
+  function card(t){
+    var c=el("article","card p-"+t.p+(t.s==="done"?" is-done":""));
+    c.draggable=true;
+    c.dataset.id=String(t.id);
+    c.appendChild(el("div","t",t.t));
+
+    var m=el("div","meta");
+    var pTag=el("span","tag tag-prio-"+t.p);
+    pTag.appendChild(el("span","jewel j-"+t.p));
+    pTag.appendChild(document.createTextNode(PL[t.p]));
+    m.appendChild(pTag);
+
+    if(view==="week"&&t.s==="doing"){
+      m.appendChild(el("span","tag tag-doing","Đang làm"));
+    }
+    if(t.d){
+      var late=t.s!=="done"&&t.d<today();
+      if(view!=="week"||late){
+        m.appendChild(el("span","tag"+(late?" late":""),(late?"Quá hạn ":"Hạn ")+fmt(t.d)));
+      }
+    }
+
+    var a=el("div","acts");
+    var i=COLS.findIndex(function(x){return x[0]===t.s});
+    var L=el("button",null,"←");
+    L.type="button";L.title="Chuyển sang cột trước";L.setAttribute("aria-label","Chuyển sang cột trước");L.disabled=i===0;
+    var R=el("button",null,"→");
+    R.type="button";R.title="Chuyển sang cột sau";R.setAttribute("aria-label","Chuyển sang cột sau");R.disabled=i===2;
+    var X=el("button",null,"×");
+    X.type="button";X.title="Xóa việc";X.setAttribute("aria-label","Xóa việc");
+
+    L.onclick=function(){move(t.id,COLS[i-1][0])};
+    R.onclick=function(){move(t.id,COLS[i+1][0])};
+    X.onclick=function(){tasks=tasks.filter(function(x){return x.id!==t.id});save();render()};
+
+    if(view==="week"){
+      var K=el("button",null,t.s==="done"?"↺":"✓");
+      K.type="button";
+      K.title=t.s==="done"?"Mở lại việc":"Đánh dấu xong";
+      K.setAttribute("aria-label",K.title);
+      K.onclick=function(){move(t.id,t.s==="done"?"todo":"done")};
+      a.append(K,X);
+    }else{
+      a.append(L,R,X);
+    }
+    m.appendChild(a);
+    c.appendChild(m);
+
+    c.addEventListener("dragstart",function(e){
+      dragId=t.id;
+      c.classList.add("dragging");
+      try{e.dataTransfer.setData("text/plain",String(t.id))}catch(x){}
+    });
+    c.addEventListener("dragend",function(){
+      c.classList.remove("dragging");
+      dragId=null;
+      document.querySelectorAll(".col.over").forEach(function(n){n.classList.remove("over")});
+    });
+    return c;
+  }
+
+  function move(id,s){
+    tasks.forEach(function(t){if(t.id===id)t.s=s});
+    save();
+    render();
+  }
+
+  function render(){
+    var isW=view==="week";
+    document.getElementById("board").hidden=isW;
+    document.getElementById("week").hidden=!isW;
+    document.getElementById("extra").hidden=!isW;
+    document.getElementById("weeknav").hidden=!isW;
+    if(isW)renderWeek();
+
+    var b=document.getElementById("board");
+    b.textContent="";
+    if(!isW){
+      COLS.forEach(function(c){
+        var col=el("section","col");
+        col.dataset.s=c[0];
+        var list=tasks.filter(function(t){return t.s===c[0]&&(filter==="all"||t.p===filter)});
+        var h=el("div","col-head");
+        h.appendChild(el("span","jewel j-"+c[0]));
+        h.appendChild(el("h2",null,c[1]));
+        h.appendChild(el("span","count",String(list.length)));
+        col.appendChild(h);
+
+        if(!list.length){
+          col.appendChild(el("div","empty",c[0]==="todo"?"Chưa có việc nào. Thêm việc ở phía trên.":"Kéo thẻ vào đây."));
+        }
+        list.forEach(function(t){col.appendChild(card(t))});
+
+        col.addEventListener("dragover",function(e){e.preventDefault();col.classList.add("over")});
+        col.addEventListener("dragleave",function(e){if(!col.contains(e.relatedTarget))col.classList.remove("over")});
+        col.addEventListener("drop",function(e){
+          e.preventDefault();
+          col.classList.remove("over");
+          if(dragId!=null)move(dragId,c[0]);
+        });
+        b.appendChild(col);
+      });
+    }
+
+    var n=tasks.length;
+    var d=tasks.filter(function(t){return t.s==="done"}).length;
+    var g=tasks.filter(function(t){return t.s==="doing"}).length;
+    var o=n-d-g;
+    var pct=n?Math.round(d/n*100):0;
+
+    document.getElementById("pct").firstChild.nodeValue=pct+"%";
+    document.getElementById("frac").textContent=d+"/"+n+" việc xong";
+    document.getElementById("dialTxt").textContent=pct+"%";
+    document.getElementById("dialProgress").style.strokeDashoffset=String((DIAL_CIRC*(1-pct/100)).toFixed(2));
+    document.getElementById("cntDone").textContent=String(d);
+    document.getElementById("cntDoing").textContent=String(g);
+    document.getElementById("cntTodo").textContent=String(o);
+    document.getElementById("bDone").style.flexGrow=String(d);
+    document.getElementById("bDoing").style.flexGrow=String(g);
+    document.getElementById("bTodo").style.flexGrow=String(o);
+
+    var late=tasks.filter(function(t){return t.s!=="done"&&t.d&&t.d<today()}).length;
+    document.getElementById("note").textContent=
+      !n?"Chưa có công việc nào.":
+      late?late+" việc đã quá hạn.":
+      d===n?"Bạn đã xong tất cả.":
+      "Còn "+(n-d)+" việc cần hoàn thành.";
+  }
+
+  function setDate(id,d){
+    tasks.forEach(function(t){if(t.id===id)t.d=d});
+    save();
+    render();
+  }
+
+  function dayCol(title,sub,list,dateVal,cls){
+    var col=el("section","col"+(cls||""));
+    var h=el("div","col-head");
+    h.appendChild(el("h2",null,title));
+    if(sub)h.appendChild(el("span","dsub",sub));
+    h.appendChild(el("span","count",String(list.length)));
+    col.appendChild(h);
+    list.forEach(function(t){col.appendChild(card(t))});
+
+    if(dateVal!==null){
+      var A=el("button","addday","+ Thêm việc");
+      A.type="button";
+      A.onclick=function(){
+        document.getElementById("due").value=dateVal;
+        document.getElementById("title").focus();
+      };
+      col.appendChild(A);
+      col.addEventListener("dragover",function(e){e.preventDefault();col.classList.add("over")});
+      col.addEventListener("dragleave",function(e){if(!col.contains(e.relatedTarget))col.classList.remove("over")});
+      col.addEventListener("drop",function(e){
+        e.preventDefault();
+        col.classList.remove("over");
+        if(dragId!=null)setDate(dragId,dateVal);
+      });
+    }
+    return col;
+  }
+
+  function renderWeek(){
+    var W=document.getElementById("week"),E=document.getElementById("extra");
+    W.textContent="";E.textContent="";
+    var names=["Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy","Chủ nhật"];
+    var tod=today();
+    var vis=function(t){return filter==="all"||t.p===filter};
+
+    for(var k=0;k<7;k++){
+      var d=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+k),s=isoDate(d);
+      var list=tasks.filter(function(t){return t.d===s&&vis(t)});
+      W.appendChild(dayCol(names[k],pad(d.getDate())+"/"+pad(d.getMonth()+1),list,s,s===tod?" today":""));
+    }
+    var e=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+6),first=isoDate(ws);
+    document.getElementById("wlabel").textContent=
+      pad(ws.getDate())+"/"+pad(ws.getMonth()+1)+" – "+pad(e.getDate())+"/"+pad(e.getMonth()+1)+"/"+e.getFullYear();
+
+    E.appendChild(dayCol("Chưa đặt ngày","",tasks.filter(function(t){return !t.d&&vis(t)}),"",""));
+    var over=tasks.filter(function(t){return t.d&&t.d<first&&t.s!=="done"&&vis(t)});
+    if(over.length){
+      E.appendChild(dayCol("Chưa xong từ trước tuần này","",over,null,""));
+    }
+  }
+
+  function add(){
+    var inp=document.getElementById("title"),v=inp.value.trim();
+    if(!v){inp.focus();return}
+    tasks.push({
+      id:Date.now(),
+      t:v,
+      p:document.getElementById("prio").value,
+      s:"todo",
+      d:document.getElementById("due").value
+    });
+    inp.value="";
+    document.getElementById("due").value="";
+    save();
+    render();
+    inp.focus();
+  }
+
+  document.getElementById("addBtn").onclick=add;
+  document.getElementById("title").addEventListener("keydown",function(e){if(e.key==="Enter")add()});
+
+  document.querySelectorAll(".filter-chip").forEach(function(c){
+    c.onclick=function(){
+      filter=c.dataset.f;
+      document.querySelectorAll(".filter-chip").forEach(function(x){
+        x.setAttribute("aria-pressed",String(x===c));
+      });
+      render();
+    };
+  });
+
+  document.querySelectorAll(".seg button").forEach(function(b){
+    b.onclick=function(){
+      view=b.dataset.v;
+      document.querySelectorAll(".seg button").forEach(function(x){
+        x.setAttribute("aria-pressed",String(x===b));
+      });
+      render();
+    };
+  });
+
+  function shift(n){ws=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+n);render()}
+  document.getElementById("prevW").onclick=function(){shift(-7)};
+  document.getElementById("nextW").onclick=function(){shift(7)};
+  document.getElementById("thisW").onclick=function(){ws=mondayOf(new Date());render()};
+
+  /* Theme toggle (Light Material Realism <-> Dark Spatial 3D) */
+  var darkMQ=window.matchMedia?window.matchMedia("(prefers-color-scheme: dark)"):null;
+  var reducedMQ=window.matchMedia?window.matchMedia("(prefers-reduced-motion: reduce)"):null;
+  var themeBtn=document.getElementById("themeBtn");
+  var themeLbl=document.getElementById("themeLbl");
+  var spatial={gl:null,prog:null,buf:null,uTime:null,uRes:null,lineCount:0,pointCount:0,raf:0,running:false};
+  var canvas=document.getElementById("spatialCanvas");
+
+  function isDarkActive(){
+    var dt=document.documentElement.getAttribute("data-theme");
+    if(dt==="dark")return true;
+    if(dt==="light")return false;
+    return !!(darkMQ&&darkMQ.matches);
+  }
+  function syncThemeUI(){
+    var dark=isDarkActive();
+    themeBtn.setAttribute("aria-pressed",String(dark));
+    themeLbl.textContent=dark?"Chế độ sáng":"Chế độ tối";
+    syncSpatialScene();
+  }
+
+  themeBtn.onclick=function(){
+    var next=isDarkActive()?"light":"dark";
+    document.documentElement.setAttribute("data-theme",next);
+    try{localStorage.setItem(THEME_KEY,next)}catch(e){}
+    syncThemeUI();
+  };
+  if(darkMQ&&darkMQ.addEventListener){
+    darkMQ.addEventListener("change",syncThemeUI);
+  }
+
+  /* Progressive-enhancement WebGL2 Spatial 3D backdrop (dark mode, desktop, non-reduced-motion) */
+
+  function initWebGL2(){
+    if(spatial.gl||!canvas)return!!spatial.gl;
+    var gl=null;
+    try{gl=canvas.getContext("webgl2",{alpha:true,antialias:true,powerPreference:"low-power"})}catch(e){}
+    if(!gl)return false;
+
+    var vsSrc="#version 300 es\n"
+      +"in vec3 aPos;\n"
+      +"uniform float uTime;\n"
+      +"uniform vec2 uRes;\n"
+      +"out float vDepth;\n"
+      +"void main(){\n"
+      +"  float a=uTime*0.09;\n"
+      +"  float ca=cos(a), sa=sin(a);\n"
+      +"  vec3 p=aPos;\n"
+      +"  float rx=p.x*ca - p.z*sa;\n"
+      +"  float rz=p.x*sa + p.z*ca;\n"
+      +"  p.x=rx; p.z=rz - 2.6;\n"
+      +"  float aspect=max(uRes.x/max(uRes.y,1.0),0.5);\n"
+      +"  float fov=1.35;\n"
+      +"  vec2 proj=vec2(p.x*fov/aspect, p.y*fov)/max(-p.z,0.3);\n"
+      +"  vDepth=clamp((-p.z-1.2)/3.2,0.0,1.0);\n"
+      +"  gl_Position=vec4(proj,0.0,1.0);\n"
+      +"  gl_PointSize=mix(3.2,1.2,vDepth);\n"
+      +"}";
+    var fsSrc="#version 300 es\n"
+      +"precision mediump float;\n"
+      +"in float vDepth;\n"
+      +"out vec4 fragColor;\n"
+      +"void main(){\n"
+      +"  vec3 c1=vec3(0.0,0.898,1.0);\n"
+      +"  vec3 c2=vec3(0.486,0.227,0.929);\n"
+      +"  vec3 col=mix(c1,c2,vDepth);\n"
+      +"  fragColor=vec4(col,mix(0.32,0.08,vDepth));\n"
+      +"}";
+
+    function compile(type,src){
+      var sh=gl.createShader(type);
+      gl.shaderSource(sh,src);
+      gl.compileShader(sh);
+      if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS)){gl.deleteShader(sh);return null}
+      return sh;
+    }
+    var vs=compile(gl.VERTEX_SHADER,vsSrc);
+    var fs=compile(gl.FRAGMENT_SHADER,fsSrc);
+    if(!vs||!fs)return false;
+
+    var prog=gl.createProgram();
+    gl.attachShader(prog,vs);
+    gl.attachShader(prog,fs);
+    gl.linkProgram(prog);
+    if(!gl.getProgramParameter(prog,gl.LINK_STATUS))return false;
+
+    var verts=[];
+    var grid=6,step=0.45;
+    for(var i=-grid;i<=grid;i++){
+      var c=i*step;
+      verts.push(c,-0.85,-grid*step, c,-0.85,grid*step);
+      verts.push(-grid*step,-0.85,c, grid*step,-0.85,c);
+    }
+    var lineCount=verts.length/3;
+    for(var k=0;k<48;k++){
+      var ang=k*2.39996;
+      var rad=0.45+(k%12)*0.19;
+      verts.push(Math.cos(ang)*rad,-0.35+(k%7)*0.22,Math.sin(ang)*rad);
+    }
+
+    var buf=gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(verts),gl.STATIC_DRAW);
+
+    var loc=gl.getAttribLocation(prog,"aPos");
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc,3,gl.FLOAT,false,0,0);
+
+    spatial.gl=gl;
+    spatial.prog=prog;
+    spatial.buf=buf;
+    spatial.uTime=gl.getUniformLocation(prog,"uTime");
+    spatial.uRes=gl.getUniformLocation(prog,"uRes");
+    spatial.lineCount=lineCount;
+    spatial.pointCount=verts.length/3-lineCount;
+    return true;
+  }
+
+  function resizeCanvas(){
+    if(!spatial.gl)return;
+    var dpr=Math.min(window.devicePixelRatio||1,1.5);
+    var w=Math.floor(window.innerWidth*dpr);
+    var h=Math.floor(window.innerHeight*dpr);
+    if(canvas.width!==w||canvas.height!==h){
+      canvas.width=w;
+      canvas.height=h;
+      spatial.gl.viewport(0,0,w,h);
+    }
+  }
+
+  function drawSpatial(now){
+    if(!spatial.running||!spatial.gl)return;
+    var gl=spatial.gl;
+    resizeCanvas();
+    gl.clearColor(0,0,0,0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+    gl.useProgram(spatial.prog);
+    gl.uniform1f(spatial.uTime,now*0.001);
+    gl.uniform2f(spatial.uRes,canvas.width,canvas.height);
+    gl.drawArrays(gl.LINES,0,spatial.lineCount);
+    gl.drawArrays(gl.POINTS,spatial.lineCount,spatial.pointCount);
+    spatial.raf=requestAnimationFrame(drawSpatial);
+  }
+
+  function stopSpatial(){
+    spatial.running=false;
+    if(spatial.raf){cancelAnimationFrame(spatial.raf);spatial.raf=0}
+    if(canvas)canvas.classList.remove("is-active");
+  }
+
+  function syncSpatialScene(){
+    var reduced=!!(reducedMQ&&reducedMQ.matches);
+    var desktop=window.innerWidth>=768;
+    var shouldRun=isDarkActive()&&!reduced&&desktop&&!document.hidden;
+    if(!shouldRun){stopSpatial();return}
+    if(!initWebGL2()){stopSpatial();return}
+    if(!spatial.running){
+      spatial.running=true;
+      if(canvas)canvas.classList.add("is-active");
+      spatial.raf=requestAnimationFrame(drawSpatial);
+    }
+  }
+
+  document.addEventListener("visibilitychange",syncSpatialScene);
+  window.addEventListener("resize",syncSpatialScene);
+  if(reducedMQ&&reducedMQ.addEventListener){
+    reducedMQ.addEventListener("change",syncSpatialScene);
+  }
+
+  (function initTheme(){
+    try{
+      var saved=localStorage.getItem(THEME_KEY);
+      if(saved==="dark"||saved==="light"){
+        document.documentElement.setAttribute("data-theme",saved);
+      }
+    }catch(e){}
+    syncThemeUI();
+  })();
+
+  load();
+  render();
+})();
+</script>
+</body>
+</html>

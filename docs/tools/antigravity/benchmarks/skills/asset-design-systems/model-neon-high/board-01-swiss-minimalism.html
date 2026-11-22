@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bảng công việc</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+  --ink:#1a1a1a; --ink-2:#666666; --paper:#ffffff; --paper-2:#f5f5f5; --rule:#cccccc; --black:#000000;
+  --accent:#e30613;                       /* one accent per composition; alt #0057a8 */
+  --accent-sub:#cc0000;                   /* signal red [REF] substitute for text on --paper-2 (#f5f5f5): 5.40:1 vs 4.48:1 */
+  --rule-color:#cccccc;                   /* hairline colour preserved because --rule below defines 1px stroke width */
+  --ui-edge:#666666;                      /* >= 5.27:1 interactive edge substitute for #cccccc/#999999 rules */
+  --font:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --fs-display:clamp(3rem,5vw,5rem); --fs-h2:clamp(1.75rem,3vw,2.5rem); --fs-body:1rem; --fs-label:.75rem;
+  --lh-body:1.5; --lh-display:1; --track-display:-.03em; --track-label:.08em;
+  --cols:12; --gutter:24px; --margin:48px; --max:1200px; --unit:8px;   /* margin 32px <=1024, 20px <=600 */
+  --radius:0; --rule:1px; --rule-strong:3px; --t:150ms ease;
+  color-scheme:light;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{
+  scroll-padding-top:env(safe-area-inset-top,0px);
+  background:var(--paper);
+  color:var(--ink);
+}
+body{
+  margin:0;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font);
+  font-size:var(--fs-body);
+  line-height:var(--lh-body);
+  text-align:left;
+  -webkit-font-smoothing:antialiased;
+}
+input,select,button{
+  font:inherit;
+  color:inherit;
+  border-radius:var(--radius);
+}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* 12-column Swiss modular grid */
+.page{
+  display:grid;
+  grid-template-columns:repeat(var(--cols),minmax(0,1fr));
+  column-gap:var(--gutter);
+  row-gap:calc(var(--unit)*4);
+  max-width:var(--max);
+  margin-inline:auto;
+  padding-inline:var(--margin);
+  padding-block:calc(var(--unit)*5) calc(var(--unit)*8);
+}
+.page > *{min-width:0}
+
+.rule-strong{border-top:var(--rule-strong) solid var(--black)}
+.label{
+  display:inline-flex;
+  align-items:center;
+  gap:var(--unit);
+  font-size:var(--fs-label);
+  font-weight:600;
+  line-height:1.2;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--ink-2);
+}
+.sq{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  flex:0 0 auto;
+  background:var(--black);
+}
+.sq-accent{background:var(--accent)}
+.sq-muted{background:var(--ink-2)}
+.sq-hollow{background:var(--paper);border:1.5px solid var(--ink-2)}
+
+/* Asymmetric Masthead (cols 1-7) + Progress Module (cols 8-12) */
+.masthead{
+  grid-column:1 / 8;
+  border-top:var(--rule-strong) solid var(--black);
+  padding-top:calc(var(--unit)*2);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:calc(var(--unit)*2);
+}
+.masthead h1{
+  margin:0;
+  font-size:var(--fs-display);
+  font-weight:800;
+  line-height:var(--lh-display);
+  letter-spacing:var(--track-display);
+  color:var(--black);
+}
+.sub{
+  margin:0;
+  color:var(--ink-2);
+  max-width:60ch;
+}
+
+.progress{
+  grid-column:8 / 13;
+  border-top:var(--rule-strong) solid var(--black);
+  padding-top:calc(var(--unit)*2);
+  display:flex;
+  flex-direction:column;
+  gap:calc(var(--unit)*1.5);
+}
+.pg-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:var(--unit);
+  flex-wrap:wrap;
+}
+.pg-num{
+  font-size:var(--fs-display);
+  font-weight:800;
+  line-height:var(--lh-display);
+  letter-spacing:var(--track-display);
+  font-variant-numeric:tabular-nums;
+  color:var(--black);
+}
+.pg-num small{
+  display:block;
+  margin-top:calc(var(--unit)*1);
+  font-size:var(--fs-body);
+  font-weight:600;
+  line-height:1.2;
+  letter-spacing:0;
+  color:var(--ink-2);
+}
+.pg-note{
+  margin:0;
+  font-size:.875rem;
+  color:var(--ink-2);
+  max-width:60ch;
+}
+.pg-note.has-late{
+  color:var(--accent);
+  font-weight:600;
+}
+.bar{
+  display:flex;
+  width:100%;
+  height:12px;
+  gap:2px;
+  background:var(--paper);
+  border:var(--rule) solid var(--ui-edge);
+  padding:2px;
+}
+.bar span{
+  display:block;
+  min-width:0;
+  transition:flex-grow var(--t);
+}
+.bar .b-done{background:var(--black)}
+.bar .b-doing{background:var(--accent)}
+.bar .b-todo{background:var(--ink-2)}
+
+.pg-stats{
+  margin:0;
+  padding-top:var(--unit);
+  border-top:var(--rule) solid var(--rule-color);
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:var(--unit);
+}
+.pg-stat{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  min-width:0;
+}
+.pg-stat dt{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:var(--fs-label);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--ink-2);
+}
+.pg-stat dd{
+  margin:0;
+  font-size:1.25rem;
+  font-weight:700;
+  line-height:1.1;
+  font-variant-numeric:tabular-nums;
+  color:var(--black);
+}
+
+/* Task Entry Band: Swiss bottom-ruled inputs + .btn recipe */
+.add-band{
+  grid-column:1 / -1;
+  border-top:var(--rule) solid var(--rule-color);
+  border-bottom:var(--rule) solid var(--rule-color);
+  padding-block:calc(var(--unit)*3);
+}
+.add{
+  display:grid;
+  grid-template-columns:minmax(0,5fr) minmax(0,2.5fr) minmax(0,2.5fr) auto;
+  gap:var(--gutter);
+  align-items:end;
+}
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width:0;
+}
+.field label{
+  font-size:var(--fs-label);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--ink-2);
+}
+.add input,.add select{
+  width:100%;
+  min-width:0;
+  height:44px;
+  background:var(--paper);
+  color:var(--ink);
+  border:0;
+  border-bottom:var(--rule) solid var(--ui-edge);
+  padding:10px 4px 9px 0;
+  line-height:1.25;
+  transition:border-color var(--t);
+}
+.add input::placeholder{color:var(--ink-2)}
+.add input:hover,.add select:hover{border-bottom-color:var(--black)}
+.add input:focus,.add select:focus{
+  outline:none;
+  border-bottom:var(--rule-strong) solid var(--accent);
+  padding-bottom:7px;
+}
+.add input:focus-visible,.add select:focus-visible{
+  outline:3px solid var(--accent);
+  outline-offset:2px;
+}
+
+.btn{
+  border:2px solid var(--black);
+  background:var(--paper);
+  color:var(--black);
+  padding:0 1.25rem;
+  height:44px;
+  font:600 .875rem/1 var(--font);
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  cursor:pointer;
+  white-space:nowrap;
+  transition:background var(--t),color var(--t),border-color var(--t);
+}
+.btn:hover{background:var(--black);color:var(--paper)}
+.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* Control Band: Navigation text tabs + Filter indices */
+.controls{
+  grid-column:1 / -1;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:calc(var(--unit)*2) var(--gutter);
+  flex-wrap:wrap;
+  border-bottom:var(--rule) solid var(--rule-color);
+  padding-bottom:calc(var(--unit)*2);
+}
+.views{display:flex;align-items:center;gap:var(--unit);flex-wrap:wrap}
+.seg{
+  display:flex;
+  gap:calc(var(--unit)*3);
+  flex-wrap:wrap;
+}
+.seg button{
+  background:var(--paper);
+  border:0;
+  border-bottom:var(--rule-strong) solid var(--paper);
+  padding:8px 0;
+  font-size:.875rem;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--ink-2);
+  cursor:pointer;
+  transition:color var(--t),border-color var(--t);
+}
+.seg button:hover{color:var(--black)}
+.seg button[aria-pressed="true"]{
+  color:var(--black);
+  font-weight:800;
+  border-bottom-color:var(--black);
+}
+
+.filters-wrap{
+  display:flex;
+  align-items:center;
+  gap:var(--unit);
+  flex-wrap:wrap;
+}
+.filters{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.chip{
+  background:var(--paper);
+  color:var(--ink-2);
+  border:var(--rule) solid var(--ui-edge);
+  padding:6px 12px;
+  font-size:var(--fs-label);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  cursor:pointer;
+  transition:background var(--t),color var(--t),border-color var(--t);
+}
+.chip:hover{
+  color:var(--black);
+  border-color:var(--black);
+  background:var(--paper-2);
+}
+.chip[aria-pressed="true"]{
+  background:var(--black);
+  color:var(--paper);
+  border-color:var(--black);
+}
+
+/* Week Navigation */
+.weeknav{
+  grid-column:1 / -1;
+  display:flex;
+  align-items:center;
+  gap:var(--unit);
+  flex-wrap:wrap;
+  margin-top:calc(var(--unit)*-2);
+}
+.weeknav .wbtn{
+  background:var(--paper);
+  color:var(--black);
+  border:var(--rule) solid var(--black);
+  padding:6px 12px;
+  min-height:34px;
+  font-size:var(--fs-label);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  cursor:pointer;
+  transition:background var(--t),color var(--t);
+}
+.weeknav .wbtn:hover{
+  background:var(--black);
+  color:var(--paper);
+}
+.weeknav .lbl{
+  font-size:1rem;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+  color:var(--black);
+  margin-left:var(--unit);
+}
+
+/* Workspace Containers */
+.workspace{
+  grid-column:1 / -1;
+  min-width:0;
+}
+.board{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:var(--gutter);
+  align-items:start;
+}
+.col{
+  min-width:0;
+  min-height:220px;
+  background:var(--paper);
+  border-top:var(--rule-strong) solid var(--black);
+  padding:calc(var(--unit)*2) 0 calc(var(--unit)*2);
+  transition:background var(--t),border-color var(--t);
+}
+.col[data-s="doing"]{border-top-color:var(--accent)}
+.col[data-s="done"]{border-top-color:var(--ui-edge)}
+.col.over{
+  background:var(--paper-2);
+  border-top-color:var(--accent);
+  outline:2px solid var(--accent);
+  outline-offset:4px;
+}
+
+.col-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:var(--unit);
+  padding-bottom:calc(var(--unit)*1.5);
+  border-bottom:var(--rule) solid var(--rule-color);
+  margin-bottom:calc(var(--unit)*2);
+}
+.col-title-group{
+  display:flex;
+  align-items:baseline;
+  gap:var(--unit);
+  min-width:0;
+  flex-wrap:wrap;
+}
+.col-idx{
+  font-size:var(--fs-label);
+  font-weight:700;
+  letter-spacing:var(--track-label);
+  font-variant-numeric:tabular-nums;
+  color:var(--ink-2);
+}
+.col[data-s="doing"] .col-idx{color:var(--accent)}
+.col.over[data-s="doing"] .col-idx{color:var(--accent-sub)}
+.col-head h2{
+  margin:0;
+  font-size:1.125rem;
+  font-weight:800;
+  line-height:1.2;
+  letter-spacing:-.01em;
+  color:var(--black);
+}
+.col-head .count{
+  font-size:var(--fs-label);
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+  color:var(--black);
+  border:var(--rule) solid var(--black);
+  padding:2px 7px;
+  flex:0 0 auto;
+}
+
+/* Swiss Card: text under a top rule, no card chrome */
+.card{
+  background:var(--paper);
+  border-top:2px solid var(--black);
+  border-bottom:var(--rule) solid var(--rule-color);
+  padding:12px 6px 12px 0;
+  margin-bottom:calc(var(--unit)*2);
+  cursor:grab;
+  transition:background var(--t),border-color var(--t);
+}
+.card:hover{
+  background:var(--paper-2);
+  padding-inline:8px;
+}
+.card.p-high{border-top:var(--rule-strong) solid var(--accent)}
+.card.p-mid{border-top:2px solid var(--black)}
+.card.p-low{border-top:var(--rule) solid var(--ui-edge)}
+.card.is-done{border-top:var(--rule) solid var(--ui-edge)}
+.card.dragging{
+  background:var(--paper-2);
+  border-top-color:var(--accent);
+  outline:1px dashed var(--black);
+}
+
+.card-kicker{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:6px;
+  font-size:var(--fs-label);
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--ink-2);
+}
+.card.p-high .card-kicker{color:var(--accent)}
+.card.p-high:hover .card-kicker,
+.card.p-high.dragging .card-kicker,
+.col.over .card.p-high .card-kicker{color:var(--accent-sub)}
+.card.p-mid .card-kicker{color:var(--ink)}
+.card.is-done .card-kicker{color:var(--ink-2)}
+
+.card .t{
+  font-weight:500;
+  line-height:1.45;
+  color:var(--ink);
+  max-width:65ch;
+  overflow-wrap:anywhere;
+}
+.card.is-done .t{
+  text-decoration:line-through;
+  color:var(--ink-2);
+}
+
+.meta{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:10px;
+  flex-wrap:wrap;
+}
+.tag{
+  display:inline-block;
+  font-size:var(--fs-label);
+  font-weight:600;
+  line-height:1.2;
+  letter-spacing:.02em;
+  color:var(--ink-2);
+  font-variant-numeric:tabular-nums;
+  padding:2px 0;
+}
+.tag.status-doing{
+  color:var(--black);
+  border-bottom:2px solid var(--accent);
+}
+.tag.late{
+  background:var(--accent);
+  color:var(--paper);
+  padding:2px 6px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+.acts{
+  margin-left:auto;
+  display:flex;
+  gap:4px;
+}
+.acts button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:28px;
+  height:28px;
+  background:var(--paper);
+  color:var(--ink);
+  border:var(--rule) solid var(--ui-edge);
+  font-size:.875rem;
+  font-weight:600;
+  line-height:1;
+  cursor:pointer;
+  transition:background var(--t),color var(--t),border-color var(--t);
+}
+.acts button:hover:not(:disabled){
+  background:var(--black);
+  color:var(--paper);
+  border-color:var(--black);
+}
+.acts button.act-del:hover:not(:disabled){
+  background:var(--accent);
+  color:var(--paper);
+  border-color:var(--accent);
+}
+.acts button:disabled{
+  background:var(--paper-2);
+  color:var(--ink-2);
+  border-color:var(--rule-color);
+  cursor:not-allowed;
+}
+
+.empty{
+  color:var(--ink-2);
+  font-size:.875rem;
+  text-align:left;
+  max-width:60ch;
+  padding:12px 0;
+  border-top:var(--rule) solid var(--rule-color);
+}
+
+/* Week View: 7-column timetable + 2-column extra band */
+.week{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:16px;
+  align-items:start;
+}
+.week .col{
+  border-top-width:2px;
+  min-height:180px;
+}
+.week .col-head{
+  flex-direction:column;
+  align-items:flex-start;
+  gap:4px;
+  padding-bottom:10px;
+  margin-bottom:12px;
+}
+.week .col-head-row{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  width:100%;
+  gap:6px;
+}
+.week .col-head h2{
+  font-size:.875rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+}
+.dsub{
+  font-size:var(--fs-label);
+  font-weight:600;
+  font-variant-numeric:tabular-nums;
+  color:var(--ink-2);
+}
+.col.today{
+  border-top:var(--rule-strong) solid var(--accent);
+}
+.col.today .dsub{
+  color:var(--accent);
+  font-weight:700;
+}
+.col.today.over .dsub{color:var(--accent-sub)}
+.today-mark{
+  font-size:var(--fs-label);
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  color:var(--accent);
+}
+.col.today.over .today-mark{color:var(--accent-sub)}
+
+.week .card{
+  padding:10px 4px 10px 0;
+  margin-bottom:12px;
+  font-size:.875rem;
+}
+.week .card:hover{padding-inline:6px}
+
+.addday{
+  width:100%;
+  text-align:left;
+  background:var(--paper);
+  color:var(--ink-2);
+  border:var(--rule) solid var(--ui-edge);
+  padding:8px 10px;
+  font-size:var(--fs-label);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:var(--track-label);
+  cursor:pointer;
+  transition:background var(--t),color var(--t),border-color var(--t);
+}
+.addday:hover{
+  background:var(--black);
+  color:var(--paper);
+  border-color:var(--black);
+}
+
+.extra{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:var(--gutter);
+  margin-top:calc(var(--unit)*4);
+  padding-top:calc(var(--unit)*3);
+  border-top:var(--rule) solid var(--rule-color);
+  align-items:start;
+}
+.extra .col{
+  min-height:140px;
+  border-top-width:2px;
+}
+
+/* Responsive Breakpoints: Swiss margins 48px -> 32px <=1024 -> 20px <=600 */
+@media (max-width:1050px){
+  .week{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:1024px){
+  :root{--margin:32px}
+  .masthead{grid-column:1 / -1}
+  .progress{grid-column:1 / -1}
+}
+@media (max-width:860px){
+  .board{grid-template-columns:minmax(0,1fr)}
+  .add{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .add .field-title{grid-column:1 / -1}
+  .add .btn{grid-column:1 / -1;justify-self:start}
+}
+@media (max-width:720px){
+  .extra{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:600px){
+  :root{--margin:20px;--gutter:16px}
+  .page{grid-template-columns:minmax(0,1fr)}
+  .masthead,.progress,.add-band,.controls,.weeknav,.workspace{grid-column:1 / -1}
+  .week{grid-template-columns:minmax(0,1fr)}
+  .add{grid-template-columns:minmax(0,1fr)}
+  .add .btn{width:100%}
+  .pg-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+/* Accessibility & Platform Fallbacks */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    transition:none!important;
+    animation:none!important;
+    scroll-behavior:auto!important;
+  }
+}
+@media (prefers-reduced-transparency:reduce){
+  body,.col,.card,.btn,.chip,.acts button,.addday{
+    background-color:var(--paper);
+    opacity:1;
+  }
+  .chip[aria-pressed="true"]{background-color:var(--black)}
+  .tag.late{background-color:var(--accent)}
+}
+@media (forced-colors:active){
+  :focus-visible{outline:3px solid Highlight;outline-offset:2px}
+  .btn,.chip,.weeknav .wbtn,.acts button,.addday,.col-head .count,.bar{
+    border-color:ButtonBorder;
+  }
+  .chip[aria-pressed="true"],.btn:hover{
+    background:Highlight;
+    color:HighlightText;
+    border-color:Highlight;
+  }
+  .seg button[aria-pressed="true"]{
+    border-bottom-color:Highlight;
+    color:CanvasText;
+  }
+  .bar span{
+    forced-color-adjust:none;
+    border:1px solid CanvasText;
+  }
+  .bar .b-done{background:CanvasText}
+  .bar .b-doing{background:Highlight}
+  .bar .b-todo{background:Canvas}
+  .col.today,.col[data-s="doing"],.card.p-high{border-top-color:Highlight}
+  .tag.late{border:1px solid Highlight}
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <div class="label"><span class="sq sq-accent" aria-hidden="true"></span>00 / Danh mục điều phối</div>
+    <h1>Bảng công việc</h1>
+    <p class="sub">Kéo thẻ giữa các cột hoặc dùng nút mũi tên để đổi trạng thái.</p>
+  </header>
+
+  <section class="progress" aria-label="Tiến độ">
+    <div class="pg-head">
+      <span class="label">Tiến độ hoàn thành</span>
+    </div>
+    <div class="pg-num" id="pct">0%<small id="frac">0/0 việc xong</small></div>
+    <p class="pg-note" id="note"></p>
+    <div class="bar" aria-hidden="true"><span class="b-done" id="bDone"></span><span class="b-doing" id="bDoing"></span><span class="b-todo" id="bTodo"></span></div>
+    <dl class="pg-stats">
+      <div class="pg-stat"><dt><span class="sq" aria-hidden="true"></span>Xong</dt><dd id="cntDone">0</dd></div>
+      <div class="pg-stat"><dt><span class="sq sq-accent" aria-hidden="true"></span>Đang làm</dt><dd id="cntDoing">0</dd></div>
+      <div class="pg-stat"><dt><span class="sq sq-muted" aria-hidden="true"></span>Cần làm</dt><dd id="cntTodo">0</dd></div>
+    </dl>
+  </section>
+
+  <section class="add-band" aria-label="Thêm công việc mới">
+    <form class="add" id="addForm">
+      <div class="field field-title">
+        <label for="title">Tên công việc</label>
+        <input type="text" id="title" placeholder="Bạn cần làm gì?" aria-label="Tên công việc" maxlength="120" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="prio">Mức ưu tiên</label>
+        <select id="prio" aria-label="Mức ưu tiên">
+          <option value="high">Ưu tiên cao</option>
+          <option value="mid" selected>Ưu tiên vừa</option>
+          <option value="low">Ưu tiên thấp</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="due">Hạn hoàn thành</label>
+        <input type="date" id="due" aria-label="Hạn hoàn thành">
+      </div>
+      <button type="submit" class="btn" id="addBtn">Thêm việc</button>
+    </form>
+  </section>
+
+  <nav class="controls" aria-label="Điều hướng và bộ lọc">
+    <div class="views">
+      <div class="seg" role="group" aria-label="Chế độ xem">
+        <button type="button" data-v="board" aria-pressed="true">Theo trạng thái</button>
+        <button type="button" data-v="week" aria-pressed="false">Theo tuần</button>
+      </div>
+    </div>
+    <div class="filters-wrap">
+      <span class="label">Ưu tiên</span>
+      <div class="filters" role="group" aria-label="Lọc theo ưu tiên">
+        <button type="button" class="chip" data-f="all" aria-pressed="true">Tất cả</button>
+        <button type="button" class="chip" data-f="high" aria-pressed="false">Cao</button>
+        <button type="button" class="chip" data-f="mid" aria-pressed="false">Vừa</button>
+        <button type="button" class="chip" data-f="low" aria-pressed="false">Thấp</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="weeknav" id="weeknav" hidden>
+    <button type="button" class="wbtn" id="prevW" aria-label="Tuần trước">←</button>
+    <button type="button" class="wbtn" id="thisW">Tuần này</button>
+    <button type="button" class="wbtn" id="nextW" aria-label="Tuần sau">→</button>
+    <span class="lbl" id="wlabel"></span>
+  </div>
+
+  <div class="workspace">
+    <div class="board" id="board"></div>
+    <div class="week" id="week" hidden></div>
+    <div class="extra" id="extra" hidden></div>
+  </div>
+</main>
+
+<script>
+(function(){
+  var KEY="bang-cong-viec-v1";
+  var COLS=[["todo","Cần làm","01"],["doing","Đang làm","02"],["done","Hoàn thành","03"]];
+  var PL={high:"Cao",mid:"Vừa",low:"Thấp"};
+  var PSQ={high:"sq sq-accent",mid:"sq",low:"sq sq-hollow"};
+  var tasks=[],filter="all",dragId=null;
+
+  function load(){
+    try{var r=localStorage.getItem(KEY);if(r){tasks=JSON.parse(r)||[];return}}catch(e){}
+    var d=new Date(),iso=function(n){var x=new Date(d);x.setDate(x.getDate()+n);return isoDate(x)};
+    tasks=[
+      {id:1,t:"Gửi báo cáo tuần cho nhóm",p:"high",s:"doing",d:iso(0)},
+      {id:2,t:"Đặt lịch khám răng",p:"mid",s:"todo",d:iso(3)},
+      {id:3,t:"Dọn hộp thư đến",p:"low",s:"todo",d:""},
+      {id:4,t:"Thanh toán tiền điện",p:"high",s:"done",d:iso(-1)}
+    ];
+  }
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch(e){}}
+
+  function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+  function pad(n){return n<10?"0"+n:""+n}
+  function isoDate(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+  function today(){return isoDate(new Date())}
+  function mondayOf(d){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
+  var view="board",ws=mondayOf(new Date());
+  function fmt(s){var p=s.split("-");return p[2]+"/"+p[1]}
+
+  function draggedTaskId(e){
+    if(dragId!=null)return dragId;
+    try{var v=e.dataTransfer.getData("text/plain");if(v)return Number(v)}catch(x){}
+    return null;
+  }
+
+  function card(t){
+    var c=el("article","card p-"+t.p+(t.s==="done"?" is-done":""));
+    c.draggable=true;c.dataset.id=t.id;
+
+    var k=el("div","card-kicker");
+    var sq=el("span",t.s==="done"?"sq sq-muted":(PSQ[t.p]||"sq"));
+    sq.setAttribute("aria-hidden","true");
+    k.appendChild(sq);
+    k.appendChild(el("span",null,PL[t.p]||""));
+    c.appendChild(k);
+
+    c.appendChild(el("div","t",t.t));
+
+    var m=el("div","meta");
+    if(view==="week"&&t.s==="doing")m.appendChild(el("span","tag status-doing","Đang làm"));
+    if(t.d){
+      var late=t.s!=="done"&&t.d<today();
+      if(view!=="week"||late)m.appendChild(el("span","tag"+(late?" late":""),(late?"Quá hạn ":"Hạn ")+fmt(t.d)));
+    }
+
+    var a=el("div","acts"),i=COLS.findIndex(function(x){return x[0]===t.s});
+    var L=el("button",null,"←");L.type="button";L.title="Chuyển sang cột trước";L.setAttribute("aria-label","Chuyển sang cột trước");L.disabled=i===0;
+    var R=el("button",null,"→");R.type="button";R.title="Chuyển sang cột sau";R.setAttribute("aria-label","Chuyển sang cột sau");R.disabled=i===2;
+    var X=el("button","act-del","×");X.type="button";X.title="Xóa việc";X.setAttribute("aria-label","Xóa việc");
+    L.onclick=function(){move(t.id,COLS[i-1][0])};
+    R.onclick=function(){move(t.id,COLS[i+1][0])};
+    X.onclick=function(){tasks=tasks.filter(function(x){return x.id!==t.id});save();render()};
+
+    if(view==="week"){
+      var K=el("button",null,t.s==="done"?"↺":"✓");
+      K.type="button";
+      K.title=t.s==="done"?"Mở lại việc":"Đánh dấu xong";
+      K.setAttribute("aria-label",K.title);
+      K.onclick=function(){move(t.id,t.s==="done"?"todo":"done")};
+      a.append(K,X);
+    }else{
+      a.append(L,R,X);
+    }
+
+    m.appendChild(a);
+    c.appendChild(m);
+
+    c.addEventListener("dragstart",function(e){
+      dragId=t.id;
+      c.classList.add("dragging");
+      try{e.dataTransfer.setData("text/plain",String(t.id))}catch(x){}
+    });
+    c.addEventListener("dragend",function(){
+      c.classList.remove("dragging");
+      dragId=null;
+      document.querySelectorAll(".col.over").forEach(function(n){n.classList.remove("over")});
+    });
+    return c;
+  }
+
+  function move(id,s){tasks.forEach(function(t){if(t.id===id)t.s=s});save();render()}
+
+  function render(){
+    var isW=view==="week";
+    document.getElementById("board").hidden=isW;
+    document.getElementById("week").hidden=!isW;
+    document.getElementById("extra").hidden=!isW;
+    document.getElementById("weeknav").hidden=!isW;
+    if(isW)renderWeek();
+
+    var b=document.getElementById("board");b.textContent="";
+    if(!isW)COLS.forEach(function(c){
+      var col=el("section","col");col.dataset.s=c[0];col.setAttribute("aria-label",c[1]);
+      var list=tasks.filter(function(t){return t.s===c[0]&&(filter==="all"||t.p===filter)});
+      var h=el("div","col-head");
+      var tg=el("div","col-title-group");
+      tg.appendChild(el("span","col-idx",c[2]));
+      tg.appendChild(el("h2",null,c[1]));
+      h.appendChild(tg);
+      h.appendChild(el("span","count",String(list.length)));
+      col.appendChild(h);
+      if(!list.length){
+        col.appendChild(el("div","empty",c[0]==="todo"?"Chưa có việc nào. Thêm việc ở phía trên.":"Kéo thẻ vào đây."));
+      }
+      list.forEach(function(t){col.appendChild(card(t))});
+      col.addEventListener("dragover",function(e){e.preventDefault();col.classList.add("over")});
+      col.addEventListener("dragleave",function(e){if(!col.contains(e.relatedTarget))col.classList.remove("over")});
+      col.addEventListener("drop",function(e){
+        e.preventDefault();
+        col.classList.remove("over");
+        var id=draggedTaskId(e);
+        if(id!=null)move(id,c[0]);
+      });
+      b.appendChild(col);
+    });
+
+    var n=tasks.length;
+    var d=tasks.filter(function(t){return t.s==="done"}).length;
+    var g=tasks.filter(function(t){return t.s==="doing"}).length;
+    var o=n-d-g;
+    var pct=n?Math.round(d/n*100):0;
+
+    document.getElementById("pct").firstChild.nodeValue=pct+"%";
+    document.getElementById("frac").textContent=d+"/"+n+" việc xong";
+    document.getElementById("cntDone").textContent=String(d);
+    document.getElementById("cntDoing").textContent=String(g);
+    document.getElementById("cntTodo").textContent=String(o);
+    document.getElementById("bDone").style.flexGrow=d;
+    document.getElementById("bDoing").style.flexGrow=g;
+    document.getElementById("bTodo").style.flexGrow=o;
+
+    var late=tasks.filter(function(t){return t.s!=="done"&&t.d&&t.d<today()}).length;
+    var noteEl=document.getElementById("note");
+    noteEl.className="pg-note"+(late?" has-late":"");
+    noteEl.textContent=!n?"Chưa có công việc nào.":late?late+" việc đã quá hạn.":d===n?"Bạn đã xong tất cả.":"Còn "+(n-d)+" việc cần hoàn thành.";
+  }
+
+  function setDate(id,d){tasks.forEach(function(t){if(t.id===id)t.d=d});save();render()}
+
+  function dayCol(title,sub,list,dateVal,cls,isToday,emptyText){
+    var col=el("section","col"+(cls||""));
+    col.setAttribute("aria-label",title);
+    var h=el("div","col-head");
+    var row=el("div","col-head-row");
+    row.appendChild(el("h2",null,title));
+    row.appendChild(el("span","count",String(list.length)));
+    h.appendChild(row);
+    if(sub||isToday){
+      var subRow=el("div","col-head-row");
+      if(sub)subRow.appendChild(el("span","dsub",sub));
+      if(isToday)subRow.appendChild(el("span","today-mark","Hôm nay"));
+      h.appendChild(subRow);
+    }
+    col.appendChild(h);
+
+    if(!list.length&&emptyText){
+      col.appendChild(el("div","empty",emptyText));
+    }
+    list.forEach(function(t){col.appendChild(card(t))});
+
+    if(dateVal!==null){
+      var A=el("button","addday","+ Thêm việc");
+      A.type="button";
+      A.onclick=function(){document.getElementById("due").value=dateVal;document.getElementById("title").focus()};
+      col.appendChild(A);
+      col.addEventListener("dragover",function(e){e.preventDefault();col.classList.add("over")});
+      col.addEventListener("dragleave",function(e){if(!col.contains(e.relatedTarget))col.classList.remove("over")});
+      col.addEventListener("drop",function(e){
+        e.preventDefault();
+        col.classList.remove("over");
+        var id=draggedTaskId(e);
+        if(id!=null)setDate(id,dateVal);
+      });
+    }
+    return col;
+  }
+
+  function renderWeek(){
+    var W=document.getElementById("week"),E=document.getElementById("extra");
+    W.textContent="";E.textContent="";
+    var names=["Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy","Chủ nhật"],tod=today();
+    var vis=function(t){return filter==="all"||t.p===filter};
+    for(var k=0;k<7;k++){
+      var d=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+k),s=isoDate(d);
+      var list=tasks.filter(function(t){return t.d===s&&vis(t)});
+      var isTod=s===tod;
+      W.appendChild(dayCol(names[k],pad(d.getDate())+"/"+pad(d.getMonth()+1),list,s,isTod?" today":"",isTod,""));
+    }
+    var e=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+6),first=isoDate(ws);
+    document.getElementById("wlabel").textContent=pad(ws.getDate())+"/"+pad(ws.getMonth()+1)+" – "+pad(e.getDate())+"/"+pad(e.getMonth()+1)+"/"+e.getFullYear();
+    E.appendChild(dayCol("Chưa đặt ngày","",tasks.filter(function(t){return !t.d&&vis(t)}),"","",false,""));
+    var over=tasks.filter(function(t){return t.d&&t.d<first&&t.s!=="done"&&vis(t)});
+    E.appendChild(dayCol("Chưa xong từ trước tuần này","",over,null,"",false,"Không có việc tồn đọng."));
+  }
+
+  function add(){
+    var inp=document.getElementById("title"),v=inp.value.trim();
+    if(!v){inp.focus();return}
+    tasks.push({id:Date.now(),t:v,p:document.getElementById("prio").value,s:"todo",d:document.getElementById("due").value});
+    inp.value="";document.getElementById("due").value="";save();render();inp.focus();
+  }
+
+  document.getElementById("addForm").addEventListener("submit",function(e){e.preventDefault();add()});
+  document.querySelectorAll(".filters [data-f]").forEach(function(c){
+    c.onclick=function(){
+      filter=c.dataset.f;
+      document.querySelectorAll(".filters [data-f]").forEach(function(x){x.setAttribute("aria-pressed",String(x===c))});
+      render();
+    };
+  });
+  document.querySelectorAll(".seg [data-v]").forEach(function(b){
+    b.onclick=function(){
+      view=b.dataset.v;
+      document.querySelectorAll(".seg [data-v]").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});
+      render();
+    };
+  });
+  function shift(n){ws=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+n);render()}
+  document.getElementById("prevW").onclick=function(){shift(-7)};
+  document.getElementById("nextW").onclick=function(){shift(7)};
+  document.getElementById("thisW").onclick=function(){ws=mondayOf(new Date());render()};
+
+  load();
+  render();
+})();
+</script>
+</body>
+</html>
