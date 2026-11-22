@@ -14,7 +14,7 @@ folder. Reload after a workspace switch, context compaction, or a User-reported 
 When an Antigravity session runs a `claude-*` model and also reads
 [claude-instructions/](../claude-instructions/README.md), this folder's Antigravity host
 rules and tools (`invoke_subagent`, `ask_question`, `send_message`, `run_workflow`,
-`/compact`) take precedence over Claude-only tools (`mcp__ccd_session__start_session`,
+`swarm`, `/compact`) take precedence over Claude-only tools (`mcp__ccd_session__start_session`,
 `Explore`, and the Claude advisor tool).
 
 These instructions shape how to work on Antigravity. They preserve task authority and
@@ -26,7 +26,8 @@ session role ([#009](../harness-constraints/0822-user-authority-operation-gate.m
 Each subagent instruction below has its own `[x]` checklist so the User can pick a Gemini
 model tier independently per workflow. `invoke_subagent` (and `run_workflow` `agent()`)
 accepts four model tiers only: `flash_lite`, `flash`, `pro`, and `inherit` — it has no
-exact model ID or per-subagent `effort` argument.
+exact model ID or per-subagent `effort` argument. Exact models are available only when the
+User selects `/swarm` in [coding-subagent.md](coding-subagent.md).
 
 ## Adding an instruction
 
@@ -49,5 +50,6 @@ no ID. An instruction for one exact model and effort belongs in
   `/compact` before a task and write the prompt for it.
 - [prd-research-subagent.md](prd-research-subagent.md): run `prd-research` in a fresh
   `self` subagent, with a selectable Gemini model-tier checklist.
-- [coding-subagent.md](coding-subagent.md): run non-trivial coding tasks in a fresh
-  `self` subagent, with a selectable Gemini model-tier checklist.
+- [coding-subagent.md](coding-subagent.md): run non-trivial coding tasks in a `self`
+  subagent or `/swarm` worker, with selectable dispatch-mode, tier, and `/swarm` Gemini
+  model checklists.

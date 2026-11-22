@@ -105,3 +105,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Start Herdr desktop app workers with --dangerously-skip-permissions so they do not ask the User](1121-herdr-app-skip-permissions.md) — `#088_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
 - [Add UBIQUITOUS-LANGUAGES.md, a shared glossary for the User, agents and the Harness repo](1121-ubiquitous-languages.md) — `#089_IMPROVE_HARNESS_1121`, `PRIORITY: [MEDIUM]`
 - [Add an agy-instructions folder with four Antigravity operational guides read at session start](1122-agy-instructions-folder.md) — `#090_IMPROVE_HARNESS_1122`, `PRIORITY: [MEDIUM]`
+- [Add a User-selectable /swarm dispatch option to agy-instructions/coding-subagent.md](1122-coding-subagent-swarm-option.md) — `#091_IMPROVE_HARNESS_1122`, `PRIORITY: [MEDIUM]`
