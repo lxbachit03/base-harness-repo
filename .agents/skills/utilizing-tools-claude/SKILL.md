@@ -68,6 +68,10 @@ and a bounded target.
 | External service data | `mcp__<server>__<tool>` from a connected, authenticated server |
 | Bounded independent investigation | `Agent`, only under the delegation rule below |
 
+Browser and computer-use screenshots: pass `scale: 0.5` for routine checks;
+for small text or visual detail, `zoom` into that region. Click coordinates
+stay in the full-resolution frame.
+
 Capability discovery rules:
 
 - **Built-in tools**: trust the session's exposed tool schemas. Settings,
