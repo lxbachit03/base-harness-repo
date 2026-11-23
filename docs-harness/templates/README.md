@@ -18,6 +18,8 @@ before creating a resource. Templates contain placeholders and are not domain tr
 - [risk.md](risk.md) and [proposal.md](proposal.md): inline risk and proposal
   scaffolding for an authorized ticket or plan.
 - [ticket.md](ticket.md): every ticket's source, result, and evidence.
+- [ticket-DoD.md](ticket-DoD.md): every ticket's questions and actions
+  that wait on the User before it can be resolved.
 - [apis.md](apis.md), [entities.md](entities.md): applicable ticket inventories.
 - [ticket-docs-README.md](ticket-docs-README.md): manifest when artifacts exist.
 - [folder-readme.md](folder-readme.md): short README for a folder whose rules,

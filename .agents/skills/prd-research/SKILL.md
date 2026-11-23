@@ -103,7 +103,8 @@ uncertainties and questions:
 
 Highlight an unclear AC where it appears, including its question and pending
 status; do not bury the question only in a summary. After producing the
-reports, ask the User the outstanding questions with their AC/question IDs.
+reports and step 5, ask the User the outstanding questions with their
+AC/question IDs and `U<n>` IDs.
 Group repeated questions when useful. The User may answer later; unanswered
 items stay pending and do not block supported analysis.
 
@@ -125,9 +126,30 @@ unattempted proof. Report output paths, source coverage, User confirmations,
 and unresolved limitations. A file count or successful tool call alone is not
 completion evidence.
 
+## 5. Update the ticket's ticket-DoD.md
+
+Write every pending question into the owning ticket's `ticket-DoD.md`,
+which docs-harness/tickets/README.md owns; create it from
+docs-harness/templates/ticket-DoD.md when missing. One open item per report
+question, phrased from the BA's AC wording and the PRD section it rests on so
+the User can answer without opening the report. Title it with the question ID
+and the affected AC IDs; in `Source` cite the PRD page/section and link the
+report's AC entry; in `Blocks` name the ACs and ownership it holds up; offer
+options with a recommendation where the project evidence supports one.
+
+On a rerun, update the item that carries the same question ID instead of adding
+another, and close an item the new source version settles, citing it. With no
+identified ticket, keep the questions in the reports and report the gap.
+
+Done when every pending question in the reports has exactly one open item, and
+every open prd-research item maps to a pending question.
+
 When the User answers later, reopen the relevant source and reports, associate
-each answer with its AC/question ID, and update both reports consistently.
+each answer with its AC/question ID, update both reports consistently, and
+close the matching `ticket-DoD.md` item with the answer and where it was
+applied.
 Record the User's answer and status without changing the original BA wording;
-keep unanswered or partially answered items pending. Flag any conflict with
+keep unanswered or partially answered items pending and their
+`ticket-DoD.md` items open, narrowing `Needed` to what remains. Flag any conflict with
 the PRD rather than silently rewriting it. A clarification does not authorize
 implementation or external actions.

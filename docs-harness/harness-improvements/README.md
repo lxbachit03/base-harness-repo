@@ -109,3 +109,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Add three findings from a live Herdr desktop app test to HERDR-APP.md](1123-herdr-app-test-findings.md) — `#092_IMPROVE_HARNESS_1123`, `PRIORITY: [MEDIUM]`
 - [Refresh the Claude Code catalog against the 2026-11-23 Desktop host](1123-claude-catalog-refresh.md) — `#093_IMPROVE_HARNESS_1123`, `PRIORITY: [MEDIUM]`
 - [Add a code-graph skill and a Graphify catalog for projects with large codebases](1123-code-graph-skill.md) — `#094_IMPROVE_HARNESS_1123`, `PRIORITY: [MEDIUM]`
+- [Add ticket-DoD.md to every ticket: what the User must answer or do before the ticket can close](1123-ticket-awaiting-user.md) — `#095_IMPROVE_HARNESS_1123`, `PRIORITY: [MEDIUM]`

@@ -44,7 +44,9 @@ links when applicable; otherwise note why they are unnecessary.>
 
 ## Risks and Open Questions
 
-<Each reported risk with mitigation/investigation proposal; unknowns and next action.>
+<Each reported risk with mitigation/investigation proposal. Questions and
+actions for the User live in [ticket-DoD.md](ticket-DoD.md); link, do not
+repeat them.>
 
 ## Artifacts
 

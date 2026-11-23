@@ -54,6 +54,28 @@ ticket. Ticket decisions are supporting artifacts, not canonical Harness
 resources: do not assign them global resource IDs or individually index them
 in docs-harness/INDEX.md.
 
+## Ticket DoD: items awaiting the User
+
+Every ticket also gets `ticket-DoD.md` (DoD: definition of done), initialized from
+templates/ticket-DoD.md during authorized intake or solving: the single list
+of questions the User must answer and actions the User must take before the
+ticket can be resolved. A read-only review reports a missing file without
+creating it.
+
+Add an item as soon as the work needs the User: an unknown acceptance
+criterion, a choice between approaches, a missing access, an approval for an
+external or authority-gated action, a manual check only the User can run. Give
+it the next `U<n>` ID, state what is needed, link what it blocks, and offer
+options with your recommendation. Ask the User the open items in the report.
+
+When the User answers or acts, move the item to Closed with the answer, date
+and the ticket.md section or decision file that applies it; never delete
+items. prd-research writes each pending PRD/AC question as an item that
+carries its question and AC IDs and links the report entry; the reports keep
+the analysis, this file tracks what the User still owes. With nothing open the file says
+`Nothing awaiting the User.` ticket.md links the file instead of repeating its
+items.
+
 ## Proportional artifacts
 
 Add only artifacts the task needs:
@@ -82,7 +104,8 @@ Use intake, ready, in-progress, blocked, or resolved as appropriate. Work one
 ticket at a time unless independent parallel work has been requested. When a
 batch ticket is blocked, continue another independent requested ticket.
 
-Acceptance proof marks a ticket resolved. Keep it in active/ for review unless
+Acceptance proof marks a ticket resolved, and only while `ticket-DoD.md`
+has no open item; an item the User waives is closed as waived. Keep it in active/ for review unless
 the User requested closure or approved the active-to-completed move; that
 authority may already exist earlier in the task. Preserve artifacts and history
 including the `decision/` folder when moving, update status to completed, and
@@ -104,8 +127,9 @@ follow harness-constraints/0812-risk-proposal-suggestion-cross-link.md. A
 proposal remains a suggestion until accepted by the relevant authority.
 
 Before handoff verify requested ticket count/identity, each decision folder,
-index, dated decision files and links, folder READMEs, applicable artifacts,
+index, dated decision files and links, `ticket-DoD.md`, folder READMEs,
+applicable artifacts,
 acceptance
-evidence, lifecycle, and the final diff. Report outcomes, checks, unresolved
-decisions, and any unattempted proof. INDEX routes to stable ticket lifecycle
+evidence, lifecycle, and the final diff. Report outcomes, checks, open
+`ticket-DoD.md` items, and any unattempted proof. INDEX routes to stable ticket lifecycle
 folders; ordinary ticket records do not receive Harness IDs.

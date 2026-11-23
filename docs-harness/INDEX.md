@@ -450,6 +450,7 @@ Resources:
 - [Inline proposal template](templates/proposal.md)
 - [Canonical plan template](templates/plan.md)
 - [Ticket template](templates/ticket.md)
+- [Ticket DoD (definition of done) template](templates/ticket-DoD.md)
 - [API inventory template](templates/apis.md)
 - [Schema inventory template](templates/entities.md)
 - [Ticket docs manifest template](templates/ticket-docs-README.md)
