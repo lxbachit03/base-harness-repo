@@ -68,9 +68,17 @@ and a bounded target.
 | External service data | `mcp__<server>__<tool>` from a connected, authenticated server |
 | Bounded independent investigation | `Agent`, only under the delegation rule below |
 
-Browser and computer-use screenshots: pass `scale: 0.5` for routine checks;
-for small text or visual detail, `zoom` into that region. Click coordinates
-stay in the full-resolution frame.
+Browser observation, cheapest first: `get_page_text` or `find`; then
+`read_page` with `filter: "interactive"` or a container `ref`; then a
+screenshot at `scale: 0.5` for layout and visual checks; then `zoom` into a
+region. Small text reads more reliably from the text tools than from `zoom`.
+Act by `ref`, group actions in one `browser_batch`, and end each batch with a
+single observation. A freshly opened built-in browser tab can report a 0x0
+viewport, and `read_page` then returns an empty page until the first
+screenshot; `find` works meanwhile. When the task needs a screenshot, take it
+before the first `read_page`. Screenshots
+in browser and computer-use tools follow the same `scale: 0.5` default; click
+coordinates stay in the full-resolution frame.
 
 Capability discovery rules:
 

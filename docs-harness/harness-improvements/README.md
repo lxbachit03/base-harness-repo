@@ -111,3 +111,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Add a code-graph skill and a Graphify catalog for projects with large codebases](1123-code-graph-skill.md) — `#094_IMPROVE_HARNESS_1123`, `PRIORITY: [MEDIUM]`
 - [Add ticket-DoD.md to every ticket: what the User must answer or do before the ticket can close](1123-ticket-awaiting-user.md) — `#095_IMPROVE_HARNESS_1123`, `PRIORITY: [MEDIUM]`
 - [Default Claude browser screenshots to scale 0.5 and zoom for detail](1123-browser-screenshot-scale.md) — `#096_IMPROVE_HARNESS_1123`, `PRIORITY: [NORMAL]`
+- [Observe browser pages text-first and wait for a fresh tab before read_page](1123-browser-observe-text-first.md) — `#097_IMPROVE_HARNESS_1123`, `PRIORITY: [NORMAL]`
