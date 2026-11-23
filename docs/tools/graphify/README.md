@@ -3,8 +3,8 @@
 > **Tài liệu tham khảo kỹ thuật cho nhóm phát triển (Team-Facing Documentation)**
 > *Vị trí lưu trữ*: `docs/tools/graphify/README.md`
 > *Phạm vi*: Graphify `0.9.115` (PyPI `graphifyy`), đọc từ repo và tài liệu ngày
-> 2026-11-23; chưa chạy thử trong một project thật. Skill dùng nó:
-> `.agents/skills/code-graph/`. Nghiên cứu nền:
+> 2026-11-23, và pilot cùng ngày trên một repo C#/TS khoảng 1.445 file code. Skill
+> `code-graph` dựa trên tài liệu này đã bị gỡ sau pilot (#094). Nghiên cứu nền:
 > [Đánh giá dự án Graphify](../../../R&D/graphify-research/reports/Đánh%20giá%20dự%20án%20Graphify.md).
 
 Graphify dựng knowledge graph cho một repo. Harness chỉ dùng **một phần** của nó: graph
@@ -14,10 +14,12 @@ gần như toàn Markdown, nên code-only không thấy gì, còn bước tài l
 nội dung tới model.
 
 > [!IMPORTANT]
-> Hiệu quả **chưa được chứng minh**. Nhà phát triển báo tiết kiệm 71 lần token; một phép
-> thử độc lập 360 lần chạy không thấy lợi ích rõ và hook trên Claude Code còn tốn thêm 17%;
-> code-review-graph (MIT) báo 6,65 lần so với agent dùng grep. Chạy pilot
-> (`references/pilot.md` của skill) trước khi một project dựa vào graph.
+> **Kết quả pilot 2026-11-23: không dùng.** Trên YGZ-Microservices-Multitenancy (C# và TS,
+> khoảng 136 nghìn dòng), host `agy` với Sonnet 5.5: khi không nhắc, agent không lần nào gọi
+> graph; khi được nhắc, Graphify tốn thêm 101% và code-review-graph thêm 69% token so với tìm
+> bằng shell, cùng độ chính xác. Chi tiết:
+> [ticket pilot](../../../docs-harness/tickets/active/TBD-code-graph-pilot-ygz/ticket.md).
+> Tài liệu dưới đây giữ lại làm tham khảo nếu đánh giá lại (câu hỏi nhiều tầng, host khác).
 
 ---
 
@@ -27,10 +29,10 @@ nội dung tới model.
 | :--- | :--- |
 | Chỉ `--code-only` | Không LLM, không token, code không rời máy, kết quả tất định. |
 | Chỉ MCP cục bộ (`graphify-mcp`, stdio) | Cả Claude Code, Codex, OpenCode và Antigravity gọi được như nhau; không dùng `api.graphify.com/mcp` (Graphify Cloud). |
-| Không chạy `graphify install`, `graphify <platform> install`, `graphify hook install` | Chúng ghi `AGENTS.md`, file rules và hook; hook chỉ có trên Claude Code và Gemini CLI. Harness quản lý chỉ dẫn qua skill `code-graph` và project constraint. |
+| Không chạy `graphify install`, `graphify <platform> install`, `graphify hook install` | Chúng ghi `AGENTS.md`, file rules và hook; hook chỉ có trên Claude Code và Gemini CLI. Harness quản lý chỉ dẫn qua project constraint. |
 | Graph là gợi ý | Agent đọc file thật trước khi kết luận hoặc sửa; graph cũ thì dùng grep. |
-| Cài đặt cần authority | Cài backend là cài dependency, cần User cho phép riêng ([#009](../../../docs-harness/harness-constraints/0822-user-authority-operation-gate.md)). |
-| Backend trung lập | Skill tên `code-graph`; code-review-graph (MIT) là phương án dự phòng nếu pilot cho thấy nó tốt hơn. GitNexus bị loại vì giấy phép không cho dùng thương mại. |
+| Cài đặt cần authority | Cài backend là cài dependency, cần User cho phép riêng ([#009](../../../docs-harness/harness-constraints/0822-user-authority-operation-gate.md)). Hai gói xung đột dependency: cài trong hai môi trường riêng (pilot). |
+| Backend trung lập | code-review-graph (MIT) là phương án so sánh; GitNexus bị loại vì giấy phép không cho dùng thương mại. |
 
 ## 2. Lệnh Liên Quan
 
@@ -77,6 +79,6 @@ Theo README của Graphify `0.9.115`; cú pháp chính xác lấy từ `--help` 
 | Hạng mục | Nguồn | Trạng thái |
 | :--- | :--- | :--- |
 | Lệnh, MCP tool, cấu hình, giới hạn | README, ARCHITECTURE và `pyproject.toml` của Graphify nhánh `v8`, commit `a3db62f`, 2026-11-23 | [DOCS] chưa chạy thử |
-| Hiệu quả token | Benchmark của nhà phát triển; phép thử độc lập 360 lần chạy (2026-10-16); issue #985; code-review-graph | Mâu thuẫn, cần pilot |
+| Hiệu quả token | Benchmark của nhà phát triển; phép thử độc lập 360 lần chạy (2026-10-16); issue #985; code-review-graph; pilot 2026-11-23 của harness | Pilot: tốn thêm 69–101% khi dùng |
 | Cấu hình MCP của Claude Code, OpenCode, Antigravity | Các cẩm nang trong `docs/tools/` | [DOCS] theo từng cẩm nang |
 | Cấu hình MCP của Codex | Chưa có trong cẩm nang Codex | [UNKNOWN] |

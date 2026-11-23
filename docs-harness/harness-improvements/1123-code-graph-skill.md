@@ -5,9 +5,9 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [MEDIUM]
 TITLE: Add a code-graph skill and a Graphify catalog for projects with large codebases
 CREATED: 2026-11-23
-STATUS: active
+STATUS: completed
 REFERENCES:
-- .agents/skills/code-graph/SKILL.md
+- docs-harness/tickets/active/TBD-code-graph-pilot-ygz/ticket.md
 - docs/tools/graphify/README.md
 - R&D/graphify-research/reports/Đánh giá dự án Graphify.md
 - docs-harness/harness-constraints/0822-user-authority-operation-gate.md
@@ -83,7 +83,9 @@ skill, and a pilot gate before any project relies on it.
 
 ## Decision and Result
 
-Decision: keep the written skill and catalog; pending the pilot.
+Decision: remove the skill (2026-11-23, after the pilot); keep the catalog as reference.
+
+Earlier decision, superseded: keep the written skill and catalog; pending the pilot.
 
 Checks: `harness_check.py` full run `RESULT: clean (exit 0)` (94 IDs, 1115 links, 21 skills
 and 73 files identical across the mirror); new files CRLF like their neighbours.
@@ -107,3 +109,30 @@ real large project; until it runs, Graphify's benefit, the exact `graphify-mcp` 
 for the graph path, whether `graphify update .` stays code-only, and Codex's project-scoped
 `.codex/config.toml` stay unverified. Next case: the pilot on a project the User names;
 owner: the primary session, once the User authorizes it. STATUS stays active until then.
+
+Pilot round 1 (2026-11-23, ticket `tickets/active/TBD-code-graph-pilot-ygz/`): YGZ-Microservices-Multitenancy
+(about 1,445 code files, C# and TS), `agy` `1.5.14` print mode with `claude-sonnet-5-5-medium`, 5
+questions x 3 arms, prompts without any graph hint. All 15 runs found every expected file; no
+run called the graph (shell search only, 2-4 calls); tokens in+out: baseline 125,772, Graphify
+121,978, code-review-graph 118,678 (noise, the graph was not used). Under the pilot rule neither
+backend passes for unprompted use on this host. Verified on the way: `graphify-mcp <graph.json>`
+and `code-review-graph serve --repo <path>` work as MCP stdio servers in `agy` through the
+workspace `.agents/mcp_config.json`; headless `agy` denies MCP calls without
+`--dangerously-skip-permissions`; `graphify update` needs no LLM; the two packages conflict and
+need separate environments. Pilot round 2 (same day, prompt carrying the constraint text, graph arms only): agents did call
+the graph (Graphify 9 calls, code-review-graph 7) but spent more: on q1-q4, where every arm was
+4/4 correct, tokens in+out were baseline 97,265, Graphify 195,676 (+101%), code-review-graph
+163,909 (+69%); q5 failed in both arms on the `agy` third-party quota (HTTP 429). Under the pilot
+rule the outcome for this project is drop (ticket decision `11-23-pilot-outcome.md`, proposed).
+The User accepted drop and the cleanup on 2026-11-23 (venvs, clone, graphs and the tool caches
+the pilot created removed; the logs kept at `E:\personal\pilots\results`). Next: the User
+decided to remove the skill ("Gỡ skill", 2026-11-23).
+
+Removal (2026-11-23, through `improve-harness`): deleted `.agents/skills/code-graph/` and its
+`.claude/skills/` mirror (recoverable from commit `98a9842`); the Claude catalog skill list back to
+20 skills and 70 mirrored files with `README.html` rebuilt; `docs/tools/graphify/README.md` now
+opens with the pilot result and stays as reference for a later re-evaluation (multi-hop questions,
+another host); the `docs/README.md` entry says the skill was removed; the ticket and its decisions
+point to the skill's pilot protocol by path and commit instead of a link. The User's goal (code
+navigation for projects with large codebases) stays open; on this evidence, shell search in the
+agent is the cheaper path.

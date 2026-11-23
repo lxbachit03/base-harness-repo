@@ -78,9 +78,11 @@ docs-harness/
 ├── project-constraints/
 ├── tickets/
 │   ├── active/
-│   │   └── 01-sample-ticket/
-│   │       └── docs/
-│   │           └── prd-research/
+│   │   ├── 01-sample-ticket/
+│   │   │   └── docs/
+│   │   │       └── prd-research/
+│   │   └── TBD-code-graph-pilot-ygz/
+│   │       └── decision/
 │   └── completed/
 └── templates/
     ├── {sample-big-ticket}/
