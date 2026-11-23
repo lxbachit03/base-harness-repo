@@ -46,7 +46,10 @@ are marked, use the first.
   mandatory session retrieval), as the repository requires of every session, workers
   included.
 - [ ] Skip: the brief names the only files to read and tells the worker not to read
-  `AGENTS.md` or the INDEX; the task and the limits in the brief carry the rules.
+  `AGENTS.md` or the INDEX; the task and the limits in the brief carry the rules. The
+  worker still gets `AGENTS.md` as memory, and its rule requires the INDEX first, so the
+  brief also states that the User overrides that rule for this task. A brief without
+  that sentence made an `agy` worker pause and ask (2026-11-23); with it, one turn.
 
 Measured on 2026-11-21 with a small read-only task and no prohibition in the brief:
 Claude Haiku 5.5 received `AGENTS.md` as memory, did not read the INDEX, and carried about
@@ -100,6 +103,11 @@ With Skip a worker reads outside the workspace, runs network and unsandboxed com
 edits files with no dialog (`agy` still blocks its list of system commands). The paths and
 limits in the brief and your review of `git status` and `git diff` are then the only guard;
 the flag covers only workers you start, never the User's own spaces or terminals.
+
+The host's permission mode decides whether you may run that start command. On 2026-11-23
+Claude Code auto mode refused it ("Undermining Oversight"), and it ran once the User set
+Bypass permissions. After such a refusal, keep the command as it is: give it to the User
+to run, or ask whether to start this worker with Ask instead.
 
 ## 4. Orchestrate one task
 
@@ -177,7 +185,9 @@ same terminal (section 4).
 3. Wait with `hc wait <terminal>` until the status is `idle` (`agy` reports it), then give
    the brief with `hc send --wait <terminal> "<brief>"`, as in section 4. For a Claude
    worker use `--argv '["claude","--model","<id>","<perm>"]'` and the marker of section 4; this
-   was not run in the app.
+   was not run in the app. The first `agy` start in a folder stops at a folder-trust
+   question and `hc wait` returns `blocked`: ask the User to answer it in the new space,
+   then wait for `idle` again. Later starts in that folder skip it.
 4. Collect with `hc read <terminal> --lines 100` and check that `herdr-app ls` lists the
    space with the terminal's status. Review as in section 4.
 5. Leave the space for the User to watch. Close it only when the User asks:
@@ -189,6 +199,11 @@ Run on 2026-11-21 in the User's open app: `space.new` with `--task` made the ter
 `agy` refused the argument; after `hc send` started `agy` in it, `hc send --wait` returned
 `status: done` in 37 s with the right answer, `git status` unchanged, and `herdr-app ls`
 showed the space active with `idle` and `antigravity`.
+
+Run on 2026-11-23 (`hc 0.1.22`, `agy` 1.5.14, `gemini-4-hydrogen-high`, read-only task): a
+`--mode plan` worker met the trust question, then answered after a second message; a
+Skip-permission worker whose brief stated the User's INDEX override answered in one turn.
+`git status` stayed clean.
 
 ## 6. Safety
 
