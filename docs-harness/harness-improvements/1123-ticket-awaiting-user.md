@@ -30,6 +30,9 @@ blocks `resolved` while an item is open, and reports the open items.
 - [x] After `prd-research`, the ticket's ticket-DoD.md holds the questions
   drawn from the BA's ACs and PRD, so the User answers them in one place
   (User request, 2026-11-23).
+- [x] Apply ponytail's "does it need to exist?" principle: each item is triaged,
+  and items no acceptance criterion depends on become optional with a stated
+  default, so they do not block completion (User request, 2026-11-23).
 
 ## Current State
 
@@ -74,7 +77,11 @@ ACs and PRD; added step 5 to the skill, a `Source` field to the template, and
 replaced the link-only rule in tickets/README.md. 2026-11-23: User renamed the
 file from `awaiting-user.md` to `ticket-DoD.md` (DoD: definition of done);
 all references, the template and this record updated; earlier replay notes
-refer to the old name.
+refer to the old name. 2026-11-23: after the ponytail research
+(`R&D/ponytail-research/`), the User asked for a required/optional triage;
+added the four-rung ladder to tickets/README.md, `Priority`/`Default` fields
+and `answered-from-evidence`/`defaulted` statuses to the template, and
+required-only gates to ticket-solving and prd-research.
 
 ## Validation
 
@@ -87,6 +94,11 @@ refer to the old name.
 
 - One more file per ticket adds noise when nothing waits on the User.
   Mitigation: the file then states one line, `Nothing awaiting the User`.
+- An agent lowers items to optional to close a ticket early (premature
+  completion). Mitigation: rung 2 items (acceptance criteria, authority,
+  product, money, security, data) are never lowered by the agent; optional
+  needs a concrete reversible default; reports list every default applied;
+  the User can raise any item back to required.
 - Duplication with ticket.md open questions or prd-research questions.
   Mitigation: ticket-DoD.md is the single list of User-blocking items;
   ticket.md links it; prd-research reports keep the analysis while the file
@@ -117,3 +129,19 @@ wording with FRD page links and links the report entries, and options carry a
 recommendation only where the FRD supports one. It asked the User U1–U12 by ID
 and reported the missing ticket.md and decision/ as gaps. Repository untouched.
 Not exercised: closing an item after a User answer, the rerun update path.
+
+Triage replays (required/optional), 2026-11-23, fresh agents on scratchpad
+copies of `01-sample-ticket` with the 12 FRD questions, repository untouched:
+- Run 1, rung 2 worded "touches an acceptance criterion": 11 required,
+  1 optional (Q-09 draft-until-Save). Too conservative: every PRD question
+  names an AC, so ownership (Q-01) stayed required.
+- Revised rung 2 to "different answers would change an acceptance criterion's
+  observable outcome", noting that ownership rarely does.
+- Run 2: 10 required, 2 optional (Q-01 ownership with the report's proposed
+  layers as default; Q-09 draft-until-Save, citing FRD p.65). All money,
+  scope, version and display questions stayed required; both optional items
+  carry a default; the agent asked required items first and listed the
+  defaults. It noted Q-04 and Q-09 are nearly settled by the FRD but left them
+  because rung 1 would edit the reports, which the test forbade.
+Not exercised: closing optional items as `defaulted` at resolution, the User
+raising an item, rung 1 with report edits. Keep.

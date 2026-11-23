@@ -37,13 +37,14 @@ Stop here for intake-only work.
    docs-harness/harness-constraints/0822-user-authority-operation-gate.md. Record each solution decision as it is made in the ticket's dated
    decision/ files and maintain its index per the workspace guide. Keep
    implementation code in its normal repository paths.
-4. Record meaningful progress, evidence, and applicable artifacts. Add an
-   `ticket-DoD.md` item whenever the work needs a User answer or action;
+4. Record meaningful progress, evidence, and applicable artifacts. Add a
+   triaged `ticket-DoD.md` item whenever the work needs a User answer or
+   action;
    close items with the answer and where it was applied.
 5. For domain discovery or runtime changes apply docs-harness/domain/README.md;
    pair every reported risk with an inline mitigation or investigation proposal.
-6. Mark resolved only with acceptance evidence and no open
-   `ticket-DoD.md` item. Apply completed moves and
+6. Mark resolved only with acceptance evidence and no open required
+   `ticket-DoD.md` item; close open optional items as defaulted. Apply completed moves and
    metadata correction only under the guide's authorized maintenance boundary.
 
 For a requested batch, continue another independent ticket when one is blocked.
@@ -58,5 +59,6 @@ metadata. Update stable INDEX routes and folder tree when their structure
 changes; ordinary tickets are not classified Harness resources.
 
 Report outcome, changed paths, checks, and unresolved dependencies. Ask the
-User every open `ticket-DoD.md` item by its `U<n>` ID.
+User every open `ticket-DoD.md` item by its `U<n>` ID, required first, and
+list the defaults that optional items will apply.
 A missing tool is not a failing test. Prepared intake is not a solved ticket.

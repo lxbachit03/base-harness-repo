@@ -68,6 +68,26 @@ external or authority-gated action, a manual check only the User can run. Give
 it the next `U<n>` ID, state what is needed, link what it blocks, and offer
 options with your recommendation. Ask the User the open items in the report.
 
+Triage every item before asking: does the User really need to answer it? Take
+the first rung that fits:
+
+1. **Settled by evidence** (code, PRD, docs, earlier User answers): answer it
+   yourself, cite the source, and record it Closed as `answered-from-evidence`.
+2. **Required**: different answers would change an acceptance criterion's
+   observable outcome, or it touches an authority gate (dependency install,
+   external write, test authority, push), a product decision, money, security
+   or user data. Only the User may lower it. Naming an AC is not enough: who
+   owns the work, or how it is organized, rarely changes the outcome.
+3. **Optional**: a safe, reversible default satisfies every acceptance
+   criterion. Record the default, why no criterion depends on the answer, and
+   where it will apply.
+4. Otherwise **required**.
+
+The User may raise an optional item to required at any time. When the ticket is
+resolved, close each still-open optional item as `defaulted` with the default
+applied; list those defaults in the report so the User sees every choice made
+on their behalf.
+
 When the User answers or acts, move the item to Closed with the answer, date
 and the ticket.md section or decision file that applies it; never delete
 items. prd-research writes each pending PRD/AC question as an item that
@@ -105,7 +125,8 @@ ticket at a time unless independent parallel work has been requested. When a
 batch ticket is blocked, continue another independent requested ticket.
 
 Acceptance proof marks a ticket resolved, and only while `ticket-DoD.md`
-has no open item; an item the User waives is closed as waived. Keep it in active/ for review unless
+has no open required item; an item the User waives is closed as waived, and
+open optional items close as defaulted. Keep it in active/ for review unless
 the User requested closure or approved the active-to-completed move; that
 authority may already exist earlier in the task. Preserve artifacts and history
 including the `decision/` folder when moving, update status to completed, and
@@ -131,5 +152,5 @@ index, dated decision files and links, `ticket-DoD.md`, folder READMEs,
 applicable artifacts,
 acceptance
 evidence, lifecycle, and the final diff. Report outcomes, checks, open
-`ticket-DoD.md` items, and any unattempted proof. INDEX routes to stable ticket lifecycle
+required and optional `ticket-DoD.md` items, defaults applied, and any unattempted proof. INDEX routes to stable ticket lifecycle
 folders; ordinary ticket records do not receive Harness IDs.

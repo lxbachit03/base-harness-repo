@@ -136,13 +136,16 @@ the User can answer without opening the report. Title it with the question ID
 and the affected AC IDs; in `Source` cite the PRD page/section and link the
 report's AC entry; in `Blocks` name the ACs and ownership it holds up; offer
 options with a recommendation where the project evidence supports one.
+Triage each item with the ticket guide's ladder: mark it required or optional,
+and give an optional item its default. A question the evidence settles is
+answered in both reports rather than written as an item.
 
 On a rerun, update the item that carries the same question ID instead of adding
 another, and close an item the new source version settles, citing it. With no
 identified ticket, keep the questions in the reports and report the gap.
 
-Done when every pending question in the reports has exactly one open item, and
-every open prd-research item maps to a pending question.
+Done when every pending question in the reports has exactly one open item with
+a priority, and every open prd-research item maps to a pending question.
 
 When the User answers later, reopen the relevant source and reports, associate
 each answer with its AC/question ID, update both reports consistently, and
