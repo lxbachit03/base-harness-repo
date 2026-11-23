@@ -378,7 +378,7 @@ thắng Project. File Markdown trong `.claude/commands/` (kiểu cũ) vẫn ch�
 `.agents/skills/` **không** nằm trong danh sách đó. Repo Harness này giữ bản gốc
 ở `.agents/skills/` (nguồn dùng chung với các agent khác) và **mirror sang
 `.claude/skills/`**, nơi Claude Code thực sự nạp. Khi sửa skill phải đồng bộ cả
-hai; hai cây hiện giống hệt từng byte (20 skill, 70 file, 2026-11-23).
+hai; hai cây hiện giống hệt từng byte (21 skill, 73 file, 2026-11-23).
 `harness-check` (mục `skill-mirror`) báo drift khi nội dung khác nhau và chỉ báo
 `info` khi chỉ khác line-ending; khi tự so sánh, hãy bỏ CR trước:
 `diff <(tr -d '\r' < a) <(tr -d '\r' < b)`.
@@ -418,9 +418,9 @@ frontmatter rồi đến `skillOverrides` và deny rule `Skill(...)`.
 
 ### 7.3 Skill có sẵn theo nhóm (phiên tham chiếu)
 
-**Skill của repo Harness** (20; `.claude/skills/` + `.agents/skills/`),
+**Skill của repo Harness** (21; `.claude/skills/` + `.agents/skills/`),
 model-invoked: `asset-design-systems`, `asset-design-systems-hallmark`,
-`goal-griller`, `improve-harness`, `onboarding`, `prd-research`,
+`code-graph`, `goal-griller`, `improve-harness`, `onboarding`, `prd-research`,
 `prompt-leverage`, `sequence-execution-plan`, `typesafe-ai`,
 `utilizing-tools-agy`, `utilizing-tools-claude`, `utilizing-tools-codex`,
 `utilizing-tools-opencode`, `utilizing-tools-orca-ade`, `writing-for-agents`,
