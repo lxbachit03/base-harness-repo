@@ -113,9 +113,11 @@ Tài liệu cũ và bề mặt IDE còn dùng các tên sau. Không phiên `agy`
 - Quản lý: `agy mcp add|remove|list|enable|disable` hoặc `/mcp`. MCP server của plugin tự có tiền tố `<plugin>_<server>`.
 - Trong các phiên đã kiểm tra, **không có tool MCP nào** được nạp. Hai phiên đọc được `~/.gemini/config/mcp_config.json` thấy tệp rỗng (0 byte); ba phiên còn lại bị sandbox chặn đọc.
 
-### 3.2 Ba Plugin Đang Bật
+### 3.2 Plugin
 
-Cả ba hiện `enabled` trong `agy plugin list --json` và đều **không** cấp tool MCP trong phiên; chúng chỉ cấp skill.
+Ngày 2026-11-21 cả ba plugin dưới đây hiện `enabled` trong `agy plugin list --json` và đều **không** cấp tool MCP trong phiên; chúng chỉ cấp skill. Sau bản cập nhật sáng 2026-11-23 (`agy` 1.5.15), danh sách trả về `[]`. Ngày 2026-11-24 chỉ `chrome-devtools-plugin` 1.10.1 được cài lại (theo yêu cầu của User); hai plugin còn lại chưa cài. Trạng thái hiện tại luôn lấy từ `agy plugin list --json`.
+
+Trình duyệt: `/browser` gọi subagent `browser`, dùng Chrome DevTools MCP có sẵn trong `agy` và gắn vào Google Chrome đang bật remote debugging (`DevToolsActivePort` trong `User Data` của Chrome). Máy này không có Google Chrome nên lệnh thất bại (2026-11-24). Đường dùng được là `playwright-cli` qua `run_command`, theo ghi chú browser trong skill `utilizing-tools-agy` (#098).
 
 | Plugin | Phiên bản | Cung cấp |
 | :--- | :--- | :--- |

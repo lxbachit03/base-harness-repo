@@ -71,11 +71,36 @@ and a bounded target.
 | Image asset or mockup | `invoke_subagent` with the `image-generator` type |
 | A decision only the User can make | `ask_question` |
 | Hand a plan to the execution model | `exit_plan_mode`, present only in plan-mode (Orchestrator) sessions |
-| Browser automation or web debugging | `chrome-devtools-plugin` skills (`chrome-devtools`, `debug-optimize-lcp`, `a11y-debugging`, `cookie-debugging`, `memory-leak-debugging`, `troubleshooting`) |
+| Browser automation or web debugging | `playwright-cli` through `run_command` (browser note below); `chrome-devtools-plugin` skills and `/browser` only where Google Chrome runs with remote debugging |
 | Modern web platform guidance | `modern-web-guidance-plugin` skills (`modern-web-guidance`, `chrome-extensions`) |
 | AGY configuration or SDK work | `agy-customizations`, `antigravity-guide`, `google-antigravity-sdk` skills |
 | Semantic judgment, fast classification, Jev primitives | `typesafe-ai` (`.agents/skills/typesafe-ai/scripts/invoke-typesafe.ps1`) |
 | Repository procedure | the matching repository workflow skill |
+
+Browser note: on this machine Google Chrome is absent, so `/browser` and the
+Chrome DevTools route cannot connect; drive the browser with `playwright-cli`.
+1. `playwright-cli --version` (0.1.25). When it is missing, report it to the
+   User; installing it needs the User's authority.
+2. Read its agent skill at
+   `Join-Path (npm root -g) '@playwright\cli\node_modules\playwright-core\lib\tools\skills\playwright-cli\SKILL.md'`;
+   `--help` names that file only under Claude Code or Copilot CLI.
+3. The browser closes when the `run_command` shell that opened it exits, so
+   one `run_command` carries a whole flow. Start it with
+   `New-Item -ItemType Directory -Force "$env:TEMP\agy-playwright" | Set-Location`
+   so the `.playwright-cli/` output stays out of the repository even when the
+   folder is new, then `open` with `-s=<name>` and
+   `--browser msedge` (add `--headed` when the User wants to watch), the
+   actions, the reads, and `playwright-cli -s=<name> close` last. Plan the
+   refs from a first `snapshot` run, then run the flow. When `run_command`
+   offers `BypassSandbox`, set it to `true`; the browser needs it.
+   PowerShell strips double quotes inside single-quoted arguments: wrap an
+   `eval` function in double quotes and use single quotes inside it.
+4. Observe text-first: `snapshot`, `find`, `eval`. A screenshot the model sees
+   costs about 1.3k prompt tokens whatever its size, and one over about 10 KB
+   stays a file the model never sees; take one only for a visual check, of an
+   element (`screenshot <ref>`) rather than the page.
+5. Refs go stale when the page changes; take a fresh `snapshot` before reusing
+   one.
 
 Capability discovery rules:
 
@@ -85,8 +110,9 @@ Capability discovery rules:
 - **Plugins and their skills**: discover from the session's exposed skill list,
   not from memory of what a plugin usually provides. A plugin being known is not
   a plugin being enabled in this workspace, and an enabled plugin is not an MCP
-  tool: the three enabled plugins contributed no MCP tool to any of the five
-  checked sessions.
+  tool: no enabled plugin contributed an MCP tool in the checked sessions. An
+  `agy` update can reset the installed plugins (2026-11-23: `agy plugin list`
+  went from three to none); `agy plugin list --json` is the current state.
 - **MCP**: an MCP-backed plugin needs a reachable server and, where applicable,
   an authenticated account before its tools do real work. Configuration lives in
   `~/.gemini/config/mcp_config.json`, `.agents/mcp_config.json` or a plugin's
