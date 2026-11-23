@@ -107,3 +107,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Add an agy-instructions folder with four Antigravity operational guides read at session start](1122-agy-instructions-folder.md) — `#090_IMPROVE_HARNESS_1122`, `PRIORITY: [MEDIUM]`
 - [Add a User-selectable /swarm dispatch option to agy-instructions/coding-subagent.md](1122-coding-subagent-swarm-option.md) — `#091_IMPROVE_HARNESS_1122`, `PRIORITY: [MEDIUM]`
 - [Add three findings from a live Herdr desktop app test to HERDR-APP.md](1123-herdr-app-test-findings.md) — `#092_IMPROVE_HARNESS_1123`, `PRIORITY: [MEDIUM]`
+- [Refresh the Claude Code catalog against the 2026-11-23 Desktop host](1123-claude-catalog-refresh.md) — `#093_IMPROVE_HARNESS_1123`, `PRIORITY: [MEDIUM]`

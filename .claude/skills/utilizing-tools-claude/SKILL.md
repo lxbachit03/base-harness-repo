@@ -10,8 +10,8 @@ it, execute it, and leave observable proof. The current session's exposed tool,
 skill, agent, and MCP declarations are the runtime authority; this skill routes
 to them and never promises that a documented capability is enabled here.
 
-Version boundary: calibrated to Claude Code `2.1.325` (the Claude Desktop host;
-the `claude` on PATH was `2.1.268`), local evidence of 2026-11-15. Capability
+Version boundary: calibrated to Claude Code `2.1.330` (the Claude Desktop host;
+the `claude` on PATH was `2.1.304`), local evidence of 2026-11-23. Capability
 surfaces move with the release, the host, the account, the marketplace, and the
 plugin set. When this skill and the session disagree, the session wins; report
 the gap instead of following either silently.
@@ -56,7 +56,7 @@ and a bounded target.
 | Edit or create files | `Edit` for exact replacement, `Write` for a new or fully replaced file |
 | Shell, build, test, git | `Bash` (POSIX) or `PowerShell` (Windows-native), within task authority |
 | Notebook cells | `NotebookEdit` (deferred) |
-| Current web facts | `WebFetch` for a known URL, `WebSearch` for discovery (both deferred) |
+| Current web facts | A known URL: `WebFetch`, or the `web-fetch` agent when your tool list has no `WebFetch` (the main conversation of Desktop `2.1.330`; its subagents keep `WebFetch` deferred); discovery: `WebSearch` (deferred); a sign-in or script-rendered page: the built-in browser (Claude in Chrome when the User asks for it); a private repository or service: `gh` or an authenticated MCP tool |
 | A decision only the User can make | `AskUserQuestion` |
 | Plan before acting | `EnterPlanMode` / `ExitPlanMode` (deferred) |
 | Isolated branch work (only on an explicit User request; never for agent coordination) | `EnterWorktree` / `ExitWorktree` (deferred) |
@@ -86,13 +86,17 @@ Capability discovery rules:
   the session; name the binary and its `claude --version` when reporting their
   output.
 - **Plugins**: a plugin contributes skills (`<plugin>:<skill>`), MCP servers, and
-  commands under its own namespace. `claude plugin list` shows what is installed
-  and loaded; `claude plugin details <name>` shows its component inventory and
-  token cost. Being in a marketplace is not being installed, and being installed
-  is not being authenticated.
+  commands under its own namespace. `claude plugin list` shows what the CLI
+  installed; a Desktop host also loads plugins that list omits, so the session's
+  skill and tool names are the evidence for those. `claude plugin details <name>`
+  shows a plugin's component inventory and token cost. Being in a marketplace is
+  not being installed, and being installed is not being authenticated.
 - **Skills**: discover from the session's available-skills listing. A skill with
-  `disable-model-invocation: true` is absent from that listing and only the User
-  can invoke it by name.
+  `disable-model-invocation: true`, or one that `skillOverrides` sets to
+  `"user-invocable-only"`, is absent from that listing and only the User can
+  invoke it by name. `skillOverrides` set to `"off"` also removes a skill from the
+  listing; the repository does so for the four non-Claude `utilizing-tools-*`
+  skills in `.claude/settings.local.json`.
 - **Agents**: use the session's available agent types. Delegation needs a bounded
   assignment, a write set, and a stop condition.
 
