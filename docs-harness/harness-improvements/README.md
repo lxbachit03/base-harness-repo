@@ -116,3 +116,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Ask goal-griller questions in rounds with yes-accepts recommendations](1124-goal-griller-question-rounds.md) — `#099_IMPROVE_HARNESS_1124`, `PRIORITY: [NORMAL]`
 - [Add a Plain / Controlled (STE-lite) response persona](1124-persona-plain-ste-lite.md) — `#100_IMPROVE_HARNESS_1124`, `PRIORITY: [NORMAL]`
 - [Add a Zero-Context Newcomer response persona](1124-persona-zero-context-newcomer.md) — `#101_IMPROVE_HARNESS_1124`, `PRIORITY: [NORMAL]`
+- [Herdr app: send slash commands from Git Bash and clear inherited Claude variables](1124-herdr-git-bash-and-claude-env.md) — `#102_IMPROVE_HARNESS_1124`, `PRIORITY: [NORMAL]`

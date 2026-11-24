@@ -34,6 +34,16 @@ authority for syntax; this file keeps what they do not say.
 2. There is no `HERDR_ENV` gate and no pane layout: any shell can run `hc`, including a
    Claude Desktop session.
 3. Print the syntax a step needs from the binary: `hc --help`, then `hc <command> --help`.
+4. From Git Bash, send a text that starts with `/` as `MSYS_NO_PATHCONV=1 hc send ...`.
+   Without it, `/exit` arrived as `C:/Program Files/Git/exit`, and the agent took it and
+   the next sends as prompts (2026-11-24).
+5. Before `claude` starts in an `hc` terminal (`hc run`, `hc send`, `--argv`), clear the
+   `CLAUDE*` variables its shell inherited, then set the ones you want, such as
+   `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE`: `Get-ChildItem Env: | Where-Object Name -like
+   '*CLAUDE*' | ForEach-Object { Remove-Item ('Env:' + $_.Name) }` in PowerShell. On
+   2026-11-24 a new app space held 33 of them from a Claude Desktop session (source
+   unverified); `claude` there ran as a child session, refused Code Mode and saved no
+   transcript, and ran normally once they were cleared.
 
 Done when `hc server status` answers and the commands you will use are printed.
 
