@@ -7,7 +7,7 @@ TITLE: Add a code-graph skill and a Graphify catalog for projects with large cod
 CREATED: 2026-11-23
 STATUS: completed
 REFERENCES:
-- docs-harness/tickets/active/TBD-code-graph-pilot-ygz/ticket.md
+- docs-harness/tickets/completed/TBD-code-graph-pilot-ygz/ticket.md
 - docs/tools/graphify/README.md
 - R&D/graphify-research/reports/Đánh giá dự án Graphify.md
 - docs-harness/harness-constraints/0822-user-authority-operation-gate.md
@@ -110,7 +110,7 @@ for the graph path, whether `graphify update .` stays code-only, and Codex's pro
 `.codex/config.toml` stay unverified. Next case: the pilot on a project the User names;
 owner: the primary session, once the User authorizes it. STATUS stays active until then.
 
-Pilot round 1 (2026-11-23, ticket `tickets/active/TBD-code-graph-pilot-ygz/`): YGZ-Microservices-Multitenancy
+Pilot round 1 (2026-11-23, ticket `tickets/completed/TBD-code-graph-pilot-ygz/`): YGZ-Microservices-Multitenancy
 (about 1,445 code files, C# and TS), `agy` `1.5.14` print mode with `claude-sonnet-5-5-medium`, 5
 questions x 3 arms, prompts without any graph hint. All 15 runs found every expected file; no
 run called the graph (shell search only, 2-4 calls); tokens in+out: baseline 125,772, Graphify

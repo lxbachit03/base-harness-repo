@@ -18,7 +18,7 @@ nội dung tới model.
 > khoảng 136 nghìn dòng), host `agy` với Sonnet 5.5: khi không nhắc, agent không lần nào gọi
 > graph; khi được nhắc, Graphify tốn thêm 101% và code-review-graph thêm 69% token so với tìm
 > bằng shell, cùng độ chính xác. Chi tiết:
-> [ticket pilot](../../../docs-harness/tickets/active/TBD-code-graph-pilot-ygz/ticket.md).
+> [ticket pilot](../../../docs-harness/tickets/completed/TBD-code-graph-pilot-ygz/ticket.md).
 > Tài liệu dưới đây giữ lại làm tham khảo nếu đánh giá lại (câu hỏi nhiều tầng, host khác).
 
 ---

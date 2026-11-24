@@ -78,12 +78,12 @@ docs-harness/
 ├── project-constraints/
 ├── tickets/
 │   ├── active/
-│   │   ├── 01-sample-ticket/
-│   │   │   └── docs/
-│   │   │       └── prd-research/
-│   │   └── TBD-code-graph-pilot-ygz/
-│   │       └── decision/
+│   │   └── 01-sample-ticket/
+│   │       └── docs/
+│   │           └── prd-research/
 │   └── completed/
+│       └── TBD-code-graph-pilot-ygz/
+│           └── decision/
 └── templates/
     ├── {sample-big-ticket}/
     │   ├── {ticket-number}-{ticket-1}/

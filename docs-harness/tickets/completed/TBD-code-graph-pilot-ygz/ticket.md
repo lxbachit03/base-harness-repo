@@ -1,7 +1,7 @@
 ---
 ticket_id: TBD
 title: Pilot code-graph trên YGZ-Microservices-Multitenancy
-status: resolved
+status: completed
 created: 2026-11-23
 owner: User (lxbachit03)
 source: User prompt, 2026-11-23
@@ -191,6 +191,8 @@ hưởng gián tiếp nhiều tầng); host khác (Claude Code, Codex, OpenCode)
 bằng so khớp tên file là cách chấm lỏng; chưa chấm tay phần giải thích.
 
 ## Risks and Open Questions
+
+Câu hỏi và việc cho User: [ticket-DoD.md](ticket-DoD.md) (mock data, thêm 2026-11-24).
 
 | Rủi ro hoặc câu hỏi | Đề xuất |
 | :--- | :--- |
