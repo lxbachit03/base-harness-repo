@@ -118,3 +118,25 @@ read-only guarantee for Explore. The token columns are not the same unit:
 `subagent_tokens` is the host's figure and its definition (final context or
 cumulative input) is unverified, so the cost comparison stays open. Not tested: a
 larger multi-file trace, warm cache, repeated runs.
+
+Large-task test, 2026-11-24 (User request: does relaying a many-step task pay off?).
+Run from a fresh Claude Desktop coordinator session (~114K context). Task: audit the
+13 `STATUS: active` files outside `templates/` (ID, first word of Decision and Result,
+REFERENCES paths exist, consistency verdict). Ground-truth script: 4 Keep, 4 Pending,
+5 missing (constraints), 3 files with a missing reference (#067, #065, #071). One run
+each, Direct first:
+
+| Arm | Correct | Coordinator calls | Coordinator context growth | Reread in the turn | Worker | Time |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| D: coordinator does it with ordinary tools (parallel calls allowed) | yes | 4 | +30,412 | 514,554 | — | ~32 s |
+| H: relay to the Herdr Code Mode worker (`t2t`, after `/clear`) | yes | 2 (+1 for `/clear`) | +4,224 | 441,832 | 2 calls, 62,814 input, 1,863 output; 1 `REPL` call holding 92 `Read` and 1 `Bash` (`repl_` ids) | ~40 s |
+
+Findings: parallel tool calls kept Direct at 4 calls, so relaying saved few calls in
+the turn. The gain is the context left behind: Direct kept ~30K of file content that
+every later coordinator call rereads; the relay kept ~4K. The worker's one-time 62.8K
+breaks even after about 2-3 later coordinator calls. Decision: for a read-heavy task
+with large intermediate output in a coordinator session that continues, relay to a
+Code Mode worker; do small tasks directly; working directly in terminal `claude` with
+Code Mode stays the first choice. Limits: one run each; order effect (Direct ran
+first, 3 of the 13 files were already in context, so Direct's true cost may be
+higher; the relay started ~32K larger); times include `get_usage` waits.

@@ -119,3 +119,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Herdr app: send slash commands from Git Bash and clear inherited Claude variables](1124-herdr-git-bash-and-claude-env.md) — `#102_IMPROVE_HARNESS_1124`, `PRIORITY: [NORMAL]`
 - [Record how to turn on Code Mode for claude -p workers, with token measurements](1124-code-mode-claude-p-worker.md) — `#103_IMPROVE_HARNESS_1124`, `PRIORITY: [NORMAL]`
 - [Sub-session instructions: fall back when the host has no session tool](1124-sub-session-fallback-without-session-tool.md) — `#104_IMPROVE_HARNESS_1124`, `PRIORITY: [NORMAL]`
+- [Route Claude Desktop searches through a persistent Code Mode worker in Herdr](1124-code-mode-search-worker.md) — `#105_IMPROVE_HARNESS_1124`, `PRIORITY: [MEDIUM]`
