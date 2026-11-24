@@ -5,7 +5,9 @@ started runs the skill itself and starts no other session.
 
 1. Ask the User before starting a session, in one question that names the model
    (Opus 5.5), the effort (high) and the brief's contents. Start it only after a yes.
-   After a no, ask whether to run the skill here.
+   After a no, ask whether to run the skill here. A host with no session tool (for
+   example `claude` in a terminal) skips the session: say so and ask only whether to run
+   the skill here.
 2. Run the skill in a new session, not here. Start it with the host's session tool
    (`mcp__ccd_session__start_session` in the Claude desktop app):
    - `model`: `claude-opus-5-5`, `effort`: `high`.

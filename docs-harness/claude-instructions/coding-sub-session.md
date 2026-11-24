@@ -33,7 +33,8 @@ high. Ignored while the switch is off.
    with the marked one first and names the model. With the advisor on, the same question
    names the advisor and offers its two efforts the same way, and the User may switch it
    off for this task. Start it only after an answer; if the User declines a session, do
-   the task here.
+   the task here. A host with no session tool (for example `claude` in a terminal) skips
+   the question: say so in one line and do the task here.
 2. Start a new session with the host's session tool (`mcp__ccd_session__start_session` in
    the Claude desktop app):
    - `model`: `claude-sonnet-5-5`, `effort`: the answer (`xhigh` for "extra").
