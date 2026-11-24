@@ -590,6 +590,26 @@ cùng 11 lệnh `mcp` và cùng 66 flag; chỉ khác ở `claude plugin` (mục 
 | `--output-format` / `--json-schema` | Định dạng output; schema cho structured output. |
 | `--settings <file-or-json>` / `--setting-sources` | Nạp settings từ file/JSON; chọn nguồn `user,project,local`. |
 
+**Code Mode** (thử nghiệm, tắt mặc định; kiểm tra 2026-11-24 ở `2.1.331`;
+[tài liệu](https://code.claude.com/docs/en/code-mode)): Claude viết JavaScript gọi tool
+thay vì gọi từng tool. Phiên trong giao diện app Desktop không bật được; một `claude`
+khởi chạy từ shell của phiên Desktop thì bật được (xem gạch đầu dòng cuối).
+
+- `claude` tương tác: đặt `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE=1` trong env của shell hoặc
+  trong `env` của `~/.claude/settings.json`.
+- `claude -p` và Agent SDK: chỉ bật khi biến nằm trong khối `env` của `--settings`:
+  `claude -p --settings '{"env":{"CLAUDE_CODE_EXPERIMENTAL_CODE_MODE":"1"}}' ...`. Biến của
+  shell và của `settings.json` bị bỏ qua; cảnh báo chỉ in ở output text, không in ở
+  `stream-json`. Với `-p`, `--output-format stream-json` cần thêm `--verbose`.
+- Xác nhận: event `init` không liệt kê `REPL`; dấu hiệu là `tool_use` id bắt đầu bằng
+  `toolu_cc_` (hoặc `repl_`).
+- Chạy từ một phiên Claude Desktop: xóa các biến `CLAUDE*` thừa hưởng trước, nếu không
+  `claude` chạy như session con và từ chối Code Mode. Git Bash, trong subshell:
+  `( for v in $(compgen -e | grep CLAUDE); do unset "$v"; done; claude -p ... )`;
+  PowerShell: [HERDR-APP.md mục 2](../../../docs-harness/HERDR-APP.md#2-gate).
+- Số đo token khi giao việc cho worker `claude -p`:
+  [#103](../../../docs-harness/harness-improvements/1124-code-mode-claude-p-worker.md).
+
 ### 9.5 Slash commands
 
 Trong Claude Code, **skill là slash command**: skill của repo, của user, của
