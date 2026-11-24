@@ -5,7 +5,7 @@ TAG: [IMPROVE_HARNESS]
 PRIORITY: [NORMAL]
 TITLE: Run the Code Mode search worker in the Claude Desktop Terminal panel, as a User option
 CREATED: 2026-11-25
-STATUS: active
+STATUS: completed
 REFERENCES:
 - docs-harness/claude-instructions/research-subagents.md
 - docs-harness/claude-instructions/code-search-worker.ps1
@@ -102,7 +102,22 @@ shown): 26.9K write, 25.4K read, 1.4K output, two citations matching `grep`; `-p
 regression in tab `c3`: 3 turns, $0.0053, correct `path:line`. `git status` showed only
 this change's files each time.
 
-Decision: pending fresh rerun. Not yet run: a fresh-agent replay that reads only the
-rule, a `-Resume` follow-up through the repository script (tried only with the scratch
-script), a permission prompt in the TUI, and the fallback question.
-Owner: the next session that runs a search with the Terminal panel host.
+Replay (User go-ahead; fresh Haiku 5.5 Explore subagent, 54.4K tokens, read only the
+rule and the script, no commands), four cases: TUI first search, TUI follow-up, `-p`
+follow-up in a reused tab, and no DONE marker after the wait. All four followed the
+steps: tab title and `cwd`, link after the start, `-Tui -SessionId`, `-Resume` on the
+follow-up with the old tab closed, `-Out` and the result line for `-p`, and one
+fallback question with the four choices. Gaps it named and fixed in the rule: a resumed
+worker writes the same transcript and can be asked about "the files you just listed"
+(the replay had restated the paths); a guard for the first tab; how to make a UUID and
+count N; `"` added to the excluded question characters; the result line, not
+`WORKER-DONE`, ends `-p`. Not changed: points owned by other rules (INDEX-first, the
+Explore question), or settled by the tools (what "reusable" means). The revisions were
+not replayed again.
+
+Live `-Resume` through the repository script (tab `c7`): the TUI answered from memory
+with no tool call, 0.2K cache write, 27.8K read, 0.2K output, correct; the closed tab's
+screen showed "manual mode on", the `default` permission mode.
+
+Decision: keep. Limits: no permission prompt has yet appeared in a TUI run, and the
+fallback question was planned, not run.

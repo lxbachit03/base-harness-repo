@@ -48,17 +48,19 @@ The script [code-search-worker.ps1](code-search-worker.ps1) clears the inherited
 interactive `claude` in `default` permission mode; without it `claude -p`, printing each
 step and ending with `WORKER-DONE`. The Terminal panel cannot type into a running
 `claude`, so each question is a new run; `-Resume <session id>` carries the worker's
-memory into it. Add `-Resume` only when the question follows up the previous answer.
-The question names the known paths and terms, in ASCII with no `'`, `$` or backtick.
+memory into it and writes to the same transcript. Add `-Resume` only when the question
+follows up the previous answer; it may then refer to that answer ("the files you just
+listed"). The question names the known paths and terms, in ASCII with no `'`, `"`, `$`
+or backtick. N counts this session's searches from 1, one higher each time.
 
-1. Tab (TUI): close the previous `code-search` tab you opened
+1. Tab (TUI): close the previous `code-search` tab you opened, if there is one
    (`stop_terminal_tab`, `close: true`; Ctrl-C does not end the TUI), then open a new
    one with `run_in_terminal`, title `code-search`, the repository root as `cwd`.
    Tab (`-p`): reuse the `code-search` tab when `list_terminal_tabs` marks it reusable;
    otherwise open it the same way.
 2. Run with `run_in_terminal`, then at once write one chat line with the tab link,
    `[code-search worker](#terminal/<tab_id>)`, so the User can watch it live:
-   - TUI, new worker: generate a UUID, then
+   - TUI, new worker: generate a UUID (`[guid]::NewGuid()` or Python `uuid4`), then
      `& '<repo>\docs-harness\claude-instructions\code-search-worker.ps1' -Tui -SessionId '<uuid>' -N <N> -Q '<question>' -Effort <high|xhigh>`;
      a follow-up replaces `-SessionId '<uuid>'` with `-Resume '<uuid>'`. Use a fresh N.
    - `-p`: `& '<same script>' -Q '<question>' -Effort <high|xhigh> -Out '<scratchpad>\search-<N>.jsonl'`,
@@ -66,7 +68,8 @@ The question names the known paths and terms, in ASCII with no `'`, `$` or backt
 3. Wait, polling from the shell for up to 300 seconds. TUI: done when the transcript
    `~/.claude/projects/<slug>/<uuid>.jsonl` holds `DONE-<N>` (`<slug>` is the repository
    path with `:`, `\` and `/` replaced by `-`). `-p`: done when the log holds a line with
-   `"type":"result"`. A permission prompt in the tab is the User's to answer: tell them.
+   `"type":"result"` (`WORKER-DONE` is only the tab's last line). A permission prompt
+   in the tab is the User's to answer: tell them.
 4. Read, in the same shell call as `git status --short` (the worker changes nothing):
    TUI, the last assistant text in the transcript; `-p`, the `result`, `session_id`
    and `total_cost_usd` of the result line. Read cited lines yourself only as part of
