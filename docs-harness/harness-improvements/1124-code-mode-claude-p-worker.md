@@ -101,3 +101,20 @@ Pass: it uses `--settings` with the env block, clears `CLAUDE*` first, checks fo
 
 Limits: planning replays, not executions; the measurements stay one run per arm on a
 one-call task, with warm cache and many-call tasks unmeasured.
+
+Follow-up A/B, 2026-11-24 (User request: should code research in
+`claude-instructions/research-subagents.md` move to a Code Mode worker?). Question:
+every `HARNESS_ROLE` mention with path, line and meaning; grep truth 13 mentions in 7
+files. Same brief, one run each:
+
+| Arm | Correct | Calls | Tokens | Time |
+| :--- | :--- | :--- | :--- | :--- |
+| A: Explore subagent, Haiku 5.5, effort high | yes, 13/7 | 2 tool uses | 43,859 (host `subagent_tokens`) | 14.8 s |
+| B: `claude -p --model haiku --effort high`, Code Mode via `--settings`, `--disallowedTools Edit Write NotebookEdit Agent Task` | yes, 13/7 | 4 `toolu_cc_` calls, 6 turns | 108,326 input (77,898 read / 30,420 creation) + 3,591 output; $0.0087 list | 20.7 s |
+
+Result: no clear win for B; keep the Explore rule unchanged. B was slower, needs
+more setup (clearing `CLAUDE*`, `--settings`, tool deny list) and lacks the host's
+read-only guarantee for Explore. The token columns are not the same unit:
+`subagent_tokens` is the host's figure and its definition (final context or
+cumulative input) is unverified, so the cost comparison stays open. Not tested: a
+larger multi-file trace, warm cache, repeated runs.
