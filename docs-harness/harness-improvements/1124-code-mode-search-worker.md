@@ -56,6 +56,11 @@ which research helpers are allowed), User settings.
 Same day, User request: a "Code Mode worker on" checkbox (marked by default); unmarked
 returns to Haiku Explore subagents with the previous ask-first rule and the one-or-two
 file exemption. Replay 3 on the unmarked branch passed (see Decision and Result).
+2026-11-25: the rewrite had dropped the "Effort" checklist (Haiku 5.5 high / extra) and
+the effort choice in the ask-first question without User authority; the User asked to
+restore them. Restored for both branches: the worker starts with `--effort <marked>`,
+Explore uses the marked effort, and the Explore question offers both efforts. Not
+replayed.
 
 ## Validation
 

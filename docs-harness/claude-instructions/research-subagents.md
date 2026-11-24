@@ -11,10 +11,19 @@ searches with its own tools and starts no worker.
 - [x] Code Mode worker on
 
 Marked: follow the steps below. Unmarked: research code in Haiku Explore subagents. Ask
-the User once per task before the first spawn, naming the model and how many subagents;
-spawn each with `subagent_type: Explore`, `model: haiku`, `effort: high` and one
+the User once per task before the first spawn, in one question that names the model,
+offers the two efforts with the marked one first, and states how many subagents; spawn
+each with `subagent_type: Explore`, `model: haiku`, the chosen effort and one
 self-contained question; a direct read of one or two known files stays in the session;
 read the results yourself before relying on them.
+
+## Effort (select exactly one by marking `[x]`)
+
+If none or several are marked, use high. It applies to the worker (`--effort high`, or
+`xhigh` for "extra") and to Explore subagents (`effort: high`, or `xhigh`).
+
+- [ ] Haiku 5.5, effort: high
+- [x] Haiku 5.5, effort: extra
 
 The search worker is one `claude --model haiku` with Code Mode in a Herdr app space,
 kept for the whole session ([HERDR-APP.md](../HERDR-APP.md) sections 2 and 5). User
@@ -27,12 +36,14 @@ decisions, 2026-11-24: Haiku 5.5, every search, and on failure ask the User.
    (`--name code-search`, the repository folder, `--focus false`, no `--argv`). Its shell
    is PowerShell: in one `hc send`, clear the inherited `CLAUDE*` variables (section 2
    item 5), set `$env:CLAUDE_CODE_EXPERIMENTAL_CODE_MODE = '1'`, and start
-   `claude --model haiku --disallowedTools Edit Write NotebookEdit Agent`, with no
-   permission flag; from Git Bash write each `$` as `\$` inside the double quotes. Wait with `hc wait <terminal> --output "Code Mode" --timeout 60`.
+   `claude --model haiku --effort <marked> --disallowedTools Edit Write NotebookEdit Agent`
+   with no permission flag; from Git Bash write each `$` as `\$` inside the double
+   quotes. Wait with `hc wait <terminal> --output "Code Mode" --timeout 60`.
    Done when `hc read` shows "Code Mode (experimental) is on".
 2. On a worker that has answered before, send `/clear` before a question that does not
-   follow up the previous answer (section 2 item 4). Send the question as one line with `hc send`: a read-only search worker for
-   a coordinator that starts no agent and writes nothing; the User overrides the
+   follow up the previous answer (section 2 item 4). Send the question as one line with
+   `hc send`: a read-only search worker for a coordinator that starts no agent and
+   writes nothing; the User overrides the
    INDEX-first rule for this search; the question with the paths and terms known; what
    to return (findings as `path:line` with a short phrase); and "Finish with the word
    DONE, a dash and the number <N>, joined with no spaces", with a fresh N.
@@ -44,7 +55,7 @@ decisions, 2026-11-24: Haiku 5.5, every search, and on failure ask the User.
    nothing. Read cited lines yourself only as part of an edit that relies on them.
 5. When the Herdr core does not answer, the worker shows no Code Mode banner, or a
    search fails twice, stop and ask the User once: open Herdr and retry, use a Haiku
-   Explore subagent (`subagent_type: Explore`, `model: haiku`, `effort: high`, one
+   Explore subagent (`subagent_type: Explore`, `model: haiku`, the marked effort, one
    self-contained question), or search here.
 
 Leave the space running at the end of the session; the User closes it.
