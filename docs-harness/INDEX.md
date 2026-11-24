@@ -64,6 +64,7 @@ docs-harness/
 ├── agy-instructions/
 ├── harness-constraints/
 ├── claude-instructions/
+│   └── mods/
 ├── domain/
 ├── harness-improvements/
 ├── layers/

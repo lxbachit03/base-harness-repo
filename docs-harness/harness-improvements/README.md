@@ -121,3 +121,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Sub-session instructions: fall back when the host has no session tool](1124-sub-session-fallback-without-session-tool.md) — `#104_IMPROVE_HARNESS_1124`, `PRIORITY: [NORMAL]`
 - [Route Claude Desktop searches through a persistent Code Mode worker in Herdr](1124-code-mode-search-worker.md) — `#105_IMPROVE_HARNESS_1124`, `PRIORITY: [MEDIUM]`
 - [Run the Code Mode search worker in the Claude Desktop Terminal panel, as a User option](1125-code-mode-worker-terminal-panel.md) — `#106_IMPROVE_HARNESS_1125`, `PRIORITY: [NORMAL]`
+- [Add per-mod instructions under claude-instructions/mods/ that ask the User before installing a mod](1125-claude-mods-install-instructions.md) — `#107_IMPROVE_HARNESS_1125`, `PRIORITY: [NORMAL]`

@@ -2,7 +2,8 @@
 
 Instructions written for working with Claude. A session that runs a Claude model or
 a Claude platform reads this file and every Markdown file under this folder at
-session start, after the layers step and before task work.
+session start, after the layers step and before task work. Under `mods/`, only
+`mods/README.md` loads then; it routes each mod's own file.
 
 A session counts as Claude when its resolved model ID contains `claude`, or its host
 is a Claude platform: Claude Code (CLI, desktop app, IDE extension), claude.ai, or the
@@ -38,5 +39,7 @@ take no ID. An instruction for one exact model and effort belongs in
   Terminal panel tab (default), `claude -p` with progress lines, or a Herdr app space;
   ask the User when it cannot run. An on/off checkbox switches back to Haiku Explore
   subagents.
+- [mods/README.md](mods/README.md): Claude Code mods the User keeps; at session start,
+  check which are not installed and ask the User once before installing any.
 - [compact-before-task.md](compact-before-task.md): above 50% context, ask the User about
   `/compact` before a task and write the prompt for it.
