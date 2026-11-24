@@ -5,7 +5,7 @@ description: Turn vague ideas into verifiable Codex goals. Use when the user men
 
 # Goal Griller
 
-Interrogate fuzzy intent until it becomes a goal Codex can autonomously pursue, verify, and stop on. This skill is inspired by the `grill-me` pattern: ask one question at a time, recommend an answer, and inspect the codebase instead of asking when the answer is discoverable.
+Interrogate fuzzy intent until it becomes a goal Codex can autonomously pursue, verify, and stop on. This skill is inspired by the `grill-me` pattern: ask in rounds, recommend an answer, and inspect the codebase instead of asking when the answer is discoverable.
 
 ## Hard Gate
 
@@ -69,11 +69,11 @@ Route:
 ## Interview Loop
 
 1. Restate the apparent intent in one sentence.
-2. Identify the weakest missing field from the hard gate.
+2. Identify the missing fields from the hard gate.
 3. If the answer can be discovered from local files, active goal state, logs, docs, tests, or repo conventions, inspect those sources instead of asking.
-4. Ask exactly one question at a time.
-5. For each question, include your recommended answer and why it is probably right.
-6. After the user answers, update the working goal shape and repeat.
+4. Ask one round per turn: every open question whose answer does not depend on another open answer. A question that depends on an answer still open waits for a later round.
+5. Number each question and give your recommended answer with a one-line reason. Word the question so that "yes" accepts the recommendation, so the User can reply by number.
+6. After the user answers, update the working goal shape and ask the next round.
 
 The interview should feel useful, not bureaucratic. Prefer three sharp questions over ten generic ones. Stop interviewing as soon as the goal is safely draftable.
 

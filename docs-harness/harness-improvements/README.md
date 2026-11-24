@@ -113,3 +113,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Default Claude browser screenshots to scale 0.5 and zoom for detail](1123-browser-screenshot-scale.md) — `#096_IMPROVE_HARNESS_1123`, `PRIORITY: [NORMAL]`
 - [Observe browser pages text-first and wait for a fresh tab before read_page](1123-browser-observe-text-first.md) — `#097_IMPROVE_HARNESS_1123`, `PRIORITY: [NORMAL]`
 - [Give agy a working browser route through playwright-cli](1124-agy-browser-playwright-cli.md) — `#098_IMPROVE_HARNESS_1124`, `PRIORITY: [NORMAL]`
+- [Ask goal-griller questions in rounds with yes-accepts recommendations](1124-goal-griller-question-rounds.md) — `#099_IMPROVE_HARNESS_1124`, `PRIORITY: [NORMAL]`
