@@ -34,7 +34,9 @@ take no ID. An instruction for one exact model and effort belongs in
   session, with a checklist for its effort and an optional Opus 5.5 advisor (on/off
   checkbox, effort checklist).
 - [research-subagents.md](research-subagents.md): send every search of code or file
-  content to a Haiku 5.5 Code Mode worker kept in a Herdr app space; ask the User when it
-  cannot run. An on/off checkbox switches back to Haiku Explore subagents.
+  content to a Haiku 5.5 Code Mode worker the User can watch: a TUI per question in a
+  Terminal panel tab (default), `claude -p` with progress lines, or a Herdr app space;
+  ask the User when it cannot run. An on/off checkbox switches back to Haiku Explore
+  subagents.
 - [compact-before-task.md](compact-before-task.md): above 50% context, ask the User about
   `/compact` before a task and write the prompt for it.

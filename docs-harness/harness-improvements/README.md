@@ -120,3 +120,4 @@ at revision `6b1bd92`; they are not current skill entry points.
 - [Record how to turn on Code Mode for claude -p workers, with token measurements](1124-code-mode-claude-p-worker.md) — `#103_IMPROVE_HARNESS_1124`, `PRIORITY: [NORMAL]`
 - [Sub-session instructions: fall back when the host has no session tool](1124-sub-session-fallback-without-session-tool.md) — `#104_IMPROVE_HARNESS_1124`, `PRIORITY: [NORMAL]`
 - [Route Claude Desktop searches through a persistent Code Mode worker in Herdr](1124-code-mode-search-worker.md) — `#105_IMPROVE_HARNESS_1124`, `PRIORITY: [MEDIUM]`
+- [Run the Code Mode search worker in the Claude Desktop Terminal panel, as a User option](1125-code-mode-worker-terminal-panel.md) — `#106_IMPROVE_HARNESS_1125`, `PRIORITY: [NORMAL]`
