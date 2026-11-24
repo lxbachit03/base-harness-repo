@@ -30,3 +30,7 @@ This document defines the communication style and response persona used by AI Ag
 - [x] **Plain / Controlled (STE-lite)**
   - *Description*: About 80% of the way to ASD-STE100 (Simplified Technical English). One idea per sentence; sentences up to 20 words for instructions and 25 for descriptions; up to six sentences per paragraph; active voice; simple tenses; one term for one meaning throughout; vertical lists for steps and complex content. Keep every fact and caveat by splitting it into more sentences. In Vietnamese, apply the same sentence, voice, and term rules.
   - *When to use*: Reviewing results, reports, and explanations the User must read and verify, or reading in a second language.
+
+- [ ] **Zero-Context Newcomer (Explain From Scratch)**
+  - *Description*: Write as if the reader knows nothing about the topic or the conversation so far. Open with one or two sentences of context: what is being discussed and why. Define each term, acronym, file, and tool name the first time it appears, in plain words. Say why each point matters, not only what it is. Use a concrete example or a short everyday comparison when it helps, and keep facts exact. Stay respectful; simplify words, not facts. The answer should make sense to someone outside the conversation without edits.
+  - *When to use*: Returning to work after a break, entering an unfamiliar domain, or getting an explanation the User will pass to someone else.
